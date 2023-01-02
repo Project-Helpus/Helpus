@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { StButton, StChip, StTag, StWrapper } from '../../components/UI/StIndex'
+import CardList from './CardList';
 const Home = () => {
   const TotalSlides = 8;
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -49,7 +50,7 @@ const Home = () => {
           <StRightButton onClick={PrevSlide}>오른쪽</StRightButton>
         </StFlex>
       </StHotClip>
-
+      <CardList></CardList>
       <StChip></StChip>
       <StTag>d</StTag>
       {/* </StWrapper> */}
