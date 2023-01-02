@@ -3,32 +3,38 @@ import styled from 'styled-components';
 import { StButton, StChip, StTag, StWrapper } from '../../components/UI/StIndex'
 import CardList from './CardList';
 const Home = () => {
-  const TotalSlides = 8;
+  const TotalSlides = 10;
   const [currentSlide, setCurrentSlide] = useState(0)
   const slideRef = useRef(null)
   //    < next button >
   const NextSlide = () => {
+    console.log('다음으로')
+    // console.log('ref:', slideRef.current.style)
     if (currentSlide >= TotalSlides) {
       //더 이상 넘어갈 슬라이드가 없으면
       setCurrentSlide(0)  //1번째 사진으로 넘어간다
     }
     else { setCurrentSlide(currentSlide + 1) }
+    console.log(currentSlide)
   }
 
   //    <  prev button  >
   const PrevSlide = () => {
+    console.log('이전으로')
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides)
       // 마지막 사진으로 이동
     }
     else { setCurrentSlide(currentSlide - 1) }
-
-
-    useEffect(() => {
-      slideRef.current.style.transition = "all 0.5s ease-in-out";
-      slideRef.current.style.transform = `translateX(-${currentSlide}00%)`; // 백틱을 사용하여 슬라이드로 이동하는 에니메이션을 만듭니다.
-    }, [currentSlide]);
+    console.log(currentSlide)
   }
+
+
+  useEffect(() => {
+    slideRef.current.style.transition = "all 0.5s ease-in-out";
+    slideRef.current.style.transform = `translateX(-${currentSlide * 5}0%)`; // 백틱을 사용하여 슬라이드로 이동하는 에니메이션을 만듭니다.
+  }, [currentSlide]);
+
   return (
     <div>
       {/* <StWrapper> */}
@@ -36,19 +42,27 @@ const Home = () => {
       {/* <StChip mode="헬퍼스">헬퍼스</StChip> */}
       <StHeaderImg src='https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/11/urbanbrush-20221112200500085684.jpg'></StHeaderImg>
 
-      <StHotClip>
-        <StCarouselTitle value={currentSlide + 1}>우리 함께해요</StCarouselTitle>
-        <StFlex>
-          <StLeftButton onClick={NextSlide}>왼쪽</StLeftButton>
+      <StHotClip value={currentSlide + 1}>
+        <StCarouselTitle >우리 함께해요</StCarouselTitle>
+
+        <StLeftButton onClick={PrevSlide}>왼쪽</StLeftButton>
+        <StCarouselContainer >
           <StCarousel ref={slideRef}>
-            <StCarouselItem></StCarouselItem>
-            <StCarouselItem></StCarouselItem>
-            <StCarouselItem></StCarouselItem>
-            <StCarouselItem></StCarouselItem>
-            <StCarouselItem></StCarouselItem>
+            1<StCarouselItem ></StCarouselItem>
+            2<StCarouselItem></StCarouselItem>
+            3<StCarouselItem></StCarouselItem>
+            4<StCarouselItem></StCarouselItem>
+            5<StCarouselItem></StCarouselItem>
+            6<StCarouselItem></StCarouselItem>
+            7<StCarouselItem></StCarouselItem>
+            8<StCarouselItem></StCarouselItem>
+            9<StCarouselItem></StCarouselItem>
+            10<StCarouselItem></StCarouselItem>
           </StCarousel>
-          <StRightButton onClick={PrevSlide}>오른쪽</StRightButton>
-        </StFlex>
+        </StCarouselContainer>
+
+        <StRightButton onClick={NextSlide}>오른쪽</StRightButton>
+
       </StHotClip>
 
       <CardList></CardList>
@@ -82,26 +96,52 @@ const StHotClip = styled.div`
 border:1px solid #000;
 width:90%;
 margin:auto;
-
+position:relative;
 `
 const StCarouselTitle = styled.h2`
 `
-const StFlex = styled.div`
-display:flex;`
-const StLeftButton = styled.button`
+const StCarouselContainer = styled.div`
+display:flex;
+width:inherit;
+height:12em;
+overflow:hidden;
+position:relative;
+border: 1px solid #000;
+margin-left:2em;
 `
+
+const StLeftButton = styled.button`
+width:2em;
+position:absolute;
+/* margin-right:100px; */
+top:50%;
+`
+
 const StCarousel = styled.div`
 border:2px solid #000;
-width:100%;
+/* width:100%; */
+padding-left:2em;
+z-index:-1;
+display:flex;
+/* overflow:hidden; */
 `
 const StRightButton = styled.button`
+width:2em;
+position:absolute;
+right:0;
+top:50%;
 `
 const StCarouselItem = styled.img`
 border:2px solid #000;
 width:18em;
-height:10em;
+height:100%;
 margin-right:2em;
+z-index:-1;
+/* display:inline-block */
 `
+
+
+//    <  Foot  >
 const StFooterImg = styled.div`
 height:20em;
 width:100%;

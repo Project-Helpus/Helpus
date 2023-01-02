@@ -68,5 +68,4 @@ const StPropile = styled.div`
 width:26px;
 border:2px solid #000;
 border-radius:50%;
-bottom:-100px;
 `
