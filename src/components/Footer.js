@@ -16,7 +16,7 @@ const StFooter = styled.div`
   color: rgba(120, 120, 120);
   margin: 0;
   height: 100px;
-  background-color: rgba(229, 232, 232, 0.9);
+  /* background-color: rgba(229, 232, 232, 0.9); */
 `;
 
 

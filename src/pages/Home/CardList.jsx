@@ -7,12 +7,12 @@ const CardList = () => {
       <StFlex>
         <StHelper>
           <StFlex><p>헬퍼 게시물</p><p>글쓰기</p></StFlex>
-          <StLink>더보기</StLink>
+          <StLink to={'/postlist'}>더보기</StLink>
         </StHelper>
         <StHelpee>
           <StFlex><p>헬피 게시물</p><p>글쓰기</p></StFlex>
           <StItem></StItem>
-          <StLink>더보기</StLink>
+          <StLink to={'/postlist'}>더보기</StLink>
         </StHelpee>
       </StFlex>
     </StContainer>

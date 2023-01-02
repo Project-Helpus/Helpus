@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { Navigate } from 'react-router';
-import { Link } from 'react-router-dom';
+
 const Header = () => {
   const boolean = true;
   return (
@@ -68,4 +68,5 @@ const StPropile = styled.div`
 width:26px;
 border:2px solid #000;
 border-radius:50%;
+bottom:-100px;
 `

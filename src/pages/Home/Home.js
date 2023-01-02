@@ -35,6 +35,7 @@ const Home = () => {
       {/* <StButton>dd</StButton> */}
       {/* <StChip mode="헬퍼스">헬퍼스</StChip> */}
       <StHeaderImg src='https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/11/urbanbrush-20221112200500085684.jpg'></StHeaderImg>
+
       <StHotClip>
         <StCarouselTitle value={currentSlide + 1}>우리 함께해요</StCarouselTitle>
         <StFlex>
@@ -45,14 +46,23 @@ const Home = () => {
             <StCarouselItem></StCarouselItem>
             <StCarouselItem></StCarouselItem>
             <StCarouselItem></StCarouselItem>
-
           </StCarousel>
           <StRightButton onClick={PrevSlide}>오른쪽</StRightButton>
         </StFlex>
       </StHotClip>
+
       <CardList></CardList>
-      <StChip></StChip>
-      <StTag>d</StTag>
+
+      <StFooterImg>
+        <Sth3>About up</Sth3>
+        <Stp>헬퍼스는 재능기부, 자원보사를 돕는 커뮤니티 입니다
+          따뜻한 마음과 봉사가 더 나은 지역 사뢰를 만들어 봅니다
+        </Stp>
+
+      </StFooterImg>
+
+      {/* <StChip></StChip> */}
+      {/* <StTag>d</StTag> */}
       {/* </StWrapper> */}
     </div>
   );
@@ -92,3 +102,18 @@ width:18em;
 height:10em;
 margin-right:2em;
 `
+const StFooterImg = styled.div`
+height:20em;
+width:100%;
+position:relative;
+z-index:-1;
+bottom:-100px;
+background-image:url('http://jaemisupil.com/files/attach/images/162/941/043/b7811b30d31d07e0f589f18f2bd274fa.png');
+background-size:100% 100%;
+text-align:center;
+`
+const Sth3 = styled.h3`
+`
+const Stp = styled.p`
+`
+
