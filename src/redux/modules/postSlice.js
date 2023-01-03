@@ -13,13 +13,19 @@ export const __function = createAsyncThunk(
   }
 );
 
-const initialState = {};
+const initialState = {
+  boolHelper: false,
+  boolHelpee: false,
+};
 
 const postSlice = createSlice({
   name: "postSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    setBoolHelper: (state) => { state.boolHelper = true; },
+    setBoolHelpee: (state) => { state.boolHelpee = true; }
+  },
   extraReducers: {},
 });
-
+export const { setBoolHelper, setBoolHelpee } = postSlice.actions;
 export default postSlice.reducer;

@@ -1,18 +1,36 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setBoolHelpee, setBoolHelper } from "../../redux/modules/postSlice";
+import { useNavigate } from "react-router";
+
+
 const CardList = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const linkHelper = () => {
+    dispatch(setBoolHelper());
+    navigate('/postlist')
+
+  }
+  const linkHelpee = () => {
+    dispatch(setBoolHelpee())
+    navigate('/postlist')
+
+  }
+
 
   return (<>
     <StContainer>
       <StFlex>
         <StHelper>
           <StFlex><p>헬퍼 게시물</p><p>글쓰기</p></StFlex>
-          <StLink to={'/postlist'}>더보기</StLink>
+          <StLink onClick={linkHelper}>더보기</StLink>
         </StHelper>
         <StHelpee>
           <StFlex><p>헬피 게시물</p><p>글쓰기</p></StFlex>
           <StItem></StItem>
-          <StLink to={'/postlist'}>더보기</StLink>
+          <StLink onClick={linkHelpee}>더보기</StLink>
         </StHelpee>
       </StFlex>
     </StContainer>
@@ -41,9 +59,9 @@ width:50%;
 height:50em;
 
 `
-const StLink = styled(Link)`
-text-decoration:none;
-&:visited{color:#000;}
+const StLink = styled.div`
+/* text-decoration:none; */
+/* &:visited{color:#000;} */
 display:block;
 width:100%;
 text-align:center;
