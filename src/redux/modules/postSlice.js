@@ -22,8 +22,8 @@ const postSlice = createSlice({
   name: "postSlice",
   initialState,
   reducers: {
-    setBoolHelper: (state) => { state.boolHelper = true; },
-    setBoolHelpee: (state) => { state.boolHelpee = true; }
+    setBoolHelper: (state) => { state.boolHelper = true; state.boolHelpee = false; },
+    setBoolHelpee: (state) => { state.boolHelpee = true; state.boolHelper = false; }
   },
   extraReducers: {},
 });
