@@ -35,6 +35,8 @@ const Home = () => {
     slideRef.current.style.transform = `translateX(-${currentSlide * 5}0%)`; // 백틱을 사용하여 슬라이드로 이동하는 에니메이션을 만듭니다.
   }, [currentSlide]);
 
+
+
   return (
     <div>
       {/* <StWrapper> */}
