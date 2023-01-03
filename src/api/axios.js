@@ -32,6 +32,8 @@ export const UserAPI = {
 
 export const MypageAPI = {
   getMyPage: () => client.get('/api/user/detail'),
+  getHelper: () => client.get('/api/post/1'),
+  getHelpee: () => client.get('/api/post/2'),
   getWishlist: () => client.get('/api/user/wishlist'),
   patchMypage: (userData) => client.patch('api/user/detail', userData),
   patchPassword: (changePassword) => client.patch('api/user/password', changePassword),

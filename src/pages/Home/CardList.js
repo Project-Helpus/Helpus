@@ -1,9 +1,19 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { __getHelper, __getHelpee } from "../../redux/modules/mypageSlice";
+import { useSelector } from "react-redux";
 import Card from "../../components/UI/Card";
 import imageA from '../Home/element/image/A.jpg'
 import imageB from '../Home/element/image/B.jpg'
+
 const CardList = () => {
+
+  const dispatch = useDispatch();
+  // const real = useSelector((state) => state.mypageSlice);
+  // console.log('real', real)
+
 
   const Mok = {
     'result': [
@@ -32,18 +42,14 @@ const CardList = () => {
   }
 
 
-
-
-
-
-
-
+  // useEffect(dispatch(__getHelpee, __getHelper), [dispatch]);
 
   return (<>
     <StContainer>
       <StFlex>
         <StHelper>
           <StFlex><p>헬퍼 게시물</p><p>글쓰기</p></StFlex>
+          {Mok.result.map((item) => { return <StItem key={item.postId}><Card type={"세로"} data={item} /></StItem> })}
           <StLink to={'/postlist'}>더보기</StLink>
         </StHelper>
         <StHelpee>
