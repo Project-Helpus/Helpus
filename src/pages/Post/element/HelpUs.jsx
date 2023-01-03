@@ -1,6 +1,12 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 const HelpUs = () => {
+  const dispatch = useDispatch();
+  // const real = useState((state))
+
+  // useEffect()
 
   return (<>
     <StHelpeUsWrapper>
