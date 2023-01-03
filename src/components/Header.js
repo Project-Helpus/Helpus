@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from "styled-components";
-import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 const Header = () => {
   const boolean = true;
+  const navigate = useNavigate();
   return (
 
     <StHeaderWrapper>
-      <Stlogo onClick={() => { Navigate('/') }}>로고</Stlogo>
+      <Stlogo onClick={() => { navigate('/') }}>로고</Stlogo>
       <StSearch placeholder='Search'></StSearch>
       {boolean ?
         (<>
