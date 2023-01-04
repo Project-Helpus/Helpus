@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
-const All = () => {
+const AllFalse = () => {
   return (<>
 
     <StAll>
-      전국
+      전체(전국) 게시물
     </StAll>
   </>)
 }
 
-export default All;
+export default AllFalse;
 
 const StAll = styled.div`
 width:95%;

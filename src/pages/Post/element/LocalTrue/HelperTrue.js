@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-const HelperFalse = () => {
+const HelperTrue = () => {
   const dispatch = useDispatch();
   // const real = useSelector((state))
 
@@ -15,4 +15,9 @@ const HelperFalse = () => {
     </StHelpeeWrapper>
   </>)
 }
-export default HelperFalse;
+export default HelperTrue;
+const StHelpeeWrapper = styled.div`
+width:95%;
+margin:auto;
+  border:1px solid #000;
+`

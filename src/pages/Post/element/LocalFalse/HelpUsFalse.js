@@ -10,7 +10,7 @@ const HelpUsFalse = () => {
 
   return (<>
     <StHelpeUsWrapper>
-      헬퍼스
+      헬퍼스(전국)
     </StHelpeUsWrapper>
   </>)
 }

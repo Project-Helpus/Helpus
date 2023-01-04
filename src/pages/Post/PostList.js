@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import HelpUsFalse from './element/LocalFalse/HelpUsFalse';
 import HelperFalse from './element/LocalFalse/HelperFalse';
 import HelpeeFalse from './element/LocalFalse/HelpeeFalse';
-import All from './element/All';
+import HelpUsTrue from './element/LocalTrue/HelpUsTrue';
+import HelperTrue from './element/LocalTrue/HelperTrue';
+import HelpeeTrue from './element/LocalTrue/HelpeeTrue';
+import AllTrue from './element/LocalTrue/AllTrue';
+import AllFalse from './element/LocalFalse/AllFalse';
 import { setBoolHelper } from '../../redux/modules/postSlice';
 const PostList = () => {
   // const { helpUsRef, helperRef, helpeeRef } = useRef(null);
@@ -73,13 +77,13 @@ const PostList = () => {
   }
 
   const setBoolLocationTrue = () => {
-    if (boolLocation == true) {
+    if (boolLocation === true) {
       setBoolLocation(false);
       locationRef.current.style.color = 'black'
     }
     else {
-      setBoolLocation(true);
       locationRef.current.style.color = 'blue'
+      setBoolLocation(true);
     }
   }
 
@@ -95,10 +99,11 @@ const PostList = () => {
         <StLocation ref={locationRef} onClick={setBoolLocationTrue}>전국</StLocation>
       </StPostListWrapper>
       {boolLocation ? 'true' : 'false'}
-      {boolAll ? <All /> : null}
-      {boolHelpUs ? <HelpUsFalse /> : null}
-      {boolHelper ? <HelperFalse /> : null}
-      {boolHelpee ? <HelpeeFalse /> : null}
+      {boolLocation ? <>{boolAll ? <AllTrue /> : null}</> : <>{boolAll ? <AllFalse /> : null}</>}
+      {boolLocation ? <>{boolHelpUs ? < HelpUsTrue /> : null}</> : <>{boolHelpUs ? <HelpUsFalse /> : null}</>}
+      {boolLocation ? <>{boolHelper ? < HelperTrue /> : null}</> : <>{boolHelper ? <HelperFalse /> : null}</>}
+      {boolLocation ? <>{boolHelpee ? <HelpeeTrue /> : null}</> : <>{boolHelpee ? <HelpeeFalse /> : null}</>}
+
     </>
   );
 };
