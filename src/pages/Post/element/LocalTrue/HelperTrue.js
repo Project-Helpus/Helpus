@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-
+import { __getHelperTrue } from "../../../../redux/modules/postSlice";
 const HelperTrue = () => {
   const dispatch = useDispatch();
-  // const real = useSelector((state))
+  const data = useSelector((state) => state.postSlice.helperTrueDate)
+  console.log('헬퍼 true data:', data)
 
 
 
-  // useEffect()
+  useEffect(() => dispatch(__getHelperTrue()), [dispatch])
+
   return (<>
     <StHelpeeWrapper>
       헬퍼(로컬)

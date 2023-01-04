@@ -5,7 +5,7 @@ import { __getHelpUsFalse } from "../../../../redux/modules/postSlice";
 
 const HelpUsFalse = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.HelpeeFalseDate)
+  const data = useSelector((state) => state.postSlice.HelpUSFalseDate)
   console.log('헬피 false data:', data)
 
   useEffect(() => dispatch(__getHelpUsFalse()), [dispatch])
