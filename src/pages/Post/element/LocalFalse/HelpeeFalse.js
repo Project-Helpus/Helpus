@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { __getHelpeeFalse } from "../../../../redux/modules/postSlice";
 const HelpeeFalse = () => {
   const dispatch = useDispatch();
-  const real = useSelector((state) => state.postSlice.HelpeeFalseDate)
-  console.log('헬피 false real:', real)
+  const data = useSelector((state) => state.postSlice.HelpeeFalseDate)
+  console.log('헬피 false data:', data)
 
 
   useEffect(() => dispatch(__getHelpeeFalse()), [dispatch])
