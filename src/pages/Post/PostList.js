@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import HelpUs from './element/HelpUs';
-import Helper from './element/Helper';
-import Helpee from './element/Helpee';
+import HelpUsFalse from './element/LocalFalse/HelpUsFalse';
+import HelperFalse from './element/LocalFalse/HelperFalse';
+import HelpeeFalse from './element/LocalFalse/HelpeeFalse';
 import All from './element/All';
 import { setBoolHelper } from '../../redux/modules/postSlice';
 const PostList = () => {
@@ -96,9 +96,9 @@ const PostList = () => {
       </StPostListWrapper>
       {boolLocation ? 'true' : 'false'}
       {boolAll ? <All /> : null}
-      {boolHelpUs ? <HelpUs /> : null}
-      {boolHelper ? <Helper /> : null}
-      {boolHelpee ? <Helpee /> : null}
+      {boolHelpUs ? <HelpUsFalse /> : null}
+      {boolHelper ? <HelperFalse /> : null}
+      {boolHelpee ? <HelpeeFalse /> : null}
     </>
   );
 };

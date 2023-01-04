@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-const Helpee = () => {
+const HelperFalse = () => {
   const dispatch = useDispatch();
   // const real = useSelector((state))
 
@@ -11,14 +11,8 @@ const Helpee = () => {
   // useEffect()
   return (<>
     <StHelpeeWrapper>
-      헬피
+      헬퍼(로컬)
     </StHelpeeWrapper>
   </>)
 }
-export default Helpee;
-
-const StHelpeeWrapper = styled.div`
-width:95%;
-margin:auto;
-  border:1px solid #000;
-`
+export default HelperFalse;

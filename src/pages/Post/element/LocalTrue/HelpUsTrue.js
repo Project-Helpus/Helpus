@@ -2,22 +2,17 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-
-const Helper = () => {
+const HelpUsFalse = () => {
   const dispatch = useDispatch();
   // const real = useSelector((state))
 
+
+
   // useEffect()
   return (<>
-    <StHelperWrapper>
-      헬퍼
-    </StHelperWrapper>
+    <StHelpeeWrapper>
+      헬퍼스(로컬)
+    </StHelpeeWrapper>
   </>)
 }
-export default Helper;
-
-const StHelperWrapper = styled.div`
-width:95%;
-margin:auto;
-  border:1px solid #000;
-`
+export default HelpUsFalse;
