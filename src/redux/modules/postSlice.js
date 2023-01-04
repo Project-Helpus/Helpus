@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PostAPI } from '../../api/axios';
 
-export const __function = createAsyncThunk(
-  "mypageSlice/",
-  async (data, thunkAPI) => {
+export const __search = createAsyncThunk(
+  "mypageSlice/__search",
+  async (payload, thunkAPI) => {
     try {
-      const response = PostAPI(data);
-      return thunkAPI.fulfillWithValue();
+      console.log('서버로 search값을 전송')
+      const res = PostAPI.getSearch(payload);
+      console.log('search res:', res)
+      return thunkAPI.fulfillWithValue(res);
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }

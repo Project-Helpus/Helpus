@@ -19,6 +19,7 @@ export const PostAPI = {
   postReport: (userId, type, reason) => client.post(`/api/report/${userId}`, type, reason),
   postWishList: (postId) => client.post(`/api/board/post/${postId}/wish`),
   // 검색 확정되면 재 확인 필요
+  postSearch: () => client.post('/api/search'),
   getSearch: (keyword, type, location) => client.get(`/api/search?keyword=${keyword}&type=${type}`),
 };
 
