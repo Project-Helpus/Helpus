@@ -150,8 +150,8 @@ const SignUp = () => {
     }
     formData.delete("confirm");
     dispatch(__signUp(formData));
-    // alert("회원가입 완료");
-    // navigate("/signin");
+    alert("회원가입 완료");
+    navigate("/login");
   };
 
   //email 중복확인

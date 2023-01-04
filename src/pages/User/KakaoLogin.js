@@ -15,7 +15,7 @@ const KakaoLogin = () => {
 
   const sendAuth = () => {
     const code = location.search.split("=")[1];
-    console.log("🚀 ~ file: KakaoLogin.js:17 ~ sendAuth ~ code", code);
+    console.log(code);
     dispatch(kakaoLogin(code));
   };
 

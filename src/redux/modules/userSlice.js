@@ -53,9 +53,8 @@ export const __postLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.login(payload);
-      console.log("🚀 ~ file: userSlice.js:56 ~ res", res);
-      //window.alert("로그인 성공!");
-      //window.location.replace("/");
+      window.alert("로그인 성공!");
+      window.location.replace("/");
       return thunkAPI.fulfillWithValue(res.data.accessToken);
     } catch (error) {
       window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
@@ -66,11 +65,10 @@ export const __postLogin = createAsyncThunk(
 
 //카카오 로그인 post
 export const kakaoLogin = createAsyncThunk(
-  "signSlice/kakaoLogin",
+  "user/kakaoLogin",
   async (code, thunkAPI) => {
     try {
       const response = await UserAPI.kakaoLogin(code);
-      console.log("🚀 ~ file: userSlice.js:72 ~ response", response);
       if (response.status === 200) {
         return thunkAPI.fulfillWithValue();
       } else {
@@ -107,10 +105,8 @@ const userSlice = createSlice({
     [__postDupEmail.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.dupCheck = action.payload.result;
-      console.log(12);
     },
-    [__postDupEmail.rejected]: (state, action) => {
-      console.log(action.payload);
+    [__postDupEmail.rejected]: (state) => {
       state.isLoading = false;
       state.error = true;
     },
@@ -119,7 +115,7 @@ const userSlice = createSlice({
     [__postLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__postLogin.fulfilled]: (state, action) => {
+    [__postLogin.fulfilled]: (state) => {
       state.isLoading = false;
       state.isLogin = true;
     },
@@ -130,12 +126,12 @@ const userSlice = createSlice({
 
     //kakaoLogin
     [kakaoLogin.pending]: (state) => {},
-    [kakaoLogin.fulfilled]: (state, action) => {
-      state.isLogedIn = true;
+    [kakaoLogin.fulfilled]: (state) => {
+      state.isLogin = true;
     },
     [kakaoLogin.rejected]: (state, action) => {
       state.error = false;
-      state.errorMsg = action.payload;
+      state.error = action.payload;
     },
   },
 });
