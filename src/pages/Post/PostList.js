@@ -4,42 +4,60 @@ import styled from 'styled-components';
 import HelpUs from './element/HelpUs';
 import Helper from './element/Helper';
 import Helpee from './element/Helpee';
+import All from './element/All';
 import { setBoolHelper } from '../../redux/modules/postSlice';
 const PostList = () => {
   // const { helpUsRef, helperRef, helpeeRef } = useRef(null);
+  const dispatch = useDispatch()
+
   const helpUsRef = useRef(null);
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
-  const dispatch = useDispatch()
+  const allRef = useRef(null);
+  const locationRef = useRef(null)
+
 
 
 
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper)
   const storeBboolHelpee = useSelector((state) => state.postSlice.boolHelpee)
+  const [boolAll, setBoolAll] = useState(true)
   const [boolHelpUs, setBoollHelpUs] = useState(false);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBboolHelpee);
+  const [boolLocation, setBoolLocation] = useState(true)
 
+  const setBollAllTrue = () => {
+    allRef.current.style.color = 'black'
+    setBoolAll(true)
+    setBoollHelpUs(false);
+    setBoollHelper(false)
+    setBoollHelpee(false)
+    helpUsRef.current.style.color = 'blue'
+    helpeeRef.current.style.color = 'blue'
+    helperRef.current.style.color = 'blue'
 
-  // console.log('us:', helpUsRef)
+  }
+
   const setBoollHelpUsTrue = () => {
     helpUsRef.current.style.color = 'black'
-
     setBoollHelpUs(true);
     setBoollHelper(false)
     setBoollHelpee(false)
-    helpeeRef.current.style.color = 'red'
-    helperRef.current.style.color = 'red'
-
-    // console.log(setBoollHelpUs)
+    setBoolAll(false)
+    helpeeRef.current.style.color = 'blue'
+    helperRef.current.style.color = 'blue'
+    allRef.current.style.color = 'blue'
   }
   const setBoollHelperTrue = () => {
     helperRef.current.style.color = 'black'
     setBoollHelpUs(false);
     setBoollHelper(true)
     setBoollHelpee(false);
-    helpeeRef.current.style.color = 'red'
-    helpUsRef.current.style.color = 'red'
+    setBoolAll(false)
+    helpeeRef.current.style.color = 'blue'
+    helpUsRef.current.style.color = 'blue'
+    allRef.current.style.color = 'blue'
 
   }
   const setBoollHelpeeTrue = () => {
@@ -47,9 +65,22 @@ const PostList = () => {
     setBoollHelpUs(false);
     setBoollHelper(false)
     setBoollHelpee(true)
-    helperRef.current.style.color = 'red'
-    helpUsRef.current.style.color = 'red'
+    setBoolAll(false)
+    helperRef.current.style.color = 'blue'
+    helpUsRef.current.style.color = 'blue'
+    allRef.current.style.color = 'blue'
 
+  }
+
+  const setBoolLocationTrue = () => {
+    if (boolLocation == true) {
+      setBoolLocation(false);
+      locationRef.current.style.color = 'black'
+    }
+    else {
+      setBoolLocation(true);
+      locationRef.current.style.color = 'blue'
+    }
   }
 
   // useEffect(() => { console.log('us2:', helpUsRef.current) }, [boolHelpUs])
@@ -57,12 +88,14 @@ const PostList = () => {
     <>
       <button>글쓰기</button>
       <StPostListWrapper >
-
+        <StAll ref={allRef} onClick={setBollAllTrue} >전체</StAll>
         <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>헬퍼스 게시판</StHelpUs>
         <StHelper ref={helperRef} onClick={setBoollHelperTrue}>헬퍼 게시판</StHelper>
         <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>헬피 게시판</StHelpee>
-        <div>전국</div>
+        <StLocation ref={locationRef} onClick={setBoolLocationTrue}>전국</StLocation>
       </StPostListWrapper>
+      {boolLocation ? 'true' : 'false'}
+      {boolAll ? <All /> : null}
       {boolHelpUs ? <HelpUs /> : null}
       {boolHelper ? <Helper /> : null}
       {boolHelpee ? <Helpee /> : null}
@@ -80,11 +113,18 @@ div{margin-right:3em;
 
 const StHelpUs = styled.div`
 
-color:red;
+color:blue;
 `
 const StHelper = styled.div`
-color:red;
+color:blue;
 
 `
 const StHelpee = styled.div`
-color:red`
+color:blue`
+
+const StAll = styled.div`
+color:blue;
+`
+const StLocation = styled.div`
+color:blue;
+`
