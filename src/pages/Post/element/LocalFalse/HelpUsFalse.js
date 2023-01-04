@@ -8,7 +8,8 @@ const HelpUsFalse = () => {
   const data = useSelector((state) => state.postSlice.HelpUSFalseDate)
   console.log('헬피 false data:', data)
 
-  useEffect(() => dispatch(__getHelpUsFalse()), [dispatch])
+  useEffect(() => { dispatch(__getHelpUsFalse()) }
+    , [dispatch])
 
 
   return (<>

@@ -80,7 +80,7 @@ export const __getHelperTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       console.log('서버야 헬퍼 true 주세요')
-      const res = await client.get(`/api/post/mylocation?category=2`);
+      const res = await client.get(`/api/post?category=2`);
       console.log('헬퍼 true res:', res)
       return thunkAPI.fulfillWithValue(res);
     } catch (err) {

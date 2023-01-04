@@ -98,12 +98,15 @@ const PostList = () => {
         <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>헬피 게시판</StHelpee>
         <StLocation ref={locationRef} onClick={setBoolLocationTrue}>전국</StLocation>
       </StPostListWrapper>
-      {boolLocation ? 'true' : 'false'}
+      {boolLocation ? '로컬입니다' : '전체조회 입니다'}
       {boolLocation ? <>{boolAll ? <AllTrue /> : null}</> : <>{boolAll ? <AllFalse /> : null}</>}
       {boolLocation ? <>{boolHelpUs ? < HelpUsTrue /> : null}</> : <>{boolHelpUs ? <HelpUsFalse /> : null}</>}
       {boolLocation ? <>{boolHelper ? < HelperTrue /> : null}</> : <>{boolHelper ? <HelperFalse /> : null}</>}
       {boolLocation ? <>{boolHelpee ? <HelpeeTrue /> : null}</> : <>{boolHelpee ? <HelpeeFalse /> : null}</>}
-
+      {/* <HelpUsFalse /> */}
+      {/* <HelperFalse /> */}
+      {/* <HelpeeFalse /> */}
+      <AllFalse />
     </>
   );
 };

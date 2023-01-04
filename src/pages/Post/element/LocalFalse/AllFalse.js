@@ -1,6 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-
+import { __getAllFalse } from "../../../../redux/modules/postSlice";
 const AllFalse = () => {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.postSlice.AllFalseDate)
+  console.log('전체 true data:', data)
+
+  useEffect(() => { dispatch(__getAllFalse()) }, [])
   return (<>
 
     <StAll>
