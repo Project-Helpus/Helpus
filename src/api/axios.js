@@ -16,26 +16,28 @@ export const PostAPI = {
   getDetailPost: (postId) => client.get(`/api/post/${postId}`),
   putPost: (postId, formData) => client.put(`/api/post/${postId}`, formData),
   deletePost: (postId) => client.delete(`/api/post/${postId}`),
-  postReport: (userId, type, reason) => client.post(`/api/report/${userId}`, type, reason),
+  postReport: (userId, type, reason) =>
+    client.post(`/api/report/${userId}`, type, reason),
   postWishList: (postId) => client.post(`/api/board/post/${postId}/wish`),
   // 검색 확정되면 재 확인 필요
-  getSearch: (keyword, type, location) => client.get(`/api/search?keyword=${keyword}&type=${type}`),
+  getSearch: (keyword, type, location) =>
+    client.get(`/api/search?keyword=${keyword}&type=${type}`),
 };
 
 export const UserAPI = {
-  getKakaoLogin: (code) => client.get(`/auth/kakao?code=${code}`),
-  // 소셜 로그인시 주소 기입 API 추가 해야함
-  postEmailCheck: (email) => client.post(`/api/user/email`, { email }),
-  postSignUp: (formData) => client.post("/api/user/signup", formData),
+  kakaoLogin: (code) => client.get(`/api/user/kakao?code=${code}`),
+  emailCheck: (email) => client.post(`/api/user/email`, { email }),
+  signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
 };
 
 export const MypageAPI = {
-  getMyPage: () => client.get('/api/user/detail'),
-  getWishlist: () => client.get('/api/user/wishlist'),
-  patchMypage: (userData) => client.patch('api/user/detail', userData),
-  patchPassword: (changePassword) => client.patch('api/user/password', changePassword),
-  getUserPage: (userId) => client.get(`/api/user/${userId}/detail`)
+  getMyPage: () => client.get("/api/user/detail"),
+  getWishlist: () => client.get("/api/user/wishlist"),
+  patchMypage: (userData) => client.patch("api/user/detail", userData),
+  patchPassword: (changePassword) =>
+    client.patch("api/user/password", changePassword),
+  getUserPage: (userId) => client.get(`/api/user/${userId}/detail`),
 };
 
 client.interceptors.request.use(
