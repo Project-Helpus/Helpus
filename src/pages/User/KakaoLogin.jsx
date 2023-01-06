@@ -11,7 +11,6 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 const KakaoLogin = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  //const navigate = useNavigate();
 
   const sendAuth = () => {
     const code = location.search.split("=")[1];
