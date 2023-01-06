@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StWrapper = ({children}) => {
-  return <Wrapper>{children}</Wrapper>;
+  return <Wrapper>{ children }</Wrapper>;
 };
 
 export default StWrapper;
@@ -13,6 +13,4 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  width: 50%;
-
 `;
