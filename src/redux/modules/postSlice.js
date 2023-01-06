@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PostAPI } from "../../api/axios";
-import { client } from "../../api/axios";
 
 export const __createPost = createAsyncThunk(
   "mypageSlice/createPost",
