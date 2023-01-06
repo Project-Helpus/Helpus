@@ -73,7 +73,7 @@ export const __postLogin = createAsyncThunk(
   }
 );
 
-//카카오 로그인 post
+//카카오 로그인 get
 export const __kakaoLogin = createAsyncThunk(
   "user/kakaoLogin",
   async (code, thunkAPI) => {
