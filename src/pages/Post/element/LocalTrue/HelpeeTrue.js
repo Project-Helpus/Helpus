@@ -10,7 +10,7 @@ const HelpeeTrue = () => {
 
 
 
-  useEffect(() => dispatch(__getHelpeeTrue()), [dispatch])
+  useEffect(() => { dispatch(__getHelpeeTrue()) }, [dispatch])
 
   return (<>
     <StHelpeeWrapper>

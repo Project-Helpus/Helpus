@@ -10,6 +10,7 @@ import HelpeeTrue from './element/LocalTrue/HelpeeTrue';
 import AllTrue from './element/LocalTrue/AllTrue';
 import AllFalse from './element/LocalFalse/AllFalse';
 import { setBoolHelper } from '../../redux/modules/postSlice';
+import { Cookies } from 'react-cookie';
 const PostList = () => {
   // const { helpUsRef, helperRef, helpeeRef } = useRef(null);
   const dispatch = useDispatch()
@@ -19,17 +20,18 @@ const PostList = () => {
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
   const locationRef = useRef(null)
-
-
+  const cookie = new Cookies();
 
 
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper)
-  const storeBboolHelpee = useSelector((state) => state.postSlice.boolHelpee)
-  const [boolAll, setBoolAll] = useState(true)
+  const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee)
+  const storeBoolAll = useSelector((state) => state.postSlice.boolAll)
+
+  const [boolAll, setBoolAll] = useState(storeBoolAll)
   const [boolHelpUs, setBoollHelpUs] = useState(false);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
-  const [boolHelpee, setBoollHelpee] = useState(storeBboolHelpee);
-  const [boolLocation, setBoolLocation] = useState(true)
+  const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
+  const [boolLocation, setBoolLocation] = useState(false)
 
   const setBollAllTrue = () => {
     allRef.current.style.color = 'black'
@@ -77,13 +79,16 @@ const PostList = () => {
   }
 
   const setBoolLocationTrue = () => {
-    if (boolLocation === true) {
-      setBoolLocation(false);
-      locationRef.current.style.color = 'black'
-    }
+    if (cookie.get('token') == undefined) { alert('로그인시 이용할 수 있습니다') }
     else {
-      locationRef.current.style.color = 'blue'
-      setBoolLocation(true);
+      if (boolLocation === true) {
+        setBoolLocation(false);
+        locationRef.current.style.color = 'black'
+      }
+      else {
+        locationRef.current.style.color = 'blue'
+        setBoolLocation(true);
+      }
     }
   }
 
@@ -103,10 +108,6 @@ const PostList = () => {
       {boolLocation ? <>{boolHelpUs ? < HelpUsTrue /> : null}</> : <>{boolHelpUs ? <HelpUsFalse /> : null}</>}
       {boolLocation ? <>{boolHelper ? < HelperTrue /> : null}</> : <>{boolHelper ? <HelperFalse /> : null}</>}
       {boolLocation ? <>{boolHelpee ? <HelpeeTrue /> : null}</> : <>{boolHelpee ? <HelpeeFalse /> : null}</>}
-      {/* <HelpUsFalse /> */}
-      {/* <HelperFalse /> */}
-      {/* <HelpeeFalse /> */}
-      <AllFalse />
     </>
   );
 };

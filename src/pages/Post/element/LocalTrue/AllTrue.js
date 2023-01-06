@@ -1,6 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-
+import { __getAllTrue } from "../../../../redux/modules/postSlice";
 const AllTrue = () => {
+  const dispatch = useDispatch();
+
+
+
+  useEffect(() => { dispatch(__getAllTrue()) }, [dispatch])
   return (<>
 
     <StAll>

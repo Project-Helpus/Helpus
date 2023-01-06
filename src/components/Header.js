@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { __search } from '../redux/modules/postSlice';
 const Header = () => {
   const [search, setSearch] = useState('')
   const boolean = true;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const searching = (e) => {
     e.preventDefault();
-    dispatch(__search(search));
+    // dispatch(__search(search));
   }
 
   return (
 
     <StHeaderWrapper>
-      <Stlogo onClick={() => { Navigate('/') }}>로고</Stlogo>
+      <Stlogo onClick={() => { navigate('/') }}>로고</Stlogo>
       <form onSubmit={searching}>
         <StSearch placeholder='Search' type='text' value={search} onChange={(e) => { setSearch(e.target.value) }}></StSearch>
       </form>
