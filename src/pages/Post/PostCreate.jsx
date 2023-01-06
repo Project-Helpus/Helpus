@@ -8,6 +8,7 @@ import { __createPost } from "../../redux/modules/postSlice";
 import { 행정구역 } from "./elements/address";
 import Category from "./elements/Category";
 import { categoryType } from "./elements/categoryType";
+import Calender from "./elements/Calender";
 
 const PostCreate = () => {
   const { state, city } = 행정구역;
@@ -16,10 +17,10 @@ const PostCreate = () => {
   const [img, setImg] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState("");
+  const [date, setDate] = useState();
   const [input, setInput] = useState({
     title: "",
     content: "",
-    // date: "",
     category: 0,
     location1: "",
     location2: "",
@@ -60,12 +61,17 @@ const PostCreate = () => {
     e.preventDefault();
 
     const formData = new FormData();
+
     for (const property in input) {
       formData.append(`${property}`, input[property]);
     }
     for (let i = 0; i < img.length; i++) {
       formData.append("post-image", img[i]);
     }
+    // const day = new Date(+date+3240*10000).toISOString().replace("T", " ").replace(/\..*/, '');
+    const day = date.toISOString();
+
+    formData.append("appointed", day);
     formData.append("tag", tags);
     dispatch(__createPost(formData));
   };
@@ -77,7 +83,6 @@ const PostCreate = () => {
   };
 
   const addTag = e => {
-    if (e.target.value === "") return;
     setTag(e.target.value);
   };
 
@@ -107,12 +112,7 @@ const PostCreate = () => {
           onChange={changeInputHandler}
         ></StTextarea>
         <label htmlFor="date">날짜</label>
-        {/* <input
-          name="date"
-          id="date"
-          placeholder="날짜를 적어주세요"
-          onChange={changeInputHandler}
-        ></input> */}
+        <Calender value={date} setDate={setDate} />
         <label>카테고리 선택</label>
         <StInnerContainer>
           {categoryType.map((el, id) => (
