@@ -1,8 +1,8 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { kakaoLogin } from "../../redux/modules/userSlice";
+import { __kakaoLogin } from "../../redux/modules/userSlice";
 
 const REST_API_KEY = process.env.REACT_APP_KAKAO_KEY;
 const KAKAO_REDIRECT_URL = process.env.REACT_APP_KAKAO_SERVER;
@@ -11,12 +11,10 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 const KakaoLogin = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const sendAuth = () => {
     const code = location.search.split("=")[1];
-    console.log(code);
-    dispatch(kakaoLogin(code));
+    dispatch(__kakaoLogin(code));
   };
 
   useEffect(() => {
