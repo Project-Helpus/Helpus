@@ -8,7 +8,6 @@ export const __getMyPage = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getMyPage(data);
-      console.log("🚀 ~ file: mypageSlice.js:11 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserAPI } from "../../api/axios";
 import { Cookies } from "react-cookie";
+const cookie = new Cookies();
 
 const initialState = {
   email: "",
@@ -59,7 +60,6 @@ export const __postLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.login(payload);
-      console.log("🚀 ~ file: userSlice.js:61 ~ res", res);
       if (res.status === 200) {
         window.alert("로그인 성공!");
         return thunkAPI.fulfillWithValue(res.data.token);
@@ -113,8 +113,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    checkLogin: (state, action) => {
-      const cookie = new Cookies();
+    __checkLogin: (state, action) => {
       if (cookie.get("token")) {
         state.isLogin = true;
       } else {
@@ -122,7 +121,6 @@ const userSlice = createSlice({
       }
     },
     __logout: (state, action) => {
-      const cookie = new Cookies();
       if ((state.isLogin = true)) {
         cookie.remove("token");
         state.isLogin = false;
@@ -185,5 +183,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { checkLogin, __logout } = userSlice.actions;
+export const { __checkLogin, __logout } = userSlice.actions;
 export default userSlice.reducer;
