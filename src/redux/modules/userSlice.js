@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserAPI } from "../../api/axios";
+import { Cookies } from "react-cookie";
 
 const initialState = {
   email: "",
@@ -58,10 +59,10 @@ export const __postLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.login(payload);
+      console.log("🚀 ~ file: userSlice.js:61 ~ res", res);
       if (res.status === 200) {
         window.alert("로그인 성공!");
-        window.location.replace("/");
-        return thunkAPI.fulfillWithValue(res.data.accessToken);
+        return thunkAPI.fulfillWithValue(res.data.token);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
         return thunkAPI.rejectWithValue();
@@ -106,11 +107,30 @@ export const __kakaoState = createAsyncThunk(
     }
   }
 );
+
 //slice 데이터 저장
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducer: {},
+  reducers: {
+    checkLogin: (state, action) => {
+      const cookie = new Cookies();
+      if (cookie.get("token")) {
+        state.isLogin = true;
+      } else {
+        state.isLogin = false;
+      }
+    },
+    __logout: (state, action) => {
+      const cookie = new Cookies();
+      if ((state.isLogin = true)) {
+        cookie.remove("token");
+        state.isLogin = false;
+      } else {
+        return;
+      }
+    },
+  },
 
   extraReducers: {
     [__signUp.pending]: (state) => {
@@ -164,4 +184,6 @@ const userSlice = createSlice({
     },
   },
 });
+
+export const { checkLogin, __logout } = userSlice.actions;
 export default userSlice.reducer;
