@@ -13,8 +13,6 @@ const SignUp = () => {
   const [nicknameText, setNicknameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
   const [confirmText, setConfirmText] = useState("");
-  const [state1Text, setState1Text] = useState("");
-  const [state2Text, setState2Text] = useState("");
 
   const { state, city } = address;
 
@@ -38,6 +36,7 @@ const SignUp = () => {
     isState2: "",
   });
 
+  //img 넣는 state
   const [imgFile, setImgFile] = useState();
   const [privewImg, setPrivewImg] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -121,20 +120,16 @@ const SignUp = () => {
     if (name === "state1") {
       if (value === "") {
         //value 값이 없을때
-        setState1Text("지역을 입력해주세요.");
         setIsValid({ ...isValid, isState1: false });
       } else {
-        setState1Text("");
         setIsValid({ ...isValid, isState1: true });
       }
     }
     if (name === "state2") {
       if (value === "") {
         //value 값이 없을때
-        setState2Text("지역을 입력해주세요.");
         setIsValid({ ...isValid, isState2: false });
       } else {
-        setState2Text("");
         setIsValid({ ...isValid, isState2: true });
       }
     }
@@ -169,6 +164,7 @@ const SignUp = () => {
               onClick={() => {
                 fileInput.current.click();
               }}
+              alt=""
             />
             <input
               style={{ display: "none" }}
@@ -233,7 +229,6 @@ const SignUp = () => {
                   </option>
                 ))}
               </select>
-              <span>{state1Text}</span>
               <select name="state2" onChange={onChangeHandler}>
                 <option>:: 선택 ::</option>
                 {city
@@ -244,7 +239,6 @@ const SignUp = () => {
                     </option>
                   ))}
               </select>
-              <span>{state2Text}</span>
             </div>
           </div>
           <button
@@ -366,20 +360,4 @@ const CheckButton = styled.div`
   background-color: white;
   border: 1px solid #e0e0e0;
   cursor: pointer;
-`;
-const Stbox1 = styled.div`
-  display: block;
-  width: 350px;
-  padding: 20px 0;
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  text-align: center;
-  margin: 10px auto;
-  button {
-    all: unset;
-    color: #0095f6;
-    font-weight: 900;
-    padding-left: 8px;
-    cursor: pointer;
-  }
 `;

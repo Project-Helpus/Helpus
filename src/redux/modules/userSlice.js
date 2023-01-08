@@ -21,7 +21,12 @@ export const __signUp = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.signUp(payload);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 201) {
+        return thunkAPI.fulfillWithValue(res.data);
+      } else {
+        window.alert("회원가입에 실패했습니다.");
+        return thunkAPI.rejectWithValue();
+      }
     } catch (error) {
       window.alert("회원가입에 실패했습니다.");
       return thunkAPI.rejectWithValue(error);
@@ -39,7 +44,7 @@ export const __postDupEmail = createAsyncThunk(
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("중복된 ID가 있습니다.");
-        return thunkAPI.rejectWithValue("1");
+        return thunkAPI.rejectWithValue();
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -53,18 +58,23 @@ export const __postLogin = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.login(payload);
-      window.alert("로그인 성공!");
-      window.location.replace("/");
-      return thunkAPI.fulfillWithValue(res.data.accessToken);
+      if (res.status === 200) {
+        window.alert("로그인 성공!");
+        window.location.replace("/");
+        return thunkAPI.fulfillWithValue(res.data.accessToken);
+      } else {
+        window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
+        return thunkAPI.rejectWithValue();
+      }
     } catch (error) {
-      window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
+      window.alert(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-//카카오 로그인 post
-export const kakaoLogin = createAsyncThunk(
+//카카오 로그인 get
+export const __kakaoLogin = createAsyncThunk(
   "user/kakaoLogin",
   async (code, thunkAPI) => {
     try {
@@ -72,10 +82,27 @@ export const kakaoLogin = createAsyncThunk(
       if (response.status === 200) {
         return thunkAPI.fulfillWithValue();
       } else {
-        return thunkAPI.rejectWithValue("kakao error");
+        return thunkAPI.rejectWithValue();
       }
-    } catch (err) {
-      return thunkAPI.rejectWithValue("kakao error");
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+//카카오 회원가입 지역 추가
+export const __kakaoState = createAsyncThunk(
+  "user/kakaoLoginState",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await UserAPI.kakaoLoginState(payload);
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue();
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -102,9 +129,9 @@ const userSlice = createSlice({
     [__postDupEmail.pending]: (state) => {
       state.isLoading = true;
     },
-    [__postDupEmail.fulfilled]: (state, action) => {
+    [__postDupEmail.fulfilled]: (state) => {
       state.isLoading = false;
-      state.dupCheck = action.payload.result;
+      state.dupCheck = true;
     },
     [__postDupEmail.rejected]: (state) => {
       state.isLoading = false;
@@ -125,11 +152,13 @@ const userSlice = createSlice({
     },
 
     //kakaoLogin
-    [kakaoLogin.pending]: (state) => {},
-    [kakaoLogin.fulfilled]: (state) => {
+    [__kakaoLogin.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__kakaoLogin.fulfilled]: (state) => {
       state.isLogin = true;
     },
-    [kakaoLogin.rejected]: (state, action) => {
+    [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
       state.error = action.payload;
     },

@@ -9,10 +9,9 @@ import HelperTrue from './element/LocalTrue/HelperTrue';
 import HelpeeTrue from './element/LocalTrue/HelpeeTrue';
 import AllTrue from './element/LocalTrue/AllTrue';
 import AllFalse from './element/LocalFalse/AllFalse';
-import { setBoolHelper } from '../../redux/modules/postSlice';
+import { setBoolHelper, setBoolLocationTrue, setBoolLocationFalse } from '../../redux/modules/postSlice';
 import { Cookies } from 'react-cookie';
 const PostList = () => {
-  // const { helpUsRef, helperRef, helpeeRef } = useRef(null);
   const dispatch = useDispatch()
 
   const helpUsRef = useRef(null);
@@ -26,12 +25,20 @@ const PostList = () => {
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper)
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee)
   const storeBoolAll = useSelector((state) => state.postSlice.boolAll)
+  const storeBooLocation = useSelector((state) => state.postSlice.boolLocation)
+  const confirm = useSelector((state) => state.postSlice)
+  console.log('location:', storeBooLocation)
+
+
+
+
 
   const [boolAll, setBoolAll] = useState(storeBoolAll)
   const [boolHelpUs, setBoollHelpUs] = useState(false);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
-  const [boolLocation, setBoolLocation] = useState(false)
+  const [boolLocation, setBoolLocation] = useState(storeBooLocation)
+  // const [boolLocation, setBoolLocation] = useState(false)
 
   const setBollAllTrue = () => {
     allRef.current.style.color = 'black'
@@ -81,14 +88,10 @@ const PostList = () => {
   const setBoolLocationTrue = () => {
     if (cookie.get('token') == undefined) { alert('로그인시 이용할 수 있습니다') }
     else {
-      if (boolLocation === true) {
-        setBoolLocation(false);
-        locationRef.current.style.color = 'black'
-      }
-      else {
-        locationRef.current.style.color = 'blue'
-        setBoolLocation(true);
-      }
+      // if (storeBooLocation == true) { dispatch(setBoolLocationFalse); locationRef.current.style.color = 'black' }
+      if (boolLocation == true) { setBoolLocation(false); locationRef.current.style.color = 'black'; dispatch(setBoolLocationFalse) }
+      // else { dispatch(setBoolLocationTrue); locationRef.current.style.color = 'blue' }
+      else { setBoolLocation(true); locationRef.current.style.color = 'blue'; dispatch(setBoolLocationTrue) }
     }
   }
 

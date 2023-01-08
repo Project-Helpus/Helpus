@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __getHelpeeFalse } from "../../../../redux/modules/postSlice";
-import Card from "../../../../api/Card";
+import Card from "../../../../components/Card";
 const HelpeeFalse = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice.helpeeFalseDate.result)
-  console.log('헬피 false data:', data)
+  // console.log('헬피 false data:', data)
 
 
   useEffect(() => { dispatch(__getHelpeeFalse()) }, [dispatch])
