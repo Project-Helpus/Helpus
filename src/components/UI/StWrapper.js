@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const StWrapper = ({children}) => {
-  return <Wrapper>{ children }</Wrapper>;
+const StWrapper = ({ children }) => {
+  return <Wrapper>{children}</Wrapper>;
 };
 
 export default StWrapper;
