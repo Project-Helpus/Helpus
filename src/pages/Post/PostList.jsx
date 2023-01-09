@@ -29,7 +29,6 @@ const PostList = () => {
   const storeBoolAll = useSelector(state => state.postSlice.boolAll);
   const storeBooLocation = useSelector(state => state.postSlice.boolLocation);
   const confirm = useSelector(state => state.postSlice);
-  console.log("location:", storeBooLocation);
 
   const [boolAll, setBoolAll] = useState(storeBoolAll);
   const [boolHelpUs, setBoollHelpUs] = useState(false);
@@ -84,14 +83,11 @@ const PostList = () => {
     if (isLogin === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
-      // if (storeBooLocation == true) { dispatch(setBoolLocationFalse); locationRef.current.style.color = 'black' }
-      if (boolLocation == true) {
+      if (boolLocation === true) {
         setBoolLocation(false);
         locationRef.current.style.color = "black";
         dispatch(__setBoolLocationFalse());
-      }
-      // else { dispatch(setBoolLocationTrue); locationRef.current.style.color = 'blue' }
-      else {
+      } else {
         setBoolLocation(true);
         locationRef.current.style.color = "blue";
         dispatch(__setBoolLocationTrue());
@@ -99,7 +95,6 @@ const PostList = () => {
     }
   };
 
-  // useEffect(() => { console.log('us2:', helpUsRef.current) }, [boolHelpUs])
   return (
     <>
       <button>글쓰기</button>
