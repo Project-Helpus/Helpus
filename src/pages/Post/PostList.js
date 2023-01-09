@@ -1,116 +1,146 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import HelpUsFalse from './element/LocalFalse/HelpUsFalse';
-import HelperFalse from './element/LocalFalse/HelperFalse';
-import HelpeeFalse from './element/LocalFalse/HelpeeFalse';
-import HelpUsTrue from './element/LocalTrue/HelpUsTrue';
-import HelperTrue from './element/LocalTrue/HelperTrue';
-import HelpeeTrue from './element/LocalTrue/HelpeeTrue';
-import AllTrue from './element/LocalTrue/AllTrue';
-import AllFalse from './element/LocalFalse/AllFalse';
-import { setBoolHelper, setBoolLocationTrue, setBoolLocationFalse } from '../../redux/modules/postSlice';
-import { Cookies } from 'react-cookie';
-const PostList = () => {
-  const dispatch = useDispatch()
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
+import HelperFalse from "./element/LocalFalse/HelperFalse";
+import HelpeeFalse from "./element/LocalFalse/HelpeeFalse";
+import HelpUsTrue from "./element/LocalTrue/HelpUsTrue";
+import HelperTrue from "./element/LocalTrue/HelperTrue";
+import HelpeeTrue from "./element/LocalTrue/HelpeeTrue";
+import AllTrue from "./element/LocalTrue/AllTrue";
+import AllFalse from "./element/LocalFalse/AllFalse";
+import {
+  __setBoolHelper,
+  __setBoolLocationTrue,
+  __setBoolLocationFalse,
+} from "../../redux/modules/postSlice";
 
+const PostList = () => {
+  const dispatch = useDispatch();
+  const { isLogin } = useSelector(state => state.userSlice);
   const helpUsRef = useRef(null);
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
-  const locationRef = useRef(null)
-  const cookie = new Cookies();
+  const locationRef = useRef(null);
 
+  const storeBoolHelper = useSelector(state => state.postSlice.boolHelper);
+  const storeBoolHelpee = useSelector(state => state.postSlice.boolHelpee);
+  const storeBoolAll = useSelector(state => state.postSlice.boolAll);
+  const storeBooLocation = useSelector(state => state.postSlice.boolLocation);
+  const confirm = useSelector(state => state.postSlice);
+  console.log("location:", storeBooLocation);
 
-  const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper)
-  const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee)
-  const storeBoolAll = useSelector((state) => state.postSlice.boolAll)
-  const storeBooLocation = useSelector((state) => state.postSlice.boolLocation)
-  const confirm = useSelector((state) => state.postSlice)
-  console.log('location:', storeBooLocation)
-
-
-
-
-
-  const [boolAll, setBoolAll] = useState(storeBoolAll)
+  const [boolAll, setBoolAll] = useState(storeBoolAll);
   const [boolHelpUs, setBoollHelpUs] = useState(false);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
-  const [boolLocation, setBoolLocation] = useState(storeBooLocation)
+  const [boolLocation, setBoolLocation] = useState(storeBooLocation);
   // const [boolLocation, setBoolLocation] = useState(false)
 
   const setBollAllTrue = () => {
-    allRef.current.style.color = 'black'
-    setBoolAll(true)
+    allRef.current.style.color = "black";
+    setBoolAll(true);
     setBoollHelpUs(false);
-    setBoollHelper(false)
-    setBoollHelpee(false)
-    helpUsRef.current.style.color = 'blue'
-    helpeeRef.current.style.color = 'blue'
-    helperRef.current.style.color = 'blue'
-
-  }
+    setBoollHelper(false);
+    setBoollHelpee(false);
+    helpUsRef.current.style.color = "blue";
+    helpeeRef.current.style.color = "blue";
+    helperRef.current.style.color = "blue";
+  };
 
   const setBoollHelpUsTrue = () => {
-    helpUsRef.current.style.color = 'black'
+    helpUsRef.current.style.color = "black";
     setBoollHelpUs(true);
-    setBoollHelper(false)
-    setBoollHelpee(false)
-    setBoolAll(false)
-    helpeeRef.current.style.color = 'blue'
-    helperRef.current.style.color = 'blue'
-    allRef.current.style.color = 'blue'
-  }
-  const setBoollHelperTrue = () => {
-    helperRef.current.style.color = 'black'
-    setBoollHelpUs(false);
-    setBoollHelper(true)
+    setBoollHelper(false);
     setBoollHelpee(false);
-    setBoolAll(false)
-    helpeeRef.current.style.color = 'blue'
-    helpUsRef.current.style.color = 'blue'
-    allRef.current.style.color = 'blue'
-
-  }
-  const setBoollHelpeeTrue = () => {
-    helpeeRef.current.style.color = 'black'
+    setBoolAll(false);
+    helpeeRef.current.style.color = "blue";
+    helperRef.current.style.color = "blue";
+    allRef.current.style.color = "blue";
+  };
+  const setBoollHelperTrue = () => {
+    helperRef.current.style.color = "black";
     setBoollHelpUs(false);
-    setBoollHelper(false)
-    setBoollHelpee(true)
-    setBoolAll(false)
-    helperRef.current.style.color = 'blue'
-    helpUsRef.current.style.color = 'blue'
-    allRef.current.style.color = 'blue'
-
-  }
+    setBoollHelper(true);
+    setBoollHelpee(false);
+    setBoolAll(false);
+    helpeeRef.current.style.color = "blue";
+    helpUsRef.current.style.color = "blue";
+    allRef.current.style.color = "blue";
+  };
+  const setBoollHelpeeTrue = () => {
+    helpeeRef.current.style.color = "black";
+    setBoollHelpUs(false);
+    setBoollHelper(false);
+    setBoollHelpee(true);
+    setBoolAll(false);
+    helperRef.current.style.color = "blue";
+    helpUsRef.current.style.color = "blue";
+    allRef.current.style.color = "blue";
+  };
 
   const setBoolLocationTrue = () => {
-    if (cookie.get('token') == undefined) { alert('로그인시 이용할 수 있습니다') }
-    else {
+    if (isLogin === false) {
+      alert("로그인시 이용할 수 있습니다");
+    } else {
       // if (storeBooLocation == true) { dispatch(setBoolLocationFalse); locationRef.current.style.color = 'black' }
-      if (boolLocation == true) { setBoolLocation(false); locationRef.current.style.color = 'black'; dispatch(setBoolLocationFalse) }
+      if (boolLocation == true) {
+        setBoolLocation(false);
+        locationRef.current.style.color = "black";
+        dispatch(__setBoolLocationFalse());
+      }
       // else { dispatch(setBoolLocationTrue); locationRef.current.style.color = 'blue' }
-      else { setBoolLocation(true); locationRef.current.style.color = 'blue'; dispatch(setBoolLocationTrue) }
+      else {
+        setBoolLocation(true);
+        locationRef.current.style.color = "blue";
+        dispatch(__setBoolLocationTrue());
+      }
     }
-  }
+  };
 
   // useEffect(() => { console.log('us2:', helpUsRef.current) }, [boolHelpUs])
   return (
     <>
       <button>글쓰기</button>
-      <StPostListWrapper >
-        <StAll ref={allRef} onClick={setBollAllTrue} >전체</StAll>
-        <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>헬퍼스 게시판</StHelpUs>
-        <StHelper ref={helperRef} onClick={setBoollHelperTrue}>헬퍼 게시판</StHelper>
-        <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>헬피 게시판</StHelpee>
-        <StLocation ref={locationRef} onClick={setBoolLocationTrue}>전국</StLocation>
+      <StPostListWrapper>
+        <StAll ref={allRef} onClick={setBollAllTrue}>
+          전체
+        </StAll>
+        <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>
+          헬퍼스 게시판
+        </StHelpUs>
+        <StHelper ref={helperRef} onClick={setBoollHelperTrue}>
+          헬퍼 게시판
+        </StHelper>
+        <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>
+          헬피 게시판
+        </StHelpee>
+        <StLocation ref={locationRef} onClick={setBoolLocationTrue}>
+          전국
+        </StLocation>
       </StPostListWrapper>
-      {boolLocation ? '로컬입니다' : '전체조회 입니다'}
-      {boolLocation ? <>{boolAll ? <AllTrue /> : null}</> : <>{boolAll ? <AllFalse /> : null}</>}
-      {boolLocation ? <>{boolHelpUs ? < HelpUsTrue /> : null}</> : <>{boolHelpUs ? <HelpUsFalse /> : null}</>}
-      {boolLocation ? <>{boolHelper ? < HelperTrue /> : null}</> : <>{boolHelper ? <HelperFalse /> : null}</>}
-      {boolLocation ? <>{boolHelpee ? <HelpeeTrue /> : null}</> : <>{boolHelpee ? <HelpeeFalse /> : null}</>}
+      {boolLocation ? "로컬입니다" : "전체조회 입니다"}
+      {boolLocation ? (
+        <>{boolAll ? <AllTrue /> : null}</>
+      ) : (
+        <>{boolAll ? <AllFalse /> : null}</>
+      )}
+      {boolLocation ? (
+        <>{boolHelpUs ? <HelpUsTrue /> : null}</>
+      ) : (
+        <>{boolHelpUs ? <HelpUsFalse /> : null}</>
+      )}
+      {boolLocation ? (
+        <>{boolHelper ? <HelperTrue /> : null}</>
+      ) : (
+        <>{boolHelper ? <HelperFalse /> : null}</>
+      )}
+      {boolLocation ? (
+        <>{boolHelpee ? <HelpeeTrue /> : null}</>
+      ) : (
+        <>{boolHelpee ? <HelpeeFalse /> : null}</>
+      )}
     </>
   );
 };
@@ -118,25 +148,27 @@ const PostList = () => {
 export default PostList;
 
 const StPostListWrapper = styled.div`
-display:flex;
-margin:3em auto 3em auto;
-div{margin-right:3em;
-  border-bottom:2px solid #000;}`
+  display: flex;
+  margin: 3em auto 3em auto;
+  div {
+    margin-right: 3em;
+    border-bottom: 2px solid #000;
+  }
+`;
 
 const StHelpUs = styled.div`
-
-color:blue;
-`
+  color: blue;
+`;
 const StHelper = styled.div`
-color:blue;
-
-`
+  color: blue;
+`;
 const StHelpee = styled.div`
-color:blue`
+  color: blue;
+`;
 
 const StAll = styled.div`
-color:blue;
-`
+  color: blue;
+`;
 const StLocation = styled.div`
-color:blue;
-`
+  color: blue;
+`;
