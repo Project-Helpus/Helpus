@@ -68,7 +68,6 @@ const PostCreate = () => {
     for (let i = 0; i < img.length; i++) {
       formData.append("post-image", img[i]);
     }
-    // const day = new Date(+date+3240*10000).toISOString().replace("T", " ").replace(/\..*/, '');
     const day = date.toISOString();
 
     formData.append("appointed", day);
