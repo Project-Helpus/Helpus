@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
-import {
-  __giveInput,
-} from "../redux/modules/postSlice";
+import { __giveInput } from "../redux/modules/postSlice";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,8 +77,6 @@ const StHeaderWrapper = styled.header`
   align-items: center;
   width: 100%;
   height: 70px;
-  top: 0;
-  margin: 0 auto;
   background-color: white;
 `;
 
