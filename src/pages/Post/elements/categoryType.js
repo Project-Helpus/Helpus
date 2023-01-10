@@ -1,1 +1,1 @@
-export const categoryType = ["헬퍼스", "헬피", "헬퍼"];
+export const categoryType = ["헬피", "헬퍼", "헬퍼스"];

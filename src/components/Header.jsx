@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
-
+import {
+  __giveInput,
+} from "../redux/modules/postSlice";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
 
   const profile = useSelector((state) => state.mypageSlice.data);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
@@ -15,6 +18,11 @@ const Header = () => {
   const logoutButton = (e) => {
     e.preventDefault();
     dispatch(__logout(isLogin));
+  };
+
+  const searching = (e) => {
+    e.preventDefault();
+    dispatch(__giveInput(search));
   };
 
   useEffect(() => {
@@ -29,8 +37,15 @@ const Header = () => {
       >
         ❤+❤ Helpus
       </StLogo>
-      <StSearch>
-        <input type="text" placeholder="search"></input>
+      <StSearch onSubmit={searching}>
+        <input
+          type="text"
+          placeholder="search"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        ></input>
         <button>검색</button>
       </StSearch>
       <StLogin>
@@ -68,7 +83,7 @@ const StHeaderWrapper = styled.header`
   margin: 0 auto;
   background-color: white;
 `;
-const StSearch = styled.div`
+const StSearch = styled.form`
   input {
     border: 1px solid #efefef;
     background-color: transparent;

@@ -12,6 +12,16 @@ export const ChatAPI = {
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
+  getAllFalse:(searchValue)=>client.get(`api/post/all-location?category=&search=${searchValue}`),
+  getHelpeeFalse: (searchValue) => client.get(`api/post/all-location?category=1&search=${searchValue}`),
+  getHelperFalse: (searchValue) => client.get(`api/post/all-location?category=2&search=${searchValue}`),
+  getHelpUsFalse: (searchValue) => client.get(`api/post/all-location?category=3&search=${searchValue}`),
+  getAllTrue: (searchValue) => client.get(`api/post/my-location?category=&search=${searchValue}`),
+  getHelpeeTrue: (searchValue) => client.get(`api/post/my-location?category=1&search=${searchValue}`),
+  getHelperTrue: (searchValue) => client.get(`api/post/my-location?category=2&search=${searchValue}`),
+  getHelpUsTrue:(searchValue)=>client.get(`api/post/my-location?category=3&search=${searchValue}`),
+
+
   getAllPost: (id) => client.get(`/api/post?lastId=${id}`),
   getDetailPost: (postId) => client.get(`/api/post/${postId}`),
   putPost: (postId, formData) => client.put(`/api/post/${postId}`, formData),
