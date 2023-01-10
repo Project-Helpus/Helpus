@@ -10,34 +10,30 @@ import HelpeeTrue from "./element/LocalTrue/HelpeeTrue";
 import AllTrue from "./element/LocalTrue/AllTrue";
 import AllFalse from "./element/LocalFalse/AllFalse";
 import {
-  __setBoolHelper,
   __setBoolLocationTrue,
   __setBoolLocationFalse,
 } from "../../redux/modules/postSlice";
 
 const PostList = () => {
   const dispatch = useDispatch();
-  const { isLogin } = useSelector(state => state.userSlice);
   const helpUsRef = useRef(null);
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
   const locationRef = useRef(null);
 
-  const storeBoolHelper = useSelector(state => state.postSlice.boolHelper);
-  const storeBoolHelpee = useSelector(state => state.postSlice.boolHelpee);
-  const storeBoolAll = useSelector(state => state.postSlice.boolAll);
-  const storeBooLocation = useSelector(state => state.postSlice.boolLocation);
-  const confirm = useSelector(state => state.postSlice);
+  const { isLogin } = useSelector((state) => state.userSlice);
+  const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
+  const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
+  const storeBoolAll = useSelector((state) => state.postSlice.boolAll);
+  const storeBooLocation = useSelector((state) => state.postSlice.boolLocation);
 
   const [boolAll, setBoolAll] = useState(storeBoolAll);
   const [boolHelpUs, setBoollHelpUs] = useState(false);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
-  const [boolLocation, setBoolLocation] = useState(storeBooLocation);
-  // const [boolLocation, setBoolLocation] = useState(false)
 
-  const setBollAllTrue = () => {
+  const setBoolAllTrue = () => {
     allRef.current.style.color = "black";
     setBoolAll(true);
     setBoollHelpUs(false);
@@ -83,12 +79,10 @@ const PostList = () => {
     if (isLogin === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
-      if (boolLocation === true) {
-        setBoolLocation(false);
+      if (storeBooLocation === true) {
         locationRef.current.style.color = "black";
         dispatch(__setBoolLocationFalse());
       } else {
-        setBoolLocation(true);
         locationRef.current.style.color = "blue";
         dispatch(__setBoolLocationTrue());
       }
@@ -99,7 +93,7 @@ const PostList = () => {
     <>
       <button>글쓰기</button>
       <StPostListWrapper>
-        <StAll ref={allRef} onClick={setBollAllTrue}>
+        <StAll ref={allRef} onClick={setBoolAllTrue}>
           전체
         </StAll>
         <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>
@@ -115,23 +109,22 @@ const PostList = () => {
           전국
         </StLocation>
       </StPostListWrapper>
-      {boolLocation ? "로컬입니다" : "전체조회 입니다"}
-      {boolLocation ? (
+      {storeBooLocation ? (
         <>{boolAll ? <AllTrue /> : null}</>
       ) : (
         <>{boolAll ? <AllFalse /> : null}</>
       )}
-      {boolLocation ? (
+      {storeBooLocation ? (
         <>{boolHelpUs ? <HelpUsTrue /> : null}</>
       ) : (
         <>{boolHelpUs ? <HelpUsFalse /> : null}</>
       )}
-      {boolLocation ? (
+      {storeBooLocation ? (
         <>{boolHelper ? <HelperTrue /> : null}</>
       ) : (
         <>{boolHelper ? <HelperFalse /> : null}</>
       )}
-      {boolLocation ? (
+      {storeBooLocation ? (
         <>{boolHelpee ? <HelpeeTrue /> : null}</>
       ) : (
         <>{boolHelpee ? <HelpeeFalse /> : null}</>
