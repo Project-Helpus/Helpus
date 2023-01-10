@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useEffect } from "react";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import Router from "./shared/Router";
@@ -14,7 +15,7 @@ function App() {
     disPatch(__checkLogin());
   });
   return (
-    <div>
+    <div className="App">
       <Router />
     </div>
   );
