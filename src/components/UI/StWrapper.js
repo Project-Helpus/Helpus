@@ -7,7 +7,7 @@ const StWrapper = ({ children }) => {
 
 export default StWrapper;
 
-const Wrapper = styled.div`
+const Wrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
