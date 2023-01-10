@@ -17,11 +17,11 @@ export const __createPost = createAsyncThunk(
 //    <  전국 false  >
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
-  async (payload, thunkAPI) => {
+  async (count, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllFalse(searchValue);
-      return thunkAPI.fulfillWithValue(res.data);
+      const res = await PostAPI.getAllFalse(count, searchValue);
+      return thunkAPI.fulfillWithValue(res.data.result);
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -34,7 +34,7 @@ export const __getHelpeeFalse = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getHelpeeFalse(searchValue)
+      const res = await PostAPI.getHelpeeFalse(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -48,7 +48,7 @@ export const __getHelperFalse = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getHelperFalse(searchValue)
+      const res = await PostAPI.getHelperFalse(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -62,7 +62,7 @@ export const __getHelpUsFalse = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res =await PostAPI.getHelpUsFalse(searchValue)
+      const res = await PostAPI.getHelpUsFalse(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -77,7 +77,7 @@ export const __getAllTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllTrue(searchValue)
+      const res = await PostAPI.getAllTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -91,7 +91,7 @@ export const __getHelpeeTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllTrue(searchValue)
+      const res = await PostAPI.getAllTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -105,7 +105,7 @@ export const __getHelperTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getHelperTrue(searchValue)
+      const res = await PostAPI.getHelperTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -119,7 +119,7 @@ export const __getHelpUsTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getHelpUsTrue(searchValue)
+      const res = await PostAPI.getHelpUsTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -129,6 +129,7 @@ export const __getHelpUsTrue = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
+  dataLength: 0,
   error: false,
   boolHelper: false,
   boolHelpee: false,
@@ -182,11 +183,20 @@ const postSlice = createSlice({
     },
 
     //    <<<<<<<<<<<<<<<<<<  전체 false 가져오기  >>>>>>>>>>>>>>>>>>>>>
-    [__getAllFalse.pending]: (state) => {},
+    [__getAllFalse.pending]: (state) => {
+      state.isLoading = true;
+    },
     [__getAllFalse.fulfilled]: (state, action) => {
-      state.AllFalseDate = action.payload;
+      state.isLoading = false;
+      state.dataLength = action.payload.length;
+      if (state.dataLength !== 0) {
+        state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
+      } else {
+        console.log("데이터 없음");
+      }
     },
     [__getAllFalse.rejected]: (state, action) => {
+      state.isLoading = true;
       console.log("전체 false 가져오기 Error");
     },
 

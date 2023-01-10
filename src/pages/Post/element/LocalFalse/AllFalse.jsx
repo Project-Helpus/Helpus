@@ -1,40 +1,56 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
+
 const AllFalse = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.AllFalseDate.result);
+  const data = useSelector((state) => state.postSlice.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
+  const { dataLength, isLoading } = useSelector((state) => state.postSlice);
+
+  const observerTarget = useRef(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    dispatch(__getAllFalse());
-  }, [input]);
+    let observer = new IntersectionObserver(
+      (e, io) => {
+        e.forEach((e) => {
+          if (e.isIntersecting) {
+            io.unobserve(e.target);
+            console.log(data);
+            setTimeout(() => {
+              if (data !== 0) {
+                dispatch(__getAllFalse(count));
+                setCount((prev) => prev + 12);
+              }
+            }, 300);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    if (observerTarget.current) observer.observe(observerTarget.current);
+    return () => observer.disconnect();
+  }, [data]);
 
   return (
     <>
-      <StAll>
-        전체(전국) 게시물
-        <StCardWrapper>
-          {data?.map((item, idx) => {
-            return <Card type={"세로"} data={item} key={idx} />;
-          })}
-        </StCardWrapper>
-      </StAll>
+      {data?.map((item, idx) => {
+        return <Card type={"세로"} data={item} key={idx} />;
+      })}
+      {!isLoading && (
+        <div
+          ref={observerTarget}
+          style={{
+            height: "1px",
+            width: "100%",
+          }}
+        ></div>
+      )}
     </>
   );
 };
 
 export default AllFalse;
-
-const StAll = styled.div`
-  width: 95%;
-  margin: auto;
-  border: 1px solid #000;
-`;
-const StCardWrapper = styled.div`
-  /* width:25em; */
-  /* height:15em; */
-  display: flex;
-`;

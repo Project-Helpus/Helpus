@@ -12,15 +12,24 @@ export const ChatAPI = {
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
-  getAllFalse:(searchValue)=>client.get(`api/post/all-location?category=&search=${searchValue}`),
-  getHelpeeFalse: (searchValue) => client.get(`api/post/all-location?category=1&search=${searchValue}`),
-  getHelperFalse: (searchValue) => client.get(`api/post/all-location?category=2&search=${searchValue}`),
-  getHelpUsFalse: (searchValue) => client.get(`api/post/all-location?category=3&search=${searchValue}`),
-  getAllTrue: (searchValue) => client.get(`api/post/my-location?category=&search=${searchValue}`),
-  getHelpeeTrue: (searchValue) => client.get(`api/post/my-location?category=1&search=${searchValue}`),
-  getHelperTrue: (searchValue) => client.get(`api/post/my-location?category=2&search=${searchValue}`),
-  getHelpUsTrue:(searchValue)=>client.get(`api/post/my-location?category=3&search=${searchValue}`),
-
+  getAllFalse: (count, searchValue) =>
+    client.get(
+      `api/post/all-location?q=${count}&category=&search=${searchValue}`
+    ),
+  getHelpeeFalse: (searchValue) =>
+    client.get(`api/post/all-location?category=1&search=${searchValue}`),
+  getHelperFalse: (searchValue) =>
+    client.get(`api/post/all-location?category=2&search=${searchValue}`),
+  getHelpUsFalse: (searchValue) =>
+    client.get(`api/post/all-location?category=3&search=${searchValue}`),
+  getAllTrue: (searchValue) =>
+    client.get(`api/post/my-location?category=&search=${searchValue}`),
+  getHelpeeTrue: (searchValue) =>
+    client.get(`api/post/my-location?category=1&search=${searchValue}`),
+  getHelperTrue: (searchValue) =>
+    client.get(`api/post/my-location?category=2&search=${searchValue}`),
+  getHelpUsTrue: (searchValue) =>
+    client.get(`api/post/my-location?category=3&search=${searchValue}`),
 
   getAllPost: (id) => client.get(`/api/post?lastId=${id}`),
   getDetailPost: (postId) => client.get(`/api/post/${postId}`),
@@ -30,8 +39,9 @@ export const PostAPI = {
     client.post(`/api/report/${userId}`, type, reason),
   postWishList: (postId) => client.post(`/api/board/post/${postId}/wish`),
   // 검색 확정되면 재 확인 필요
-  postSearch: () => client.post('/api/search'),
-  getSearch: (keyword, type, location) => client.get(`/api/search?keyword=${keyword}&type=${type}`),
+  postSearch: () => client.post("/api/search"),
+  getSearch: (keyword, type, location) =>
+    client.get(`/api/search?keyword=${keyword}&type=${type}`),
 };
 
 export const UserAPI = {
