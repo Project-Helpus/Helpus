@@ -41,6 +41,7 @@ export const __getHelpeeFalse = createAsyncThunk(
     }
   }
 );
+
 //    <  헬퍼 false  >
 export const __getHelperFalse = createAsyncThunk(
   "mypageSlice/__getHelperFalse",
@@ -54,6 +55,7 @@ export const __getHelperFalse = createAsyncThunk(
     }
   }
 );
+
 //    <  헬퍼스 false  >
 export const __getHelpUsFalse = createAsyncThunk(
   "mypageSlice/__getHelpUsFalse",
@@ -68,9 +70,7 @@ export const __getHelpUsFalse = createAsyncThunk(
   }
 );
 
-
 //    <<<<<<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  로컬  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
-
 //    <  전체 게시물 true  >
 export const __getAllTrue = createAsyncThunk(
   "mypageSlice/getAllTrue",
@@ -84,6 +84,7 @@ export const __getAllTrue = createAsyncThunk(
     }
   }
 );
+
 //    <  헬피 true  >
 export const __getHelpeeTrue = createAsyncThunk(
   "mypageSlice/__getHelpeeTrue",
@@ -97,6 +98,7 @@ export const __getHelpeeTrue = createAsyncThunk(
     }
   }
 );
+
 //    <  헬퍼 true  >
 export const __getHelperTrue = createAsyncThunk(
   "mypageSlice/__getHelperTrue",
@@ -110,6 +112,7 @@ export const __getHelperTrue = createAsyncThunk(
     }
   }
 );
+
 //    <  헬퍼스 true  >
 export const __getHelpUsTrue = createAsyncThunk(
   "mypageSlice/__getHelpUsTrue",
@@ -211,7 +214,6 @@ const postSlice = createSlice({
     [__getHelpUsFalse.rejected]: (state, action) => {
       console.log("헬퍼스 false 가져오기 Error");
     },
-
     //    <<<<<<<<<<<<<<<<<<  전체 true 가져오기  >>>>>>>>>>>>>>>>>>>>>
     [__getAllTrue.pending]: (state) => {},
     [__getAllTrue.fulfilled]: (state, action) => {

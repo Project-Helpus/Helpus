@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __getHelperTrue } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
+
 const HelperTrue = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice.helperTrueDate.result);

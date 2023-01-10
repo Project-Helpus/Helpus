@@ -83,6 +83,7 @@ const StHeaderWrapper = styled.header`
   margin: 0 auto;
   background-color: white;
 `;
+
 const StSearch = styled.form`
   input {
     border: 1px solid #efefef;

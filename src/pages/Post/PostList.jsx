@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
@@ -13,9 +13,9 @@ import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
 } from "../../redux/modules/postSlice";
+
 const PostList = () => {
   const dispatch = useDispatch();
-
   const helpUsRef = useRef(null);
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
@@ -88,6 +88,7 @@ const PostList = () => {
       }
     }
   };
+
   return (
     <>
       <button>글쓰기</button>
@@ -108,7 +109,6 @@ const PostList = () => {
           전국
         </StLocation>
       </StPostListWrapper>
-      {storeBooLocation ? "로컬입니다" : "전체조회 입니다"}
       {storeBooLocation ? (
         <>{boolAll ? <AllTrue /> : null}</>
       ) : (
