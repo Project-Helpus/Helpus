@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
@@ -13,6 +13,7 @@ import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
 } from "../../redux/modules/postSlice";
+import { StWrapper } from "../../components/UI/StIndex";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -91,57 +92,71 @@ const PostList = () => {
 
   return (
     <>
-      <button>글쓰기</button>
-      <StPostListWrapper>
-        <StAll ref={allRef} onClick={setBoolAllTrue}>
-          전체
-        </StAll>
-        <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>
-          헬퍼스 게시판
-        </StHelpUs>
-        <StHelper ref={helperRef} onClick={setBoollHelperTrue}>
-          헬퍼 게시판
-        </StHelper>
-        <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>
-          헬피 게시판
-        </StHelpee>
-        <StLocation ref={locationRef} onClick={setBoolLocationTrue}>
-          전국
-        </StLocation>
-      </StPostListWrapper>
-      {storeBooLocation ? (
-        <>{boolAll ? <AllTrue /> : null}</>
-      ) : (
-        <>{boolAll ? <AllFalse /> : null}</>
-      )}
-      {storeBooLocation ? (
-        <>{boolHelpUs ? <HelpUsTrue /> : null}</>
-      ) : (
-        <>{boolHelpUs ? <HelpUsFalse /> : null}</>
-      )}
-      {storeBooLocation ? (
-        <>{boolHelper ? <HelperTrue /> : null}</>
-      ) : (
-        <>{boolHelper ? <HelperFalse /> : null}</>
-      )}
-      {storeBooLocation ? (
-        <>{boolHelpee ? <HelpeeTrue /> : null}</>
-      ) : (
-        <>{boolHelpee ? <HelpeeFalse /> : null}</>
-      )}
+      <StWrapper>
+        <StTabWrapper>
+          <StAll ref={allRef} onClick={setBoolAllTrue}>
+            전체
+          </StAll>
+          <StHelpUs ref={helpUsRef} onClick={setBoollHelpUsTrue}>
+            헬퍼스 게시판
+          </StHelpUs>
+          <StHelper ref={helperRef} onClick={setBoollHelperTrue}>
+            헬퍼 게시판
+          </StHelper>
+          <StHelpee ref={helpeeRef} onClick={setBoollHelpeeTrue}>
+            헬피 게시판
+          </StHelpee>
+          <StLocation ref={locationRef} onClick={setBoolLocationTrue}>
+            전국
+          </StLocation>
+          <button>글쓰기</button>
+        </StTabWrapper>
+        <StCardContainer>
+          {storeBooLocation ? (
+            <>{boolAll ? <AllTrue /> : null}</>
+          ) : (
+            <>{boolAll ? <AllFalse /> : null}</>
+          )}
+          {storeBooLocation ? (
+            <>{boolHelpUs ? <HelpUsTrue /> : null}</>
+          ) : (
+            <>{boolHelpUs ? <HelpUsFalse /> : null}</>
+          )}
+          {storeBooLocation ? (
+            <>{boolHelper ? <HelperTrue /> : null}</>
+          ) : (
+            <>{boolHelper ? <HelperFalse /> : null}</>
+          )}
+          {storeBooLocation ? (
+            <>{boolHelpee ? <HelpeeTrue /> : null}</>
+          ) : (
+            <>{boolHelpee ? <HelpeeFalse /> : null}</>
+          )}
+        </StCardContainer>
+      </StWrapper>
     </>
   );
 };
 
 export default PostList;
 
-const StPostListWrapper = styled.div`
+const StTabWrapper = styled.div`
   display: flex;
-  margin: 3em auto 3em auto;
+  flex-direction: flex-start;
+  width: 100%;
+  margin: 3em 0 3em 0;
   div {
     margin-right: 3em;
     border-bottom: 2px solid #000;
   }
+`;
+
+const StCardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1280px;
+  width: 100%;
+  gap: 2.25% 3.125%;
 `;
 
 const StHelpUs = styled.div`
