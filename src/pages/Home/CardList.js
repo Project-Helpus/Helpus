@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import {
-  __setBoolHelpee,
-  __setBoolHelper,
-} from "../../redux/modules/postSlice";
+import { __setBoolHelpee, __setBoolHelper } from "../../redux/modules/postSlice";
 import { useNavigate } from "react-router";
 
 const CardList = () => {
@@ -12,12 +9,13 @@ const CardList = () => {
 
   const linkHelper = () => {
     dispatch(__setBoolHelper());
-    navigate("/postlist");
-  };
+    navigate('/postlist')
+  }
+  
   const linkHelpee = () => {
-    dispatch(__setBoolHelpee());
-    navigate("/postlist");
-  };
+    dispatch(__setBoolHelpee())
+    navigate('/postlist')
+  }
 
   return (
     <>

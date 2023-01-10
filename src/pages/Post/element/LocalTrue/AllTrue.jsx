@@ -3,38 +3,31 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __getAllTrue } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
+
 const AllTrue = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.AllTrueDate.result)
-  // console.log('useSelect 전체 true:', data)
-  const search = useSelector((state) => state.postSlice)
-  const searched = useSelector((state) => state.postSlice.searched)
-  // console.log('searched:', searched)
-  // console.log('search:', search)
+  const data = useSelector((state) => state.postSlice.AllTrueDate.result);
+  const input = useSelector((state) => state.postSlice.inputReciver);
 
-
-
-  useEffect(() => { dispatch(__getAllTrue()) }, [dispatch])
-  return (<>
-
-    <StAll>
-      전체(로컬) 게시물
-      {/* {searched ?
-        search?.map((item, idx) => { return (<Card type={'세로'} data={item} key={idx} />) })
-        :
-        data?.map((item, idx) => { return (<Card type={'세로'} data={item} key={idx} />) })} */}
-      {data?.map((item, idx) => { return (<Card type={'세로'} data={item} key={idx} />) })}
-
-
-    </StAll>
-  </>)
-}
+  useEffect(() => {
+    dispatch(__getAllTrue());
+  }, [input]);
+  return (
+    <>
+      <StAll>
+        전체(로컬) 게시물
+        {data?.map((item, idx) => {
+          return <Card type={"세로"} data={item} key={idx} />;
+        })}
+      </StAll>
+    </>
+  );
+};
 
 export default AllTrue;
 
 const StAll = styled.div`
-width:95%;
-margin:auto;
-border:1px solid #000;
-
-`
+  width: 95%;
+  margin: auto;
+  border: 1px solid #000;
+`;
