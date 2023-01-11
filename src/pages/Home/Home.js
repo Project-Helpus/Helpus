@@ -46,7 +46,7 @@ const Home = () => {
   return (
     <div>
       <StHeaderImg src='https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/11/urbanbrush-20221112200500085684.jpg'></StHeaderImg>
-
+<StTransForm>
       <StHotClip value={currentSlide + 1}>
         <StCarouselTitle >자원봉사 함께해요</StCarouselTitle>
 
@@ -72,7 +72,7 @@ const Home = () => {
       </StHotClip>
 
       <CardList></CardList>
-
+</StTransForm>
       <StFooterImg>
         <Sth3>About up</Sth3>
         <Stp>헬퍼스는 재능기부, 자원보사를 돕는 커뮤니티 입니다
@@ -81,15 +81,14 @@ const Home = () => {
 
       </StFooterImg>
 
-      {/* <StChip></StChip> */}
-      {/* <StTag>d</StTag> */}
-      {/* </StWrapper> */}
     </div>
   );
 };
 
 export default Home;
 
+const StTransForm = styled.div`
+transform:translateY(-200px)`
 const StHeaderImg = styled.img`
 height:360px;
 width:100%;
