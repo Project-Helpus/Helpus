@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { StButton, StChip, StTag, StWrapper } from '../../components/UI/StIndex'
 import CardList from './CardList';
+import { __getAllFalse } from '../../redux/modules/postSlice';
+import Card from '../../components/Card';
 const Home = () => {
+  const dispatch = useDispatch();
   const TotalSlides = 10;
   const [currentSlide, setCurrentSlide] = useState(0)
   const slideRef = useRef(null)
+  const data = useSelector((state) => state.postSlice.AllFalseDate);
   //    < next button >
   const NextSlide = () => {
     console.log('다음으로')
@@ -31,37 +36,38 @@ const Home = () => {
 
 
   useEffect(() => {
-    slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide * 5}0%)`; // 백틱을 사용하여 슬라이드로 이동하는 에니메이션을 만듭니다.
+    slideRef.current.style.transition = "all 2s ease-in-out";
+    slideRef.current.style.transform = `translateX(-${currentSlide}132px)`; // 백틱을 사용하여 슬라이드로 이동하는 에니메이션을 만듭니다.
   }, [currentSlide]);
+  useEffect(() => {
+    dispatch(__getAllFalse());
+  }, [dispatch]);
 
   return (
     <div>
-      {/* <StWrapper> */}
-      {/* <StButton>dd</StButton> */}
-      {/* <StChip mode="헬퍼스">헬퍼스</StChip> */}
       <StHeaderImg src='https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/11/urbanbrush-20221112200500085684.jpg'></StHeaderImg>
 
       <StHotClip value={currentSlide + 1}>
-        <StCarouselTitle >우리 함께해요</StCarouselTitle>
+        <StCarouselTitle >자원봉사 함께해요</StCarouselTitle>
 
-        <StLeftButton onClick={PrevSlide}>왼쪽</StLeftButton>
+        <StLeftButton onClick={PrevSlide}>&lt;</StLeftButton>
         <StCarouselContainer >
           <StCarousel ref={slideRef}>
-            1<StCarouselItem ></StCarouselItem>
-            2<StCarouselItem></StCarouselItem>
-            3<StCarouselItem></StCarouselItem>
+            {data?.map((item,idx) => { return <StCarouselItem><Card type={"케러셀"} data={item} key={idx} /> </StCarouselItem>})}
+            {/* <StCarouselItem ></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
             4<StCarouselItem></StCarouselItem>
-            5<StCarouselItem></StCarouselItem>
-            6<StCarouselItem></StCarouselItem>
-            7<StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
             8<StCarouselItem></StCarouselItem>
-            9<StCarouselItem></StCarouselItem>
-            10<StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem>
+            <StCarouselItem></StCarouselItem> */}
           </StCarousel>
         </StCarouselContainer>
 
-        <StRightButton onClick={NextSlide}>오른쪽</StRightButton>
+        <StRightButton onClick={NextSlide}>&gt;</StRightButton>
 
       </StHotClip>
 
@@ -85,7 +91,7 @@ const Home = () => {
 export default Home;
 
 const StHeaderImg = styled.img`
-height:24em;
+height:360px;
 width:100%;
 background-size:cover;
 position:relative;
@@ -102,25 +108,27 @@ const StCarouselTitle = styled.h2`
 `
 const StCarouselContainer = styled.div`
 display:flex;
-width:inherit;
+width:94%;
 height:12em;
 overflow:hidden;
 position:relative;
-border: 1px solid #000;
 margin-left:2em;
 `
 
 const StLeftButton = styled.button`
 width:2em;
 position:absolute;
-/* margin-right:100px; */
+background-color:transparent;
+border:none;
 top:50%;
+color:rgb(0,0,0,0.4);
+font-size:18x;
+font-weight:700;
 `
 
 const StCarousel = styled.div`
-border:2px solid #000;
 /* width:100%; */
-padding-left:2em;
+padding-left:150px;
 z-index:-1;
 display:flex;
 /* overflow:hidden; */
@@ -130,14 +138,23 @@ width:2em;
 position:absolute;
 right:0;
 top:50%;
+background-color:transparent;
+border:none;
+top:50%;
+color:rgb(0,0,0,0.4);
+font-size:18x;
+font-weight:700;
 `
-const StCarouselItem = styled.img`
-border:2px solid #000;
-width:18em;
-height:100%;
-margin-right:2em;
-z-index:-1;
-/* display:inline-block */
+// const StCarouselItem = styled.img`
+// border:2px solid #000;
+// width:240px;
+// height:135px;
+// margin-right:2em;
+// z-index:-1;
+// /* display:inline-block */
+// `
+const StCarouselItem = styled.div`
+margin-left:21px;
 `
 
 

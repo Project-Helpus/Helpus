@@ -13,6 +13,7 @@ export const StCirclePhoto = styled.img`
 export const StMainSquarePhoto = styled.img`
 width:240px;
 height:135px;
+border-radius:20px;
 `
 export const StMySquarePhoto = styled.img`
 width:320px;

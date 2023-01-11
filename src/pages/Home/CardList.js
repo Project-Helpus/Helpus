@@ -1,21 +1,47 @@
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { __setBoolHelpee, __setBoolHelper } from "../../redux/modules/postSlice";
+import { useDispatch ,useSelector} from "react-redux";
+import {
+  __setBoolHelpee,
+  __setBoolHelper,
+  __getHelperFalse,
+  __getHelpeeFalse,
+} from "../../redux/modules/postSlice";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import Card from "../../components/Card";
 
 const CardList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const HelperData = useSelector((state) => state.postSlice.helperFalseDate.result);
+  const HelpeeData = useSelector((state)=>state.postSlice.helpeeFalseDate.result)
+  console.log('헬퍼:',HelperData)
+  console.log('헬피:',HelpeeData)
+
+  const HelpeeArr = HelpeeData?.slice(0, 10)
+  console.log('new:', HelpeeArr)
+  const HelperArr = HelperData?.slice(0,10)
 
   const linkHelper = () => {
     dispatch(__setBoolHelper());
-    navigate('/postlist')
-  }
-  
+    navigate("/postlist");
+  };
+
   const linkHelpee = () => {
-    dispatch(__setBoolHelpee())
-    navigate('/postlist')
-  }
+    dispatch(__setBoolHelpee());
+    navigate("/postlist");
+  };
+
+  useEffect(() => {
+    dispatch(__getHelperFalse(""));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(__getHelpeeFalse(""));
+  }, [dispatch]);
+
+
+
 
   return (
     <>
@@ -23,18 +49,21 @@ const CardList = () => {
         <StFlex>
           <StHelper>
             <StFlex>
-              <p>헬퍼 게시물</p>
-              <p>글쓰기</p>
-            </StFlex>
+              <StFlex><p>재능을 기부합니다~ Helper</p>
             <StLink onClick={linkHelper}>더보기</StLink>
+                </StFlex>
+              {HelperData?.map((item, idx) => {return<Card type={"메인"} data={item} key={idx} /> })}
+            </StFlex>
           </StHelper>
           <StHelpee>
             <StFlex>
-              <p>헬피 게시물</p>
-              <p>글쓰기</p>
-            </StFlex>
-            <StItem></StItem>
+              <StFlex><p>도움을 기다려요~ Helpee</p>
             <StLink onClick={linkHelpee}>더보기</StLink>
+              </StFlex>
+            </StFlex>
+            <StItem>
+              {HelpeeArr?.map((item, idx) => { return < Card type={"메인"} data={item} key={idx} /> } )}
+            </StItem>
           </StHelpee>
         </StFlex>
       </StContainer>
