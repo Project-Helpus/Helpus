@@ -20,12 +20,14 @@ export const PostAPI = {
     client.post(`/api/report/${userId}`, type, reason),
   postWishList: (postId) => client.post(`/api/board/post/${postId}/wish`),
   // 검색 확정되면 재 확인 필요
-  postSearch: () => client.post('/api/search'),
-  getSearch: (keyword, type, location) => client.get(`/api/search?keyword=${keyword}&type=${type}`),
+  postSearch: () => client.post("/api/search"),
+  getSearch: (keyword, type, location) =>
+    client.get(`/api/search?keyword=${keyword}&type=${type}`),
 };
 
 export const UserAPI = {
   kakaoLogin: (code) => client.get(`/api/user/kakao?code=${code}`),
+  kakaoState: (payload) => client.post(`/api/user/kakao/state`, payload),
   emailCheck: (email) => client.post(`/api/user/email`, { email }),
   signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
@@ -33,8 +35,10 @@ export const UserAPI = {
 
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
+  getMyposts: () => client.get("/api/user/myposts"),
   getWishlist: () => client.get("/api/user/wishlist"),
   patchMypage: (userData) => client.patch("api/user/detail", userData),
+  userImage: (formData) => client.patch("api/user/image", formData),
   patchPassword: (changePassword) =>
     client.patch("api/user/password", changePassword),
   getUserPage: (userId) => client.get(`/api/user/${userId}/detail`),

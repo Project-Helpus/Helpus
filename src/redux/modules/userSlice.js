@@ -15,6 +15,7 @@ const initialState = {
   error: false,
   isLogin: false,
   isSignup: false,
+  kakaoInfo: "",
 };
 
 //회원가입 post
@@ -77,10 +78,11 @@ export const __postLogin = createAsyncThunk(
 //카카오 로그인 get
 export const __kakaoLogin = createAsyncThunk(
   "user/kakaoLogin",
-  async (code, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLogin(code);
+      const response = await UserAPI.kakaoLogin(payload);
       if (response.status === 200) {
+        //window.location.replace("/auth/kakao/state");
         return thunkAPI.fulfillWithValue();
       } else {
         return thunkAPI.rejectWithValue();
@@ -96,7 +98,7 @@ export const __kakaoState = createAsyncThunk(
   "user/kakaoLoginState",
   async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLoginState(payload);
+      const response = await UserAPI.kakaoState(payload);
       if (response.status === 200) {
         return thunkAPI.fulfillWithValue();
       } else {
@@ -173,8 +175,9 @@ const userSlice = createSlice({
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__kakaoLogin.fulfilled]: (state) => {
+    [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLogin = true;
+      state.kakaoInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
