@@ -25,8 +25,8 @@ const Router = () => {
         <Route path="/auth/kakao" element={<KakaoLogin />} />
         <Route path="/postlist" element={<PostList />} />
         <Route path="/post" element={<PostCreate />} />
-        <Route path="/post/:postid" element={<PostDetail />} />
-        <Route path="/chat/:roomid" element={<Chat />} />
+        <Route path="/post/:postId" element={<PostDetail />} />
+        <Route path="/chat/:postId/:ownerId" element={<Chat />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
