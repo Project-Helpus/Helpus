@@ -1,45 +1,56 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StWrapper } from "../../components/UI/StIndex";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { __detailPost } from "../../redux/modules/postSlice";
 
-const PostDetail = ({}) => {
+const PostDetail = () => {
+  const navigate = useNavigate();
+  const { postId } = useParams();
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.userSlice);
+  const { postInfo } = useSelector((state) => state.postSlice);
+  const { userId } = postInfo;
+
+  useEffect(() => {
+    dispatch(__detailPost(postId));
+  }, []);
+
   return (
     <StWrapper>
       <StFirstBox>
-        <button>뒤로가기</button>
-        <h2>제목</h2>
+        <button onClick={() => navigate(-1)}>뒤로가기</button>
+        <h2>{postInfo?.title}</h2>
       </StFirstBox>
       <StSecondBox>
-        <div>프로필 사진</div>
+        <img src={postInfo?.userImage} alt="profile" />
         <StInnerBox>
-          <div>열정적인 쌤</div>
-          <div>경상북도</div>
-          <div>온도</div>
+          <div>{postInfo?.Name}</div>
+          <div>{postInfo?.location1}</div>
         </StInnerBox>
       </StSecondBox>
       <div>조회수</div>
-      <div>작성일</div>
+      <div>{postInfo?.createdAt}</div>
       <StThirdBox>
-        <div>이미지1</div>
-        <div>이미지2</div>
-        <div>이미지3</div>
+        <img src={postInfo?.imageUrl1} />
+        <img src={postInfo?.imageUrl2} />
+        <img src={postInfo?.imageUrl3} />
       </StThirdBox>
-      <div>희망 날짜</div>
-      <div>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with the release
-        of Letraset sheets containing Lorem Ipsum passages, and more recently
-        with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.
-      </div>
+      <div>{postInfo?.appointed}</div>
+      <div>{postInfo?.content}</div>
+      {/* {userInfo?.userId !== postInfo?.userId && ( */}
       <StFourthBox>
-        <button>문의하기</button>
+        <button
+          onClick={() => {
+            navigate(`/chat/${postId}/${postInfo?.userId}`);
+          }}
+        >
+          문의하기
+        </button>
         <button>찜하기</button>
       </StFourthBox>
+      {/* )} */}
     </StWrapper>
   );
 };
@@ -48,9 +59,13 @@ const StFirstBox = styled.div`
 `;
 const StSecondBox = styled.div`
   display: flex;
+  width: 300px;
+  height: 200px;
 `;
 const StThirdBox = styled.div`
   display: flex;
+  width: 300px;
+  height: 300px;
 `;
 const StFourthBox = styled.div`
   display: flex;
