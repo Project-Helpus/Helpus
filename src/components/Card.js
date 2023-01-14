@@ -27,7 +27,10 @@ import {
   StMySquarePhoto,
   StZZimSquarePhote,
   StMainContentsTitle,
-} from "./UI/CardStyle.js/Common";
+  StMarginRight,
+  StMainWrapper,
+  StSpaceBetween,
+} from "./UI/CardStyle.js/StCommon";
 const Card = ({ type, data, onClick }) => {
   const Model = () => {
     const curr = new Date(data.createdAt);
@@ -38,7 +41,8 @@ const Card = ({ type, data, onClick }) => {
     // console.log("Date:", KoreaDate);
     // toLocaleDateString = 브라우저에서 설정된 국가에서 사용되는 날짜를 뽑아줌
     const category =  data.category== 1 ?"헬피":"헬퍼"
-    
+    const content = data.content.slice(0, 26)
+    const title15 = data.title.slice(0,15)
     switch (type) {
       case "가로 ":
         return (
@@ -129,30 +133,34 @@ const Card = ({ type, data, onClick }) => {
         );
       case "메인":
         return (
-          <>
+          <StMainWrapper>
             <StFlex>
             <StMainSquarePhoto src={data.imageUrl1}></StMainSquarePhoto>
               <StMainContentsWrapper>
-                <StFlex>
+                <StSpaceBetween>
+                  <StFlex>
                   <StCirclePhoto src={data.userImage}></StCirclePhoto>
                   <StNickname>{data.userName}</StNickname>
+                  </StFlex>
+                  <StFlex>
                   <StDate>&nbsp;{KoreaDate}</StDate>
                   <StAddress> 
-                    {data.location1} {data.location2}
-                  </StAddress>
-                </StFlex>
+                    &gt;{data.location1} {data.location2}
+                    </StAddress>
+                    </StFlex>
+                  </StSpaceBetween>
                 <StContentsTitle>{data.title}</StContentsTitle>
-                <StContentsInfo>{data.content}</StContentsInfo>
+                <StContentsInfo>{content}...</StContentsInfo>
             </StMainContentsWrapper>
             </StFlex>
-          </>
+          </StMainWrapper>
         )
       case "케러셀":
         return (
-          <>
-            <StMainSquarePhoto src={data.imageUrl1}></StMainSquarePhoto>
-            <StMainContentsTitle>{data.title}</StMainContentsTitle>
-          </>
+          <StMarginRight>
+            <StMySquarePhoto src={data.imageUrl1}></StMySquarePhoto>
+            <StMainContentsTitle>{title15}...</StMainContentsTitle>
+          </StMarginRight>
         )
       default:
         return;

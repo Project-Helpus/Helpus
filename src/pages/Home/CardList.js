@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useDispatch ,useSelector} from "react-redux";
 import {
   __setBoolHelpee,
@@ -7,20 +6,34 @@ import {
   __getHelpeeFalse,
 } from "../../redux/modules/postSlice";
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Card from "../../components/Card";
+import { StContainer,StFlex,StTitle,StHelpee,StHelper, StSubTitle } from "./Style/StCardList";
 
 const CardList = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const HelperData = useSelector((state) => state.postSlice.helperFalseDate.result);
   const HelpeeData = useSelector((state)=>state.postSlice.helpeeFalseDate.result)
-  console.log('헬퍼:',HelperData)
-  console.log('헬피:',HelpeeData)
-
-  const HelpeeArr = HelpeeData?.slice(0, 10)
-  console.log('new:', HelpeeArr)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const HelperRef = useRef(null);
+  const HelpeeRef = useRef(null);
   const HelperArr = HelperData?.slice(0,10)
+  const HelpeeArr = HelpeeData?.slice(0, 10)
+
+  const onMouseOverHandlerHelper = () => {
+    HelperRef.current.style.color = "#7C7C7C";
+    HelperRef.current.style.backgroundColor= "pink";
+  }
+  const onMouseOutHandlerHelper = () => {
+    HelperRef.current.style.color = "pink"
+  }
+  const onMouseOverHandlerHelpee = () => {
+    HelpeeRef.current.style.color = "#7C7C7C";
+    HelpeeRef.current.style.backgroundColor= "pink";
+  }
+  const onMouseOutHandlerHelpee = () => {
+    HelpeeRef.current.style.color = "pink"
+  }
 
   const linkHelper = () => {
     dispatch(__setBoolHelper());
@@ -40,67 +53,21 @@ const CardList = () => {
     dispatch(__getHelpeeFalse(""));
   }, [dispatch]);
 
-
-
-
   return (
-    <>
       <StContainer>
         <StFlex>
           <StHelper>
-            <StFlex>
-              <StFlex><p>재능을 기부합니다~ Helper</p>
-            <StLink onClick={linkHelper}>더보기</StLink>
-                </StFlex>
-              {HelperData?.map((item, idx) => {return<Card type={"메인"} data={item} key={idx} /> })}
-            </StFlex>
+                <StTitle onClick={linkHelper} onMouseOver={onMouseOverHandlerHelper} onMouseOut={onMouseOutHandlerHelper}>재능을 기부합니다~ Helper
+              <StSubTitle ref={HelperRef} onClick={linkHelper}>더보기</StSubTitle></StTitle>
+              {HelperArr?.map((item, idx) => {return<Card type={"메인"} data={item} key={idx} /> })}
           </StHelper>
           <StHelpee>
-            <StFlex>
-              <StFlex><p>도움을 기다려요~ Helpee</p>
-            <StLink onClick={linkHelpee}>더보기</StLink>
-              </StFlex>
-            </StFlex>
-            <StItem>
+              <StTitle onClick={linkHelper} onMouseOver={onMouseOverHandlerHelpee} onMouseOut={onMouseOutHandlerHelpee}>도움을 기다려요~ Helpee<StSubTitle ref={HelpeeRef} onClick={linkHelpee}>더보기</StSubTitle></StTitle>
               {HelpeeArr?.map((item, idx) => { return < Card type={"메인"} data={item} key={idx} /> } )}
-            </StItem>
           </StHelpee>
         </StFlex>
       </StContainer>
-    </>
   );
 };
 export default CardList;
 
-const StContainer = styled.div`
-  height: 50em;
-  width: 90%;
-  margin: auto;
-`;
-const StFlex = styled.div`
-  display: flex;
-`;
-
-const StHelper = styled.div`
-  border: 1px solid #000;
-  width: 50%;
-  height: 50em;
-`;
-const StHelpee = styled.div`
-  border: 1px solid #000;
-  width: 50%;
-  height: 50em;
-`;
-const StLink = styled.div`
-  /* text-decoration:none; */
-  /* &:visited{color:#000;} */
-  display: block;
-  width: 100%;
-  text-align: center;
-  height: 10%;
-`;
-const StItem = styled.div`
-  width: 30em;
-  height: 25em;
-  border: 1px solid #000;
-`;

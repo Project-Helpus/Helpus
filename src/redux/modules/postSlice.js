@@ -133,6 +133,7 @@ const initialState = {
   error: false,
   boolHelper: false,
   boolHelpee: false,
+  boolHelpUs:false,
   boolAll: false,
   boolLocation: false,
   AllFalseDate: [],
@@ -153,10 +154,18 @@ const postSlice = createSlice({
     __setBoolHelper: (state) => {
       state.boolHelper = true;
       state.boolHelpee = false;
+      state.boolHelpUs = false;
       state.boolAll = false;
     },
     __setBoolHelpee: (state) => {
       state.boolHelpee = true;
+      state.boolHelper = false;
+      state.boolHelpUs = false;
+      state.boolAll = false;
+    },
+    __setBoolHelpUs: (state) => {
+      state.boolHelpUs =true
+      state.boolHelpee = false;
       state.boolHelper = false;
       state.boolAll = false;
     },
@@ -261,6 +270,7 @@ const postSlice = createSlice({
 export const {
   __setBoolHelper,
   __setBoolHelpee,
+  __setBoolHelpUs,
   __setBoolLocationTrue,
   __setBoolLocationFalse,
   __giveInput,
