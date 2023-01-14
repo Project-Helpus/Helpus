@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
+import {
+  __getChat,
+  __getMyPage,
+  __getMyposts,
+} from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 
 const Mypage = () => {
@@ -11,11 +15,13 @@ const Mypage = () => {
   const profile = useSelector((state) => state.mypageSlice.profile);
   const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
   const userImage = useSelector((state) => state.mypageSlice.userImage);
-  console.log("🚀 ~ file: Mypage.jsx:14 ~ Mypage ~ userImage", userImage);
+  const data = useSelector((state) => state.mypageSlice.data);
+  console.log("🚀 ~ file: Mypage.jsx:19 ~ Mypage ~ data", data.list?.[0]);
 
   useEffect(() => {
     dispatch(__getMyPage());
     dispatch(__getMyposts());
+    dispatch(__getChat());
   }, [dispatch]);
 
   return (
@@ -38,6 +44,11 @@ const Mypage = () => {
       <div>
         <div>
           <h2>채팅</h2>
+          <div>
+            {data.list?.map((el) => (
+              <div key={el.roomId}>{el.Post.title}</div>
+            ))}
+          </div>
         </div>
         <div>
           <h2>내 게시물</h2>

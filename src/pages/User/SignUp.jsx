@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { address } from "./element/Address";
 import { StSelector } from "../../components/UI/StIndex";
 import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
-
+import { funEmoji } from "@dicebear/collection";
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

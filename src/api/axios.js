@@ -58,6 +58,7 @@ export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
   getMyposts: () => client.get("/api/user/myposts"),
   getWishlist: () => client.get("/api/user/wishlist"),
+  getChat: () => client.get("api/chat/list"),
   patchMypage: (userData) => client.patch("api/user/detail", userData),
   userImage: (formData) => client.patch("api/user/image", formData),
   patchPassword: (changePassword) =>
