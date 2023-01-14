@@ -13,6 +13,23 @@ export const __createPost = createAsyncThunk(
   }
 );
 
+export const __detailPost = createAsyncThunk(
+  "mypageSlice/detailPost",
+  async (postId, thunkAPI) => {
+    try {
+      const response = await PostAPI.getDetailPost(postId);
+      console.log(response);
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue(response.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 //    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  전국  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //    <  전국 false  >
 export const __getAllFalse = createAsyncThunk(
@@ -144,6 +161,7 @@ const initialState = {
   helperTrueDate: [],
   helpUsTrueDate: [],
   inputReciver: "",
+  postInfo: "",
 };
 
 const postSlice = createSlice({
@@ -178,6 +196,17 @@ const postSlice = createSlice({
       state.isLoading = false;
     },
     [__createPost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__detailPost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__detailPost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.postInfo = action.payload.result;
+    },
+    [__detailPost.rejected]: (state) => {
       state.isLoading = false;
       state.error = true;
     },
