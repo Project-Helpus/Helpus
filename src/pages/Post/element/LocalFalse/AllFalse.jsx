@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
-import Card from "../../../../components/Card";
+import ColCard from "../ColCard";
 
 const AllFalse = () => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ const AllFalse = () => {
   return (
     <>
       {data?.map((item, idx) => {
-        return <Card type={"세로"} data={item} key={idx} />;
+        return <ColCard data={item} key={idx} />;
       })}
       {!isLoading && (
         <div
