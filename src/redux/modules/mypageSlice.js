@@ -22,7 +22,6 @@ export const __getMyPage = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getMyPage(data);
-      console.log("🚀 ~ file: mypageSlice.js:12 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -73,10 +72,8 @@ export const __patchMypage = createAsyncThunk(
 export const __userImage = createAsyncThunk(
   "mypage/userImage",
   async (data, thunkAPI) => {
-    console.log("🚀 ~ file: mypageSlice.js:21 ~ data", data);
     try {
       const res = await MypageAPI.userImage(data);
-      console.log("🚀 ~ file: mypageSlice.js:23 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -88,10 +85,8 @@ export const __userImage = createAsyncThunk(
 export const __patchPassword = createAsyncThunk(
   "mypage/patchPassword",
   async (data, thunkAPI) => {
-    console.log("🚀 ~ file: mypageSlice.js:21 ~ data", data);
     try {
       const res = await MypageAPI.patchPassword(data);
-      console.log("🚀 ~ file: mypageSlice.js:23 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -144,9 +139,18 @@ const mypageSlice = createSlice({
       state.isLoading = true;
     },
     [__userImage.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      state.userImage = action.payload;
     },
     [__userImage.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    [__patchPassword.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__patchPassword.fulfilled]: (state, action) => {
+      state.patchPassword = action.payload;
+    },
+    [__patchPassword.rejected]: (state) => {
       state.isLoading = false;
     },
   },

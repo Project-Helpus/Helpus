@@ -9,12 +9,13 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const profile = useSelector((state) => state.mypageSlice.data);
+  const profile = useSelector((state) => state.mypageSlice.profile);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
 
   const logoutButton = (e) => {
     e.preventDefault();
     dispatch(__logout(isLogin));
+    navigate("/");
   };
 
   useEffect(() => {
@@ -107,5 +108,6 @@ const StProfile = styled.button`
   img {
     width: 25px;
     height: 25px;
+    border-radius: 100px;
   }
 `;
