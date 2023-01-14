@@ -15,13 +15,14 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const profile = useSelector((state) => state.mypageSlice.data);
+  const profile = useSelector((state) => state.mypageSlice.profile);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
 
   const logoutButton = (e) => {
     e.preventDefault();
     dispatch(__logout(isLogin));
+    navigate("/");
   };
 
   const searching = (e) => {
@@ -115,7 +116,6 @@ const StHeaderWrapper = styled.header`
   align-items: center;
   width: 100%;
   height: 70px;
-  background-color: white;
 `;
 
 const StSearch = styled.form`
@@ -157,5 +157,6 @@ const StProfile = styled.button`
   img {
     width: 25px;
     height: 25px;
+    border-radius: 100px;
   }
 `;

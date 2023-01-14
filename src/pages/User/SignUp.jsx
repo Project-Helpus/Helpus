@@ -2,9 +2,10 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
 import { address } from "./element/Address";
-
+import { StSelector } from "../../components/UI/StIndex";
+import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
+import { funEmoji } from "@dicebear/collection";
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -156,6 +157,7 @@ const SignUp = () => {
 
   return (
     <StWarp>
+      <StLeft></StLeft>
       <Stupwrap>
         <form onSubmit={submitHandler}>
           <Avatar>
@@ -177,17 +179,23 @@ const SignUp = () => {
           </Avatar>
           <CheckWrap>
             <label>이메일</label>
-            <input
-              name="email"
-              type="email"
-              placeholder="이메일을 입력해주세요."
-              onChange={onChangeHandler}
-              value={input.email}
-            ></input>
-            <CheckButton onClick={dupEmail}>중복확인</CheckButton>
-          </CheckWrap>
-          <span>{emailText}</span>
-          <CheckWrap>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <input
+                name="email"
+                type="email"
+                placeholder="이메일을 입력해주세요."
+                onChange={onChangeHandler}
+                value={input.email}
+              ></input>
+              <CheckButton onClick={dupEmail}>중복확인</CheckButton>
+            </div>
+            <span>{emailText}</span>
             <label>닉네임</label>
             <input
               name="userName"
@@ -196,51 +204,52 @@ const SignUp = () => {
               onChange={onChangeHandler}
               value={input.userName}
             ></input>
-          </CheckWrap>
-          <span>{nicknameText}</span>
-          <label>패쓰워드</label>
-          <input
-            name="password"
-            type="password"
-            placeholder="비밀번호는 4글자 이상으로 입력해 주세요."
-            onChange={onChangeHandler}
-            value={input.password}
-            autoComplete="off"
-          ></input>
-          <span>{passwordText}</span>
-          <label></label>
-          <input
-            name="confirm"
-            type="password"
-            placeholder="다시 한번 입력해 주세요."
-            onChange={onChangeHandler}
-            value={input.confirm}
-            autoComplete="off"
-          ></input>
-          <span>{confirmText}</span>
-          <div>
-            <label>지역 설정</label>
+
+            <span>{nicknameText}</span>
+            <label>패쓰워드</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="비밀번호는 4글자 이상으로 입력해 주세요."
+              onChange={onChangeHandler}
+              value={input.password}
+              autoComplete="off"
+            ></input>
+            <span>{passwordText}</span>
+            <label></label>
+            <input
+              name="confirm"
+              type="password"
+              placeholder="다시 한번 입력해 주세요."
+              onChange={onChangeHandler}
+              value={input.confirm}
+              autoComplete="off"
+            ></input>
+            <span>{confirmText}</span>
             <div>
-              <select name="state1" onChange={onChangeHandler}>
-                <option>:: 선택 ::</option>
-                {state.map((el) => (
-                  <option key={el.state} value={el.state}>
-                    {el.codeNm}
-                  </option>
-                ))}
-              </select>
-              <select name="state2" onChange={onChangeHandler}>
-                <option>:: 선택 ::</option>
-                {city
-                  .filter((el) => el.state === input.state1)
-                  .map((el) => (
-                    <option key={el.city} value={el.codeNm}>
+              <label>살고 있는 곳</label>
+              <div style={{ display: "flex", gap: "6px", marginTop: "6px" }}>
+                <StSelector name="state1" onChange={onChangeHandler}>
+                  <option>:: 선택 ::</option>
+                  {state.map((el) => (
+                    <option key={el.state} value={el.state}>
                       {el.codeNm}
                     </option>
                   ))}
-              </select>
+                </StSelector>
+                <StSelector name="state2" onChange={onChangeHandler}>
+                  <option>:: 선택 ::</option>
+                  {city
+                    .filter((el) => el.state === input.state1)
+                    .map((el) => (
+                      <option key={el.city} value={el.codeNm}>
+                        {el.codeNm}
+                      </option>
+                    ))}
+                </StSelector>
+              </div>
             </div>
-          </div>
+          </CheckWrap>
           <button
             disabled={
               !(
@@ -265,58 +274,47 @@ export default SignUp;
 
 const StWarp = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
   font-size: 0.8em;
-  p {
-    width: 200px;
-    text-align: center;
-    margin: 0 auto;
-    color: #999;
-    font-size: 1.3em;
-    font-weight: 800;
-  }
+`;
+const StLeft = styled.div`
+  display: flex;
+  width: 610px;
+  height: 100vh;
+  background-color: #efefef;
 `;
 
 const Avatar = styled.div`
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   border-radius: 100%;
   overflow: hidden;
+  margin: 0 auto;
+  margin-bottom: 40px;
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 `;
 
 const Stupwrap = styled.div`
-  width: 350px;
-  margin: 0 auto;
-  border: 1px solid #e0e0e0;
-  background-color: white;
-  padding: 40px 0;
-  img {
-    width: 200px;
-    display: block;
-    margin: 0px auto;
-  }
+  display: flex;
+  width: 100%;
+  margin: 6em auto;
+  justify-content: center;
   form {
-    display: flex;
+    width: 523px;
     flex-direction: column;
-    padding: 20px;
+
     input {
       all: unset;
       width: 100%;
-      height: 36px;
+      height: 45px;
       border: 1px solid #e0e0e0;
-      border-radius: 5px;
-      margin: 6px;
+      border-radius: 7px;
       background-color: #fafafa;
     }
     span {
@@ -324,16 +322,16 @@ const Stupwrap = styled.div`
       flex-direction: column;
       color: red;
       font-size: 12px;
-      margin: 0px 6px;
+      margin: 6px 0;
     }
     button {
       border: 0;
       width: 100%;
-      height: 38px;
-      background-color: #0095f6;
-      border-radius: 5px;
-      margin: 6px;
+      height: 45px;
+      background-color: #ffc3d5;
+      border-radius: 7px;
       color: white;
+      margin-top: 12px;
       cursor: pointer;
       &:disabled {
         cursor: default;
@@ -341,23 +339,23 @@ const Stupwrap = styled.div`
         background-color: #808080;
       }
     }
-    select {
-      width: 120px;
-      height: 32px;
+    label {
+      margin: 6px 0;
     }
   }
 `;
 const CheckWrap = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
 `;
 const CheckButton = styled.div`
-  width: 76px;
-  height: 36px;
-  border-radius: 5px;
+  width: 135px;
+  height: 45px;
+  border-radius: 7px;
   text-align: center;
-  line-height: 36px;
-  background-color: white;
-  border: 1px solid #e0e0e0;
+  line-height: 45px;
+  background-color: #7d7d7d;
+  color: white;
+  margin-left: 6px;
   cursor: pointer;
 `;

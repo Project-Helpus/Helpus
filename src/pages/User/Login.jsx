@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __postLogin } from "../../redux/modules/userSlice";
 import { KAKAO_AUTH_URL } from "./KakaoLogin";
+import kakaoLogin from "../../asset/kakaoLogin.png";
 
-const SignIn = () => {
+const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const isLogin = useSelector((state) => state.userSlice.isLogin);
   //input state 초기값
   const [account, setAccount] = useState({ email: "", password: "" });
 
@@ -24,10 +25,21 @@ const SignIn = () => {
     dispatch(__postLogin(account));
   };
 
+  //로그인 성공시
+  useEffect(() => {
+    if (!isLogin) return;
+    if (isLogin) {
+      alert("로그인 성공");
+      navigate("/");
+    }
+  }, [isLogin]);
+
   return (
     <StWarp>
+      <StLeft></StLeft>
       <StLoginWrap>
         <div>
+          <h1>로그인</h1>
           <form>
             <label>이메일</label>
             <input
@@ -44,9 +56,9 @@ const SignIn = () => {
               onChange={onChangeAccount}
             ></input>
             <button onClick={loginSubmitHandler}>로그인</button>
-            <button>
-              <a href={KAKAO_AUTH_URL}>kakao</a>
-            </button>
+            <a href={KAKAO_AUTH_URL}>
+              <img src={kakaoLogin} alt="" />
+            </a>
           </form>
         </div>
       </StLoginWrap>
@@ -54,7 +66,7 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Login;
 
 const StWarp = styled.div`
   display: flex;
@@ -62,37 +74,44 @@ const StWarp = styled.div`
   height: 100vh;
   margin: 0 auto;
   font-size: 0.8em;
+  h1 {
+    text-align: center;
+  }
 `;
-
+const StLeft = styled.div`
+  display: flex;
+  width: 610px;
+  height: 100vh;
+  background-color: #efefef;
+`;
 const StLoginWrap = styled.div`
   display: flex;
   width: 100%;
-  margin: 0 auto;
+  margin: 12em auto;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-
   form {
     display: flex;
     flex-direction: column;
     padding: 20px;
     input {
       all: unset;
-      width: 260px;
-      height: 36px;
+      width: 300px;
+      height: 40px;
       border: 1px solid #e0e0e0;
-      border-radius: 5px;
+      border-radius: 7px;
       margin: 6px;
       background-color: #fafafa;
     }
     button {
       border: 0;
-      width: 266px;
-      height: 38px;
-      background-color: #0095f6;
-      border-radius: 5px;
+      width: 300px;
+      height: 45px;
+      background-color: #ffc3d5;
+      border-radius: 7px;
       margin: 6px;
-      color: white;
+    }
+    img {
+      margin: 6px;
     }
   }
 `;

@@ -4,18 +4,21 @@ import { Cookies } from "react-cookie";
 const cookie = new Cookies();
 
 const initialState = {
+  userid: 0,
   email: "",
   userName: "",
-  password: "",
   isConfirm: false,
   dupCheck: false,
-  isLoading: false,
   state1: "",
   state2: "",
-  error: false,
   isLogin: false,
   isSignup: false,
-  userInfo: {},
+  kakaoInfo: "",
+  userInfo: "",
+  kakaoState: "",
+  isLoginkakao: false,
+  isLoading: false,
+  error: false,
 };
 
 //회원가입 post
@@ -62,7 +65,6 @@ export const __postLogin = createAsyncThunk(
     try {
       const res = await UserAPI.login(payload);
       if (res.status === 200) {
-        window.alert("로그인 성공!");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
@@ -78,11 +80,11 @@ export const __postLogin = createAsyncThunk(
 //카카오 로그인 get
 export const __kakaoLogin = createAsyncThunk(
   "user/kakaoLogin",
-  async (code, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLogin(code);
+      const response = await UserAPI.kakaoLogin(payload);
       if (response.status === 200) {
-        return thunkAPI.fulfillWithValue();
+        return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
       }
@@ -97,9 +99,26 @@ export const __kakaoState = createAsyncThunk(
   "user/kakaoLoginState",
   async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLoginState(payload);
+      const response = await UserAPI.kakaoState(payload);
       if (response.status === 200) {
-        return thunkAPI.fulfillWithValue();
+        return thunkAPI.fulfillWithValue(response.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+//카카오 탈퇴
+export const __kakaoSignOut = createAsyncThunk(
+  "user/kakaoSignOut",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await UserAPI.kakaoSignOut(payload);
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
       }
@@ -114,16 +133,16 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    __checkLogin: (state, action) => {
+    __checkLogin: (state) => {
       if (cookie.get("token")) {
         state.isLogin = true;
       } else {
         state.isLogin = false;
       }
     },
-    __logout: (state, action) => {
+    __logout: (state) => {
       if ((state.isLogin = true)) {
-        cookie.remove("token");
+        cookie.remove("token", { path: "/" });
         state.isLogin = false;
         state.userInfo = {};
       } else {
@@ -170,16 +189,28 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-
     //kakaoLogin
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLogin = true;
-      state.userInfo = action.payload;
+      state.isLoginkakao = true;
+      state.kakaoInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
+      state.error = false;
+      state.error = action.payload;
+    },
+    //kakaoLoginState
+    [__kakaoState.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__kakaoState.fulfilled]: (state, action) => {
+      state.isLogin = true;
+      state.kakaoState = action.payload;
+    },
+    [__kakaoState.rejected]: (state, action) => {
       state.error = false;
       state.error = action.payload;
     },
