@@ -26,14 +26,14 @@ const PostList = () => {
   const { isLogin } = useSelector((state) => state.userSlice);
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
+  const storeBoolHepUs = useSelector((state) => state.postSlice.boolHelpUs);
   const storeBoolAll = useSelector((state) => state.postSlice.boolAll);
   const storeBooLocation = useSelector((state) => state.postSlice.boolLocation);
 
   const [boolAll, setBoolAll] = useState(storeBoolAll);
-  const [boolHelpUs, setBoollHelpUs] = useState(false);
+  const [boolHelpUs, setBoollHelpUs] = useState(storeBoolHepUs);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
-
   const setBoolAllTrue = () => {
     allRef.current.style.color = "black";
     setBoolAll(true);

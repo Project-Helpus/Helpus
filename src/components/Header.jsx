@@ -77,7 +77,6 @@ const StHeaderWrapper = styled.header`
   align-items: center;
   width: 100%;
   height: 70px;
-  background-color: white;
 `;
 
 const StSearch = styled.form`
