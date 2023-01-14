@@ -15,6 +15,7 @@ const initialState = {
   error: false,
   isLogin: false,
   isSignup: false,
+  userInfo: {},
 };
 
 //회원가입 post
@@ -124,6 +125,7 @@ const userSlice = createSlice({
       if ((state.isLogin = true)) {
         cookie.remove("token");
         state.isLogin = false;
+        state.userInfo = {};
       } else {
         return;
       }
@@ -160,9 +162,10 @@ const userSlice = createSlice({
     [__postLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__postLogin.fulfilled]: (state) => {
+    [__postLogin.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.isLogin = true;
+      state.userInfo = action.payload;
     },
     [__postLogin.rejected]: (state, action) => {
       state.isLoading = false;
@@ -173,8 +176,9 @@ const userSlice = createSlice({
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__kakaoLogin.fulfilled]: (state) => {
+    [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLogin = true;
+      state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
