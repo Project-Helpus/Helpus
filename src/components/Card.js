@@ -1,43 +1,167 @@
-import React from "react";
-import styled from "styled-components";
-
+import {
+  StColumnCard,
+  StColumnImgWrapper,
+  StColumnNickName,
+  StColumnCity,
+  StColumnTitle,
+  StColumnDate,
+} from "./UI/CardStyle.js/Column";
+import {
+  StRowCard,
+  StRowImgWrapper,
+  StImg,
+  StRowTitle,
+  StRowContent,
+} from "./UI/CardStyle.js/Row";
+import {
+  StFlex,
+  StCirclePhoto,
+  StContentsTitle,
+  StCategoryName,
+  StDate,
+  StNickname,
+  StAddress,
+  StContentsInfo,
+  StMainSquarePhoto,
+  StMainContentsWrapper,
+  StMySquarePhoto,
+  StZZimSquarePhote,
+  StMainContentsTitle,
+  StMarginRight,
+  StMainWrapper,
+  StSpaceBetween,
+} from "./UI/CardStyle.js/StCommon";
 const Card = ({ type, data, onClick }) => {
   const Model = () => {
     const curr = new Date(data.createdAt);
-    const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
+    const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
     const kRTimeDiff = 9 * 60 * 60 * 1000;
-    const KrCurr = new Date(utc + (kRTimeDiff))
+    const KrCurr = new Date(utc + kRTimeDiff);
     const KoreaDate = KrCurr.toLocaleDateString();
+    // console.log("Date:", KoreaDate);
     // toLocaleDateString = 브라우저에서 설정된 국가에서 사용되는 날짜를 뽑아줌
-
+    const category =  data.category== 1 ?"헬피":"헬퍼"
+    const content = data.content.slice(0, 26)
+    const title15 = data.title.slice(0,15)
     switch (type) {
-      case "가로":
+      case "가로 ":
         return (
           <StRowCard onClick={onClick}>
             <StRowImgWrapper>
               <StImg src={data.imageUrl}></StImg>
             </StRowImgWrapper>
-            <StDiv>
+            <div>
               <StRowTitle>{data.title}</StRowTitle>
               <StRowContent>{data.content}</StRowContent>
-            </StDiv>
+            </div>
           </StRowCard>
         );
       case "세로":
         return (
           <StColumnCard onClick={onClick}>
             <StColumnImgWrapper>
-              <StImg src={data.imageUrl} />
+              <StImg alt="thumbnail" src={data.imageUrl1} />
             </StColumnImgWrapper>
             <StFlex>
               <StColumnNickName>{data.userName}</StColumnNickName>
-              <StColumnCity>{data.location1} {data.location2}</StColumnCity>
+              <StColumnCity>
+                {data.location1} {data.location2}
+              </StColumnCity>
             </StFlex>
             <StColumnTitle>{data.title}</StColumnTitle>
-            <StColumnContent>{data.content}</StColumnContent>
-            <StColumnDate>{data.createdAt}</StColumnDate>
+            <StColumnDate>{KoreaDate}</StColumnDate>
           </StColumnCard>
         );
+      case "채팅":
+        return (
+          <>
+            <StFlex>
+            <div>
+              <StCirclePhoto src={data.imageUrl1}></StCirclePhoto>
+              <StNickname>{data.userName}</StNickname>
+              </div>
+              <div>
+              <StFlex>
+                <StCategoryName>{category} 게시판</StCategoryName>
+                <StDate>&nbsp;{KoreaDate}</StDate>
+              </StFlex>
+                <StContentsTitle>{data.title}</StContentsTitle>
+                {data.content}
+                </div>
+              </StFlex>
+          </>
+        );
+      case "내 게시물":
+        return (
+          <>
+            <StFlex>
+              <StMySquarePhoto src={data.imageUrl1}></StMySquarePhoto>
+              <div>
+                <StFlex>
+                  <StCirclePhoto src={data.userImage}></StCirclePhoto>
+                  <StNickname>{data.userName}</StNickname>
+                  <StDate>{KoreaDate}</StDate>
+                  <StAddress>상세주소</StAddress>
+                </StFlex>
+                <StContentsTitle></StContentsTitle>
+                <StContentsInfo>게시물 내용</StContentsInfo>
+                <StFlex>
+                  {/* map 돌리기(내 게시물에 참여한 사람들 프로필 사진) */}
+                  <img></img>
+                  <img></img>
+                  <img></img>
+                </StFlex>
+              </div>
+            </StFlex>
+          </>
+        );
+      case "찜 게시물":
+        return (
+          <>
+            <StZZimSquarePhote src={data.imageUrl1}></StZZimSquarePhote>
+            <StFlex>
+              <StCirclePhoto src={data.userImage}></StCirclePhoto>
+              <StNickname>{data.userName}</StNickname>
+              <div>
+                <StDate>{KoreaDate}</StDate>
+                <StAddress>{data.location1} {data.location2}</StAddress>
+              </div>
+            </StFlex>
+              <StContentsTitle>{data.title}</StContentsTitle>
+              <StContentsInfo>{data.content}</StContentsInfo>
+          </>
+        );
+      case "메인":
+        return (
+          <StMainWrapper>
+            <StFlex>
+            <StMainSquarePhoto src={data.imageUrl1}></StMainSquarePhoto>
+              <StMainContentsWrapper>
+                <StSpaceBetween>
+                  <StFlex>
+                  <StCirclePhoto src={data.userImage}></StCirclePhoto>
+                  <StNickname>{data.userName}</StNickname>
+                  </StFlex>
+                  <StFlex>
+                  <StDate>&nbsp;{KoreaDate}</StDate>
+                  <StAddress> 
+                    &gt;{data.location1} {data.location2}
+                    </StAddress>
+                    </StFlex>
+                  </StSpaceBetween>
+                <StContentsTitle>{data.title}</StContentsTitle>
+                <StContentsInfo>{content}...</StContentsInfo>
+            </StMainContentsWrapper>
+            </StFlex>
+          </StMainWrapper>
+        )
+      case "케러셀":
+        return (
+          <StMarginRight>
+            <StMySquarePhoto src={data.imageUrl1}></StMySquarePhoto>
+            <StMainContentsTitle>{title15}...</StMainContentsTitle>
+          </StMarginRight>
+        )
       default:
         return;
     }
@@ -47,68 +171,3 @@ const Card = ({ type, data, onClick }) => {
 };
 
 export default Card;
-
-// const model = styled.div``
-//    <  가로  >
-const StRowCard = styled.div`
-width:inherit;
-height:inherit;
-display:flex;
-`
-const StRowImgWrapper = styled.div`
-width:40%;
-height:100%;
-`
-const StImg = styled.img`
-width:100%;
-height:100%;
-`
-
-const StDiv = styled.div`
-`
-const StRowTitle = styled.p`
-font-size:30px;
-font-weight:700;
-`
-
-const StRowContent = styled.p`
-font-size:10px;
-font-weight:500;
-`
-
-//    < 세로  >
-const StColumnCard = styled.div`
-width:inherit;
-height:inherit;
-`
-const StColumnImgWrapper = styled.div`
-width:100%;
-height:40%;
-`
-const StFlex = styled.div`
-display:flex;`
-
-const StColumnNickName = styled.p`
-margin-right:10px;
-font-size:'';
-font-weight:'';
-`
-const StColumnCity = styled.p`
-font-size:'';
-font-weight:'';
-`
-const StColumnTitle = styled.p`
-margin: 10px 0 0 0;
-font-size:'';
-font-weight:'';
-`
-const StColumnContent = styled.p`
-margin:10px 0 0 0 ;
-font-size:'';
-font-weight:'';
-`
-const StColumnDate = styled.p`
-margin:10px 0 0 0;
-font-size:'';
-font-weight:'';
-`
