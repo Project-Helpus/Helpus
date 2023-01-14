@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
+import { io } from "socket.io-client";
+
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [search, setSearch] = useState("");
+  const [notifications, setNotifications] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const profile = useSelector((state) => state.mypageSlice.data);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
+  const { userInfo } = useSelector((state) => state.userSlice);
 
   const logoutButton = (e) => {
     e.preventDefault();
@@ -23,9 +29,30 @@ const Header = () => {
     dispatch(__giveInput(search));
   };
 
+  const displayNotification = ({ senderName }) => {
+    <span>{`${senderName} sends new message`}</span>;
+  };
+
+  const handleRead = () => {
+    setNotifications([]);
+  };
+
   useEffect(() => {
     dispatch(__getMyPage());
-  }, [dispatch]);
+    if (userInfo.userId) {
+      const socket = io("ws://helpus-api.shop");
+      console.log("hi");
+      socket.emit("login", userInfo.userId);
+      socket.emit("test");
+      socket.on("test", (data) => {
+        console.log(data);
+      });
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [isLogin]);
+
   return (
     <StHeaderWrapper>
       <StLogo
@@ -46,6 +73,17 @@ const Header = () => {
         ></input>
         <button>검색</button>
       </StSearch>
+      <button
+        onClick={() => {
+          setOpen(!open);
+          handleRead();
+        }}
+      >
+        알림
+        {notifications.length > 0 && <div>{notifications.length}</div>}
+      </button>
+
+      {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
       <StLogin>
         {!isLogin && (
           <StLogin>
@@ -57,8 +95,8 @@ const Header = () => {
         {isLogin && (
           <div>
             <StProfile onClick={() => navigate("/mypage")}>
-              <img src={profile?.userImage} alt="" />
-              <span>{profile?.userName}</span>
+              <img src={userInfo?.userImage} alt="" />
+              <span>{userInfo?.userName}</span>
             </StProfile>
             <span>|</span>
             <button onClick={logoutButton}>로그아웃</button>
