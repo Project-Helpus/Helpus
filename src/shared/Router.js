@@ -12,6 +12,7 @@ import PostCreate from "../pages/Post/PostCreate";
 import PostDetail from "../pages/Post/PostDetail";
 import Chat from "../pages/Chat/Chat";
 import KakaoLogin from "../pages/User/KakaoLogin";
+import PostUpdate from "../pages/Post/PostUpdate";
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
         <Route path="/postlist" element={<PostList />} />
         <Route path="/post" element={<PostCreate />} />
         <Route path="/post/:postId" element={<PostDetail />} />
+        <Route path="/post/update/:postId" element={<PostUpdate />} />
         <Route path="/chat/:postId/:ownerId" element={<Chat />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>

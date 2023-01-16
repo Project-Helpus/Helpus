@@ -3,7 +3,7 @@ import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { __detailPost } from "../../redux/modules/postSlice";
+import { __detailPost,__deletePost } from "../../redux/modules/postSlice";
 import arrow_forward from "../../asset/arrow_forward.svg";
 import heart from "../../asset/heart.svg";
 
@@ -12,6 +12,19 @@ const PostDetail = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const { postInfo } = useSelector((state) => state.postSlice);
+// console.log('id:',postInfo)
+  const userId = useSelector((state) => state.mypageSlice.data?.userId)
+  const postCreaterId = useSelector((state) => state.postSlice.postInfo.userId);
+  console.log('userId:', userId)
+  console.log('createrId:',postCreaterId)
+  const deletePost = () => {
+    if (userId != postCreaterId) { alert('게시물 생성자만 해당 게시글을 삭제할 수 있습니다') }
+    else {
+      dispatch(__deletePost(postId))
+      alert('게시물이 삭제되었습니다.홈으로 돌아갑니다!')
+      navigate('/')
+    }
+  }
 
   useEffect(() => {
     dispatch(__detailPost(postId));
@@ -24,7 +37,8 @@ const PostDetail = () => {
           <img src={arrow_forward} alt="back_button" />
         </StBackBtn>
         <StTitle>{postInfo?.title}</StTitle>
-
+        <StUpdateButton onClick={() => navigate(`/post/update/${postId}`)}>수정</StUpdateButton>
+        <StUpdateButton onClick={deletePost}>삭제</StUpdateButton>
         <StProfileBox>
           <StBox>
             <Avatar>
@@ -153,3 +167,9 @@ const StWishBtn = styled.button`
   font-weight: 700;
   font-size: 24px;
 `;
+
+const StUpdateButton =styled.button`
+  width:100px;
+  height:50px;
+  cursor: pointer;
+`

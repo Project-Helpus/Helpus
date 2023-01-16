@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { PostAPI } from "../../api/axios";
 
 export const __createPost = createAsyncThunk(
@@ -12,6 +13,34 @@ export const __createPost = createAsyncThunk(
     }
   }
 );
+export const __updatePost = createAsyncThunk(
+  "mypageSlice/updatePost",
+  async (payload, thunkAPI) => {
+    try {
+      const Id = payload.id
+      const Form = payload.formData
+      const res = await PostAPI.postUpdate(Id,Form)
+      console.log('res:', res)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+export const __deletePost = createAsyncThunk(
+  "mypageSlice/deletePost",
+  async (id, thunkAPI) => {
+    try {
+      console.log('작동')
+      const res = await PostAPI.deletePost(id)
+      console.log('res:',res)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 
 export const __detailPost = createAsyncThunk(
   "mypageSlice/detailPost",
