@@ -1,4 +1,6 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { __postZZim } from "../redux/modules/postSlice";
 import {
   StColumnCard,
   StColumnImgWrapper,
@@ -34,9 +36,14 @@ import {
   StSpaceBetween,
   StHeart,
 } from "./UI/CardStyle.js/StCommon";
+
 const Card = ({ type, data, onClick }) => {
+  const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message)
+  const zId = useSelector((state) => state.postSlice.ZZimMsg.postId)
+  const login = useSelector((state) => state.userSlice.isLogin)
   const Model = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const curr = new Date(data.appointed);
     const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
     const kRTimeDiff = 9 * 60 * 60 * 1000;
@@ -47,9 +54,15 @@ const Card = ({ type, data, onClick }) => {
     const content = data.content.slice(0, 26)
     const title15 = data.title.slice(0, 15)
     const deadLine = data.isDeadLine;
-    console.log('dead:,',deadLine)
+    console.log('zId:',zId)
+    // console.log('data:',data)
     const moveDetail = (id) => {
       navigate(`/post/${id}`,{state:{data:data}})
+    }
+    const ZZim = (id) => {
+      console.log('msg',zMsg)
+      console.log('id:', data.postId)
+      dispatch(__postZZim(id))
     }
     switch (type) {
       case "가로 ":
@@ -148,9 +161,11 @@ const Card = ({ type, data, onClick }) => {
           <StMainWrapper>
             <StFlex>
               <StMainSquarePhoto src={data.imageUrl1} onClick={() => moveDetail(data.postId)} >
-                <StHeart>🤍</StHeart>
-            </StMainSquarePhoto>
+              </StMainSquarePhoto>
               <StMainContentsWrapper>
+                {login == true ? <>{zMsg == "찜 취소"&&data.postId ==zId ?
+                  <StHeart onClick={() => ZZim(data.postId)}>🤍</StHeart>
+                  : <StHeart onClick={() => ZZim(data.postId)}>🧡</StHeart>}</> : <StHeart />}
                 <StSpaceBetween>
                   <StFlex>
                   <StCirclePhoto src={data.userImage}></StCirclePhoto>
@@ -164,11 +179,11 @@ const Card = ({ type, data, onClick }) => {
                     {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
                     </StFlex>
                   </StSpaceBetween>
-                <StContentsTitle>{data.title}</StContentsTitle>
-                <StContentsInfo>{content}...</StContentsInfo>
-            </StMainContentsWrapper>
-            </StFlex>
-          </StMainWrapper>
+                  <StContentsTitle>{data.title}</StContentsTitle>
+                  <StContentsInfo>{content}...</StContentsInfo>
+                </StMainContentsWrapper>
+              </StFlex>
+            </StMainWrapper>
         )
       case "케러셀":
         return (

@@ -42,7 +42,19 @@ export const __deletePost = createAsyncThunk(
     }
   }
 );
-
+export const __postZZim = createAsyncThunk(
+  "mypageSlice/postZZim",
+  async (id, thunkAPI) => {
+    try {
+      console.log('작동')
+      const res = await PostAPI.postZZim(id)
+      console.log('res:',res)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 export const __detailPost = createAsyncThunk(
   "mypageSlice/detailPost",
@@ -194,6 +206,7 @@ const initialState = {
   helpUsTrueDate: [],
   inputReciver: "",
   postInfo: "",
+  ZZimMsg:'',
 };
 
 const postSlice = createSlice({
@@ -258,6 +271,17 @@ const postSlice = createSlice({
       state.postInfo = action.payload.result;
     },
     [__updatePost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__postZZim.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__postZZim.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.ZZimMsg = action.payload;
+    },
+    [__postZZim.rejected]: (state) => {
       state.isLoading = false;
       state.error = true;
     },

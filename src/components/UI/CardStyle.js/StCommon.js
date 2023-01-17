@@ -67,7 +67,8 @@ export const StContentsInfo = styled.p`
 export const StMainContentsWrapper = styled.div`
 width:400px;
 height:107px;
-padding:14px 0 14px 18px;
+padding:0 0 14px 18px;
+transform:translateY(-6px)
 `
 export const StMarginRight = styled.div`
 margin-right:20px;
@@ -83,4 +84,9 @@ display:flex;`
 
 export const StHeart = styled.div`
 width:20px;
-height:20px;`
+height:20px;
+z-index: 1;
+position: relative;
+right: 53px;
+top: 16px;
+cursor: pointer;`
