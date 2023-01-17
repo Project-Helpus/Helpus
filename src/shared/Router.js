@@ -11,6 +11,7 @@ import PostList from "../pages/Post/PostList";
 import PostCreate from "../pages/Post/PostCreate";
 import PostDetail from "../pages/Post/PostDetail";
 import Chat from "../pages/Chat/Chat";
+import MyChat from "../pages/Chat/ MyChat";
 import KakaoLogin from "../pages/User/KakaoLogin";
 import MypageDetail from "../pages/Mypage/MypageDetail";
 import State from "../pages/User/State";
@@ -31,6 +32,7 @@ const Router = () => {
         <Route path="/post" element={<PostCreate />} />
         <Route path="/post/:postId" element={<PostDetail />} />
         <Route path="/chat/:postId/:ownerId" element={<Chat />} />
+        <Route path="/mypage/chat/:roomId" element={<MyChat />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
