@@ -29,3 +29,8 @@ export const StColumnDate = styled.p`
   font-size: "";
   font-weight: "";
 `;
+export const StDeadLine = styled.span`
+color:#fff;
+width:100px;
+background-color:green;
+`

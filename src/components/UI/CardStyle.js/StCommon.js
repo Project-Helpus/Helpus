@@ -80,3 +80,7 @@ margin-bottom:20px;
 export const StSpaceBetween = styled.div`
 justify-content:space-between;
 display:flex;`
+
+export const StHeart = styled.div`
+width:20px;
+height:20px;`

@@ -19,6 +19,8 @@ export const __updatePost = createAsyncThunk(
     try {
       const Id = payload.id
       const Form = payload.formData
+      console.log('id:', Id)
+      console.log('Form:', Form)
       const res = await PostAPI.postUpdate(Id,Form)
       console.log('res:', res)
       return thunkAPI.fulfillWithValue(res.data);
@@ -245,6 +247,17 @@ const postSlice = createSlice({
       state.postInfo = action.payload.result;
     },
     [__detailPost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__updatePost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updatePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.postInfo = action.payload.result;
+    },
+    [__updatePost.rejected]: (state) => {
       state.isLoading = false;
       state.error = true;
     },

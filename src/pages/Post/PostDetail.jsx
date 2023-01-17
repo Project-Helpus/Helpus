@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { StWrapper } from "../../components/UI/StIndex";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { __detailPost,__deletePost } from "../../redux/modules/postSlice";
+import { __detailPost,__deletePost,__updatePost} from "../../redux/modules/postSlice";
 import arrow_forward from "../../asset/arrow_forward.svg";
 import heart from "../../asset/heart.svg";
+import { isCompositeComponent } from "react-dom/test-utils";
 
 const PostDetail = () => {
   const navigate = useNavigate();
@@ -15,20 +16,42 @@ const PostDetail = () => {
 // console.log('id:',postInfo)
   const userId = useSelector((state) => state.mypageSlice.data?.userId)
   const postCreaterId = useSelector((state) => state.postSlice.postInfo.userId);
-  console.log('userId:', userId)
-  console.log('createrId:',postCreaterId)
+  const a = useSelector((state) => state.postSlice)
+  const deadLine = useSelector((state)=>state.postSlice.postInfo.isDeadLine)
+  console.log('user:', userId)
+  const  {state} = useLocation();
+  console.log('stata:',state)
+  console.log('post:',postCreaterId)
   const deletePost = () => {
-    if (userId != postCreaterId) { alert('게시물 생성자만 해당 게시글을 삭제할 수 있습니다') }
+    if (userId != state.data.userId) { alert('게시물 생성자만 해당 게시글을 삭제할 수 있습니다') }
     else {
       dispatch(__deletePost(postId))
       alert('게시물이 삭제되었습니다.홈으로 돌아갑니다!')
       navigate('/')
     }
   }
+  const updatePost = () => {
+    if (userId != state.data.userId) { alert('게시물 생성자만 해당 게시글을 수정할 수 있습니다') }
+    else{navigate(`/post/update/${postId}`)}
+  }
 
-  useEffect(() => {
-    dispatch(__detailPost(postId));
-  }, []);
+  const changeDeadLine = () => {
+    const formData = new FormData();
+    if (deadLine === 1) {
+      formData.append("isDeadLine", parseInt(2))
+      dispatch(__updatePost({ formData, id: postId }))
+    }
+    else {
+      formData.append("isDeadLine",1)
+      dispatch(__updatePost({ formData, id: postId }))
+    }
+  }
+
+  // useEffect(() => {
+  //   dispatch(__detailPost(postId));
+  // }, []);
+
+  useEffect(() => { }, [deadLine])
 
   return (
     <StWrapper>
@@ -37,30 +60,33 @@ const PostDetail = () => {
           <img src={arrow_forward} alt="back_button" />
         </StBackBtn>
         <StTitle>{postInfo?.title}</StTitle>
-        <StUpdateButton onClick={() => navigate(`/post/update/${postId}`)}>수정</StUpdateButton>
-        <StUpdateButton onClick={deletePost}>삭제</StUpdateButton>
+        {(userId !== state.data.userId) ||<StUpdateButton onClick={updatePost}>수정</StUpdateButton>}
+        {(userId !== state.data.userId) ||<StUpdateButton onClick={deletePost}>삭제</StUpdateButton>}
+          {(userId !== state.data.userId) || <>{deadLine === 2 ?(
+            <><StUpdateButton onClick={changeDeadLine}>마감취소</StUpdateButton><span>마감된 게시물</span></>)
+          :<StUpdateButton onClick={changeDeadLine}>마감</StUpdateButton>}</>}
         <StProfileBox>
           <StBox>
             <Avatar>
-              <img src={postInfo?.userImage} alt="profile" />
+              <img src={state.data?.userImage} alt="profile" />
             </Avatar>
             <StInnerColBox>
-              <div>{postInfo?.userName}</div>
-              <div>{postInfo?.location1}</div>
+              <div>{state.data?.userName}</div>
+              <div>{state.data?.location1}</div>
             </StInnerColBox>
           </StBox>
           <StInnerRowBox>
             <span>조회수</span>
-            <span>{postInfo?.createdAt}</span>
+            <span>{state.data?.createdAt}</span>
           </StInnerRowBox>
         </StProfileBox>
         <StGroupImgs>
-          <img src={postInfo?.imageUrl1} />
-          <img src={postInfo?.imageUrl2} />
-          <img src={postInfo?.imageUrl3} />
+          <img src={state.data?.imageUrl1} />
+          <img src={state.data?.imageUrl2} />
+          <img src={state.data?.imageUrl3} />
         </StGroupImgs>
-        <StDate>재능기부 희망일: {postInfo?.appointed}</StDate>
-        <StContent>{postInfo?.content}</StContent>
+        <StDate>재능기부 희망일: {state.data?.appointed}</StDate>
+        <StContent>{state.data?.content}</StContent>
         {/* {userInfo?.userId !== postInfo?.userId && ( */}
         <StBtnBox>
           <StChatBtn

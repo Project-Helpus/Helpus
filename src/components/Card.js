@@ -6,6 +6,7 @@ import {
   StColumnCity,
   StColumnTitle,
   StColumnDate,
+  StDeadLine,
 } from "./UI/CardStyle.js/Column";
 import {
   StRowCard,
@@ -31,22 +32,24 @@ import {
   StMarginRight,
   StMainWrapper,
   StSpaceBetween,
+  StHeart,
 } from "./UI/CardStyle.js/StCommon";
 const Card = ({ type, data, onClick }) => {
   const Model = () => {
     const navigate = useNavigate();
-    const curr = new Date(data.createdAt);
+    const curr = new Date(data.appointed);
     const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
     const kRTimeDiff = 9 * 60 * 60 * 1000;
     const KrCurr = new Date(utc + kRTimeDiff);
     const KoreaDate = KrCurr.toLocaleDateString();
-    // console.log("Date:", data);
     // toLocaleDateString = 브라우저에서 설정된 국가에서 사용되는 날짜를 뽑아줌
     const category =  data.category== 1 ?"헬피":"헬퍼"
     const content = data.content.slice(0, 26)
     const title15 = data.title.slice(0, 15)
+    const deadLine = data.isDeadLine;
+    console.log('dead:,',deadLine)
     const moveDetail = (id) => {
-      navigate(`/post/${id}`)
+      navigate(`/post/${id}`,{state:{data:data}})
     }
     switch (type) {
       case "가로 ":
@@ -72,6 +75,7 @@ const Card = ({ type, data, onClick }) => {
               <StColumnCity>
                 {data.location1} {data.location2}
               </StColumnCity>
+              {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
             </StFlex>
             <StColumnTitle>{data.title}</StColumnTitle>
             <StColumnDate>{KoreaDate}</StColumnDate>
@@ -88,7 +92,8 @@ const Card = ({ type, data, onClick }) => {
               <div>
               <StFlex>
                 <StCategoryName>{category} 게시판</StCategoryName>
-                <StDate>&nbsp;{KoreaDate}</StDate>
+                  <StDate>&nbsp;{KoreaDate}</StDate>
+                  {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
               </StFlex>
                 <StContentsTitle>{data.title}</StContentsTitle>
                 {data.content}
@@ -107,6 +112,7 @@ const Card = ({ type, data, onClick }) => {
                   <StNickname>{data.userName}</StNickname>
                   <StDate>{KoreaDate}</StDate>
                   <StAddress>상세주소</StAddress>
+                  {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
                 </StFlex>
                 <StContentsTitle></StContentsTitle>
                 <StContentsInfo>게시물 내용</StContentsInfo>
@@ -131,6 +137,7 @@ const Card = ({ type, data, onClick }) => {
                 <StDate>{KoreaDate}</StDate>
                 <StAddress>{data.location1} {data.location2}</StAddress>
               </div>
+              {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
             </StFlex>
               <StContentsTitle>{data.title}</StContentsTitle>
               <StContentsInfo>{data.content}</StContentsInfo>
@@ -140,7 +147,9 @@ const Card = ({ type, data, onClick }) => {
         return (
           <StMainWrapper>
             <StFlex>
-            <StMainSquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} ></StMainSquarePhoto>
+              <StMainSquarePhoto src={data.imageUrl1} onClick={() => moveDetail(data.postId)} >
+                <StHeart>🤍</StHeart>
+            </StMainSquarePhoto>
               <StMainContentsWrapper>
                 <StSpaceBetween>
                   <StFlex>
@@ -152,6 +161,7 @@ const Card = ({ type, data, onClick }) => {
                   <StAddress> 
                     &gt;{data.location1} {data.location2}
                     </StAddress>
+                    {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
                     </StFlex>
                   </StSpaceBetween>
                 <StContentsTitle>{data.title}</StContentsTitle>
@@ -164,7 +174,7 @@ const Card = ({ type, data, onClick }) => {
         return (
           <StMarginRight>
             <StMySquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StMySquarePhoto>
-            <StMainContentsTitle>{title15}...</StMainContentsTitle>
+            <StMainContentsTitle>{title15}...</StMainContentsTitle>{deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
           </StMarginRight>
         )
       default:

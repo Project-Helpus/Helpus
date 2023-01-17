@@ -24,8 +24,8 @@ const PostCreate = () => {
     location1: `${userInfo.location1}`,
     location2: `${userInfo.location2}`,
   });
-  console.log('data:', Date.parse(userInfo.appointed))
-  console.log('dataResult:', date)
+  // console.log('data:', Date.parse(userInfo.appointed))
+  // console.log('dataResult:', date)
   // console.log('dataIOS:',date.toISOString())
   const [titleInput, setTitleInput] = useState(userInfo.title)
   const [contentsInput, setContentsInput] = useState(userInfo.content)
@@ -34,9 +34,9 @@ const PostCreate = () => {
   const helpeeRef = useRef(null)
   const helperRef = useRef(null)
   const helpUsRef = useRef(null)
-  const [img, setImg1] = useState(userInfo.imageUrl1)
-  const [img2, setImg2] = useState(userInfo.imageUrl2)
-  const [img3, setImg3] = useState(userInfo.imageUrl3)
+  const [img, setImg1] = useState()
+  const [img2, setImg2] = useState()
+  const [img3, setImg3] = useState()
   const [pr, setPrImg1] = useState(userInfo.imageUrl1)
   const [pr2, setPrImg2] = useState(userInfo.imageUrl2)
   const [pr3, setPrImg3] = useState(userInfo.imageUrl3)
@@ -50,6 +50,7 @@ const PostCreate = () => {
     setInput({ ...input, [name]: value });
   };
   console.log('userInfo:', userInfo)
+  console.log('day:',date)
   const changeHelpeeColor = e => {
     helpeeRef.current.style.backgroundColor="green"
     helperRef.current.style.backgroundColor="transparent"
@@ -101,15 +102,31 @@ const PostCreate = () => {
     formData.append("title", titleInput)
     formData.append("content", contentsInput)
     formData.append("category", categories)
-    formData.append("appointed", date.toISOString())
+    console.log('만들기전:', date)
+    const value = date.toISOString()
+    console.log('만든후:',value)
+    formData.append("appointed", value)
     formData.append("isDeadLine",parseInt(1))
     for (const property in input) {
       formData.append(`${property}`, input[property]);
     }
     
-    formData.append("post-image", img);
-    formData.append("post-image", img2);
-    formData.append("post-image", img3);
+    // if (img || img2 || img3) {
+    //   formData.append("post-image", img);
+    //   formData.append("post-image", img2);
+    //   formData.append("post-image", img3);
+    // }
+    
+    if (img !== undefined) {
+      formData.append("imageUrl1", img);
+    }
+    if (img2 !== undefined) {
+      formData.append("imageUrl2", img2);
+    } 
+    if (img3 !== undefined) {
+      formData.append("imageUrl3", img3);
+    } 
+    
     formData.append("tag", tags);
       for (let value of formData.values()) {
           console.log('값',value);
