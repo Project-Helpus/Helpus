@@ -41,13 +41,10 @@ const Header = () => {
   useEffect(() => {
     dispatch(__getMyPage());
     if (userInfo.userId) {
-      const socket = io("ws://helpus-api.shop");
-      console.log("hi");
-      socket.emit("login", userInfo.userId);
-      socket.emit("test");
-      socket.on("test", (data) => {
-        console.log(data);
+      const socket = io(process.env.REACT_APP_CHAT_SERVER, {
+        transports: ["websocket"],
       });
+      socket.emit("login", userInfo.userId);
       return () => {
         socket.disconnect();
       };
