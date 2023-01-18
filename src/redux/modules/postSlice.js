@@ -46,9 +46,9 @@ export const __postZZim = createAsyncThunk(
   "mypageSlice/postZZim",
   async (id, thunkAPI) => {
     try {
-      console.log('작동')
+      console.log('찜하기 작동')
       const res = await PostAPI.postZZim(id)
-      console.log('res:',res)
+      console.log('zzimres:',res)
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -206,7 +206,7 @@ const initialState = {
   helpUsTrueDate: [],
   inputReciver: "",
   postInfo: "",
-  ZZimMsg:'',
+  ZZimMsg:[],
 };
 
 const postSlice = createSlice({

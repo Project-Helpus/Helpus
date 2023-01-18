@@ -4,10 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import {__updatePost } from "../../redux/modules/postSlice";
-
 import { 행정구역 } from "./elements/address";
-// import Category from "./elements/Category";
-import { categoryType } from "./elements/categoryType";
 import Calender from "./elements/Calender";
 import { element } from "prop-types";
 
@@ -17,16 +14,11 @@ const PostCreate = () => {
   const tagData = userInfo.tag?.split(',')
   const [tags, setTags] = useState(tagData);
   const [tag, setTag] = useState('');
-  // const [date, setDate] = useState();
-  // const [date, setDate] = useState(Date.parse(userInfo.appointed));
   const [date, setDate] = useState(new Date(userInfo.appointed));
   const [input, setInput] = useState({
     location1: `${userInfo.location1}`,
     location2: `${userInfo.location2}`,
   });
-  // console.log('data:', Date.parse(userInfo.appointed))
-  // console.log('dataResult:', date)
-  // console.log('dataIOS:',date.toISOString())
   const [titleInput, setTitleInput] = useState(userInfo.title)
   const [contentsInput, setContentsInput] = useState(userInfo.content)
   const dispatch = useDispatch();
@@ -41,7 +33,6 @@ const PostCreate = () => {
   const [pr2, setPrImg2] = useState(userInfo.imageUrl2)
   const [pr3, setPrImg3] = useState(userInfo.imageUrl3)
   
-  console.log('img',img)
   const category = userInfo.category;
   const [categories, setCategories] = useState(category)
 
@@ -49,8 +40,6 @@ const PostCreate = () => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
-  console.log('userInfo:', userInfo)
-  console.log('day:',date)
   const changeHelpeeColor = e => {
     helpeeRef.current.style.backgroundColor="green"
     helperRef.current.style.backgroundColor="transparent"
@@ -102,20 +91,12 @@ const PostCreate = () => {
     formData.append("title", titleInput)
     formData.append("content", contentsInput)
     formData.append("category", categories)
-    console.log('만들기전:', date)
     const value = date.toISOString()
-    console.log('만든후:',value)
     formData.append("appointed", value)
     formData.append("isDeadLine",parseInt(1))
     for (const property in input) {
       formData.append(`${property}`, input[property]);
     }
-    
-    // if (img || img2 || img3) {
-    //   formData.append("post-image", img);
-    //   formData.append("post-image", img2);
-    //   formData.append("post-image", img3);
-    // }
     
     if (img !== undefined) {
       formData.append("imageUrl1", img);
@@ -128,9 +109,6 @@ const PostCreate = () => {
     } 
     
     formData.append("tag", tags);
-      for (let value of formData.values()) {
-          console.log('값',value);
-    }
     dispatch(__updatePost({formData, id: userInfo.postId}));
   };
 

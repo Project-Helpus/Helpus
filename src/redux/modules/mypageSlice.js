@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { MypageAPI, PostAPI } from "../../api/axios";
 
-const initialState = {};
+const initialState = {wish:[],};
 
 export const __getMyPage = createAsyncThunk(
   "mypage/getMyPage",
@@ -27,6 +27,21 @@ export const __getAllPost = createAsyncThunk(
   }
 );
 
+export const __getWishPost = createAsyncThunk(
+  "mypageSlice/getWishPost",
+  async (data, thunkAPI) => {
+    try {
+      // console.log('Wish 작동')
+      const res = await MypageAPI.getWishlist(data)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+
+
 const mypageSlice = createSlice({
   name: "mypageSlice",
   initialState,
@@ -39,6 +54,15 @@ const mypageSlice = createSlice({
       state.data = action.payload;
     },
     [__getMyPage.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    [__getWishPost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getWishPost.fulfilled]: (state, action) => {
+      state.wish = action.payload;
+    },
+    [__getWishPost.rejected]: (state) => {
       state.isLoading = false;
     },
   },

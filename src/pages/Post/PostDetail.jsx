@@ -3,25 +3,21 @@ import { StWrapper } from "../../components/UI/StIndex";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { __detailPost,__deletePost,__updatePost} from "../../redux/modules/postSlice";
+import { __detailPost,__deletePost,__updatePost,__postZZim} from "../../redux/modules/postSlice";
 import arrow_forward from "../../asset/arrow_forward.svg";
-import heart from "../../asset/heart.svg";
+// import heart from "../../asset/heart.svg";
 import { isCompositeComponent } from "react-dom/test-utils";
-
+import emptyHeart from '../../asset/emptyHeart.svg'
+import fullHeart from '../../asset/fullHeart.svg'
 const PostDetail = () => {
+  const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message)
+  const userId = useSelector((state) => state.mypageSlice.data?.userId)
+  const deadLine = useSelector((state)=>state.postSlice.postInfo.isDeadLine)
   const navigate = useNavigate();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postInfo } = useSelector((state) => state.postSlice);
-// console.log('id:',postInfo)
-  const userId = useSelector((state) => state.mypageSlice.data?.userId)
-  const postCreaterId = useSelector((state) => state.postSlice.postInfo.userId);
-  const a = useSelector((state) => state.postSlice)
-  const deadLine = useSelector((state)=>state.postSlice.postInfo.isDeadLine)
-  console.log('user:', userId)
+  
   const  {state} = useLocation();
-  console.log('stata:',state)
-  console.log('post:',postCreaterId)
   const deletePost = () => {
     if (userId != state.data.userId) { alert('게시물 생성자만 해당 게시글을 삭제할 수 있습니다') }
     else {
@@ -46,10 +42,14 @@ const PostDetail = () => {
       dispatch(__updatePost({ formData, id: postId }))
     }
   }
-
-  // useEffect(() => {
-  //   dispatch(__detailPost(postId));
-  // }, []);
+const ZZim =e => {
+      dispatch(__postZZim(postId))
+      if (zMsg === "찜") {e.target.src = emptyHeart }
+      else{e.target.src = fullHeart}
+    }
+  useEffect(() => {
+    dispatch(__detailPost(postId));
+  }, []);
 
   useEffect(() => { }, [deadLine])
 
@@ -59,7 +59,7 @@ const PostDetail = () => {
         <StBackBtn onClick={() => navigate(-1)}>
           <img src={arrow_forward} alt="back_button" />
         </StBackBtn>
-        <StTitle>{postInfo?.title}</StTitle>
+        <StTitle>{state.data.title}</StTitle>
         {(userId !== state.data.userId) ||<StUpdateButton onClick={updatePost}>수정</StUpdateButton>}
         {(userId !== state.data.userId) ||<StUpdateButton onClick={deletePost}>삭제</StUpdateButton>}
           {(userId !== state.data.userId) || <>{deadLine === 2 ?(
@@ -87,17 +87,16 @@ const PostDetail = () => {
         </StGroupImgs>
         <StDate>재능기부 희망일: {state.data?.appointed}</StDate>
         <StContent>{state.data?.content}</StContent>
-        {/* {userInfo?.userId !== postInfo?.userId && ( */}
         <StBtnBox>
           <StChatBtn
             onClick={() => {
-              navigate(`/chat/${postId}/${postInfo?.userId}`);
+              navigate(`/chat/${postId}/${state.data?.userId}`);
             }}
           >
             문의하기
           </StChatBtn>
           <StWishBtn>
-            <img src={heart} alt="wish" />
+            <StZZimImg onClick={ZZim}src={emptyHeart} alt="wish" />
             찜하기
           </StWishBtn>
         </StBtnBox>
@@ -136,6 +135,8 @@ const StBox = styled.div`
 const StGroupImgs = styled.div`
   display: flex;
   flex-direction: row;
+  width:300px;
+  height:100px;
   gap: 10px;
 `;
 const StBtnBox = styled.div`
@@ -198,4 +199,7 @@ const StUpdateButton =styled.button`
   width:100px;
   height:50px;
   cursor: pointer;
+`
+const StZZimImg = styled.img`
+  
 `

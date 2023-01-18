@@ -123,7 +123,7 @@ const userSlice = createSlice({
     },
     __logout: (state, action) => {
       if ((state.isLogin = true)) {
-        cookie.remove("token");
+        cookie.remove("token",{ path:'/' });
         state.isLogin = false;
         state.userInfo = {};
       } else {

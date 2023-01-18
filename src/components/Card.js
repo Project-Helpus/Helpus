@@ -1,4 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch,} from "react-redux";
 import { useNavigate } from "react-router";
 import { __postZZim } from "../redux/modules/postSlice";
 import {
@@ -9,7 +10,14 @@ import {
   StColumnTitle,
   StColumnDate,
   StDeadLine,
-} from "./UI/CardStyle.js/Column";
+  StZZimHeart,
+  StHeart,
+  StZZimDeadLine,
+  StMainSquarePhoto,
+  StMargin60,
+  StSubmitButton,
+  StEmptyDiv,
+} from "./UI/CardStyle.js/StElements";
 import {
   StRowCard,
   StRowImgWrapper,
@@ -26,7 +34,6 @@ import {
   StNickname,
   StAddress,
   StContentsInfo,
-  StMainSquarePhoto,
   StMainContentsWrapper,
   StMySquarePhoto,
   StZZimSquarePhote,
@@ -34,13 +41,15 @@ import {
   StMarginRight,
   StMainWrapper,
   StSpaceBetween,
-  StHeart,
+  StEmpty,
+  StTag,
 } from "./UI/CardStyle.js/StCommon";
-
+import emptyHeart from '../asset/emptyHeart.svg'
+import fullHeart from '../asset/fullHeart.svg'
 const Card = ({ type, data, onClick }) => {
-  const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message)
-  const zId = useSelector((state) => state.postSlice.ZZimMsg.postId)
-  const login = useSelector((state) => state.userSlice.isLogin)
+  const [count,setCount]=useState(1)
+
+  const tag = data.tag.split(',',3)
   const Model = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -54,16 +63,16 @@ const Card = ({ type, data, onClick }) => {
     const content = data.content.slice(0, 26)
     const title15 = data.title.slice(0, 15)
     const deadLine = data.isDeadLine;
-    console.log('zId:',zId)
-    // console.log('data:',data)
     const moveDetail = (id) => {
-      navigate(`/post/${id}`,{state:{data:data}})
+      navigate(`/post/${id}`, { state: { data: data } })
     }
-    const ZZim = (id) => {
-      console.log('msg',zMsg)
-      console.log('id:', data.postId)
-      dispatch(__postZZim(id))
+
+
+    const ZZim = e => {
+      dispatch(__postZZim(data.postId))
+      setCount(count + 1)
     }
+    
     switch (type) {
       case "가로 ":
         return (
@@ -142,7 +151,13 @@ const Card = ({ type, data, onClick }) => {
       case "찜 게시물":
         return (
           <>
-            <StZZimSquarePhote src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StZZimSquarePhote>
+            <StZZimSquarePhote src={data.imageUrl1} onClick={() => moveDetail(data.postId)}></StZZimSquarePhote>
+            <StFlex>
+              {deadLine === 1 ? <StEmptyDiv /> : <StZZimDeadLine>마감</StZZimDeadLine>}
+              {count%2 === 1? 
+                (<StZZimHeart onClick={ZZim} src={fullHeart} alt='wish1'></StZZimHeart>)
+                :<StZZimHeart onClick={ZZim} src={emptyHeart} alt='wish2'></StZZimHeart>}
+            </StFlex>
             <StFlex>
               <StCirclePhoto src={data.userImage}></StCirclePhoto>
               <StNickname>{data.userName}</StNickname>
@@ -150,7 +165,6 @@ const Card = ({ type, data, onClick }) => {
                 <StDate>{KoreaDate}</StDate>
                 <StAddress>{data.location1} {data.location2}</StAddress>
               </div>
-              {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
             </StFlex>
               <StContentsTitle>{data.title}</StContentsTitle>
               <StContentsInfo>{data.content}</StContentsInfo>
@@ -163,24 +177,18 @@ const Card = ({ type, data, onClick }) => {
               <StMainSquarePhoto src={data.imageUrl1} onClick={() => moveDetail(data.postId)} >
               </StMainSquarePhoto>
               <StMainContentsWrapper>
-                {login == true ? <>{zMsg == "찜 취소"&&data.postId ==zId ?
-                  <StHeart onClick={() => ZZim(data.postId)}>🤍</StHeart>
-                  : <StHeart onClick={() => ZZim(data.postId)}>🧡</StHeart>}</> : <StHeart />}
-                <StSpaceBetween>
                   <StFlex>
                   <StCirclePhoto src={data.userImage}></StCirclePhoto>
-                  <StNickname>{data.userName}</StNickname>
-                  </StFlex>
-                  <StFlex>
-                  <StDate>&nbsp;{KoreaDate}</StDate>
-                  <StAddress> 
-                    &gt;{data.location1} {data.location2}
-                    </StAddress>
-                    {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-                    </StFlex>
-                  </StSpaceBetween>
-                  <StContentsTitle>{data.title}</StContentsTitle>
-                  <StContentsInfo>{content}...</StContentsInfo>
+                  <div>
+                  <StContentsTitle>{data.title}</StContentsTitle>          
+                    <StNickname>{data.userName}</StNickname>
+                  </div>
+                </StFlex>
+                
+                  <StMargin60>{tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag>})}</StMargin60>
+                  {deadLine === 1 ? <StEmptyDiv /> : <StDeadLine>마감</StDeadLine>}
+
+                  {/* </StSpaceBetween> */}
                 </StMainContentsWrapper>
               </StFlex>
             </StMainWrapper>
@@ -189,7 +197,7 @@ const Card = ({ type, data, onClick }) => {
         return (
           <StMarginRight>
             <StMySquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StMySquarePhoto>
-            <StMainContentsTitle>{title15}...</StMainContentsTitle>{deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+            <StMainContentsTitle>{title15}...</StMainContentsTitle>
           </StMarginRight>
         )
       default:
