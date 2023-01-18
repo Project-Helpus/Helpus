@@ -5,13 +5,12 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { __detailPost,__deletePost,__updatePost,__postZZim} from "../../redux/modules/postSlice";
 import arrow_forward from "../../asset/arrow_forward.svg";
-// import heart from "../../asset/heart.svg";
 import { isCompositeComponent } from "react-dom/test-utils";
 import emptyHeart from '../../asset/emptyHeart.svg'
 import fullHeart from '../../asset/fullHeart.svg'
 const PostDetail = () => {
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message)
-  const userId = useSelector((state) => state.mypageSlice.data?.userId)
+  const userId = useSelector((state) => state.mypageSlice.profile.userId)
   const deadLine = useSelector((state)=>state.postSlice.postInfo.isDeadLine)
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -52,7 +51,8 @@ const ZZim =e => {
   }, []);
 
   useEffect(() => { }, [deadLine])
-
+console.log('userId:',userId)
+console.log('createId:',state.data.userId)
   return (
     <StWrapper>
       <StContainer>

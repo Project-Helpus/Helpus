@@ -195,7 +195,7 @@ const mypageSlice = createSlice({
     [__patchPassword.fulfilled]: (state, action) => {
       state.patchPassword = action.payload;
     },
-    [__patchPassword.rejected]: (state) => {
+    [__patchPassword.rejected]: (state) => { },
 
     [__getWishPost.pending]: (state) => {
       state.isLoading = true;
