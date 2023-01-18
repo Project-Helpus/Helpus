@@ -31,7 +31,6 @@ export const __getWishPost = createAsyncThunk(
   "mypageSlice/getWishPost",
   async (data, thunkAPI) => {
     try {
-      // console.log('Wish 작동')
       const res = await MypageAPI.getWishlist(data)
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {

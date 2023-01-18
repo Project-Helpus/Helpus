@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Category = React.memo(({ ref, children, value, changeInputHandler }) => {
-  console.log('ref:',ref)
   return (
     <StCategory
       name="category"

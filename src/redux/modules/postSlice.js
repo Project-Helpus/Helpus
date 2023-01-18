@@ -19,10 +19,7 @@ export const __updatePost = createAsyncThunk(
     try {
       const Id = payload.id
       const Form = payload.formData
-      console.log('id:', Id)
-      console.log('Form:', Form)
       const res = await PostAPI.postUpdate(Id,Form)
-      console.log('res:', res)
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -33,9 +30,7 @@ export const __deletePost = createAsyncThunk(
   "mypageSlice/deletePost",
   async (id, thunkAPI) => {
     try {
-      console.log('작동')
       const res = await PostAPI.deletePost(id)
-      console.log('res:',res)
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -46,9 +41,7 @@ export const __postZZim = createAsyncThunk(
   "mypageSlice/postZZim",
   async (id, thunkAPI) => {
     try {
-      console.log('찜하기 작동')
       const res = await PostAPI.postZZim(id)
-      console.log('zzimres:',res)
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -61,7 +54,6 @@ export const __detailPost = createAsyncThunk(
   async (postId, thunkAPI) => {
     try {
       const response = await PostAPI.getDetailPost(postId);
-      console.log(response);
       if (response.status === 200) {
         return thunkAPI.fulfillWithValue(response.data);
       } else {
