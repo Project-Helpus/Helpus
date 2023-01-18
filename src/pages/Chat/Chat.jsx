@@ -80,7 +80,6 @@ const Chat = () => {
 
   useEffect(() => {
     socket.current.on("broadcast", (data) => {
-      console.log(data);
       setNewMsg((prev) => [...prev, data]);
     });
   }, [socket.current]);
@@ -96,14 +95,13 @@ const Chat = () => {
     dispatch(__getChat());
   }, []);
 
-  console.log(data);
   return (
     <StContainer>
       <StChatList>
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {data?.list?.map((el) => {
+        {data?.list?.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
               <StCard key={el.roomId}>
@@ -119,7 +117,7 @@ const Chat = () => {
             );
           } else {
             return (
-              <StCard key={el.roomId}>
+              <StCard key={idx + 100}>
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>

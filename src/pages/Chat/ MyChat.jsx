@@ -60,7 +60,6 @@ const MyChat = () => {
       roomId: roomId,
     });
     socket.current.on("chat-history", (data) => {
-      console.log(data);
       setChatRecord(data);
     });
     return () => {
@@ -131,7 +130,7 @@ const MyChat = () => {
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>
-          {chatRecord?.map((el) => {
+          {chatRecord?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
                 <StSendDiv key={el.chatId}>
@@ -141,14 +140,14 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StReceiveDiv key={el.chatId}>
+                <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
               );
             }
           })}
-          {newMsg?.map((el) => {
+          {newMsg?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
                 <StSendDiv key={el.chatId}>
@@ -158,7 +157,7 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StReceiveDiv key={el.chatId}>
+                <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
