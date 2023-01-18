@@ -15,7 +15,9 @@ const initialState = {
   error: false,
   isLoading: false,
   data: "",
+  wish:[],
 };
+
 
 //프로필 조회
 export const __getMyPage = createAsyncThunk(
@@ -75,7 +77,6 @@ export const __userImage = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.userImage(data);
-      console.log("🚀 ~ file: mypageSlice.js:78 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -107,6 +108,20 @@ export const __getChat = createAsyncThunk(
     }
   }
 );
+
+export const __getWishPost = createAsyncThunk(
+  "mypageSlice/getWishPost",
+  async (data, thunkAPI) => {
+    try {
+      const res = await MypageAPI.getWishlist(data)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+
 
 const mypageSlice = createSlice({
   name: "mypageSlice",
@@ -181,6 +196,14 @@ const mypageSlice = createSlice({
       state.patchPassword = action.payload;
     },
     [__patchPassword.rejected]: (state) => {
+
+    [__getWishPost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getWishPost.fulfilled]: (state, action) => {
+      state.wish = action.payload;
+    },
+    [__getWishPost.rejected]: (state) => {
       state.isLoading = false;
     },
   },

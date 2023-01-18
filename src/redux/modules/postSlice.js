@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { PostAPI } from "../../api/axios";
 
 export const __createPost = createAsyncThunk(
@@ -7,6 +8,57 @@ export const __createPost = createAsyncThunk(
     try {
       const response = await PostAPI.postCreate(formData);
       return thunkAPI.fulfillWithValue();
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+export const __updatePost = createAsyncThunk(
+  "mypageSlice/updatePost",
+  async (payload, thunkAPI) => {
+    try {
+      const Id = payload.id
+      const Form = payload.formData
+      const res = await PostAPI.postUpdate(Id,Form)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+export const __deletePost = createAsyncThunk(
+  "mypageSlice/deletePost",
+  async (id, thunkAPI) => {
+    try {
+      const res = await PostAPI.deletePost(id)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+export const __postZZim = createAsyncThunk(
+  "mypageSlice/postZZim",
+  async (id, thunkAPI) => {
+    try {
+      const res = await PostAPI.postZZim(id)
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const __detailPost = createAsyncThunk(
+  "mypageSlice/detailPost",
+  async (postId, thunkAPI) => {
+    try {
+      const response = await PostAPI.getDetailPost(postId);
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue(response.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -133,7 +185,7 @@ const initialState = {
   error: false,
   boolHelper: false,
   boolHelpee: false,
-  boolHelpUs:false,
+  boolHelpUs: false,
   boolAll: false,
   boolLocation: false,
   AllFalseDate: [],
@@ -145,6 +197,8 @@ const initialState = {
   helperTrueDate: [],
   helpUsTrueDate: [],
   inputReciver: "",
+  postInfo: "",
+  ZZimMsg:[],
 };
 
 const postSlice = createSlice({
@@ -164,7 +218,7 @@ const postSlice = createSlice({
       state.boolAll = false;
     },
     __setBoolHelpUs: (state) => {
-      state.boolHelpUs =true
+      state.boolHelpUs = true;
       state.boolHelpee = false;
       state.boolHelper = false;
       state.boolAll = false;
@@ -187,6 +241,39 @@ const postSlice = createSlice({
       state.isLoading = false;
     },
     [__createPost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__detailPost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__detailPost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.postInfo = action.payload.result;
+    },
+    [__detailPost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__updatePost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updatePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.postInfo = action.payload.result;
+    },
+    [__updatePost.rejected]: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    [__postZZim.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__postZZim.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.ZZimMsg = action.payload;
+    },
+    [__postZZim.rejected]: (state) => {
       state.isLoading = false;
       state.error = true;
     },

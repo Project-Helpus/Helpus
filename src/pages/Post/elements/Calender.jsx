@@ -4,9 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const Calender = ({ changeInputHandler, value, setDate }) => {
   const filterPassedtime = time => {
-    const currentDate = new Date();
+    const currentDate = new Date(); 
     const selectedDate = new Date(time);
-
+    
     return currentDate.getTime() < selectedDate.getTime();
   };
   return (

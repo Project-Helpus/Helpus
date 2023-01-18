@@ -16,6 +16,7 @@ export const StImg = styled.img`
   height: 100%;
   border-radius: 20px;
   border: 1px solid gray;
+  cursor: pointer;
 `;
 
 export const StRowTitle = styled.p`
