@@ -12,6 +12,9 @@ export const ChatAPI = {
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
+  postUpdate: (id, Form) => client.put(`api/post/${id}`, Form),
+  postDelete: (id) => client.delete(`api/post/${id}`),
+  postZZim:(id)=>client.post(`api/wish/${id}`),
   getAllFalse: (count, searchValue) =>
     client.get(
       `api/post/all-location?q=${count}&category=&search=${searchValue}`

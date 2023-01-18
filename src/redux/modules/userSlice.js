@@ -15,6 +15,7 @@ const initialState = {
   error: false,
   isLogin: false,
   isSignup: false,
+  userInfo: {},
 };
 
 //회원가입 post
@@ -62,7 +63,7 @@ export const __postLogin = createAsyncThunk(
       const res = await UserAPI.login(payload);
       if (res.status === 200) {
         window.alert("로그인 성공!");
-        return thunkAPI.fulfillWithValue(res.data.token);
+        return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
         return thunkAPI.rejectWithValue();
@@ -122,8 +123,9 @@ const userSlice = createSlice({
     },
     __logout: (state, action) => {
       if ((state.isLogin = true)) {
-        cookie.remove("token");
+        cookie.remove("token",{ path:'/' });
         state.isLogin = false;
+        state.userInfo = {};
       } else {
         return;
       }
@@ -142,7 +144,6 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-
     //__postDupEmail
     [__postDupEmail.pending]: (state) => {
       state.isLoading = true;
@@ -160,9 +161,10 @@ const userSlice = createSlice({
     [__postLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__postLogin.fulfilled]: (state) => {
+    [__postLogin.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.isLogin = true;
+      state.userInfo = action.payload;
     },
     [__postLogin.rejected]: (state, action) => {
       state.isLoading = false;
@@ -173,8 +175,9 @@ const userSlice = createSlice({
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
     },
-    [__kakaoLogin.fulfilled]: (state) => {
+    [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLogin = true;
+      state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
