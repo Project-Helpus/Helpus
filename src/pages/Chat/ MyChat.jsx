@@ -1,34 +1,30 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import arrow_forward from "../../asset/arrow_forward.svg";
-import { __getChat } from "../../redux/modules/mypageSlice";
 
-const Chat = () => {
-  const dispatch = useDispatch();
-  const { postId } = useParams();
-  const { ownerId } = useParams();
+const MyChat = () => {
+  const { roomId } = useParams();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.userSlice);
-  const { data } = useSelector((state) => state.mypageSlice);
   const socket = useRef(
     io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
   );
   const chatWindow = useRef(null);
+  const { userInfo } = useSelector((state) => state.userSlice);
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
-  const [roomId, setRoomId] = useState(null);
-
-  const changeInputHandler = (e) => {
-    setMsg(e.target.value);
-  };
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
     return chat;
+  };
+
+  const changeInputHandler = (e) => {
+    setMsg(e.target.value);
   };
 
   const moveScrollToReceiveMessage = useCallback(() => {
@@ -60,14 +56,8 @@ const Chat = () => {
 
   useEffect(() => {
     socket.current.emit("login", userInfo?.userId);
-    socket.current.emit("join", {
-      senderId: userInfo.userId,
-      postId: Number(postId),
-      ownerId: Number(ownerId),
-    });
-    socket.current.on("roomId", (data) => {
-      console.log(data);
-      setRoomId(data);
+    socket.current.emit("enter", {
+      roomId: roomId,
     });
     socket.current.on("chat-history", (data) => {
       console.log(data);
@@ -80,9 +70,9 @@ const Chat = () => {
 
   useEffect(() => {
     socket.current.on("broadcast", (data) => {
-      console.log(data);
       setNewMsg((prev) => [...prev, data]);
     });
+    socket.current.emit("read", { roomId: roomId });
   }, [socket.current]);
 
   useEffect(() => {
@@ -92,18 +82,13 @@ const Chat = () => {
     moveScrollToReceiveMessage();
   }, [newMsg]);
 
-  useEffect(() => {
-    dispatch(__getChat());
-  }, []);
-
-  console.log(data);
   return (
     <StContainer>
       <StChatList>
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {data?.list?.map((el) => {
+        {state.data.list.map((el) => {
           if (el.ownerId === userInfo.userId) {
             return (
               <StCard key={el.roomId}>
@@ -163,7 +148,7 @@ const Chat = () => {
               );
             }
           })}
-          {newMsg?.map((el, idx) => {
+          {newMsg?.map((el) => {
             if (el.userId === userInfo.userId) {
               return (
                 <StSendDiv key={el.chatId}>
@@ -194,7 +179,7 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default MyChat;
 
 const StContainer = styled.div`
   width: 100%;
