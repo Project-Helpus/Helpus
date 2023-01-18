@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
-import ColCard from "../ColCard";
+import Card from "../../../../components/Card";
 
 const AllFalse = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
-  const { dataLength, isLoading } = useSelector((state) => state.postSlice);
+  const { isLoading } = useSelector((state) => state.postSlice);
 
   const observerTarget = useRef(null);
   const [count, setCount] = useState(0);
@@ -37,7 +37,7 @@ const AllFalse = () => {
   return (
     <>
       {data?.map((item, idx) => {
-        return <ColCard data={item} key={idx} />;
+        return <Card type={"세로"} data={item} key={idx} />;
       })}
       {!isLoading && (
         <div
