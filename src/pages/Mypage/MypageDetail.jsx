@@ -7,6 +7,12 @@ import {
   __userImage,
   __patchPassword,
 } from "../../redux/modules/mypageSlice";
+import {
+  __kakaoSignOut,
+  __logout,
+  __signOut,
+  __kakaoState,
+} from "../../redux/modules/userSlice";
 import { StSelector } from "../../components/UI/StIndex";
 import { address } from "../User/element/Address";
 import camera_icon from "../../asset/camera_icon.svg";
@@ -17,26 +23,9 @@ const MypageDetail = () => {
   const navigate = useNavigate();
 
   //프로필 정보 불러오기
-  const userImage = useSelector((state) => state.mypageSlice.userImage);
   const profile = useSelector((state) => state.mypageSlice.profile);
-  const kakaoState = useSelector((state) => state.userSlice.kakaoState);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
-  console.log(
-    "🚀 ~ file: MypageDetail.jsx:24 ~ MypageDetail ~ isLoginkakao",
-    isLoginkakao
-  );
-  console.log(
-    "🚀 ~ file: MypageDetail.jsx:22 ~ MypageDetail ~ profile",
-    profile
-  );
-  console.log(
-    "🚀 ~ file: MypageDetail.jsx:21 ~ MypageDetail ~ userImage",
-    userImage
-  );
-  console.log(
-    "🚀 ~ file: MypageDetail.jsx:23 ~ MypageDetail ~ kakaoState",
-    kakaoState
-  );
+  const isLogin = useSelector((state) => state.userSlice.isLogin);
 
   //수정 input 넣는 state
   const [input, setInput] = useState({
@@ -97,6 +86,7 @@ const MypageDetail = () => {
     const formData = new FormData();
     formData.append("userImage", imgFile);
     dispatch(__userImage(formData));
+    alert("수정완료");
   };
 
   //패쓰워드 수정 완료 버튼
@@ -113,9 +103,28 @@ const MypageDetail = () => {
     navigate("/mypage");
   };
 
+  //카카오 탈퇴 버튼
+  const kakaosignOutHandler = () => {
+    dispatch(__kakaoSignOut());
+    //dispatch(__logout(isLogin));
+    alert("탈퇴완료");
+    navigate("/");
+  };
+
+  //로컬 탈퇴 버튼
+  const signOutHandler = () => {
+    dispatch(__signOut());
+    alert("탈퇴완료");
+    navigate("/");
+  };
+
   //프로필 정보 불러오기
   useEffect(() => {
     dispatch(__getMyPage());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(__kakaoState(isLoginkakao));
   }, [dispatch]);
 
   return (
@@ -142,6 +151,7 @@ const MypageDetail = () => {
           onChange={changeImgHandler}
         ></input>
         <button onClick={submitHandler}>프로필 수정</button>
+        <label>닉네임</label>
         <input
           onChange={updateOnChange}
           name="userName"
@@ -149,12 +159,14 @@ const MypageDetail = () => {
           required
           autoFocus
         ></input>
+        <label>E-mail</label>
         <input
           value={profile?.email}
           placeholder="카카오 계정입니다."
           readOnly
         ></input>
         <div>
+          <label>지역 설정</label>
           <StState>
             <StSelector
               name="state1"
@@ -198,10 +210,14 @@ const MypageDetail = () => {
               onChange={passwordUpdateOnChange}
             ></input>
             <button onClick={PassWordUpdateHandler}>비밀번호 수정</button>
+            <button onClick={signOutHandler}>로컬회원탈퇴</button>
           </div>
         )}
-        {isLoginkakao && <div></div>}
-        <button>회원탈퇴</button>
+        {isLoginkakao && (
+          <div>
+            <button onClick={kakaosignOutHandler}>카카오회원탈퇴</button>
+          </div>
+        )}
       </StProfile>
     </StWarp>
   );
@@ -220,6 +236,7 @@ const StProfile = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  width: 300px;
   img {
     width: 200px;
     height: 200px;
@@ -230,7 +247,7 @@ const StProfile = styled.div`
     margin: 10px auto;
     width: 300px;
     height: 44px;
-    background-color: #00c2ff;
+    background-color: #ea9db4;
     border: none;
     border-radius: 7px;
   }
@@ -244,7 +261,7 @@ const StProfile = styled.div`
     :focus {
       outline: none;
     }
-    :nth-child(5) {
+    :nth-child(7) {
       background-color: #efefef;
       color: #999999;
     }

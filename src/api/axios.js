@@ -50,8 +50,8 @@ export const UserAPI = {
   emailCheck: (email) => client.post("/api/user/email", { email }),
   signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
-  kakaoSignOut: (payload) => client.post("/api/user/delete/kakao", payload),
-  SignOut: (payload) => client.post("/api/user/delete", payload),
+  kakaoSignOut: () => client.delete("/api/user/delete/kakao"),
+  signOut: () => client.delete("/api/user/delete"),
 };
 
 export const MypageAPI = {

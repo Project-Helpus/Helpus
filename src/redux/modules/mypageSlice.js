@@ -75,6 +75,7 @@ export const __userImage = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.userImage(data);
+      console.log("🚀 ~ file: mypageSlice.js:78 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -100,7 +101,6 @@ export const __getChat = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getChat(data);
-      console.log("🚀 ~ file: mypageSlice.js:103 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();

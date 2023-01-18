@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { __kakaoState } from "../../redux/modules/userSlice";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
+import StUserWrap from "../../components/UI/StUserWrap";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
+import location_searching from "../../asset/location_searching.svg";
 
 const State = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { kakaoInfo } = useSelector((state) => state.userSlice);
-  console.log("🚀 ~ file: State.jsx:11 ~ State ~ kakaoInfo", kakaoInfo);
   const kakao = window["kakao"];
   const [state1, setState1] = useState();
   const [state2, setState2] = useState();
@@ -56,42 +58,111 @@ const State = () => {
   };
 
   return (
-    <StProfile>
-      <form onSubmit={submitHandler}>
-        <button onClick={currentLocation}>내 위치 찾기</button>
-        <div>
-          <img src={kakaoInfo?.userImage} alt="" />
-        </div>
-        <div>
-          {state1}
-          {state2}
-        </div>
-        <button>저장</button>
-      </form>
-    </StProfile>
+    <StWarp>
+      <StUserWrap></StUserWrap>
+      <Starrow
+        src={arrow_forward_ios}
+        alt=""
+        onClick={() => {
+          navigate("/");
+        }}
+      ></Starrow>
+      <StProfile>
+        <StProfileImg src={kakaoInfo?.userImage} alt="" />
+        <form>
+          <StStateBtn onClick={currentLocation}>
+            <StLocation src={location_searching} alt="" />내 위치 가져오기
+          </StStateBtn>
+          <StStateInputWrap>
+            <input type="text" value={state1 || ""} readOnly></input>
+            <input type="text" value={state2 || ""} readOnly></input>
+          </StStateInputWrap>
+          <div>
+            <StRadio type="radio" />
+            카카오 계정 정보를 헬퍼스에 공유하는 것을 동의합니다.
+          </div>
+          <StSubmitBtn onClick={submitHandler}>회원가입</StSubmitBtn>
+        </form>
+      </StProfile>
+    </StWarp>
   );
 };
 
 export default State;
 
+const StWarp = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  font-size: 0.8em;
+`;
+const Starrow = styled.img`
+  width: 30px;
+  height: 30px;
+  margin: 5em 0 0 2em;
+  cursor: pointer;
+`;
 const StProfile = styled.div`
+  width: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
-  img {
-    margin: 0 auto;
-    width: 200px;
-    height: 200px;
-    position: relative;
-    border: 2px solid #efefef;
-    border-radius: 100%;
-  }
-  button {
-    margin: 10px auto;
+  form {
     width: 300px;
-    height: 44px;
-    background-color: #00c2ff;
-    border: none;
-    border-radius: 7px;
+    flex-direction: column;
   }
+`;
+const StProfileImg = styled.img`
+  width: 180px;
+  height: 180px;
+  border: 2px solid #efefef;
+  border-radius: 100%;
+`;
+const StSubmitBtn = styled.button`
+  margin: 16px auto;
+  width: 300px;
+  height: 40px;
+  background-color: #ffc3d5;
+  border: none;
+  border-radius: 7px;
+`;
+const StStateBtn = styled.button`
+  position: relative;
+  margin: 16px auto;
+  width: 300px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #c5db85;
+  border: none;
+  border-radius: 7px;
+`;
+const StLocation = styled.img`
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+`;
+const StStateInputWrap = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 6px;
+  input {
+    all: unset;
+    border: 1px solid #e0e0e0;
+    width: 50%;
+    height: 40px;
+    border-radius: 7px;
+    padding: 0 6px;
+  }
+`;
+const StRadio = styled.div`
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+  border: 1px solid #e0e0e0;
 `;
