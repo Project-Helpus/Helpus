@@ -116,19 +116,21 @@ const PostDetail = () => {
         </StGroupImgs>
         <StDate>재능기부 희망일: {state.data?.appointed}</StDate>
         <StContent>{state.data?.content}</StContent>
-        <StBtnBox>
-          <StChatBtn
-            onClick={() => {
-              navigate(`/chat/${postId}/${state.data?.userId}`);
-            }}
-          >
-            문의하기
-          </StChatBtn>
-          <StWishBtn>
-            <StZZimImg onClick={ZZim} src={emptyHeart} alt="wish" />
-            찜하기
-          </StWishBtn>
-        </StBtnBox>
+        {postInfo.userId !== userInfo.userId && (
+          <StBtnBox>
+            <StChatBtn
+              onClick={() => {
+                navigate(`/chat/${postId}/${state.data?.userId}`);
+              }}
+            >
+              문의하기
+            </StChatBtn>
+            <StWishBtn>
+              <StZZimImg onClick={ZZim} src={emptyHeart} alt="wish" />
+              찜하기
+            </StWishBtn>
+          </StBtnBox>
+        )}
       </StContainer>
     </StWrapper>
   );
