@@ -12,7 +12,7 @@ const PostDetail = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const { postInfo } = useSelector((state) => state.postSlice);
-
+  const { userInfo } = useSelector((state) => state.userSlice);
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, []);
@@ -47,20 +47,21 @@ const PostDetail = () => {
         </StGroupImgs>
         <StDate>재능기부 희망일: {postInfo?.appointed}</StDate>
         <StContent>{postInfo?.content}</StContent>
-        {/* {userInfo?.userId !== postInfo?.userId && ( */}
-        <StBtnBox>
-          <StChatBtn
-            onClick={() => {
-              navigate(`/chat/${postId}/${postInfo?.userId}`);
-            }}
-          >
-            문의하기
-          </StChatBtn>
-          <StWishBtn>
-            <img src={heart} alt="wish" />
-            찜하기
-          </StWishBtn>
-        </StBtnBox>
+        {userInfo?.userId !== postInfo?.userId && (
+          <StBtnBox>
+            <StChatBtn
+              onClick={() => {
+                navigate(`/chat/${postId}/${postInfo?.userId}`);
+              }}
+            >
+              문의하기
+            </StChatBtn>
+            <StWishBtn>
+              <img src={heart} alt="wish" />
+              찜하기
+            </StWishBtn>
+          </StBtnBox>
+        )}
       </StContainer>
     </StWrapper>
   );
