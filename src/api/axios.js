@@ -49,15 +49,21 @@ export const PostAPI = {
 
 export const UserAPI = {
   kakaoLogin: (code) => client.get(`/api/user/kakao?code=${code}`),
-  emailCheck: (email) => client.post(`/api/user/email`, { email }),
+  kakaoState: (payload) => client.post("/api/user/kakao/state", payload),
+  emailCheck: (email) => client.post("/api/user/email", { email }),
   signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
+  kakaoSignOut: () => client.delete("/api/user/delete/kakao"),
+  signOut: () => client.delete("/api/user/delete"),
 };
 
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
+  getMyposts: () => client.get("/api/user/myposts"),
   getWishlist: () => client.get("/api/user/wishlist"),
+  getChat: () => client.get("api/chat/list"),
   patchMypage: (userData) => client.patch("api/user/detail", userData),
+  userImage: (formData) => client.patch("api/user/image", formData),
   patchPassword: (changePassword) =>
     client.patch("api/user/password", changePassword),
   getUserPage: (userId) => client.get(`/api/user/${userId}/detail`),

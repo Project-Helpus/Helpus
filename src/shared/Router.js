@@ -12,7 +12,10 @@ import PostCreate from "../pages/Post/PostCreate";
 import PostDetail from "../pages/Post/PostDetail";
 import Chat from "../pages/Chat/Chat";
 import KakaoLogin from "../pages/User/KakaoLogin";
+import MypageDetail from "../pages/Mypage/MypageDetail";
+import State from "../pages/User/State";
 import PostUpdate from "../pages/Post/PostUpdate";
+
 
 const Router = () => {
   return (
@@ -22,8 +25,10 @@ const Router = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/mypage/:userid" element={<Mypage />} />
+        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/mypage/detail" element={<MypageDetail />} />
         <Route path="/auth/kakao" element={<KakaoLogin />} />
+        <Route path="/auth/kakao/state" element={<State />} />
         <Route path="/postlist" element={<PostList />} />
         <Route path="/post" element={<PostCreate />} />
         <Route path="/post/:postId" element={<PostDetail />} />

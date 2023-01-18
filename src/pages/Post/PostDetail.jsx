@@ -203,3 +203,4 @@ const StUpdateButton =styled.button`
 const StZZimImg = styled.img`
   
 `
+

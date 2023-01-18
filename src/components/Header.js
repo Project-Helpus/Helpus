@@ -1,31 +1,41 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
 const Header = () => {
+  const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
 
-  const profile = useSelector((state) => state.mypageSlice.data);
+  const profile = useSelector((state) => state.mypageSlice.profile);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
+  const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
 
+  //로그아웃
   const logoutButton = (e) => {
     e.preventDefault();
     dispatch(__logout(isLogin));
+    navigate("/");
   };
 
+  //검색 기능
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
   };
 
+  //프로필 이미지 불러오기
   useEffect(() => {
     dispatch(__getMyPage());
   }, [dispatch]);
+
+  if (locationNow.pathname === "/login") return null;
+  if (locationNow.pathname === "/signup") return null;
+  if (locationNow.pathname === "/auth/kakao/state") return null;
   return (
     <StHeaderWrapper>
       <StLogo
@@ -47,14 +57,14 @@ const Header = () => {
         <button>검색</button>
       </StSearch>
       <StLogin>
-        {!isLogin && (
+        {!(isLogin || isLoginkakao) && (
           <StLogin>
             <button onClick={() => navigate("/login")}>로그인</button>
             <span>|</span>
             <button onClick={() => navigate("/signup")}>회원가입</button>
           </StLogin>
         )}
-        {isLogin && (
+        {(isLogin || isLoginkakao) && (
           <div>
             <StProfile onClick={() => navigate("/mypage")}>
               <img src={profile?.userImage} alt="" />
@@ -118,5 +128,6 @@ const StProfile = styled.button`
   img {
     width: 25px;
     height: 25px;
+    border-radius: 100px;
   }
 `;

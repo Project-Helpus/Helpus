@@ -4,18 +4,21 @@ import { Cookies } from "react-cookie";
 const cookie = new Cookies();
 
 const initialState = {
+  userid: 0,
   email: "",
   userName: "",
-  password: "",
   isConfirm: false,
   dupCheck: false,
-  isLoading: false,
   state1: "",
   state2: "",
-  error: false,
   isLogin: false,
   isSignup: false,
-  userInfo: {},
+  kakaoInfo: "",
+  userInfo: "",
+  kakaoState: "",
+  isLoginkakao: false,
+  isLoading: false,
+  error: false,
 };
 
 //회원가입 post
@@ -78,11 +81,11 @@ export const __postLogin = createAsyncThunk(
 //카카오 로그인 get
 export const __kakaoLogin = createAsyncThunk(
   "user/kakaoLogin",
-  async (code, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLogin(code);
+      const response = await UserAPI.kakaoLogin(payload);
       if (response.status === 200) {
-        return thunkAPI.fulfillWithValue();
+        return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
       }
@@ -97,9 +100,43 @@ export const __kakaoState = createAsyncThunk(
   "user/kakaoLoginState",
   async (payload, thunkAPI) => {
     try {
-      const response = await UserAPI.kakaoLoginState(payload);
+      const response = await UserAPI.kakaoState(payload);
       if (response.status === 200) {
-        return thunkAPI.fulfillWithValue();
+        return thunkAPI.fulfillWithValue(response.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+//카카오 탈퇴
+export const __kakaoSignOut = createAsyncThunk(
+  "user/kakaoSignOut",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await UserAPI.kakaoSignOut();
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue(response.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+//로컬 탈퇴
+export const __signOut = createAsyncThunk(
+  "user/signOut",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await UserAPI.signOut();
+      if (response.status === 200) {
+        return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
       }
@@ -114,18 +151,17 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    __checkLogin: (state, action) => {
+    __checkLogin: (state) => {
       if (cookie.get("token")) {
         state.isLogin = true;
       } else {
         state.isLogin = false;
       }
     },
-    __logout: (state, action) => {
+    __logout: (state) => {
       if ((state.isLogin = true)) {
-        cookie.remove("token",{ path:'/' });
+        cookie.remove("token", { path: "/" });
         state.isLogin = false;
-        state.userInfo = {};
       } else {
         return;
       }
@@ -176,10 +212,47 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
-      state.isLogin = true;
-      state.userInfo = action.payload;
+      state.isLoginkakao = true;
+      state.kakaoInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
+      state.error = false;
+      state.error = action.payload;
+    },
+
+    //kakaoLoginState
+    [__kakaoState.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__kakaoState.fulfilled]: (state, action) => {
+      state.isLoginkakao = true;
+      state.kakaoState = action.payload;
+    },
+    [__kakaoState.rejected]: (state, action) => {
+      state.error = false;
+      state.error = action.payload;
+    },
+
+    //kakaosignOut
+    [__kakaoSignOut.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__kakaoSignOut.fulfilled]: (state, action) => {
+      state.isLoginkakao = false;
+    },
+    [__kakaoSignOut.rejected]: (state, action) => {
+      state.error = false;
+      state.error = action.payload;
+    },
+
+    //signOut
+    [__signOut.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__signOut.fulfilled]: (state, action) => {
+      state.isLogin = false;
+    },
+    [__signOut.rejected]: (state, action) => {
       state.error = false;
       state.error = action.payload;
     },

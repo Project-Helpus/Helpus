@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { __kakaoLogin } from "../../redux/modules/userSlice";
 
@@ -11,10 +11,13 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 const KakaoLogin = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
+  //카카오 인가코드 보내기
   const sendAuth = () => {
     const code = location.search.split("=")[1];
     dispatch(__kakaoLogin(code));
+    navigate("/auth/kakao/state");
   };
 
   useEffect(() => {
