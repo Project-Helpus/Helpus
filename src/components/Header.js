@@ -31,7 +31,8 @@ const Header = () => {
   //프로필 이미지 불러오기
   useEffect(() => {
     dispatch(__getMyPage());
-  }, [dispatch]);
+  }, [isLogin,isLoginkakao]);
+
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;

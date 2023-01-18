@@ -65,7 +65,6 @@ export const __postLogin = createAsyncThunk(
     try {
       const res = await UserAPI.login(payload);
       if (res.status === 200) {
-        window.alert("로그인 성공!");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
