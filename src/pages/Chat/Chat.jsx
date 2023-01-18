@@ -58,6 +58,17 @@ const Chat = () => {
     );
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && msg !== "") {
+      socket.current.emit("send", {
+        userId: userInfo.userId,
+        roomId: roomId,
+        content: msg,
+      });
+      setMsg("");
+    }
+  };
+
   useEffect(() => {
     socket.current.emit("login", userInfo?.userId);
     socket.current.emit("join", {
@@ -182,7 +193,7 @@ const Chat = () => {
         <StInputBox>
           <StInput
             value={msg}
-            onKeyDown={changeInputHandler}
+            onKeyPress={(e) => handleKeyPress(e)}
             onChange={changeInputHandler}
           ></StInput>
           <StSendBtn onClick={sendMsg}>전송</StSendBtn>

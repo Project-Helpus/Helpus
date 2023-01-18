@@ -54,6 +54,17 @@ const MyChat = () => {
     );
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && msg !== "") {
+      socket.current.emit("send", {
+        userId: userInfo.userId,
+        roomId: roomId,
+        content: msg,
+      });
+      setMsg("");
+    }
+  };
+
   useEffect(() => {
     socket.current.emit("login", userInfo?.userId);
     socket.current.emit("enter", {
@@ -133,34 +144,34 @@ const MyChat = () => {
           {chatRecord?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
-                <StSendDiv key={el.chatId}>
-                  <StChatSend>{el.content}</StChatSend>
-                  <span>{chatTime(el.createdAt)}</span>
-                </StSendDiv>
-              );
-            } else {
-              return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
+              );
+            } else {
+              return (
+                <StSendDiv key={el.chatId}>
+                  <StChatSend>{el.content}</StChatSend>
+                  <span>{chatTime(el.createdAt)}</span>
+                </StSendDiv>
               );
             }
           })}
           {newMsg?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
-                <StSendDiv key={el.chatId}>
-                  <StChatSend>{el.content}</StChatSend>
-                  <span>{chatTime(el.createdAt)}</span>
-                </StSendDiv>
-              );
-            } else {
-              return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
+              );
+            } else {
+              return (
+                <StSendDiv key={el.chatId}>
+                  <StChatSend>{el.content}</StChatSend>
+                  <span>{chatTime(el.createdAt)}</span>
+                </StSendDiv>
               );
             }
           })}
@@ -168,7 +179,7 @@ const MyChat = () => {
         <StInputBox>
           <StInput
             value={msg}
-            onKeyDown={changeInputHandler}
+            onKeyPress={(e) => handleKeyPress(e)}
             onChange={changeInputHandler}
           ></StInput>
           <StSendBtn onClick={sendMsg}>전송</StSendBtn>
