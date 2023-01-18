@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { __postLogin } from "../../redux/modules/userSlice";
 import { KAKAO_AUTH_URL } from "./KakaoLogin";
 import kakaoLogin from "../../asset/kakaoLogin.png";
+import StUserWrap from "../../components/UI/StUserWrap";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,7 +38,14 @@ const Login = () => {
 
   return (
     <StWarp>
-      <StLeft></StLeft>
+      <StUserWrap></StUserWrap>
+      <Starrow
+        src={arrow_forward_ios}
+        alt=""
+        onClick={() => {
+          navigate("/");
+        }}
+      ></Starrow>
       <StLoginWrap>
         <div>
           <h1>로그인</h1>
@@ -78,17 +87,20 @@ const StWarp = styled.div`
     text-align: center;
   }
 `;
-const StLeft = styled.div`
-  display: flex;
-  width: 610px;
-  height: 100vh;
-  background-color: #efefef;
+
+const Starrow = styled.img`
+  width: 30px;
+  height: 30px;
+  margin: 5em 0 0 2em;
+  cursor: pointer;
 `;
 const StLoginWrap = styled.div`
   display: flex;
-  width: 100%;
-  margin: 12em auto;
   justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100vh;
+  margin: 0 auto;
   form {
     display: flex;
     flex-direction: column;

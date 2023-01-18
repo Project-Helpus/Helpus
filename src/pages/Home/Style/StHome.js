@@ -47,12 +47,11 @@ export const StTransFormY = styled.div`
 transform:translateY(-220px)
 `
 export const StMain = styled.div`
-width:1840px;
+width:1780px;
 margin:auto;
 `
 export const StCarouselWrapper = styled.div`
 margin:0 auto 40px auto;
-position:relative;
 `
 export const StCarouselTitle = styled.h2`
 font-size:24px;
@@ -71,37 +70,45 @@ cursor: pointer;
 export const StCarouselContainer = styled.div`
 display:flex;
 overflow:hidden;
-position:relative;
-margin:0 15px 0 25px;
-padding-left:370px;
 `
 
 export const StLeftButton = styled.button`
 width:25px;
 height:30px;
-position:absolute;
+left:0;
 background-color:transparent;
 background-image:url(${arrowLeft});
 background-size:cover;
 border:none;
-top:40%;
+margin-top:67px;
+padding:0;
+
 `
 
 export const StRightButton = styled.button`
 width:25px;
 height:30px;
-position:absolute;
 right:0;
 background-color:transparent;
 background-image:url(${arrowRight});
 background-size:cover;
 border:none;
-top:40%;
+margin-top:67px;
+padding:0;
+
 `
 export const StCarousel = styled.div`
-/* z-index:-1; */
 display:flex;
+padding:0;
+
 `
 export const StCarouselItem = styled.div`
-margin-right:20px;
+padding:0;
+
+`
+export const StTest = styled.div`
+width:1680px;
+margin:0 20px 0 20px;
+box-sizing:border-box;
+padding:0;
 `

@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { address } from "./element/Address";
 import { StSelector } from "../../components/UI/StIndex";
 import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
-import { funEmoji } from "@dicebear/collection";
+import StUserWrap from "../../components/UI/StUserWrap";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
+
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ const SignUp = () => {
     if (e.target.files[0]) {
       setImgFile(e.target.files[0]);
     } else {
-      setImgFile("");
+      setImgFile();
       return;
     }
     //프로필 이미지 사진 표시
@@ -140,7 +142,11 @@ const SignUp = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("userImage", imgFile);
+    if (imgFile === undefined) {
+      formData.delete("userImage", imgFile);
+    } else {
+      formData.append("userImage", imgFile);
+    }
     for (const property in input) {
       formData.append(`${property}`, input[property]);
     }
@@ -157,7 +163,14 @@ const SignUp = () => {
 
   return (
     <StWarp>
-      <StLeft></StLeft>
+      <StUserWrap></StUserWrap>
+      <Starrow
+        src={arrow_forward_ios}
+        alt=""
+        onClick={() => {
+          navigate("/");
+        }}
+      ></Starrow>
       <Stupwrap>
         <form onSubmit={submitHandler}>
           <Avatar>
@@ -279,16 +292,15 @@ const StWarp = styled.div`
   margin: 0 auto;
   font-size: 0.8em;
 `;
-const StLeft = styled.div`
-  display: flex;
-  width: 610px;
-  height: 100vh;
-  background-color: #efefef;
+const Starrow = styled.img`
+  width: 30px;
+  height: 30px;
+  margin: 5em 0 0 2em;
+  cursor: pointer;
 `;
-
 const Avatar = styled.div`
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
   border-radius: 100%;
   overflow: hidden;
@@ -302,17 +314,20 @@ const Avatar = styled.div`
 
 const Stupwrap = styled.div`
   display: flex;
-  width: 100%;
-  margin: 6em auto;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100vh;
+  margin: 0 auto;
   justify-content: center;
   form {
-    width: 523px;
+    width: 300px;
     flex-direction: column;
 
     input {
       all: unset;
       width: 100%;
-      height: 45px;
+      height: 40px;
       border: 1px solid #e0e0e0;
       border-radius: 7px;
       background-color: #fafafa;
@@ -327,7 +342,7 @@ const Stupwrap = styled.div`
     button {
       border: 0;
       width: 100%;
-      height: 45px;
+      height: 40px;
       background-color: #ffc3d5;
       border-radius: 7px;
       color: white;
@@ -350,10 +365,10 @@ const CheckWrap = styled.div`
 `;
 const CheckButton = styled.div`
   width: 135px;
-  height: 45px;
+  height: 40px;
   border-radius: 7px;
   text-align: center;
-  line-height: 45px;
+  line-height: 40px;
   background-color: #7d7d7d;
   color: white;
   margin-left: 6px;

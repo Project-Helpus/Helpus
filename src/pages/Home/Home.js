@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router';
 import CardList from './CardList';
 import {__getHelpUsFalse,__setBoolHelpUs } from '../../redux/modules/postSlice';
 import Card from '../../components/Card';
-import { StMainWrapper,StCarouselTitle,StCarouselContainer,StLeftButton,StRightButton,StCarousel,StCarouselItem, StTransFormY, StTopImg, StCarouselWrapper, StMain, StSubTitle, StTopSubTilte, StTopTitle, StTitleWrapper } from './Style/StHome';
+import { StMainWrapper, StCarouselTitle, StCarouselContainer, StLeftButton, StRightButton, StCarousel, StCarouselItem, StTransFormY, StTopImg, StCarouselWrapper, StMain, StSubTitle, StTopSubTilte, StTopTitle, StTitleWrapper, StTest } from './Style/StHome';
+import { __getWishPost } from '../../redux/modules/mypageSlice';
+import { StFlex } from './Style/StCardList';
 const Home = () => {
   const data = useSelector((state) => state.postSlice.helpUsFalseDate.result);
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -37,7 +39,6 @@ const Home = () => {
   }
   const onMouseOverHandlerHelpUs = () => {
     helpUsRef.current.style.color = "#7C7C7C";
-    // helpUsRef.current.style.backgroundColor= "pink";
   }
   const onMouseOutHandlerHelpUs = () => {
     helpUsRef.current.style.color = "#fff"
@@ -46,10 +47,13 @@ const Home = () => {
 
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide}360px)`; 
+    slideRef.current.style.transform = `translateX(-${currentSlide*680}px)`; 
   }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(__getWishPost());
   }, [dispatch]);
 
   return (
@@ -63,15 +67,19 @@ const Home = () => {
       <StTransFormY>
         <StMain>
           <StCarouselWrapper value={currentSlide + 1}>
-                <StCarouselTitle onClick={linkHelpUs} onMouseOver={onMouseOverHandlerHelpUs} onMouseOut={ onMouseOutHandlerHelpUs}>자원봉사 함께해요~HelpUs
-                  <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>더보기</StSubTitle></StCarouselTitle>
-                <StLeftButton onClick={PrevSlide}></StLeftButton>
-            <StCarouselContainer>
-              <StCarousel ref={slideRef}>
-                {data?.map((item,idx) => { return <StCarouselItem key={idx}><Card type={"케러셀"} data={item} /> </StCarouselItem>})}
-              </StCarousel>
-            </StCarouselContainer>
-            <StRightButton onClick={NextSlide}></StRightButton>
+            <StCarouselTitle onClick={linkHelpUs} onMouseOver={onMouseOverHandlerHelpUs} onMouseOut={               onMouseOutHandlerHelpUs}>자원봉사 함께해요~HelpUs
+            <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>더보기</StSubTitle></StCarouselTitle>
+            <StFlex>
+              <StLeftButton onClick={PrevSlide}></StLeftButton>
+              <StTest>
+                <StCarouselContainer>
+                  <StCarousel ref={slideRef}>
+                    {data?.map((item,idx) => { return <StCarouselItem key={idx}><Card type={"케러셀"} data={item} /> </StCarouselItem>})}
+                  </StCarousel>
+                </StCarouselContainer>
+              </StTest>
+              <StRightButton onClick={NextSlide}></StRightButton>
+            </StFlex>
           </StCarouselWrapper>
 
           <CardList></CardList>

@@ -12,6 +12,9 @@ export const ChatAPI = {
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
+  postUpdate: (id, Form) => client.put(`api/post/${id}`, Form),
+  postDelete: (id) => client.delete(`api/post/${id}`),
+  postZZim:(id)=>client.post(`api/wish/${id}`),
   getAllFalse: (count, searchValue) =>
     client.get(
       `api/post/all-location?q=${count}&category=&search=${searchValue}`
@@ -50,8 +53,8 @@ export const UserAPI = {
   emailCheck: (email) => client.post("/api/user/email", { email }),
   signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
-  kakaoSignOut: (payload) => client.post("/api/user/delete/kakao", payload),
-  SignOut: (payload) => client.post("/api/user/delete", payload),
+  kakaoSignOut: () => client.delete("/api/user/delete/kakao"),
+  signOut: () => client.delete("/api/user/delete"),
 };
 
 export const MypageAPI = {
