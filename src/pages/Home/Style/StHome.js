@@ -52,8 +52,6 @@ margin:auto;
 `
 export const StCarouselWrapper = styled.div`
 margin:0 auto 40px auto;
-/* position:relative; */
-/* width:inherit; */
 `
 export const StCarouselTitle = styled.h2`
 font-size:24px;
@@ -72,22 +70,17 @@ cursor: pointer;
 export const StCarouselContainer = styled.div`
 display:flex;
 overflow:hidden;
-/* position:relative; */
-/* margin:0 20px 0 20px; */
-/* padding-left:10px; */
 `
 
 export const StLeftButton = styled.button`
 width:25px;
 height:30px;
 left:0;
-/* position:rel; */
 background-color:transparent;
 background-image:url(${arrowLeft});
 background-size:cover;
 border:none;
 margin-top:67px;
-/* top:40%; */
 padding:0;
 
 `
@@ -95,14 +88,12 @@ padding:0;
 export const StRightButton = styled.button`
 width:25px;
 height:30px;
-/* position:absolute; */
 right:0;
 background-color:transparent;
 background-image:url(${arrowRight});
 background-size:cover;
 border:none;
 margin-top:67px;
-/* top:40%; */
 padding:0;
 
 `
