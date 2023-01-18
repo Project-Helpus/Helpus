@@ -205,7 +205,6 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-
     //kakaoLogin
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
@@ -218,7 +217,6 @@ const userSlice = createSlice({
       state.error = false;
       state.error = action.payload;
     },
-
     //kakaoLoginState
     [__kakaoState.pending]: (state) => {
       state.isLoading = true;

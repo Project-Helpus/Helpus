@@ -47,7 +47,16 @@ const Mypage = () => {
           <h2>채팅</h2>
           <div>
             {data.list?.map((el) => (
-              <div key={el.roomId}>{el.Post}</div>
+              <div
+                key={el.roomId}
+                onClick={() => {
+                  navigate(`/mypage/chat/${el.roomId}`, {
+                    state: { data: data },
+                  });
+                }}
+              >
+                {el.title}
+              </div>
             ))}
           </div>
         </div>

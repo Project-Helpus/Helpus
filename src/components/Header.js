@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
+import { io } from "socket.io-client";
+
 const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [search, setSearch] = useState("");
+  const [notifications, setNotifications] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const profile = useSelector((state) => state.mypageSlice.profile);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
+  const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
 
   //로그아웃
@@ -28,15 +34,36 @@ const Header = () => {
     dispatch(__giveInput(search));
   };
 
+  const displayNotification = ({ senderName }) => {
+    <span>{`${senderName} sends new message`}</span>;
+  };
+
+  const handleRead = () => {
+    setNotifications([]);
+  };
+
+  useEffect(() => {
+    dispatch(__getMyPage());
+    if (userInfo.userId) {
+      const socket = io(process.env.REACT_APP_CHAT_SERVER, {
+        transports: ["websocket"],
+      });
+      socket.emit("login", userInfo.userId);
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [isLogin]);
+
   //프로필 이미지 불러오기
   useEffect(() => {
     dispatch(__getMyPage());
-  }, [isLogin,isLoginkakao]);
-
+  }, [isLogin, isLoginkakao]);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
   if (locationNow.pathname === "/auth/kakao/state") return null;
+
   return (
     <StHeaderWrapper>
       <StLogo
@@ -57,6 +84,17 @@ const Header = () => {
         ></input>
         <button>검색</button>
       </StSearch>
+      <button
+        onClick={() => {
+          setOpen(!open);
+          handleRead();
+        }}
+      >
+        알림
+        {notifications.length > 0 && <div>{notifications.length}</div>}
+      </button>
+
+      {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
       <StLogin>
         {!(isLogin || isLoginkakao) && (
           <StLogin>
@@ -68,8 +106,8 @@ const Header = () => {
         {(isLogin || isLoginkakao) && (
           <div>
             <StProfile onClick={() => navigate("/mypage")}>
-              <img src={profile?.userImage} alt="" />
-              <span>{profile?.userName}</span>
+              <img src={userInfo?.userImage} alt="" />
+              <span>{userInfo?.userName}</span>
             </StProfile>
             <span>|</span>
             <button onClick={logoutButton}>로그아웃</button>

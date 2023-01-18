@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
 
@@ -8,7 +7,7 @@ const AllFalse = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
-  const { dataLength, isLoading } = useSelector((state) => state.postSlice);
+  const { isLoading } = useSelector((state) => state.postSlice);
 
   const observerTarget = useRef(null);
   const [count, setCount] = useState(0);
