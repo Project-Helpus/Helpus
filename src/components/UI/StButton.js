@@ -12,8 +12,10 @@ const StButton = ({ mode, children, onClick }) => {
         return <StPinkSmBtn onClick={onClick}>{children}</StPinkSmBtn>;
       case "greenBtn":
         return <StGreenBtn onClick={onClick}>{children}</StGreenBtn>;
-      case "yellowBtn":
-        return <StYellowBtn onClick={onClick}>{children}</StYellowBtn>;
+      case "yellowMdBtn":
+        return <StYellowMdBtn onClick={onClick}>{children}</StYellowMdBtn>;
+      case "yellowSmBtn":
+        return <StYellowSmBtn onClick={onClick}>{children}</StYellowSmBtn>;
       case "orangeMdBtn":
         return <StOrangeMdBtn onClick={onClick}>{children}</StOrangeMdBtn>;
       case "orangeSmBtn":
@@ -23,7 +25,7 @@ const StButton = ({ mode, children, onClick }) => {
       case "greenBlueBtn":
         return <StGreenBlueBtn onClick={onClick}>{children}</StGreenBlueBtn>;
       default:
-        return;
+        return <StDefaultBtn onClick={onClick}>{children}</StDefaultBtn>;
     }
   };
   return <Button />;
@@ -34,6 +36,12 @@ export default StButton;
 StButton.defaultProps = {
   onClick: () => {},
 };
+
+const StDefaultBtn = styled.button`
+  border: none;
+  background-color: transparent;
+`;
+
 const StPinkLgBtn = styled.button`
   width: 260px;
   height: 44px;
@@ -55,7 +63,7 @@ const StPinkMdBtn = styled.button`
 `;
 
 const StPinkSmBtn = styled.button`
-  width: 132px;
+  width: 88px;
   height: 44px;
   color: white;
   border: none;
@@ -74,8 +82,18 @@ const StGreenBtn = styled.button`
   background-color: ${(props) => props.theme.colors.lightGreen};
 `;
 
-const StYellowBtn = styled.button`
+const StYellowMdBtn = styled.button`
   width: 132px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.yellow};
+`;
+
+const StYellowSmBtn = styled.button`
+  width: 88px;
   height: 44px;
   color: white;
   border: none;
