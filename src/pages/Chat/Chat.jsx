@@ -69,6 +69,12 @@ const Chat = () => {
     }
   };
 
+  const linkOtherChat = () => {
+    navigate(`/mypage/chat/${roomId}`, {
+      state: { data: data },
+    });
+  };
+
   useEffect(() => {
     socket.current.emit("login", userInfo?.userId);
     socket.current.emit("join", {
@@ -77,11 +83,9 @@ const Chat = () => {
       ownerId: Number(ownerId),
     });
     socket.current.on("roomId", (data) => {
-      console.log(data);
       setRoomId(data);
     });
     socket.current.on("chat-history", (data) => {
-      console.log(data);
       setChatRecord(data);
     });
     return () => {
@@ -115,7 +119,7 @@ const Chat = () => {
         {data?.list?.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
-              <StCard key={el.roomId}>
+              <StCard key={el.roomId} onClick={linkOtherChat}>
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -128,7 +132,7 @@ const Chat = () => {
             );
           } else {
             return (
-              <StCard key={idx + 100}>
+              <StCard key={idx} onClick={linkOtherChat}>
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
