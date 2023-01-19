@@ -17,6 +17,14 @@ height:180px;
 border-radius:20px;
 cursor: pointer;`
 
+export const StAllPostSquarePhoto = styled.img`
+width:400px;
+height:225px;
+border-radius:20px;
+cursor: pointer;
+margin-bottom:12px;
+`
+
 export const StZZimSquarePhote = styled.img`
 width:272px;
 height:153px;
@@ -45,6 +53,10 @@ export const StNickname = styled.p`
   font-weight: 400;
   line-height:50px;
 `;
+export const StAllPostNickName = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+`
 export const StAddress = styled.p`
   font-size: 12px;
   font-weight: "";
@@ -69,6 +81,11 @@ export const StMainWrapper = styled.div`
 width:605px;
 height:135px;
 margin-bottom:20px;
+`
+export const StAllPostWrapper = styled.div`
+width:400px;
+height:324px;
+margin:0 40px 50px 0;
 `
 export const StSpaceBetween = styled.div`
 justify-content:space-between;

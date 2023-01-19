@@ -17,6 +17,8 @@ import {
   StMargin60,
   StSubmitButton,
   StEmptyDiv,
+  StMarginTop10,
+  StAllPostDeadLine,
 } from "./UI/CardStyle.js/StElements";
 import {
   StRowCard,
@@ -43,6 +45,9 @@ import {
   StSpaceBetween,
   StEmpty,
   StTag,
+  StAllPostWrapper,
+  StAllPostSquarePhoto,
+  StAllPostNickName,
 } from "./UI/CardStyle.js/StCommon";
 import emptyHeart from '../asset/emptyHeart.svg'
 import fullHeart from '../asset/fullHeart.svg'
@@ -89,20 +94,39 @@ const Card = ({ type, data, onClick }) => {
       case "세로":
         return (
           <StColumnCard>
-            <StColumnImgWrapper>
-              <StImg alt="thumbnail" src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} />
-            </StColumnImgWrapper>
+          <StAllPostWrapper>
+            <StAllPostSquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StAllPostSquarePhoto>
             <StFlex>
-              <StColumnNickName>{data.userName}</StColumnNickName>
-              <StColumnCity>
-                {data.location1} {data.location2}
-              </StColumnCity>
-              {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+              <StCirclePhoto src={data.userImage}></StCirclePhoto>
+              <StMarginTop10>
+                <StContentsTitle>{data.title}</StContentsTitle>
+                <StAllPostNickName>{data.userName}</StAllPostNickName>
+              </StMarginTop10>
             </StFlex>
-            <StColumnTitle>{data.title}</StColumnTitle>
-            <StColumnDate>{KoreaDate}</StColumnDate>
-          </StColumnCard>
+            <StFlex>
+              {deadLine === 1 ?  <StEmptyDiv /> : <StAllPostDeadLine>마감</StAllPostDeadLine>}
+              {tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag> })}
+            </StFlex>
+            </StAllPostWrapper>
+            </StColumnCard>
         );
+      // case "세로":
+      //   return (
+      //     <StColumnCard>
+      //       <StColumnImgWrapper>
+      //         <StImg alt="thumbnail" src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} />
+      //       </StColumnImgWrapper>
+      //       <StFlex>
+      //         <StColumnNickName>{data.userName}</StColumnNickName>
+      //         <StColumnCity>
+      //           {data.location1} {data.location2}
+      //         </StColumnCity>
+      //         {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+      //       </StFlex>
+      //       <StColumnTitle>{data.title}</StColumnTitle>
+      //       <StColumnDate>{KoreaDate}</StColumnDate>
+      //     </StColumnCard>
+      //   );
       case "채팅":
         return (
           <>
