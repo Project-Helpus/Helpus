@@ -112,7 +112,6 @@ const PostDetail = () => {
                         <StDeadLineButton onClick={changeDeadLine}>
                           마감취소
                         </StDeadLineButton>
-                        <span>마감된 게시물</span>
                       </>
                     ) : (
                       <StDeadLineButton onClick={changeDeadLine}>
