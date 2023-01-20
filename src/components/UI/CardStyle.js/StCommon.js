@@ -13,18 +13,18 @@ export const StCirclePhoto = styled.img`
   cursor: pointer;
 `;
 export const StMySquarePhoto = styled.img`
-  width: 320px;
-  height: 180px;
+  width: 240px;
+  height: 135px;
   border-radius: 20px;
   cursor: pointer;
 `;
 
 export const StAllPostSquarePhoto = styled.img`
-width:400px;
-height:225px;
-border-radius:20px;
-cursor: pointer;
-margin-bottom:12px;
+  width: 400px;
+  height: 225px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 12px;
 `;
 
 export const StZZimSquarePhote = styled.img`
@@ -52,8 +52,8 @@ export const StContentsTitle = styled.p`
 `;
 
 export const StMainContentsTitle = styled.p`
-font-size:18px;
-font-weight:400;
+  font-size: 18px;
+  font-weight: 400;
 `;
 
 export const StNickname = styled.p`
@@ -92,15 +92,15 @@ export const StMarginRight = styled.div`
 `;
 
 export const StMainWrapper = styled.div`
-width:605px;
-height:135px;
-margin-bottom:20px;
+  width: 605px;
+  height: 135px;
+  margin-bottom: 20px;
 `;
 
 export const StAllPostWrapper = styled.div`
-width:400px;
-height:324px;
-margin:0 40px 50px 0;
+  width: 400px;
+  height: 324px;
+  margin: 0 40px 50px 0;
 `;
 
 export const StSpaceBetween = styled.div`

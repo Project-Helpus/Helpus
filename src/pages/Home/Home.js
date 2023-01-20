@@ -23,7 +23,7 @@ import {
   StTopSubTilte,
   StTopTitle,
   StTitleWrapper,
-  StTest,
+  StCarouselWith,
 } from "./Style/StHome";
 import { __getWishPost } from "../../redux/modules/mypageSlice";
 import { StFlex } from "./Style/StCardList";
@@ -64,14 +64,14 @@ const Home = () => {
     helpUsRef.current.style.color = "#7C7C7C";
   };
   const onMouseOutHandlerHelpUs = () => {
-    helpUsRef.current.style.color = "#fff"
-  }
+    helpUsRef.current.style.color = "#fff";
+  };
 
-  const logedIn = useSelector((state) => state.userSlice)
-console.log('loge:',logedIn)
+  const logedIn = useSelector((state) => state.userSlice);
+  console.log("loge:", logedIn);
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide*1300}px)`; 
+    slideRef.current.style.transform = `translateX(-${currentSlide * 1300}px)`;
   }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
@@ -98,7 +98,7 @@ console.log('loge:',logedIn)
               onMouseOver={onMouseOverHandlerHelpUs}
               onMouseOut={onMouseOutHandlerHelpUs}
             >
-              자원봉사 함께해요~HelpUs
+              함께해요 HelpUs
               <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>
                 더보기
               </StSubTitle>
@@ -121,7 +121,6 @@ console.log('loge:',logedIn)
               <StRightButton onClick={NextSlide}></StRightButton>
             </StFlex>
           </StCarouselWrapper>
-
           <CardList></CardList>
         </StMain>
       </StTransFormY>

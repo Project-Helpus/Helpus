@@ -32,32 +32,23 @@ export const StColumnDate = styled.p`
 `;
 
 export const StDeadLine = styled.div`
-color:#fff;
-width:50px;
-height:20px;
-position:relative;
-right: 242px;
-bottom: 105px;
-background-color:green;
-`;
-
-export const StZZimDeadLine = styled.div`
-color:#fff;
-width:50px;
-top: -149px;
-z-index: 1;
-position: relative;
-background-color:green;
+  color: #fff;
+  width: 50px;
+  height: 20px;
+  position: relative;
+  right: 242px;
+  bottom: 105px;
+  background-color: green;
 `;
 
 export const StAllPostDeadLine = styled.div`
-color:#fff;
-width:50px;
-bottom: 300px;
-left: 10px;
-z-index: 1;
-position: relative;
-background-color:green;
+  color: #fff;
+  width: 50px;
+  bottom: 300px;
+  left: 10px;
+  z-index: 1;
+  position: relative;
+  background-color: green;
 `;
 
 export const StHeart = styled.img`
@@ -143,14 +134,15 @@ export const StZZimTitle = styled.p`
   padding: 10px 0;
 `;
 
-width:50px;
-top: -149px;
-z-index: 1;
-position: relative;
-`;
+// export const St
+//   width:50px;
+//   top: -149px;
+//   z-index: 1;
+//   position: relative;
+// `;
 
 export const StMarginTop10 = styled.div`
-margin-top:10px;
+  margin-top: 10px;
 `;
 
 export const StZZimWrapContents = styled.div`
