@@ -46,7 +46,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(__getMyPage());
-    if (profile?.userId) {
+    if (userInfo?.userId) {
       const socket = io(process.env.REACT_APP_CHAT_SERVER, {
         transports: ["websocket"],
       });
