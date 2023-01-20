@@ -240,14 +240,11 @@ const postSlice = createSlice({
   extraReducers: {
     [__createPost.pending]: (state) => {
       state.isLoading = true;
-      state.flag = 0;
     },
     [__createPost.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.flag = 1;
     },
     [__createPost.rejected]: (state) => {
-      state.flag = 2;
       state.isLoading = false;
       state.error = true;
     },

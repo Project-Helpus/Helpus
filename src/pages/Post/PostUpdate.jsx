@@ -40,21 +40,21 @@ const PostCreate = () => {
     setInput({ ...input, [name]: value });
   };
   const changeHelpeeColor = (e) => {
-    helpeeRef.current.style.backgroundColor = "green";
-    helperRef.current.style.backgroundColor = "transparent";
-    helpUsRef.current.style.backgroundColor = "transparent";
+    helpeeRef.current.style.backgroundColor = "#EA9DB4";
+    helperRef.current.style.backgroundColor = "#F0F0F0";
+    helpUsRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
   };
   const changeHelperColor = (e) => {
-    helperRef.current.style.backgroundColor = "green";
-    helpeeRef.current.style.backgroundColor = "transparent";
-    helpUsRef.current.style.backgroundColor = "transparent";
+    helperRef.current.style.backgroundColor = "#EA9DB4";
+    helpeeRef.current.style.backgroundColor = "#F0F0F0";
+    helpUsRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
   };
   const changeHelpUsColor = (e) => {
-    helpUsRef.current.style.backgroundColor = "green";
-    helpeeRef.current.style.backgroundColor = "transparent";
-    helperRef.current.style.backgroundColor = "transparent";
+    helpUsRef.current.style.backgroundColor = "#EA9DB4";
+    helpeeRef.current.style.backgroundColor = "#F0F0F0";
+    helperRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
   };
   const change = (e) => {
@@ -131,47 +131,62 @@ const PostCreate = () => {
   };
   useEffect(() => {
     if (category === 1) {
-      helpeeRef.current.style.backgroundColor = "green";
+      helpeeRef.current.style.backgroundColor = "#EA9DB4";
     } else if (category === 2) {
-      helperRef.current.style.backgroundColor = "green";
+      helperRef.current.style.backgroundColor = "#EA9DB4";
     } else {
-      helpUsRef.current.style.backgroundColor = "green";
+      helpUsRef.current.style.backgroundColor = "#EA9DB4";
     }
   }, []);
 
   return (
     <StWrapper>
       <StContainer>
-        <StTitle>게시글 작성</StTitle>
-        <label htmlFor="title">제목</label>
-        <input
-          value={titleInput}
-          name="title"
-          id="title"
-          onChange={(e) => setTitleInput(e.target.value)}
-        ></input>
-        <label htmlFor="content">내용입력</label>
-        <StTextarea
-          name="content"
-          id="content"
-          value={contentsInput}
-          onChange={(e) => setContentsInput(e.target.value)}
-        ></StTextarea>
-        <label htmlFor="date">날짜</label>
-        <Calender value={date} setDate={setDate} />
-        <label>카테고리 선택</label>
-        <StInnerContainer>
-          <Category value={1} ref={helpeeRef} onClick={changeHelpeeColor}>
-            헬피
-          </Category>
-          <Category value={2} ref={helperRef} onClick={changeHelperColor}>
-            헬퍼
-          </Category>
-          <Category value={3} ref={helpUsRef} onClick={changeHelpUsColor}>
-            헬퍼스
-          </Category>
-          <div>(헬퍼스:단체 봉사 활동)</div>
-        </StInnerContainer>
+        <StBox>
+          <StBackBtn onClick={() => navigate(-1)} />
+          <StTitle>게시글 작성</StTitle>
+        </StBox>
+        <StCol>
+          <StLabel htmlFor="title">제목</StLabel>
+          <input
+            value={titleInput}
+            name="title"
+            id="title"
+            onChange={(e) => setTitleInput(e.target.value)}
+          ></input>
+        </StCol>
+        <StCol>
+          <StLabel htmlFor="content">내용입력</StLabel>
+          <StTextarea
+            name="content"
+            id="content"
+            value={contentsInput}
+            onChange={(e) => setContentsInput(e.target.value)}
+          ></StTextarea>
+        </StCol>
+        <StBox>
+          <StLabel htmlFor="date">날짜</StLabel>
+          <StInnerBox>
+            <Calender value={date} setDate={setDate} />
+          </StInnerBox>
+        </StBox>
+        <StCol>
+          <StInnerBox>
+            <StLabel>카테고리 선택</StLabel>
+            {/* <StInnerContainer> */}
+            <StCategory value={1} ref={helpeeRef} onClick={changeHelpeeColor}>
+              헬피
+            </StCategory>
+            <StCategory value={2} ref={helperRef} onClick={changeHelperColor}>
+              헬퍼
+            </StCategory>
+            <StCategory value={3} ref={helpUsRef} onClick={changeHelpUsColor}>
+              헬퍼스
+            </StCategory>
+            <span>(헬퍼스:단체 봉사 활동)</span>
+            {/* </StInnerContainer> */}
+          </StInnerBox>
+        </StCol>
         <StGroupImgs>
           <input
             style={{ display: "none" }}
@@ -215,52 +230,56 @@ const PostCreate = () => {
             </label>
           )}
         </StGroupImgs>
-        <label>지역 설정</label>
-        <div>
-          <select name="location1" onChange={changeInputHandler}>
-            <option value="">{userInfo.location1}</option>
-            {state.map((el) => (
-              <option key={el.state} value={el.codeNm}>
-                {el.codeNm}
-              </option>
-            ))}
-          </select>
-          <select name="location2" onChange={changeInputHandler}>
-            <option value="">{userInfo.location2}</option>
-            {city
-              .filter((el) => el.state === input.location1)
-              .map((el) => (
-                <option key={el.city} value={el.codeNm}>
+        <StCol>
+          <StLabel>지역 설정</StLabel>
+          <StBox>
+            <StSelector name="location1" onChange={changeInputHandler}>
+              <option value="">{userInfo.location1}</option>
+              {state.map((el) => (
+                <option key={el.state} value={el.codeNm}>
                   {el.codeNm}
                 </option>
               ))}
-          </select>
-        </div>
-        <label htmlFor="tag">태그</label>
-        <StTagContainer>
-          {tags?.map((e, i) => (
-            <StTag key={i}>
-              <StTagName>{e}</StTagName>
-              <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
-            </StTag>
-          ))}
-        </StTagContainer>
-        <input
-          placeholder="태그를 입력해주세요"
-          name="tag"
-          id="tag"
-          onChange={addTag}
-          onKeyPress={(e) => handleKeyPress(e)}
-          value={tag}
-        />
-        <StInnerContainer>
-          <StButton mode="smpr" onClick={clickHandler}>
+            </StSelector>
+            <StSelector name="location2" onChange={changeInputHandler}>
+              <option value="">{userInfo.location2}</option>
+              {city
+                .filter((el) => el.state === input.location1)
+                .map((el) => (
+                  <option key={el.city} value={el.codeNm}>
+                    {el.codeNm}
+                  </option>
+                ))}
+            </StSelector>
+          </StBox>
+        </StCol>
+        <StCol>
+          <StLabel htmlFor="tag">태그</StLabel>
+          <StTagContainer>
+            {tags?.map((e, i) => (
+              <StTag key={i}>
+                <StTagName>{e}</StTagName>
+                <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
+              </StTag>
+            ))}
+          </StTagContainer>
+          <input
+            placeholder="태그를 입력해주세요"
+            name="tag"
+            id="tag"
+            onChange={addTag}
+            onKeyPress={(e) => handleKeyPress(e)}
+            value={tag}
+          />
+        </StCol>
+        <StRow>
+          <StButton mode="pinkMdBtn" onClick={clickHandler}>
             수정
           </StButton>
-          <StButton mode="smsd" onClick={() => navigate(-1)}>
+          <StButton mode="outlineBtn" onClick={() => navigate(-1)}>
             뒤로가기
           </StButton>
-        </StInnerContainer>
+        </StRow>
       </StContainer>
     </StWrapper>
   );
@@ -268,30 +287,63 @@ const PostCreate = () => {
 
 const StTitle = styled.h2`
   text-align: center;
+  width: 100%;
+`;
+
+const StBackBtn = styled.button`
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
 `;
 
 const StContainer = styled.section`
   display: flex;
   flex-direction: column;
-  background-color: rgb(240, 240, 240);
+  gap: 55px;
+  width: 1280px;
 `;
 
-const StInnerContainer = styled.div`
+const StInnerBox = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 5px;
+  align-items: center;
+  gap: 20px;
+`;
+
+const StBox = styled.article`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const StCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const StLabel = styled.label`
+  font-size: 24px;
+  font-weight: 800;
 `;
 
 const StTextarea = styled.textarea`
   resize: none;
+  height: 300px;
 `;
 
 const StTagContainer = styled.div`
   display: flex;
   width: 590px;
-  flex-flow: row wrap;
+  flex-flow: row;
 `;
 
+const StRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px;
+`;
 const StGroupImgs = styled.div`
   display: flex;
   flex-direction: row;
@@ -302,17 +354,18 @@ const StImgButton = styled.label`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 190px;
-  height: 120px;
+  width: 400px;
+  height: 225px;
   background-color: white;
+  border: 0.5px dashed black;
   border-radius: 10px;
   cursor: pointer;
 `;
 
 const StImg = styled.img`
   border-radius: 10px;
-  width: 190px;
-  height: 120px;
+  width: 400px;
+  height: 225px;
   cursor: pointer;
 `;
 
@@ -320,27 +373,54 @@ const StTag = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 32px;
+  padding: 0 4px;
   border-radius: 12px;
   margin-right: 10px;
-  background-color: orange;
+  background-color: pink;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
 `;
 
-const StTagName = styled.h3`
+const StTagName = styled.span`
   margin-right: 10px;
 `;
 
 const StTagButton = styled.button`
-  border: none;
-  outline: 0;
-  border-radius: 50%;
   width: 20px;
-  background-color: lightgray;
+  border: 0.5px solid white;
+  border-radius: 50%;
+  color: white;
+
+  background-color: transparent;
   cursor: pointer;
 `;
-const Category = styled.button`
-  width: 100px;
-  height: 50px;
-  background-color: transparent;
+
+const StCategory = styled.button`
+  width: 200px;
+  height: 44px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+`;
+
+const StSelectedCategory = styled.button`
+  width: 200px;
+  height: 44px;
+  background-color: ${(props) => props.theme.colors.subPink};
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+`;
+
+const StSelector = styled.select`
+  width: 300px;
+  height: 44px;
+  border-radius: 10px;
 `;
 
 export default PostCreate;
