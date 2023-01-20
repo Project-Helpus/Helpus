@@ -210,12 +210,12 @@ const MypageDetail = () => {
               onChange={passwordUpdateOnChange}
             ></input>
             <button onClick={PassWordUpdateHandler}>비밀번호 수정</button>
-            <button onClick={signOutHandler}>로컬회원탈퇴</button>
+            <StSingOut onClick={signOutHandler}>로컬회원탈퇴</StSingOut>
           </div>
         )}
         {isLoginkakao && (
           <div>
-            <button onClick={kakaosignOutHandler}>카카오회원탈퇴</button>
+            <StSingOut onClick={kakaosignOutHandler}>카카오회원탈퇴</StSingOut>
           </div>
         )}
       </StProfile>
@@ -284,4 +284,9 @@ const StState = styled.div`
   display: flex;
   gap: 6px;
   margin-top: 6px;
+`;
+
+const StSingOut = styled.div`
+  font-size: 14px;
+  color: #999999;
 `;

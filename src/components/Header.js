@@ -7,6 +7,7 @@ import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
 import whiteBell from "../asset/whiteBell.svg";
 import { io } from "socket.io-client";
+import top_logo from "../asset/top_logo.svg";
 import StButton from "./UI/StButton";
 
 const Header = () => {
@@ -75,7 +76,7 @@ const Header = () => {
           navigate("/");
         }}
       >
-        ❤+❤ Helpus
+        <img src={top_logo} alt=""></img>
       </StLogo>
       <StSearch onSubmit={searching}>
         <input
@@ -86,8 +87,16 @@ const Header = () => {
             setSearch(e.target.value);
           }}
         ></input>
-        <button>검색</button>
       </StSearch>
+      <button
+        onClick={() => {
+          setOpen(!open);
+          handleRead();
+        }}
+      >
+        알림
+        {notifications.length > 0 && <div>{notifications.length}</div>}
+      </button>
       {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
       <StBox>
         {!(isLogin || isLoginkakao) && (
@@ -127,31 +136,23 @@ const StHeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 70px;
+  height: 80px;
 `;
 
 const StSearch = styled.form`
   input {
     border: 1px solid #efefef;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 4px;
-    width: 545px;
+    width: 500px;
     height: 46px;
     border-radius: 7px;
-  }
-  button {
-    height: 46px;
-    width: 62px;
-    margin-left: 6px;
-    border-radius: 7px;
-    color: white;
-    background-color: #ff00ff;
-    border: none;
+    outline: none;
   }
 `;
 const StLogo = styled.div`
-  font-size: 30px;
-  color: #ff00ff;
+  margin: 20px;
+  cursor: pointer;
 `;
 const StBox = styled.div`
   display: flex;
@@ -166,9 +167,12 @@ const StBox = styled.div`
 `;
 
 const StProfile = styled.button`
+  text-align: center;
+  line-height: 60px;
   img {
     width: 25px;
     height: 25px;
     border-radius: 100px;
+    vertical-align: middle;
   }
 `;

@@ -66,8 +66,8 @@ const SignUp = () => {
   };
   //정규식
   const emailRegExp =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  const nickRegExp = /^[A-Za-z0-9]{1,}$/;
+    /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+  const nickRegExp = /^[A-Za-z가-힣]{2,}$/;
   const pwRegExp = /^[A-Za-z0-9]{4,}$/;
 
   //input 이벤트 핸들러
@@ -90,7 +90,7 @@ const SignUp = () => {
     if (name === "userName") {
       if (!nickRegExp.test(value)) {
         //nickname 형식이 맞지 않을때
-        setNicknameText("영문과 숫자 혼합하여 작성해주세요");
+        setNicknameText("영문 또는 한글로 2글자이상 작성해주세요");
         setIsValid({ ...isValid, isUserName: false });
       } else {
         setNicknameText("");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch,} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { __postZZim } from "../redux/modules/postSlice";
 import {
@@ -17,6 +17,13 @@ import {
   StMargin60,
   StSubmitButton,
   StEmptyDiv,
+  StZZimWrap,
+  StZZimImg,
+  StZZimTitle,
+  StZZimWrapContents,
+  StZZimWrapTag,
+  StZZimWrapPhoto,
+  StZZimTag,
   StMarginTop10,
   StAllPostDeadLine,
 } from "./UI/CardStyle.js/StElements";
@@ -49,12 +56,12 @@ import {
   StAllPostSquarePhoto,
   StAllPostNickName,
 } from "./UI/CardStyle.js/StCommon";
-import emptyHeart from '../asset/emptyHeart.svg'
-import fullHeart from '../asset/fullHeart.svg'
+import emptyHeart from "../asset/emptyHeart.svg";
+import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
-  const [count,setCount]=useState(1)
+  const [count, setCount] = useState(1);
 
-  const tag = data.tag.split(',',3)
+  const tag = data.tag.split(",", 3);
   const Model = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -64,20 +71,19 @@ const Card = ({ type, data, onClick }) => {
     const KrCurr = new Date(utc + kRTimeDiff);
     const KoreaDate = KrCurr.toLocaleDateString();
     // toLocaleDateString = 브라우저에서 설정된 국가에서 사용되는 날짜를 뽑아줌
-    const category =  data.category== 1 ?"헬피":"헬퍼"
-    const content = data.content.slice(0, 26)
-    const title15 = data.title.slice(0, 15)
+    const category = data.category == 1 ? "헬피" : "헬퍼";
+    const content = data.content.slice(0, 26);
+    const title15 = data.title.slice(0, 15);
     const deadLine = data.isDeadLine;
     const moveDetail = (id) => {
-      navigate(`/post/${id}`, { state: { data: data } })
-    }
+      navigate(`/post/${id}`, { state: { data: data } });
+    };
 
+    const ZZim = (e) => {
+      dispatch(__postZZim(data.postId));
+      setCount(count + 1);
+    };
 
-    const ZZim = e => {
-      dispatch(__postZZim(data.postId))
-      setCount(count + 1)
-    }
-    
     switch (type) {
       case "가로 ":
         return (
@@ -131,27 +137,30 @@ const Card = ({ type, data, onClick }) => {
         return (
           <>
             <StFlex>
-            <div>
-              <StCirclePhoto src={data.imageUrl1}></StCirclePhoto>
-              <StNickname>{data.userName}</StNickname>
+              <div>
+                <StCirclePhoto src={data.ownerImage}></StCirclePhoto>
+                <StNickname>{data.ownerName}</StNickname>
               </div>
               <div>
-              <StFlex>
-                <StCategoryName>{category} 게시판</StCategoryName>
+                <StFlex>
+                  <StCategoryName>{category} 게시판</StCategoryName>
                   <StDate>&nbsp;{KoreaDate}</StDate>
                   {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-              </StFlex>
+                </StFlex>
                 <StContentsTitle>{data.title}</StContentsTitle>
                 {data.content}
-                </div>
-              </StFlex>
+              </div>
+            </StFlex>
           </>
         );
       case "내 게시물":
         return (
           <>
             <StFlex>
-              <StMySquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StMySquarePhoto>
+              <StMySquarePhoto
+                src={data.imageUrl1}
+                onClick={() => moveDetail(data.postId)}
+              ></StMySquarePhoto>
               <div>
                 <StFlex>
                   <StCirclePhoto src={data.userImage}></StCirclePhoto>
@@ -175,55 +184,92 @@ const Card = ({ type, data, onClick }) => {
       case "찜 게시물":
         return (
           <>
-            <StZZimSquarePhote src={data.imageUrl1} onClick={() => moveDetail(data.postId)}></StZZimSquarePhote>
-            <StFlex>
-              {deadLine === 1 ? <StEmptyDiv /> : <StZZimDeadLine>마감</StZZimDeadLine>}
-              {count%2 === 1? 
-                (<StZZimHeart onClick={ZZim} src={fullHeart} alt='wish1'></StZZimHeart>)
-                :<StZZimHeart onClick={ZZim} src={emptyHeart} alt='wish2'></StZZimHeart>}
-            </StFlex>
-            <StFlex>
-              <StCirclePhoto src={data.userImage}></StCirclePhoto>
-              <StNickname>{data.userName}</StNickname>
-              <div>
-                <StDate>{KoreaDate}</StDate>
-                <StAddress>{data.location1} {data.location2}</StAddress>
-              </div>
-            </StFlex>
-              <StContentsTitle>{data.title}</StContentsTitle>
-              <StContentsInfo>{data.content}</StContentsInfo>
+            <StZZimWrap>
+              <StZZimImg
+                src={data.imageUrl1}
+                onClick={() => moveDetail(data.postId)}
+              ></StZZimImg>
+              {count % 2 === 1 ? (
+                <StZZimHeart
+                  onClick={ZZim}
+                  src={fullHeart}
+                  alt="wish1"
+                ></StZZimHeart>
+              ) : (
+                <StZZimHeart
+                  onClick={ZZim}
+                  src={emptyHeart}
+                  alt="wish2"
+                ></StZZimHeart>
+              )}
+              <StZZimTitle>{data.title}</StZZimTitle>
+              {/* <StContentsInfo>{data.content}</StContentsInfo> */}
+              {deadLine === 1 ? (
+                <StEmptyDiv />
+              ) : (
+                <StZZimDeadLine>마감</StZZimDeadLine>
+              )}
+              <StZZimWrapContents>
+                <StFlex>
+                  <StZZimWrapPhoto src={data.userImage}></StZZimWrapPhoto>
+                  <StNickname>{data.userName}</StNickname>
+                </StFlex>
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+                {/* <StDate>{KoreaDate}</StDate>
+                  <StAddress>
+                    {data.location1} {data.location2}
+                  </StAddress> */}
+              </StZZimWrapContents>
+            </StZZimWrap>
           </>
         );
       case "메인":
         return (
           <StMainWrapper>
             <StFlex>
-              <StMainSquarePhoto src={data.imageUrl1} onClick={() => moveDetail(data.postId)} >
-              </StMainSquarePhoto>
+              <StMainSquarePhoto
+                src={data.imageUrl1}
+                onClick={() => moveDetail(data.postId)}
+              ></StMainSquarePhoto>
               <StMainContentsWrapper>
-                  <StFlex>
+                <StFlex>
                   <StCirclePhoto src={data.userImage}></StCirclePhoto>
                   <div>
-                  <StContentsTitle>{data.title}</StContentsTitle>          
+                    <StContentsTitle>{data.title}</StContentsTitle>
                     <StNickname>{data.userName}</StNickname>
                   </div>
                 </StFlex>
-                
-                  <StMargin60>{tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag>})}</StMargin60>
-                  {deadLine === 1 ? <StEmptyDiv /> : <StDeadLine>마감</StDeadLine>}
 
-                  {/* </StSpaceBetween> */}
-                </StMainContentsWrapper>
-              </StFlex>
-            </StMainWrapper>
-        )
+                <StMargin60>
+                  {tag.map((item, idx) => {
+                    return <StTag key={idx}>{item}</StTag>;
+                  })}
+                </StMargin60>
+                {deadLine === 1 ? (
+                  <StEmptyDiv />
+                ) : (
+                  <StDeadLine>마감</StDeadLine>
+                )}
+
+                {/* </StSpaceBetween> */}
+              </StMainContentsWrapper>
+            </StFlex>
+          </StMainWrapper>
+        );
       case "케러셀":
         return (
           <StMarginRight>
-            <StMySquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StMySquarePhoto>
+            <StMySquarePhoto
+              src={data.imageUrl1}
+              onClick={() => moveDetail(data.postId)}
+            ></StMySquarePhoto>
             <StMainContentsTitle>{title15}...</StMainContentsTitle>
           </StMarginRight>
-        )
+        );
       default:
         return;
     }
