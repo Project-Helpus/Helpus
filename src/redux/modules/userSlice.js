@@ -4,7 +4,6 @@ import { Cookies } from "react-cookie";
 const cookie = new Cookies();
 
 const initialState = {
-  userid: 0,
   email: "",
   userName: "",
   isConfirm: false,
