@@ -12,7 +12,7 @@ const Chat = () => {
   const { postId } = useParams();
   const { ownerId } = useParams();
   const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.userSlice);
+  const userInfo = useSelector((state) => state.userSlice.userInfo);
   const { data } = useSelector((state) => state.mypageSlice);
   const socket = useRef(
     io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
@@ -120,7 +120,7 @@ const Chat = () => {
         {data?.list?.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
-              <StCard key={el.roomId + idx} onClick={linkOtherChat}>
+              <StCard key={idx} onClick={linkOtherChat}>
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -165,14 +165,14 @@ const Chat = () => {
           {chatRecord?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
-                <StSendDiv key={el.chatId + idx}>
+                <StSendDiv key={idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
               );
             } else {
               return (
-                <StReceiveDiv key={el.chatId}>
+                <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
