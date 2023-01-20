@@ -114,8 +114,7 @@ export const StEmpty = styled.div`
 `;
 
 export const StTag = styled.span`
-  height: 20px;
-  line-height: 20px;
+  padding: 4px;
   font-size: 12px;
   font-weight: 400;
   border-radius: 3px;
