@@ -12,5 +12,5 @@ const Wrapper = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  margin: 2em 0 4em 0;
 `;
