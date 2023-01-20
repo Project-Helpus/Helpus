@@ -18,7 +18,6 @@ const AllFalse = () => {
         e.forEach((e) => {
           if (e.isIntersecting) {
             io.unobserve(e.target);
-            console.log(data);
             setTimeout(() => {
               if (data !== 0) {
                 dispatch(__getAllFalse(count));
