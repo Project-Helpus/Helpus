@@ -46,7 +46,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(__getMyPage());
-    if (userInfo.userId) {
+    if (profile?.userId) {
       const socket = io(process.env.REACT_APP_CHAT_SERVER, {
         transports: ["websocket"],
       });
@@ -91,7 +91,13 @@ const Header = () => {
       {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
       <StBox>
         {!(isLogin || isLoginkakao) && (
-          <>
+          <StBox>
+            <button onClick={() => navigate("/login")}>로그인</button>
+            <button onClick={() => navigate("/signup")}>회원가입</button>
+          </StBox>
+        )}
+        {(isLogin || isLoginkakao) && (
+          <div>
             <StButton
               onClick={() => {
                 setOpen(!open);
@@ -101,14 +107,6 @@ const Header = () => {
               <img src={whiteBell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
             </StButton>
-            <StBox>
-              <button onClick={() => navigate("/login")}>로그인</button>
-              <button onClick={() => navigate("/signup")}>회원가입</button>
-            </StBox>
-          </>
-        )}
-        {(isLogin || isLoginkakao) && (
-          <div>
             <StProfile onClick={() => navigate("/mypage")}>
               <img src={profile?.userImage} alt="" />
               <span>{profile?.userName}</span>
