@@ -12,10 +12,18 @@ export const StCirclePhoto = styled.img`
   cursor: pointer;
 `;
 export const StMySquarePhoto = styled.img`
-width:320px;
-height:180px;
+width:240px;
+height:135px;
 border-radius:20px;
 cursor: pointer;`
+
+export const StAllPostSquarePhoto = styled.img`
+width:400px;
+height:225px;
+border-radius:20px;
+cursor: pointer;
+margin-bottom:12px;
+`
 
 export const StZZimSquarePhote = styled.img`
 width:272px;
@@ -38,13 +46,18 @@ export const StContentsTitle = styled.p`
   font-weight: 700;
 `;
 export const StMainContentsTitle = styled.p`
-font-size:24px;
+font-size:18px;
+font-weight:400;
 `
 export const StNickname = styled.p`
   font-size: 14px;
   font-weight: 400;
   line-height:50px;
 `;
+export const StAllPostNickName = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+`
 export const StAddress = styled.p`
   font-size: 12px;
   font-weight: "";
@@ -69,6 +82,11 @@ export const StMainWrapper = styled.div`
 width:605px;
 height:135px;
 margin-bottom:20px;
+`
+export const StAllPostWrapper = styled.div`
+width:400px;
+height:324px;
+margin:0 40px 50px 0;
 `
 export const StSpaceBetween = styled.div`
 justify-content:space-between;

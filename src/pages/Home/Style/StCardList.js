@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StContainer = styled.div`
   margin: auto;
-  width:1690px;
+  width:1280px;
 `;
 export const StFlex = styled.div`
   display: flex;
