@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;  
-    font-family: Roboto, Arial ,sans-serif;   
+    font-family: "Malgun Gothic","맑은 고딕",helvetica,"Apple SD Gothic Neo",sans-serif;  
   }
 
   button {
@@ -19,10 +19,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input, textarea {
-    border: 0.5px solid  ${(props) => props.theme.colors.lightGray};
+    border: 0.5px solid ${(props) => props.theme.colors.lightGray};
     border-radius: 10px;
     padding: 15px 20px;
-    font-size: 24px;
+    font-size: 16px;
     &: focus {
       outline: none;
     }

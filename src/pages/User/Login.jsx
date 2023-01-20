@@ -108,12 +108,12 @@ const StLoginWrap = styled.div`
     padding: 20px;
     input {
       all: unset;
-      width: 300px;
       height: 40px;
       border: 1px solid #e0e0e0;
       border-radius: 7px;
       margin: 6px;
       background-color: #fafafa;
+      padding-left: 8px;
     }
     button {
       border: 0;
@@ -126,10 +126,14 @@ const StLoginWrap = styled.div`
     img {
       margin: 6px;
     }
+    label {
+      padding-left: 6px;
+      padding-top: 4px;
+    }
   }
 `;
 const StSingOut = styled.div`
-  padding: 6px;
+  padding: 4px 6px;
   font-size: 14px;
   color: #999999;
   cursor: pointer;

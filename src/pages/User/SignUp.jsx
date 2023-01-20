@@ -197,6 +197,7 @@ const SignUp = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                width: "300px",
               }}
             >
               <input
@@ -219,7 +220,7 @@ const SignUp = () => {
             ></input>
 
             <span>{nicknameText}</span>
-            <label>패쓰워드</label>
+            <label>패스워드</label>
             <input
               name="password"
               type="password"
@@ -306,6 +307,7 @@ const Avatar = styled.div`
   overflow: hidden;
   margin: 0 auto;
   margin-bottom: 40px;
+  cursor: pointer;
   img {
     width: 100%;
     height: 100%;
@@ -323,7 +325,6 @@ const Stupwrap = styled.div`
   form {
     width: 300px;
     flex-direction: column;
-
     input {
       all: unset;
       width: 100%;
@@ -331,6 +332,7 @@ const Stupwrap = styled.div`
       border: 1px solid #e0e0e0;
       border-radius: 7px;
       background-color: #fafafa;
+      padding-left: 6px;
     }
     span {
       display: flex;
@@ -362,9 +364,10 @@ const Stupwrap = styled.div`
 const CheckWrap = styled.div`
   display: grid;
   align-items: center;
+  width: 300px;
 `;
 const CheckButton = styled.div`
-  width: 135px;
+  width: 100px;
   height: 40px;
   border-radius: 7px;
   text-align: center;
