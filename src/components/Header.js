@@ -92,11 +92,12 @@ const Header = () => {
         {!(isLogin || isLoginkakao) && (
           <StBox>
             <button onClick={() => navigate("/login")}>로그인</button>
+            <span>|</span>
             <button onClick={() => navigate("/signup")}>회원가입</button>
           </StBox>
         )}
         {(isLogin || isLoginkakao) && (
-          <div>
+          <StBox>
             <StButton
               onClick={() => {
                 setOpen(!open);
@@ -112,7 +113,7 @@ const Header = () => {
             </StProfile>
             <span>|</span>
             <button onClick={logoutButton}>로그아웃</button>
-          </div>
+          </StBox>
         )}
       </StBox>
     </StHeaderWrapper>
@@ -133,8 +134,7 @@ const StSearch = styled.form`
   input {
     border: 1px solid #efefef;
     background-color: rgba(255, 255, 255, 0.1);
-    padding: 4px;
-    width: 500px;
+    padding: 4px;x;
     height: 46px;
     border-radius: 7px;
     outline: none;
@@ -147,6 +147,8 @@ const StLogo = styled.div`
 const StBox = styled.div`
   display: flex;
   gap: 15px;
+  padding: 0 15px;
+  align-items: center;
   button {
     border: none;
     background-color: transparent;
