@@ -3,135 +3,141 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
-import {__updatePost } from "../../redux/modules/postSlice";
-import { 행정구역 } from "./elements/address";
-import Calender from "./elements/Calender";
-import { element } from "prop-types";
+import { __updatePost } from "../../redux/modules/postSlice";
+import { 행정구역 } from "./element/address";
+import Calender from "./element/Calender";
 
 const PostCreate = () => {
-  const userInfo = useSelector((state) => state.postSlice.postInfo)
+  const userInfo = useSelector((state) => state.postSlice.postInfo);
   const { state, city } = 행정구역;
-  const tagData = userInfo.tag?.split(',')
+  const tagData = userInfo.tag?.split(",");
   const [tags, setTags] = useState(tagData);
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState("");
   const [date, setDate] = useState(new Date(userInfo.appointed));
   const [input, setInput] = useState({
     location1: `${userInfo.location1}`,
     location2: `${userInfo.location2}`,
   });
-  const [titleInput, setTitleInput] = useState(userInfo.title)
-  const [contentsInput, setContentsInput] = useState(userInfo.content)
+  const [titleInput, setTitleInput] = useState(userInfo.title);
+  const [contentsInput, setContentsInput] = useState(userInfo.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const helpeeRef = useRef(null)
-  const helperRef = useRef(null)
-  const helpUsRef = useRef(null)
-  const [img, setImg1] = useState()
-  const [img2, setImg2] = useState()
-  const [img3, setImg3] = useState()
-  const [pr, setPrImg1] = useState(userInfo.imageUrl1)
-  const [pr2, setPrImg2] = useState(userInfo.imageUrl2)
-  const [pr3, setPrImg3] = useState(userInfo.imageUrl3)
-  
-  const category = userInfo.category;
-  const [categories, setCategories] = useState(category)
+  const helpeeRef = useRef(null);
+  const helperRef = useRef(null);
+  const helpUsRef = useRef(null);
+  const [img, setImg1] = useState();
+  const [img2, setImg2] = useState();
+  const [img3, setImg3] = useState();
+  const [pr, setPrImg1] = useState(userInfo.imageUrl1);
+  const [pr2, setPrImg2] = useState(userInfo.imageUrl2);
+  const [pr3, setPrImg3] = useState(userInfo.imageUrl3);
 
-  const changeInputHandler = e => {
+  const category = userInfo.category;
+  const [categories, setCategories] = useState(category);
+
+  const changeInputHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
-  const changeHelpeeColor = e => {
-    helpeeRef.current.style.backgroundColor="green"
-    helperRef.current.style.backgroundColor="transparent"
-    helpUsRef.current.style.backgroundColor = "transparent"
-    setCategories(e.target.value)
-  }
-  const changeHelperColor = e => {
-    helperRef.current.style.backgroundColor = "green"
-    helpeeRef.current.style.backgroundColor="transparent"
-    helpUsRef.current.style.backgroundColor = "transparent"
-    setCategories(e.target.value)
-  }
-  const changeHelpUsColor = e => {
-    helpUsRef.current.style.backgroundColor = "green"
-    helpeeRef.current.style.backgroundColor="transparent"
-    helperRef.current.style.backgroundColor = "transparent"
-    setCategories(e.target.value)
-  }
-  const change = e => {
+  const changeHelpeeColor = (e) => {
+    helpeeRef.current.style.backgroundColor = "green";
+    helperRef.current.style.backgroundColor = "transparent";
+    helpUsRef.current.style.backgroundColor = "transparent";
+    setCategories(e.target.value);
+  };
+  const changeHelperColor = (e) => {
+    helperRef.current.style.backgroundColor = "green";
+    helpeeRef.current.style.backgroundColor = "transparent";
+    helpUsRef.current.style.backgroundColor = "transparent";
+    setCategories(e.target.value);
+  };
+  const changeHelpUsColor = (e) => {
+    helpUsRef.current.style.backgroundColor = "green";
+    helpeeRef.current.style.backgroundColor = "transparent";
+    helperRef.current.style.backgroundColor = "transparent";
+    setCategories(e.target.value);
+  };
+  const change = (e) => {
     setImg1(e.target.files[0]);
     const pr = e.target.files[0];
     const reader1 = new FileReader();
     reader1.readAsDataURL(pr);
     reader1.onloadend = () => {
-    setPrImg1(reader1.result)
-    } 
-  }
-  const change2 = e => {
+      setPrImg1(reader1.result);
+    };
+  };
+  const change2 = (e) => {
     setImg2(e.target.files[0]);
-    const pr2= e.target.files[0];
+    const pr2 = e.target.files[0];
     const reader2 = new FileReader();
     reader2.readAsDataURL(pr2);
     reader2.onloadend = () => {
-    setPrImg2(reader2.result)} 
-  }
-  const change3 = e => {
+      setPrImg2(reader2.result);
+    };
+  };
+  const change3 = (e) => {
     setImg3(e.target.files[0]);
-    const pr3 =e.target.files[0]
+    const pr3 = e.target.files[0];
     const reader3 = new FileReader();
     reader3.readAsDataURL(pr3);
     reader3.onloadend = () => {
-      setPrImg3(reader3.result)} 
-    }
+      setPrImg3(reader3.result);
+    };
+  };
 
-  const clickHandler = e => {
+  const clickHandler = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", titleInput)
-    formData.append("content", contentsInput)
-    formData.append("category", categories)
-    const value = date.toISOString()
-    formData.append("appointed", value)
-    formData.append("isDeadLine",parseInt(1))
+    formData.append("title", titleInput);
+    formData.append("content", contentsInput);
+    formData.append("category", categories);
+    const value = date.toISOString();
+    formData.append("appointed", value);
+    formData.append("isDeadLine", parseInt(1));
     for (const property in input) {
       formData.append(`${property}`, input[property]);
     }
-    
+
     if (img !== undefined) {
       formData.append("imageUrl1", img);
     }
     if (img2 !== undefined) {
       formData.append("imageUrl2", img2);
-    } 
+    }
     if (img3 !== undefined) {
       formData.append("imageUrl3", img3);
-    } 
-    
+    }
+
     formData.append("tag", tags);
-    dispatch(__updatePost({formData, id: userInfo.postId}));
+    dispatch(__updatePost({ formData, id: userInfo.postId }));
   };
 
-  const removeTag = i => {
+  const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);
     setTags(clonetags);
   };
 
-  const addTag = e => {
+  const addTag = (e) => {
     setTag(e.target.value);
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (e) => {
     if (e.key === "Enter" && tag !== "" && tag.length < 8) {
       setTags([...tags, tag]);
       setTag("");
     }
   };
   useEffect(() => {
-    if (category === 1) { helpeeRef.current.style.backgroundColor = "green" }
-    else if (category === 2) { helperRef.current.style.backgroundColor = "green" }
-    else{ helpUsRef.current.style.backgroundColor = "green" }},[])
+    if (category === 1) {
+      helpeeRef.current.style.backgroundColor = "green";
+    } else if (category === 2) {
+      helperRef.current.style.backgroundColor = "green";
+    } else {
+      helpUsRef.current.style.backgroundColor = "green";
+    }
+  }, []);
 
   return (
     <StWrapper>
@@ -142,37 +148,78 @@ const PostCreate = () => {
           value={titleInput}
           name="title"
           id="title"
-          onChange={e=>setTitleInput(e.target.value)}
+          onChange={(e) => setTitleInput(e.target.value)}
         ></input>
         <label htmlFor="content">내용입력</label>
         <StTextarea
           name="content"
           id="content"
           value={contentsInput}
-          onChange={e=>setContentsInput(e.target.value)}
+          onChange={(e) => setContentsInput(e.target.value)}
         ></StTextarea>
         <label htmlFor="date">날짜</label>
         <Calender value={date} setDate={setDate} />
         <label>카테고리 선택</label>
         <StInnerContainer>
-          <Category value={1} ref={helpeeRef} onClick={changeHelpeeColor} >헬피</Category>
-          <Category value={2} ref={helperRef} onClick={changeHelperColor}>헬퍼</Category>
-          <Category value={3} ref={helpUsRef} onClick={changeHelpUsColor}>헬퍼스</Category>
+          <Category value={1} ref={helpeeRef} onClick={changeHelpeeColor}>
+            헬피
+          </Category>
+          <Category value={2} ref={helperRef} onClick={changeHelperColor}>
+            헬퍼
+          </Category>
+          <Category value={3} ref={helpUsRef} onClick={changeHelpUsColor}>
+            헬퍼스
+          </Category>
           <div>(헬퍼스:단체 봉사 활동)</div>
         </StInnerContainer>
         <StGroupImgs>
-          <input style={{ display: "none" }} accept="image/jpg, image/png, image/gif" id="image1" name="image1" type='file' onChange={change}/>
-          <label htmlFor="image1"><StImg src={pr} alr="inputImage1" /></label>
-          <input style={{ display: "none" }} accept="image/jpg, image/png, image/gif" id="image2" name="image2" type='file' onChange={change2}/>
-          {pr2 == null ? <StImgButton htmlFor="image2">+</StImgButton> : (<label htmlFor="image2"><StImg src={pr2} alr="inputImage2" /></label>)}
-          <input style={{ display: "none" }} accept="image/jpg, image/png, image/gif" id="image3" name="image3" type='file' onChange={change3}/>
-          {pr3 == null ? <StImgButton htmlFor="image3">+</StImgButton> : (<label htmlFor="image3"><StImg src={pr3} alr="inputImage3" /></label>)}
+          <input
+            style={{ display: "none" }}
+            accept="image/jpg, image/png, image/gif"
+            id="image1"
+            name="image1"
+            type="file"
+            onChange={change}
+          />
+          <label htmlFor="image1">
+            <StImg src={pr} alr="inputImage1" />
+          </label>
+          <input
+            style={{ display: "none" }}
+            accept="image/jpg, image/png, image/gif"
+            id="image2"
+            name="image2"
+            type="file"
+            onChange={change2}
+          />
+          {pr2 == null ? (
+            <StImgButton htmlFor="image2">+</StImgButton>
+          ) : (
+            <label htmlFor="image2">
+              <StImg src={pr2} alr="inputImage2" />
+            </label>
+          )}
+          <input
+            style={{ display: "none" }}
+            accept="image/jpg, image/png, image/gif"
+            id="image3"
+            name="image3"
+            type="file"
+            onChange={change3}
+          />
+          {pr3 == null ? (
+            <StImgButton htmlFor="image3">+</StImgButton>
+          ) : (
+            <label htmlFor="image3">
+              <StImg src={pr3} alr="inputImage3" />
+            </label>
+          )}
         </StGroupImgs>
         <label>지역 설정</label>
         <div>
           <select name="location1" onChange={changeInputHandler}>
             <option value="">{userInfo.location1}</option>
-            {state.map(el => (
+            {state.map((el) => (
               <option key={el.state} value={el.codeNm}>
                 {el.codeNm}
               </option>
@@ -181,8 +228,8 @@ const PostCreate = () => {
           <select name="location2" onChange={changeInputHandler}>
             <option value="">{userInfo.location2}</option>
             {city
-              .filter(el => el.state === input.location1)
-              .map(el => (
+              .filter((el) => el.state === input.location1)
+              .map((el) => (
                 <option key={el.city} value={el.codeNm}>
                   {el.codeNm}
                 </option>
@@ -203,7 +250,7 @@ const PostCreate = () => {
           name="tag"
           id="tag"
           onChange={addTag}
-          onKeyPress={e => handleKeyPress(e)}
+          onKeyPress={(e) => handleKeyPress(e)}
           value={tag}
         />
         <StInnerContainer>
@@ -291,9 +338,9 @@ const StTagButton = styled.button`
   cursor: pointer;
 `;
 const Category = styled.button`
-  width:100px;
-  height:50px;
-  background-color:transparent;
-`
+  width: 100px;
+  height: 50px;
+  background-color: transparent;
+`;
 
 export default PostCreate;
