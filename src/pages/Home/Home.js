@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import CardList from "./CardList";
+import styled from "styled-components";
 import {
   __getHelpUsFalse,
   __setBoolHelpUs,
@@ -68,7 +69,6 @@ const Home = () => {
   };
 
   const logedIn = useSelector((state) => state.userSlice);
-  console.log("loge:", logedIn);
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide * 1300}px)`;
@@ -84,7 +84,9 @@ const Home = () => {
     <StMainWrapper>
       <StTopImg>
         <StTitleWrapper>
-          <StTopTitle>당신의 솜씨를 나눠주세요.</StTopTitle>
+          <StDiv>
+            <StTopTitle>당신의 솜씨를 나눠주세요.</StTopTitle>
+          </StDiv>
           <StTopSubTilte>
             재능기부로 따뜻한 지역사회를 만들어가요.
           </StTopSubTilte>
@@ -98,7 +100,7 @@ const Home = () => {
               onMouseOver={onMouseOverHandlerHelpUs}
               onMouseOut={onMouseOutHandlerHelpUs}
             >
-              함께해요 HelpUs
+              함께해요 Helpus
               <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>
                 더보기
               </StSubTitle>
@@ -129,3 +131,7 @@ const Home = () => {
 };
 
 export default Home;
+
+const StDiv = styled.div`
+  max-width: 1370px;
+`;
