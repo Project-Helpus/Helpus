@@ -28,11 +28,13 @@ export const StBox = styled.div`
 
 export const StGroupImgs = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 300px;
-  height: 100px;
   gap: 10px;
 `;
+export const StImage = styled.img`
+width:400px;
+height:225px;
+object-fit:cover;
+border-radius:10px;`
 export const StBtnBox = styled.div`
   display: flex;
   justify-content: center;
@@ -89,9 +91,29 @@ export const StWishBtn = styled.button`
   font-size: 24px;
 `;
 
+export const StDeadLineButton = styled.button`
+  width: 132px;
+  height: 44px;
+  background-color:#FFCD4D;
+   border:none;
+  border-radius:20px;
+  color:#fff;
+  cursor: pointer;
+`
 export const StUpdateButton = styled.button`
-  width: 100px;
-  height: 50px;
+  width: 132px;
+  height: 44px;
+  background-color:${(props) => props.theme.colors.subPink};
+   border:none;
+  border-radius:20px;
+  cursor: pointer;
+`;
+export const StDeleteButton = styled.button`
+  width: 132px;
+  height: 44px;
+  background-color:#FF5C00;
+  border:none;
+  border-radius:20px;
   cursor: pointer;
 `;
 export const StZZimImg = styled.img``;
@@ -104,4 +126,22 @@ export const StUserInfo = styled.div`
 width:932px;
 height:100px;
 border:1px solid #000;
+`
+export const StMagam = styled.span`
+width:80px;
+height:30px;
+text-align: center;
+line-height: 30px;
+border:1px solid #FFCD4D;
+border-radius:20px;
+color:#EA9DB4;
+`
+export const StLocation = styled.p`
+font-size:14px;
+font-weight:400;
+color:rgba(0, 0, 0, 0.53);
+`
+export const StHopeDay = styled.p`
+font-size:16px;
+font-weight:700;
 `

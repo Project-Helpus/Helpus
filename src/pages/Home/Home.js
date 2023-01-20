@@ -44,7 +44,8 @@ const Home = () => {
     helpUsRef.current.style.color = "#fff"
   }
 
-
+  const logedIn = useSelector((state) => state.userSlice)
+console.log('loge:',logedIn)
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide*680}px)`; 
