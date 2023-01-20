@@ -3,10 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Calender = ({ changeInputHandler, value, setDate }) => {
-  const filterPassedtime = time => {
-    const currentDate = new Date(); 
+  const filterPassedtime = (time) => {
+    const currentDate = new Date();
     const selectedDate = new Date(time);
-    
+
     return currentDate.getTime() < selectedDate.getTime();
   };
   return (
@@ -14,10 +14,11 @@ const Calender = ({ changeInputHandler, value, setDate }) => {
       closeOnScroll={true}
       dateFormat="yy/MM/dd"
       selected={value}
-      onChange={date => setDate(date)}
+      onChange={(date) => setDate(date)}
       minDate={new Date()}
       filterTime={filterPassedtime}
       name="date"
+      border="none"
     />
   );
 };
