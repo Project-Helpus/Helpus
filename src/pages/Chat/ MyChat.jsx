@@ -58,7 +58,7 @@ const MyChat = () => {
     );
   };
 
-  const linkOtherChat = () => {
+  const linkOtherChat = (roomId) => {
     navigate(`/mypage/chat/${roomId}`, {
       state: { data: data },
     });
@@ -96,6 +96,9 @@ const MyChat = () => {
   }, [socket.current]);
 
   useEffect(() => {
+    chatWindow.current.scrollTo({
+      top: chatWindow.current.scrollHeight,
+    });
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
 
@@ -108,7 +111,10 @@ const MyChat = () => {
         {state.data.list.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
-              <StCard key={el.roomId} onClick={linkOtherChat}>
+              <StCard
+                key={el.roomId + idx}
+                onClick={() => linkOtherChat(el.roomId)}
+              >
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -121,7 +127,7 @@ const MyChat = () => {
             );
           } else {
             return (
-              <StCard key={idx} onClick={linkOtherChat}>
+              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
@@ -205,6 +211,7 @@ const StContainer = styled.div`
   height: 90%;
   display: flex;
   flex-diretion: row;
+  margin: 2em 0 2em 0;
 `;
 
 const StChatList = styled.section`
@@ -216,8 +223,9 @@ const StChatList = styled.section`
 
 const StTopContainer = styled.div`
   display: flex;
-  height: 44px;
   justify-content: space-between;
+  height: 44px;
+  padding: 0 10px;
 `;
 
 const StInnerBox = styled.section`
@@ -232,7 +240,7 @@ const StChatBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 1em;
-  background-color: rgb(246, 246, 246);
+  background-color: white;
   overflow-y: auto;
 `;
 
@@ -290,7 +298,7 @@ const StReceiveDiv = styled.div`
 
 const StChatSend = styled.p`
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   padding: 10px;
 `;
 
@@ -303,6 +311,8 @@ const StChatReceive = styled.p`
 const StInputBox = styled.div`
   display: flex;
   align-items: center;
+
+  border-radius: 10px;
 `;
 
 const StInput = styled.input`
@@ -312,6 +322,8 @@ const StInput = styled.input`
   border: none;
   border-radius: 10px;
   padding-left: 10px;
+  font-size: 20px;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   &:focus {
     outline: none;
   }
@@ -323,6 +335,7 @@ const StSendBtn = styled.button`
   margin-right: 10px;
   border: none;
   border-radius: 10px;
+  background-color: white;
 `;
 
 const StCol = styled.div`
