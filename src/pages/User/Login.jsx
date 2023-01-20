@@ -68,6 +68,7 @@ const Login = () => {
             <a href={KAKAO_AUTH_URL}>
               <img src={kakaoLogin} alt="" />
             </a>
+            <StSingOut onClick={() => navigate("/signup")}>회원가입</StSingOut>
           </form>
         </div>
       </StLoginWrap>
@@ -126,4 +127,10 @@ const StLoginWrap = styled.div`
       margin: 6px;
     }
   }
+`;
+const StSingOut = styled.div`
+  padding: 6px;
+  font-size: 14px;
+  color: #999999;
+  cursor: pointer;
 `;

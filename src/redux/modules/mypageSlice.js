@@ -15,9 +15,8 @@ const initialState = {
   error: false,
   isLoading: false,
   data: "",
-  wish:[],
+  wish: [],
 };
-
 
 //프로필 조회
 export const __getMyPage = createAsyncThunk(
@@ -113,15 +112,13 @@ export const __getWishPost = createAsyncThunk(
   "mypageSlice/getWishPost",
   async (data, thunkAPI) => {
     try {
-      const res = await MypageAPI.getWishlist(data)
+      const res = await MypageAPI.getWishlist(data);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
   }
 );
-
-
 
 const mypageSlice = createSlice({
   name: "mypageSlice",
@@ -195,8 +192,9 @@ const mypageSlice = createSlice({
     [__patchPassword.fulfilled]: (state, action) => {
       state.patchPassword = action.payload;
     },
-    [__patchPassword.rejected]: (state) => { },
+    [__patchPassword.rejected]: (state) => {},
 
+    //찜한 게시물
     [__getWishPost.pending]: (state) => {
       state.isLoading = true;
     },
