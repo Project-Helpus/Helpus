@@ -88,16 +88,6 @@ const Header = () => {
           }}
         ></input>
       </StSearch>
-      <button
-        onClick={() => {
-          setOpen(!open);
-          handleRead();
-        }}
-      >
-        알림
-        {notifications.length > 0 && <div>{notifications.length}</div>}
-      </button>
-      {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
       <StBox>
         {!(isLogin || isLoginkakao) && (
           <StBox>
