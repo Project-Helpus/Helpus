@@ -22,7 +22,7 @@ const Chat = () => {
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
   const [roomId, setRoomId] = useState(null);
-  console.log(userInfo);
+
   const changeInputHandler = (e) => {
     setMsg(e.target.value);
   };
