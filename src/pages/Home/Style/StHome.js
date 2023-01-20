@@ -4,8 +4,9 @@ import arrowLeft from '../../../asset/arrowLeft.svg';
 import arrowRight from '../../../asset/arrowRight.svg'
 
 export const StMainWrapper = styled.div`
-width:1920px;
-margin:auto;`
+width:1670px;
+margin:auto;
+`
 
 export const StTopImg = styled.div`
 height:540px;
@@ -27,7 +28,8 @@ background-size:100% 100%;
 `
 export const StTitleWrapper = styled.div`
 top:32%;
-left:4%;
+width:1280px;
+margin-left:190px;
 position:absolute;
 `
 export const StTopTitle = styled.h1`
@@ -47,7 +49,7 @@ export const StTransFormY = styled.div`
 transform:translateY(-220px)
 `
 export const StMain = styled.div`
-width:1780px;
+width:1370px;
 margin:auto;
 `
 export const StCarouselWrapper = styled.div`
@@ -58,7 +60,7 @@ font-size:24px;
 height:29px;
 background-color:#fff;
 width:373px;
-margin:0 0 10px 40px;
+margin:0 0 20px 40px;
 cursor: pointer;
 `
 export const StSubTitle = styled.div`
@@ -106,8 +108,8 @@ export const StCarouselItem = styled.div`
 padding:0;
 
 `
-export const StTest = styled.div`
-width:1680px;
+export const StCarouselWith = styled.div`
+width:1280px;
 margin:0 20px 0 20px;
 box-sizing:border-box;
 padding:0;

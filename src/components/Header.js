@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
+import whiteBell from "../asset/whiteBell.svg";
 import { io } from "socket.io-client";
 import top_logo from "../asset/top_logo.svg";
+import StButton from "./UI/StButton";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -45,7 +47,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(__getMyPage());
-    if (userInfo.userId) {
+    if (userInfo?.userId) {
       const socket = io(process.env.REACT_APP_CHAT_SERVER, {
         transports: ["websocket"],
       });
@@ -60,6 +62,8 @@ const Header = () => {
   useEffect(() => {
     dispatch(__getMyPage());
   }, [isLogin, isLoginkakao]);
+
+  useEffect(() => {});
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -94,16 +98,24 @@ const Header = () => {
         {notifications.length > 0 && <div>{notifications.length}</div>}
       </button>
       {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
-      <StLogin>
+      <StBox>
         {!(isLogin || isLoginkakao) && (
-          <StLogin>
+          <StBox>
             <button onClick={() => navigate("/login")}>로그인</button>
-            <span>|</span>
             <button onClick={() => navigate("/signup")}>회원가입</button>
-          </StLogin>
+          </StBox>
         )}
         {(isLogin || isLoginkakao) && (
           <div>
+            <StButton
+              onClick={() => {
+                setOpen(!open);
+                handleRead();
+              }}
+            >
+              <img src={whiteBell} alt="notification" />
+              {notifications.length > 0 && <div>{notifications.length}</div>}
+            </StButton>
             <StProfile onClick={() => navigate("/mypage")}>
               <img src={profile?.userImage} alt="" />
               <span>{profile?.userName}</span>
@@ -112,7 +124,7 @@ const Header = () => {
             <button onClick={logoutButton}>로그아웃</button>
           </div>
         )}
-      </StLogin>
+      </StBox>
     </StHeaderWrapper>
   );
 };
@@ -142,11 +154,9 @@ const StLogo = styled.div`
   margin: 20px;
   cursor: pointer;
 `;
-const StLogin = styled.div`
+const StBox = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 0;
+  gap: 15px;
   button {
     border: none;
     background-color: transparent;

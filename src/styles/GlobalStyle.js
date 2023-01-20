@@ -17,6 +17,16 @@ const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  input, textarea {
+    border: 0.5px solid  ${(props) => props.theme.colors.lightGray};
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 24px;
+    &: focus {
+      outline: none;
+    }
+  }
 `;
 
 export default GlobalStyle;

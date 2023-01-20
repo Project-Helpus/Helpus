@@ -19,6 +19,14 @@ export const StMySquarePhoto = styled.img`
   cursor: pointer;
 `;
 
+export const StAllPostSquarePhoto = styled.img`
+width:400px;
+height:225px;
+border-radius:20px;
+cursor: pointer;
+margin-bottom:12px;
+`;
+
 export const StZZimSquarePhote = styled.img`
   position: relative;
   width: 272px;
@@ -30,31 +38,43 @@ export const StCategoryName = styled.p`
   font-size: "";
   font-weight: "";
 `;
+
 export const StDate = styled.p`
   font-size: 12px;
   color: #7c7c7c;
   line-height: 50px;
   font-weight: "";
 `;
+
 export const StContentsTitle = styled.p`
   font-size: 18px;
   font-weight: 700;
 `;
+
 export const StMainContentsTitle = styled.p`
-  font-size: 24px;
+font-size:18px;
+font-weight:400;
 `;
+
 export const StNickname = styled.p`
   font-size: 14px;
   font-weight: 400;
   line-height: 50px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
+
+export const StAllPostNickName = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+`;
+
 export const StAddress = styled.p`
   font-size: 12px;
   font-weight: "";
   line-height: 50px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
+
 export const StContentsInfo = styled.p`
   font-size: 14px;
   font-weight: "";
@@ -66,14 +86,23 @@ export const StMainContentsWrapper = styled.div`
   height: 125px;
   padding: 24px 0 25px 10px;
 `;
+
 export const StMarginRight = styled.div`
   margin-right: 20px;
 `;
+
 export const StMainWrapper = styled.div`
-  width: 605px;
-  height: 135px;
-  margin-bottom: 20px;
+width:605px;
+height:135px;
+margin-bottom:20px;
 `;
+
+export const StAllPostWrapper = styled.div`
+width:400px;
+height:324px;
+margin:0 40px 50px 0;
+`;
+
 export const StSpaceBetween = styled.div`
   justify-content: space-between;
   display: flex;

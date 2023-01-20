@@ -13,32 +13,31 @@ import arrow_forward from "../../asset/arrow_forward.svg";
 import { isCompositeComponent } from "react-dom/test-utils";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
+import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle.js/StCommon";
+import { Avatar, StBackBtn, StBox, StBtnBox, StChatBtn, StContainer, StContent, StDate, StDeadLineButton, StDeleteButton, StGroupImgs, StHopeDay, StImage, StInnerColBox, StInnerRowBox, StLocation, StMagam, StProfile, StProfileBox, StTitle, StUpdateButton, StUserInfo, StWishBtn, StZZimImg } from "./StPostDetail";
+import { Cookies } from "react-cookie";
 const PostDetail = () => {
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
   const userId = useSelector((state) => state.mypageSlice.profile.userId);
-  const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
+  const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine); 
+  const logedIn = useSelector((state) => state.userSlice.isLogin)
+  const detail = useSelector((state) => state.postSlice.postInfo)
   const navigate = useNavigate();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postInfo } = useSelector((state) => state.postSlice);
-  const { userInfo } = useSelector((state) => state.userSlice);
-
   const { state } = useLocation();
+  const curr = new Date(state.data?.createdAt);
+    const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+    const kRTimeDiff = 9 * 60 * 60 * 1000;
+    const KrCurr = new Date(utc + kRTimeDiff);
+    const KoreaDate = KrCurr.toLocaleDateString();
   const deletePost = () => {
-    if (userId != state.data.userId) {
-      alert("게시물 생성자만 해당 게시글을 삭제할 수 있습니다");
-    } else {
       dispatch(__deletePost(postId));
       alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
       navigate("/");
-    }
   };
   const updatePost = () => {
-    if (userId != state.data.userId) {
-      alert("게시물 생성자만 해당 게시글을 수정할 수 있습니다");
-    } else {
       navigate(`/post/update/${postId}`);
-    }
   };
 
   const changeDeadLine = () => {
@@ -65,58 +64,55 @@ const PostDetail = () => {
   }, []);
 
   useEffect(() => {}, [deadLine]);
-  console.log("userId:", userId);
-  console.log("createId:", state.data.userId);
   return (
     <StWrapper>
       <StContainer>
+          <StSpaceBetween>
         <StBackBtn onClick={() => navigate(-1)}>
-          <img src={arrow_forward} alt="back_button" />
+            <img src={arrow_forward} alt="back_button" />
         </StBackBtn>
-        <StTitle>{state.data.title}</StTitle>
-        {userId !== state.data.userId || (
-          <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
-        )}
-        {userId !== state.data.userId || (
-          <StUpdateButton onClick={deletePost}>삭제</StUpdateButton>
-        )}
-        {userId !== state.data.userId || (
-          <>
-            {deadLine === 2 ? (
-              <>
-                <StUpdateButton onClick={changeDeadLine}>
-                  마감취소
-                </StUpdateButton>
-                <span>마감된 게시물</span>
-              </>
-            ) : (
-              <StUpdateButton onClick={changeDeadLine}>마감</StUpdateButton>
-            )}
-          </>
-        )}
+          <StFlex>
+            {logedIn === false  ||<>{userId !== state.data.userId || 
+          <> {deadLine === 2 ? (<><StDeadLineButton onClick={changeDeadLine}>마감취소</StDeadLineButton><span>마감된 게시물</span></>) : 
+              <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>}</>
+            }</>}
+            
+            {logedIn === false ||(<>{userId !== state.data.userId || <StUpdateButton onClick={updatePost}>수정</StUpdateButton>}</>) }
+            
+            {logedIn === false  || (<>{userId !== state.data.userId || (<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>)}</>)}
+            </StFlex>
+            </StSpaceBetween>
+
+        <StUserInfo>
+        <StFlex>
+          <StProfile src={state.data.userImage}></StProfile>
+          <div>
+            <StFlex>
+              <StTitle>{state.data.title}</StTitle>
+              <StMagam>마감</StMagam>
+              </StFlex>
+          <div>{state.data?.userName}</div>
+              <StLocation>{state.data?.location1}&gt;{state.data?.location2}</StLocation>
+          </div>
+        </StFlex>
+        </StUserInfo>
+        
         <StProfileBox>
-          <StBox>
-            <Avatar>
-              <img src={state.data?.userImage} alt="profile" />
-            </Avatar>
-            <StInnerColBox>
-              <div>{state.data?.userName}</div>
-              <div>{state.data?.location1}</div>
-            </StInnerColBox>
-          </StBox>
           <StInnerRowBox>
-            <span>조회수</span>
-            <span>{state.data?.createdAt}</span>
+
+            
+            <StHopeDay>희망일:{KoreaDate}</StHopeDay>
           </StInnerRowBox>
         </StProfileBox>
         <StGroupImgs>
-          <img src={state.data?.imageUrl1} />
-          <img src={state.data?.imageUrl2} />
-          <img src={state.data?.imageUrl3} />
+          <StImage src={detail.imageUrl1} />
+          <StImage src={detail.imageUrl2} />
+          <StImage src={detail.imageUrl3} />
         </StGroupImgs>
-        <StDate>재능기부 희망일: {state.data?.appointed}</StDate>
-        <StContent>{state.data?.content}</StContent>
-        {postInfo.userId !== userInfo.userId && (
+        <StFlex>
+
+        </StFlex>
+        {logedIn === false||(<>{state.data.userId !== userId && (
           <StBtnBox>
             <StChatBtn
               onClick={() => {
@@ -130,7 +126,8 @@ const PostDetail = () => {
               찜하기
             </StWishBtn>
           </StBtnBox>
-        )}
+        )}</>)}
+
       </StContainer>
     </StWrapper>
   );
@@ -138,97 +135,3 @@ const PostDetail = () => {
 
 export default PostDetail;
 
-const StContainer = styled.div`
-  width: 86.1%;
-`;
-
-const StBackBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-`;
-
-const StTitle = styled.h2`
-  text-align: center;
-`;
-
-const StProfileBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const StBox = styled.div`
-  display: flex;
-`;
-
-const StGroupImgs = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 300px;
-  height: 100px;
-  gap: 10px;
-`;
-const StBtnBox = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-`;
-const StInnerColBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const StInnerRowBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-`;
-
-const Avatar = styled.div`
-  width: 98px;
-  height: 98px;
-  object-fit: cover;
-  border-radius: 100%;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const StDate = styled.span`
-  padding-top: 27px;
-  font-weight: 700;
-`;
-
-const StContent = styled.div``;
-const StChatBtn = styled.button`
-  width: 200px;
-  height: 44px;
-  background: #ffc4d5;
-  border-radius: 10px;
-  color: white;
-  font-weight: 700;
-  font-size: 18px;
-  border: none;
-`;
-
-const StWishBtn = styled.button`
-  width: 112px;
-  vertical-align: middle;
-  border: none;
-  background: white;
-  font-weight: 700;
-  font-size: 24px;
-`;
-
-const StUpdateButton = styled.button`
-  width: 100px;
-  height: 50px;
-  cursor: pointer;
-`;
-const StZZimImg = styled.img``;

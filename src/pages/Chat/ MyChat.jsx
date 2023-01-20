@@ -1,22 +1,26 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { StButton } from "../../components/UI/StIndex";
 import arrow_forward from "../../asset/arrow_forward.svg";
 
 const MyChat = () => {
   const { roomId } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
+
+  const [invitaionCard, setInvitationCard] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [newMsg, setNewMsg] = useState([]);
+  const [chatRecord, setChatRecord] = useState(null);
   const socket = useRef(
     io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
   );
   const chatWindow = useRef(null);
   const { userInfo } = useSelector((state) => state.userSlice);
-  const [msg, setMsg] = useState("");
-  const [newMsg, setNewMsg] = useState([]);
-  const [chatRecord, setChatRecord] = useState(null);
+  const { data } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -27,13 +31,13 @@ const MyChat = () => {
     setMsg(e.target.value);
   };
 
-  const moveScrollToReceiveMessage = useCallback(() => {
+  const moveScrollToReceiveMessage = () => {
     if (chatWindow.current) {
       chatWindow.current.scrollTo({
         top: chatWindow.current.scrollHeight,
       });
     }
-  }, []);
+  };
 
   const sendMsg = () => {
     if (msg !== "") {
@@ -52,6 +56,12 @@ const MyChat = () => {
         <button>수락</button>
       </StInvitation>
     );
+  };
+
+  const linkOtherChat = (roomId) => {
+    navigate(`/mypage/chat/${roomId}`, {
+      state: { data: data },
+    });
   };
 
   const handleKeyPress = (e) => {
@@ -90,7 +100,7 @@ const MyChat = () => {
       top: chatWindow.current.scrollHeight,
     });
     moveScrollToReceiveMessage();
-  }, [newMsg]);
+  }, [newMsg, chatRecord]);
 
   return (
     <StContainer>
@@ -98,10 +108,13 @@ const MyChat = () => {
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {state.data.list.map((el) => {
+        {state.data.list.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
-              <StCard key={el.roomId}>
+              <StCard
+                key={el.roomId + idx}
+                onClick={() => linkOtherChat(el.roomId)}
+              >
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -114,7 +127,7 @@ const MyChat = () => {
             );
           } else {
             return (
-              <StCard key={el.roomId}>
+              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
@@ -134,10 +147,12 @@ const MyChat = () => {
           </StBackBtn>
           <StAppointment>
             <span>약속날짜</span>
-            <button onClick={sendAppointmentCard}>약속하기</button>
-            <button>취소하기</button>
-            <button>나가기</button>
-            <button>완료</button>
+            <StButton mode="pinkSmBtn" onClick={sendAppointmentCard}>
+              약속하기
+            </StButton>
+            <StButton mode="pinkSmBtn">취소하기</StButton>
+            <StButton mode="orangeSmBtn">나가기</StButton>
+            <StButton mode="yellowSmBtn">완료</StButton>
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>
@@ -196,6 +211,7 @@ const StContainer = styled.div`
   height: 90%;
   display: flex;
   flex-diretion: row;
+  margin: 2em 0 2em 0;
 `;
 
 const StChatList = styled.section`
@@ -203,13 +219,13 @@ const StChatList = styled.section`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
 `;
 
 const StTopContainer = styled.div`
   display: flex;
-  height: 44px;
   justify-content: space-between;
+  height: 44px;
+  padding: 0 10px;
 `;
 
 const StInnerBox = styled.section`
@@ -224,7 +240,7 @@ const StChatBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 1em;
-  background-color: rgb(246, 246, 246);
+  background-color: white;
   overflow-y: auto;
 `;
 
@@ -282,7 +298,7 @@ const StReceiveDiv = styled.div`
 
 const StChatSend = styled.p`
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   padding: 10px;
 `;
 
@@ -295,6 +311,8 @@ const StChatReceive = styled.p`
 const StInputBox = styled.div`
   display: flex;
   align-items: center;
+
+  border-radius: 10px;
 `;
 
 const StInput = styled.input`
@@ -304,6 +322,8 @@ const StInput = styled.input`
   border: none;
   border-radius: 10px;
   padding-left: 10px;
+  font-size: 20px;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   &:focus {
     outline: none;
   }
@@ -315,6 +335,7 @@ const StSendBtn = styled.button`
   margin-right: 10px;
   border: none;
   border-radius: 10px;
+  background-color: white;
 `;
 
 const StCol = styled.div`

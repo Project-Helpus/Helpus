@@ -27,6 +27,7 @@ import {
 } from "./Style/StHome";
 import { __getWishPost } from "../../redux/modules/mypageSlice";
 import { StFlex } from "./Style/StCardList";
+
 const Home = () => {
   const data = useSelector((state) => state.postSlice.helpUsFalseDate.result);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -63,12 +64,14 @@ const Home = () => {
     helpUsRef.current.style.color = "#7C7C7C";
   };
   const onMouseOutHandlerHelpUs = () => {
-    helpUsRef.current.style.color = "#fff";
-  };
+    helpUsRef.current.style.color = "#fff"
+  }
 
+  const logedIn = useSelector((state) => state.userSlice)
+console.log('loge:',logedIn)
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide * 680}px)`;
+    slideRef.current.style.transform = `translateX(-${currentSlide*1300}px)`; 
   }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
@@ -102,7 +105,7 @@ const Home = () => {
             </StCarouselTitle>
             <StFlex>
               <StLeftButton onClick={PrevSlide}></StLeftButton>
-              <StTest>
+              <StCarouselWith>
                 <StCarouselContainer>
                   <StCarousel ref={slideRef}>
                     {data?.map((item, idx) => {
@@ -114,7 +117,7 @@ const Home = () => {
                     })}
                   </StCarousel>
                 </StCarouselContainer>
-              </StTest>
+              </StCarouselWith>
               <StRightButton onClick={NextSlide}></StRightButton>
             </StFlex>
           </StCarouselWrapper>
