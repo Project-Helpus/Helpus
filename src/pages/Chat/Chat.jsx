@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import arrow_forward from "../../asset/arrow_forward.svg";
+import { StButton } from "../../components/UI/StIndex";
 import { __getChat } from "../../redux/modules/mypageSlice";
 
 const Chat = () => {
@@ -69,6 +70,12 @@ const Chat = () => {
     }
   };
 
+  const linkOtherChat = () => {
+    navigate(`/mypage/chat/${roomId}`, {
+      state: { data: data },
+    });
+  };
+
   useEffect(() => {
     socket.current.emit("login", userInfo?.userId);
     socket.current.emit("join", {
@@ -77,11 +84,9 @@ const Chat = () => {
       ownerId: Number(ownerId),
     });
     socket.current.on("roomId", (data) => {
-      console.log(data);
       setRoomId(data);
     });
     socket.current.on("chat-history", (data) => {
-      console.log(data);
       setChatRecord(data);
     });
     return () => {
@@ -100,7 +105,7 @@ const Chat = () => {
       top: chatWindow.current.scrollHeight,
     });
     moveScrollToReceiveMessage();
-  }, [newMsg]);
+  }, [newMsg, chatRecord]);
 
   useEffect(() => {
     dispatch(__getChat());
@@ -115,7 +120,7 @@ const Chat = () => {
         {data?.list?.map((el, idx) => {
           if (el.ownerId === userInfo.userId) {
             return (
-              <StCard key={el.roomId}>
+              <StCard key={el.roomId + idx} onClick={linkOtherChat}>
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -128,7 +133,7 @@ const Chat = () => {
             );
           } else {
             return (
-              <StCard key={idx + 100}>
+              <StCard key={idx} onClick={linkOtherChat}>
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
@@ -148,10 +153,12 @@ const Chat = () => {
           </StBackBtn>
           <StAppointment>
             <span>약속날짜</span>
-            <button onClick={sendAppointmentCard}>약속하기</button>
-            <button>취소하기</button>
-            <button>나가기</button>
-            <button>완료</button>
+            <StButton mode="pinkSmBtn" onClick={sendAppointmentCard}>
+              약속하기
+            </StButton>
+            <StButton mode="pinkSmBtn">취소하기</StButton>
+            <StButton mode="orangeSmBtn">나가기</StButton>
+            <StButton mode="yellowSmBtn">완료</StButton>
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>
@@ -210,6 +217,7 @@ const StContainer = styled.div`
   height: 90%;
   display: flex;
   flex-diretion: row;
+  margin: 2em 0 2em 0;
 `;
 
 const StChatList = styled.section`
@@ -217,13 +225,13 @@ const StChatList = styled.section`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
 `;
 
 const StTopContainer = styled.div`
   display: flex;
-  height: 44px;
   justify-content: space-between;
+  height: 44px;
+  padding: 0 10px;
 `;
 
 const StInnerBox = styled.section`
@@ -238,7 +246,7 @@ const StChatBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 1em;
-  background-color: rgb(246, 246, 246);
+  background-color: white;
   overflow-y: auto;
 `;
 
@@ -296,7 +304,7 @@ const StReceiveDiv = styled.div`
 
 const StChatSend = styled.p`
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   padding: 10px;
 `;
 
@@ -309,6 +317,8 @@ const StChatReceive = styled.p`
 const StInputBox = styled.div`
   display: flex;
   align-items: center;
+
+  border-radius: 10px;
 `;
 
 const StInput = styled.input`
@@ -318,6 +328,8 @@ const StInput = styled.input`
   border: none;
   border-radius: 10px;
   padding-left: 10px;
+  font-size: 20px;
+  background-color: ${(props) => props.theme.colors.backgroundGray};
   &:focus {
     outline: none;
   }
@@ -329,6 +341,7 @@ const StSendBtn = styled.button`
   margin-right: 10px;
   border: none;
   border-radius: 10px;
+  background-color: white;
 `;
 
 const StCol = styled.div`

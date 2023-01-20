@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { PostAPI } from "../../api/axios";
 
 export const __createPost = createAsyncThunk(
@@ -7,7 +6,11 @@ export const __createPost = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
-      return thunkAPI.fulfillWithValue();
+      if (response.status === 201) {
+        return thunkAPI.fulfillWithValue();
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -17,9 +20,9 @@ export const __updatePost = createAsyncThunk(
   "mypageSlice/updatePost",
   async (payload, thunkAPI) => {
     try {
-      const Id = payload.id
-      const Form = payload.formData
-      const res = await PostAPI.postUpdate(Id,Form)
+      const Id = payload.id;
+      const Form = payload.formData;
+      const res = await PostAPI.postUpdate(Id, Form);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -30,7 +33,7 @@ export const __deletePost = createAsyncThunk(
   "mypageSlice/deletePost",
   async (id, thunkAPI) => {
     try {
-      const res = await PostAPI.deletePost(id)
+      const res = await PostAPI.deletePost(id);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -41,7 +44,7 @@ export const __postZZim = createAsyncThunk(
   "mypageSlice/postZZim",
   async (id, thunkAPI) => {
     try {
-      const res = await PostAPI.postZZim(id)
+      const res = await PostAPI.postZZim(id);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -65,7 +68,7 @@ export const __detailPost = createAsyncThunk(
   }
 );
 
-//    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  전국  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//    <<<<<<  전국  >>>>>>
 //    <  전국 false  >
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
@@ -181,8 +184,9 @@ export const __getHelpUsTrue = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
-  dataLength: 0,
   error: false,
+  flag: 0,
+  dataLength: 0,
   boolHelper: false,
   boolHelpee: false,
   boolHelpUs: false,
@@ -198,7 +202,7 @@ const initialState = {
   helpUsTrueDate: [],
   inputReciver: "",
   postInfo: "",
-  ZZimMsg:[],
+  ZZimMsg: [],
 };
 
 const postSlice = createSlice({
@@ -278,7 +282,7 @@ const postSlice = createSlice({
       state.error = true;
     },
 
-    //    <<<<<<<<<<<<<<<<<<  전체 false 가져오기  >>>>>>>>>>>>>>>>>>>>>
+    //    <<<<  전체 false 가져오기  >>>>
     [__getAllFalse.pending]: (state) => {
       state.isLoading = true;
     },
@@ -287,13 +291,10 @@ const postSlice = createSlice({
       state.dataLength = action.payload.length;
       if (state.dataLength !== 0) {
         state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      } else {
-        console.log("데이터 없음");
       }
     },
     [__getAllFalse.rejected]: (state, action) => {
       state.isLoading = true;
-      console.log("전체 false 가져오기 Error");
     },
 
     //    <  헬피 false 가져오기  >
@@ -301,57 +302,43 @@ const postSlice = createSlice({
     [__getHelpeeFalse.fulfilled]: (state, action) => {
       state.helpeeFalseDate = action.payload;
     },
-    [__getHelpeeFalse.rejected]: (state, action) => {
-      console.log("헬피 false 가져오기 Error");
-    },
+    [__getHelpeeFalse.rejected]: (state, action) => {},
     //    <  헬퍼 false 가져오기  >
     [__getHelperFalse.pending]: (state) => {},
     [__getHelperFalse.fulfilled]: (state, action) => {
       state.helperFalseDate = action.payload;
     },
-    [__getHelperFalse.rejected]: (state, action) => {
-      console.log("헬퍼 false 가져오기 Error");
-    },
+    [__getHelperFalse.rejected]: (state, action) => {},
     //    <  헬퍼스 false 가져오기  >
     [__getHelpUsFalse.pending]: (state) => {},
     [__getHelpUsFalse.fulfilled]: (state, action) => {
       state.helpUsFalseDate = action.payload;
     },
-    [__getHelpUsFalse.rejected]: (state, action) => {
-      console.log("헬퍼스 false 가져오기 Error");
-    },
-    //    <<<<<<<<<<<<<<<<<<  전체 true 가져오기  >>>>>>>>>>>>>>>>>>>>>
+    [__getHelpUsFalse.rejected]: (state, action) => {},
+    //    <<<<  전체 true 가져오기  >>>>
     [__getAllTrue.pending]: (state) => {},
     [__getAllTrue.fulfilled]: (state, action) => {
       state.AllTrueDate = action.payload;
     },
-    [__getAllTrue.rejected]: (state, action) => {
-      console.log("전체 true 가져오기 Error");
-    },
+    [__getAllTrue.rejected]: (state, action) => {},
     //    <  헬피 true 가져오기  >
     [__getHelpeeTrue.pending]: (state) => {},
     [__getHelpeeTrue.fulfilled]: (state, action) => {
       state.helpeeTrueDate = action.payload;
     },
-    [__getHelpeeTrue.rejected]: (state, action) => {
-      console.log("헬피 true 가져오기 Error");
-    },
+    [__getHelpeeTrue.rejected]: (state, action) => {},
     //    <  헬퍼 true 가져오기  >
     [__getHelperTrue.pending]: (state) => {},
     [__getHelperTrue.fulfilled]: (state, action) => {
       state.helperTrueDate = action.payload;
     },
-    [__getHelperTrue.rejected]: (state, action) => {
-      console.log("헬퍼 true 가져오기 Error");
-    },
+    [__getHelperTrue.rejected]: (state, action) => {},
     //    <  헬퍼스 true 가져오기  >
     [__getHelpUsTrue.pending]: (state) => {},
     [__getHelpUsTrue.fulfilled]: (state, action) => {
       state.helpUsTrueDate = action.payload;
     },
-    [__getHelpUsTrue.rejected]: (state, action) => {
-      console.log("헬퍼 true 가져오기 Error");
-    },
+    [__getHelpUsTrue.rejected]: (state, action) => {},
   },
 });
 export const {

@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const Category = React.memo(({ ref, children, value, changeInputHandler }) => {
+const Category = React.memo(({ children, value, changeInputHandler }) => {
   return (
     <StCategory
       name="category"
       id="category"
       value={value}
-      ref={ref}
       onClick={changeInputHandler}
       readOnly
     >
@@ -17,9 +16,11 @@ const Category = React.memo(({ ref, children, value, changeInputHandler }) => {
 });
 
 const StCategory = styled.button`
-  width: 100px;
-  height: 50px;
+  width: 200px;
+  height: 44px;
   cursor: pointer;
+  border: none;
+  border-radius: 10px;
 `;
 
 export default Category;

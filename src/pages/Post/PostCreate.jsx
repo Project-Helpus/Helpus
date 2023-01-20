@@ -4,19 +4,22 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
-
-import { 행정구역 } from "./elements/address";
-import Category from "./elements/Category";
-import { categoryType } from "./elements/categoryType";
-import Calender from "./elements/Calender";
+import { 행정구역 } from "./element/address";
+import { categoryType } from "./element/categoryType";
+import Calender from "./element/Calender";
+import arrow_forward_pink from "../../asset/arrow_forward.svg";
+import add_circle_outline from "../../asset/add_circle_outline.svg";
 
 const PostCreate = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { state, city } = 행정구역;
   const [getImg, setGetImg] = useState(false);
   const [previewImg, setPreviewImg] = useState();
   const [img, setImg] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState("");
+  const [btnActive, setBtnActive] = useState("");
   const [date, setDate] = useState();
   const [input, setInput] = useState({
     title: "",
@@ -25,15 +28,16 @@ const PostCreate = () => {
     location1: "",
     location2: "",
   });
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const changeInputHandler = e => {
+  const changeInputHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
+    if (name === "category") {
+      setBtnActive(value);
+    }
   };
 
-  const changeImgHandler = e => {
+  const changeImgHandler = (e) => {
     const file = e.target.files;
     const fileUrl = [];
 
@@ -57,35 +61,37 @@ const PostCreate = () => {
     setGetImg(true);
   };
 
-  const clickHandler = e => {
+  const clickHandler = (e) => {
     e.preventDefault();
+    if (window.confirm("게시 하시겠습니까?")) {
+      const formData = new FormData();
+      const day = date.toISOString();
 
-    const formData = new FormData();
+      for (const property in input) {
+        formData.append(`${property}`, input[property]);
+      }
+      for (let i = 0; i < img.length; i++) {
+        formData.append("post-image", img[i]);
+      }
 
-    for (const property in input) {
-      formData.append(`${property}`, input[property]);
+      formData.append("appointed", day);
+      formData.append("tag", tags);
+      dispatch(__createPost(formData));
+      navigate("/");
     }
-    for (let i = 0; i < img.length; i++) {
-      formData.append("post-image", img[i]);
-    }
-    const day = date.toISOString();
-
-    formData.append("appointed", day);
-    formData.append("tag", tags);
-    dispatch(__createPost(formData));
   };
 
-  const removeTag = i => {
+  const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);
     setTags(clonetags);
   };
 
-  const addTag = e => {
+  const addTag = (e) => {
     setTag(e.target.value);
   };
 
-  const handleKeyPress = e => {
+  const handleKeyPress = (e) => {
     if (e.key === "Enter" && tag !== "" && tag.length < 8) {
       setTags([...tags, tag]);
       setTag("");
@@ -95,116 +101,160 @@ const PostCreate = () => {
   return (
     <StWrapper>
       <StContainer>
-        <StTitle>게시글 작성</StTitle>
-        <label htmlFor="title">제목</label>
-        <input
-          name="title"
-          id="title"
-          placeholder="제목 입력하시오"
-          onChange={changeInputHandler}
-        ></input>
-        <label htmlFor="content">내용입력</label>
-        <StTextarea
-          name="content"
-          id="content"
-          placeholder="내용을 입력하시오."
-          onChange={changeInputHandler}
-        ></StTextarea>
-        <label htmlFor="date">날짜</label>
-        <Calender value={date} setDate={setDate} />
-        <label>카테고리 선택</label>
-        <StInnerContainer>
-          {categoryType.map((el, id) => (
-            <Category
-              key={id}
-              value={id + 1}
-              changeInputHandler={changeInputHandler}
-            >
-              {el}
-            </Category>
-          ))}
-          <div>(헬퍼스:단체 봉사 활동)</div>
-        </StInnerContainer>
-        {getImg ? (
-          <label htmlFor="image">
-            사진 첨부(첫번째 이미지는 썸네일로 사용됩니다. 이미지가 없다면 임의
-            사진으로 대체 됩니다.)
-          </label>
-        ) : (
-          <label htmlFor="image">
-            사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
-          </label>
-        )}
-        <input
-          style={{ display: "none" }}
-          accept="image/jpg, image/png, image/gif"
-          id="image"
-          name="image"
-          type="file"
-          onChange={changeImgHandler}
-          multiple
-        />
-        <StGroupImgs>
-          {previewImg ? (
-            previewImg.map((el, i) => (
-              <label htmlFor="image" key={i}>
-                <StImg src={el} alt="inputImage" />
-              </label>
-            ))
+        <StBox>
+          <StBackBtn onClick={() => navigate(-1)}>
+            <img src={arrow_forward_pink} alt="back_button" />
+          </StBackBtn>
+          <StTitle>게시글 작성</StTitle>
+        </StBox>
+        <StCol>
+          <StLabel htmlFor="title">제목</StLabel>
+          <input
+            name="title"
+            id="title"
+            placeholder="제목 입력하시오"
+            onChange={changeInputHandler}
+          ></input>
+        </StCol>
+        <StCol>
+          <StLabel htmlFor="content">내용입력</StLabel>
+          <StTextarea
+            name="content"
+            id="content"
+            placeholder="내용을 입력하시오."
+            onChange={changeInputHandler}
+          ></StTextarea>
+        </StCol>
+        <StBox>
+          <StLabel htmlFor="date">날짜</StLabel>
+          <StInnerBox>
+            <Calender value={date} setDate={setDate} />
+          </StInnerBox>
+        </StBox>
+        <StCol>
+          <StInnerBox>
+            <StLabel>카테고리 선택</StLabel>
+            {categoryType.map((el, idx) => {
+              if (Number(btnActive) === idx + 1) {
+                return (
+                  <StSelectedCategory
+                    name="category"
+                    id="category"
+                    key={idx}
+                    value={idx + 1}
+                    onClick={changeInputHandler}
+                    readOnly
+                  >
+                    {el}
+                  </StSelectedCategory>
+                );
+              } else {
+                return (
+                  <StCategory
+                    name="category"
+                    id="category"
+                    key={idx}
+                    value={idx + 1}
+                    onClick={changeInputHandler}
+                    readOnly
+                  >
+                    {el}
+                  </StCategory>
+                );
+              }
+            })}
+            <span>(헬퍼스:단체 봉사 활동)</span>
+          </StInnerBox>
+        </StCol>
+        <StCol>
+          {getImg ? (
+            <StLabel htmlFor="image">
+              사진 첨부(첫번째 이미지는 썸네일로 사용됩니다. 이미지가 없다면
+              임의 사진으로 대체 됩니다.)
+            </StLabel>
           ) : (
-            <StGroupImgs>
-              <StImgButton htmlFor="image">+</StImgButton>
-              <StImgButton htmlFor="image">+</StImgButton>
-              <StImgButton htmlFor="image">+</StImgButton>
-            </StGroupImgs>
+            <StLabel htmlFor="image">
+              사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
+            </StLabel>
           )}
-        </StGroupImgs>
-        <label>지역 설정</label>
-        <div>
-          <select name="location1" onChange={changeInputHandler}>
-            <option value="">선택</option>
-            {state.map(el => (
-              <option key={el.state} value={el.codeNm}>
-                {el.codeNm}
-              </option>
-            ))}
-          </select>
-          <select name="location2" onChange={changeInputHandler}>
-            <option value="">선택</option>
-            {city
-              .filter(el => el.state === input.location1)
-              .map(el => (
-                <option key={el.city} value={el.codeNm}>
+          <input
+            style={{ display: "none" }}
+            accept="image/jpg, image/png, image/gif"
+            id="image"
+            name="image"
+            type="file"
+            onChange={changeImgHandler}
+            multiple
+          />
+          <StRow>
+            {previewImg ? (
+              previewImg.map((el, i) => (
+                <label htmlFor="image" key={i}>
+                  <StImg src={el} alt="inputImage" />
+                </label>
+              ))
+            ) : (
+              <>
+                <StImgButton htmlFor="image">
+                  <img src={add_circle_outline} alt="image_add" />
+                </StImgButton>
+                <StImgButton htmlFor="image">
+                  <img src={add_circle_outline} alt="image_add" />
+                </StImgButton>
+                <StImgButton htmlFor="image">
+                  <img src={add_circle_outline} alt="image_add" />
+                </StImgButton>
+              </>
+            )}
+          </StRow>
+        </StCol>
+        <StCol>
+          <StLabel>지역 설정</StLabel>
+          <StBox>
+            <StSelector name="location1" onChange={changeInputHandler}>
+              <option value="">선택</option>
+              {state.map((el) => (
+                <option key={el.state} value={el.codeNm}>
                   {el.codeNm}
                 </option>
               ))}
-          </select>
-        </div>
-        <label htmlFor="tag">태그</label>
-        <StTagContainer>
-          {tags.map((e, i) => (
-            <StTag key={i}>
-              <StTagName>{e}</StTagName>
-              <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
-            </StTag>
-          ))}
-        </StTagContainer>
-        <input
-          placeholder="태그를 입력해주세요"
-          name="tag"
-          id="tag"
-          onChange={addTag}
-          onKeyPress={e => handleKeyPress(e)}
-          value={tag}
-        />
-        <StInnerContainer>
-          <StButton mode="smpr" onClick={clickHandler}>
+            </StSelector>
+            <StSelector name="location2" onChange={changeInputHandler}>
+              <option value="">선택</option>
+              {city
+                .filter((el) => el.state === input.location1)
+                .map((el) => (
+                  <option key={el.city} value={el.codeNm}>
+                    {el.codeNm}
+                  </option>
+                ))}
+            </StSelector>
+          </StBox>
+        </StCol>
+        <StCol>
+          <StLabel htmlFor="tag">태그</StLabel>
+          <StTagContainer>
+            {tags.map((e, i) => (
+              <StTag key={i}>
+                <StTagName>{e}</StTagName>
+                <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
+              </StTag>
+            ))}
+          </StTagContainer>
+          <input
+            placeholder="태그를 입력해주세요"
+            name="tag"
+            id="tag"
+            onChange={addTag}
+            onKeyPress={(e) => handleKeyPress(e)}
+            value={tag}
+          />
+        </StCol>
+        <StRow>
+          <StButton mode="pinkMdBtn" onClick={clickHandler}>
             게시
           </StButton>
-          <StButton mode="smsd" onClick={() => navigate(-1)}>
-            뒤로가기
-          </StButton>
-        </StInnerContainer>
+        </StRow>
       </StContainer>
     </StWrapper>
   );
@@ -212,51 +262,80 @@ const PostCreate = () => {
 
 const StTitle = styled.h2`
   text-align: center;
+  width: 100%;
+`;
+
+const StBackBtn = styled.button`
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
 `;
 
 const StContainer = styled.section`
   display: flex;
   flex-direction: column;
-  background-color: rgb(240, 240, 240);
+  gap: 55px;
+  width: 1280px;
 `;
 
-const StInnerContainer = styled.div`
+const StInnerBox = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 5px;
+  align-items: center;
+  gap: 20px;
+`;
+
+const StBox = styled.article`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const StCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const StLabel = styled.label`
+  font-size: 24px;
+  font-weight: 800;
 `;
 
 const StTextarea = styled.textarea`
   resize: none;
+  height: 300px;
 `;
 
 const StTagContainer = styled.div`
   display: flex;
   width: 590px;
-  flex-flow: row wrap;
+  flex-flow: row;
 `;
 
-const StGroupImgs = styled.div`
+const StRow = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  justify-content: center;
+  gap: 40px;
 `;
 
 const StImgButton = styled.label`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 190px;
-  height: 120px;
+  width: 400px;
+  height: 225px;
   background-color: white;
+  border: 0.5px dashed black;
   border-radius: 10px;
   cursor: pointer;
 `;
 
 const StImg = styled.img`
   border-radius: 10px;
-  width: 190px;
-  height: 120px;
+  width: 400px;
+  height: 225px;
   cursor: pointer;
 `;
 
@@ -264,22 +343,53 @@ const StTag = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 32px;
+  padding: 0 4px;
   border-radius: 12px;
   margin-right: 10px;
-  background-color: orange;
+  background-color: pink;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
 `;
 
-const StTagName = styled.h3`
+const StTagName = styled.span`
   margin-right: 10px;
 `;
 
 const StTagButton = styled.button`
-  border: none;
-  outline: 0;
-  border-radius: 50%;
   width: 20px;
-  background-color: lightgray;
+  border: 0.5px solid white;
+  border-radius: 50%;
+  color: white;
+  background-color: transparent;
   cursor: pointer;
+`;
+
+const StCategory = styled.button`
+  width: 200px;
+  height: 44px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+`;
+
+const StSelectedCategory = styled.button`
+  width: 200px;
+  height: 44px;
+  background-color: ${(props) => props.theme.colors.subPink};
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+`;
+
+const StSelector = styled.select`
+  width: 300px;
+  height: 44px;
+  border-radius: 10px;
 `;
 
 export default PostCreate;

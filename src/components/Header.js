@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
+import whiteBell from "../asset/whiteBell.svg";
 import { io } from "socket.io-client";
+import top_logo from "../asset/top_logo.svg";
+import StButton from "./UI/StButton";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -44,7 +47,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(__getMyPage());
-    if (userInfo.userId) {
+    if (userInfo?.userId) {
       const socket = io(process.env.REACT_APP_CHAT_SERVER, {
         transports: ["websocket"],
       });
@@ -60,6 +63,8 @@ const Header = () => {
     dispatch(__getMyPage());
   }, [isLogin, isLoginkakao]);
 
+  useEffect(() => {});
+
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
   if (locationNow.pathname === "/auth/kakao/state") return null;
@@ -71,7 +76,7 @@ const Header = () => {
           navigate("/");
         }}
       >
-        ❤+❤ Helpus
+        <img src={top_logo} alt=""></img>
       </StLogo>
       <StSearch onSubmit={searching}>
         <input
@@ -82,38 +87,35 @@ const Header = () => {
             setSearch(e.target.value);
           }}
         ></input>
-        <button>검색</button>
       </StSearch>
-      <button
-        onClick={() => {
-          setOpen(!open);
-          handleRead();
-        }}
-      >
-        알림
-        {notifications.length > 0 && <div>{notifications.length}</div>}
-      </button>
-
-      {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
-      <StLogin>
+      <StBox>
         {!(isLogin || isLoginkakao) && (
-          <StLogin>
+          <StBox>
             <button onClick={() => navigate("/login")}>로그인</button>
             <span>|</span>
             <button onClick={() => navigate("/signup")}>회원가입</button>
-          </StLogin>
+          </StBox>
         )}
         {(isLogin || isLoginkakao) && (
-          <div>
+          <StBox>
+            <StButton
+              onClick={() => {
+                setOpen(!open);
+                handleRead();
+              }}
+            >
+              <img src={whiteBell} alt="notification" />
+              {notifications.length > 0 && <div>{notifications.length}</div>}
+            </StButton>
             <StProfile onClick={() => navigate("/mypage")}>
-              <img src={userInfo?.userImage} alt="" />
-              <span>{userInfo?.userName}</span>
+              <img src={profile?.userImage} alt="" />
+              <span>{profile?.userName}</span>
             </StProfile>
             <span>|</span>
             <button onClick={logoutButton}>로그아웃</button>
-          </div>
+          </StBox>
         )}
-      </StLogin>
+      </StBox>
     </StHeaderWrapper>
   );
 };
@@ -125,35 +127,28 @@ const StHeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 70px;
+  height: 80px;
 `;
 
 const StSearch = styled.form`
   input {
     border: 1px solid #efefef;
-    background-color: transparent;
-    padding: 4px;
-    width: 545px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 4px;x;
     height: 46px;
     border-radius: 7px;
-  }
-  button {
-    height: 46px;
-    width: 62px;
-    margin-left: 6px;
-    border-radius: 7px;
-    color: white;
-    background-color: #ff00ff;
-    border: none;
+    outline: none;
   }
 `;
 const StLogo = styled.div`
-  font-size: 30px;
-  color: #ff00ff;
+  margin: 20px;
+  cursor: pointer;
 `;
-const StLogin = styled.div`
+const StBox = styled.div`
   display: flex;
-  right: 0;
+  gap: 15px;
+  padding: 0 15px;
+  align-items: center;
   button {
     border: none;
     background-color: transparent;
@@ -164,9 +159,12 @@ const StLogin = styled.div`
 `;
 
 const StProfile = styled.button`
+  text-align: center;
+  line-height: 60px;
   img {
     width: 25px;
     height: 25px;
     border-radius: 100px;
+    vertical-align: middle;
   }
 `;
