@@ -171,7 +171,6 @@ const StTabWrapper = styled.div`
   max-width:1280px;
   margin: 3em 0 3em 0;
   div {
-    /* margin-right: 3em; */
     padding-bottom:10px;
     margin-right:3px;
     border-bottom: 4px solid #B4B4B4;

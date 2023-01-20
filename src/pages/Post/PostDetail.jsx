@@ -25,11 +25,7 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  // const { postInfo } = useSelector((state) => state.postSlice);
-  // const { userInfo } = useSelector((state) => state.userSlice);
-  const cookie = new Cookies();
   const { state } = useLocation();
-  // console.log('info:',logedIn)
   const curr = new Date(state.data?.createdAt);
     const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
     const kRTimeDiff = 9 * 60 * 60 * 1000;
@@ -68,9 +64,6 @@ const PostDetail = () => {
   }, []);
 
   useEffect(() => {}, [deadLine]);
-  // console.log("userId:", userId);
-  // console.log("createId:", state.data.userId);
-  console.log('detail:',detail.tag.split())
   return (
     <StWrapper>
       <StContainer>
@@ -79,15 +72,14 @@ const PostDetail = () => {
             <img src={arrow_forward} alt="back_button" />
         </StBackBtn>
           <StFlex>
-            {cookie.get('token') === undefined  ||<>{userId !== state.data.userId || 
+            {logedIn === false  ||<>{userId !== state.data.userId || 
           <> {deadLine === 2 ? (<><StDeadLineButton onClick={changeDeadLine}>마감취소</StDeadLineButton><span>마감된 게시물</span></>) : 
               <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>}</>
             }</>}
             
-            {cookie.get('token') === undefined ||(<>{userId !== state.data.userId || <StUpdateButton onClick={updatePost}>수정</StUpdateButton>}</>) }
-            {/* {logedIn === false ||(<>{userId !== state.data.userId || <StUpdateButton onClick={updatePost}>수정</StUpdateButton>}</>) } */}
+            {logedIn === false ||(<>{userId !== state.data.userId || <StUpdateButton onClick={updatePost}>수정</StUpdateButton>}</>) }
             
-            {cookie.get('token') === undefined  || (<>{userId !== state.data.userId || (<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>)}</>)}
+            {logedIn === false  || (<>{userId !== state.data.userId || (<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>)}</>)}
             </StFlex>
             </StSpaceBetween>
 
@@ -120,8 +112,7 @@ const PostDetail = () => {
         <StFlex>
 
         </StFlex>
-        {/* {logedIn === false||(<>{state.data.userId !== userId && ( */}
-        {cookie.get('token') === undefined||(<>{state.data.userId !== userId && (
+        {logedIn === false||(<>{state.data.userId !== userId && (
           <StBtnBox>
             <StChatBtn
               onClick={() => {
