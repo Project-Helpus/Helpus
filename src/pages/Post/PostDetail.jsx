@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { StWrapper } from "../../components/UI/StIndex";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import {
   __detailPost,
@@ -10,34 +9,64 @@ import {
   __postZZim,
 } from "../../redux/modules/postSlice";
 import arrow_forward from "../../asset/arrow_forward.svg";
-import { isCompositeComponent } from "react-dom/test-utils";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
-import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle.js/StCommon";
-import { Avatar, StBackBtn, StBox, StBtnBox, StChatBtn, StContainer, StContent, StDate, StDeadLineButton, StDeleteButton, StGroupImgs, StHopeDay, StImage, StInnerColBox, StInnerRowBox, StLocation, StMagam, StProfile, StProfileBox, StTitle, StUpdateButton, StUserInfo, StWishBtn, StZZimImg } from "./StPostDetail";
-import { Cookies } from "react-cookie";
+import {
+  StFlex,
+  StSpaceBetween,
+} from "../../components/UI/CardStyle.js/StCommon";
+import {
+  Avatar,
+  StBackBtn,
+  StBox,
+  StBtnBox,
+  StChatBtn,
+  StContainer,
+  StContent,
+  StDate,
+  StDeadLineButton,
+  StDeleteButton,
+  StGroupImgs,
+  StHopeDay,
+  StImage,
+  StInnerColBox,
+  StInnerRowBox,
+  StLocation,
+  StMagam,
+  StProfile,
+  StProfileBox,
+  StTags,
+  StTitle,
+  StUpdateButton,
+  StUserInfo,
+  StWishBtn,
+  StZZimImg,
+} from "./StPostDetail";
+
 const PostDetail = () => {
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
   const userId = useSelector((state) => state.mypageSlice.profile.userId);
-  const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine); 
-  const logedIn = useSelector((state) => state.userSlice.isLogin)
-  const detail = useSelector((state) => state.postSlice.postInfo)
+  const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
+  const logedIn = useSelector((state) => state.userSlice.isLogin);
+  const detail = useSelector((state) => state.postSlice.postInfo);
   const navigate = useNavigate();
   const { postId } = useParams();
   const dispatch = useDispatch();
   const { state } = useLocation();
   const curr = new Date(state.data?.createdAt);
-    const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
-    const kRTimeDiff = 9 * 60 * 60 * 1000;
-    const KrCurr = new Date(utc + kRTimeDiff);
-    const KoreaDate = KrCurr.toLocaleDateString();
+  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+  const kRTimeDiff = 9 * 60 * 60 * 1000;
+  const KrCurr = new Date(utc + kRTimeDiff);
+  const KoreaDate = KrCurr.toLocaleDateString();
+  const tag = detail.tag?.split(",");
+
   const deletePost = () => {
-      dispatch(__deletePost(postId));
-      alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
-      navigate("/");
+    dispatch(__deletePost(postId));
+    alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
+    navigate("/");
   };
   const updatePost = () => {
-      navigate(`/post/update/${postId}`);
+    navigate(`/post/update/${postId}`);
   };
 
   const changeDeadLine = () => {
@@ -64,43 +93,68 @@ const PostDetail = () => {
   }, []);
 
   useEffect(() => {}, [deadLine]);
+
   return (
     <StWrapper>
       <StContainer>
-          <StSpaceBetween>
-        <StBackBtn onClick={() => navigate(-1)}>
+        <StSpaceBetween>
+          <StBackBtn onClick={() => navigate(-1)}>
             <img src={arrow_forward} alt="back_button" />
-        </StBackBtn>
+          </StBackBtn>
           <StFlex>
-            {logedIn === false  ||<>{userId !== state.data.userId || 
-          <> {deadLine === 2 ? (<><StDeadLineButton onClick={changeDeadLine}>마감취소</StDeadLineButton><span>마감된 게시물</span></>) : 
-              <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>}</>
-            }</>}
-            
-            {logedIn === false ||(<>{userId !== state.data.userId || <StUpdateButton onClick={updatePost}>수정</StUpdateButton>}</>) }
-            
-            {logedIn === false  || (<>{userId !== state.data.userId || (<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>)}</>)}
-            </StFlex>
-            </StSpaceBetween>
-
+            {logedIn === false || (
+              <>
+                {userId !== state.data.userId || (
+                  <>
+                    {" "}
+                    {deadLine === 2 ? (
+                      <>
+                        <StDeadLineButton onClick={changeDeadLine}>
+                          마감취소
+                        </StDeadLineButton>
+                        <span>마감된 게시물</span>
+                      </>
+                    ) : (
+                      <StDeadLineButton onClick={changeDeadLine}>
+                        마감
+                      </StDeadLineButton>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {logedIn === false || (
+              <>
+                {userId !== state.data.userId || (
+                  <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
+                )}
+              </>
+            )}
+            {logedIn === false || (
+              <>
+                {userId !== state.data.userId || (
+                  <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
+                )}
+              </>
+            )}
+          </StFlex>
+        </StSpaceBetween>
         <StUserInfo>
-        <StFlex>
-          <StProfile src={state.data.userImage}></StProfile>
-          <div>
-            <StFlex>
-              <StTitle>{state.data.title}</StTitle>
-              <StMagam>마감</StMagam>
+          <StFlex>
+            <StProfile src={state.data.userImage}></StProfile>
+            <div>
+              <StFlex>
+                <StTitle>{state.data.title}</StTitle>
               </StFlex>
-          <div>{state.data?.userName}</div>
-              <StLocation>{state.data?.location1}&gt;{state.data?.location2}</StLocation>
-          </div>
-        </StFlex>
+              <div>{state.data?.userName}</div>
+              <StLocation>
+                {state.data?.location1}&gt;{state.data?.location2}
+              </StLocation>
+            </div>
+          </StFlex>
         </StUserInfo>
-        
         <StProfileBox>
           <StInnerRowBox>
-
-            
             <StHopeDay>희망일:{KoreaDate}</StHopeDay>
           </StInnerRowBox>
         </StProfileBox>
@@ -110,28 +164,34 @@ const PostDetail = () => {
           <StImage src={detail.imageUrl3} />
         </StGroupImgs>
         <StFlex>
-
+          {tag?.map((item, idx) => {
+            return <StTags key={idx}>{item}</StTags>;
+          })}
         </StFlex>
-        {logedIn === false||(<>{state.data.userId !== userId && (
-          <StBtnBox>
-            <StChatBtn
-              onClick={() => {
-                navigate(`/chat/${postId}/${state.data?.userId}`);
-              }}
-            >
-              문의하기
-            </StChatBtn>
-            <StWishBtn>
-              <StZZimImg onClick={ZZim} src={emptyHeart} alt="wish" />
-              찜하기
-            </StWishBtn>
-          </StBtnBox>
-        )}</>)}
-
+        <p>{detail.content}</p>
+        <StFlex></StFlex>
+        {logedIn === false || (
+          <>
+            {state.data.userId !== userId && (
+              <StBtnBox>
+                <StChatBtn
+                  onClick={() => {
+                    navigate(`/chat/${postId}/${state.data?.userId}`);
+                  }}
+                >
+                  문의하기
+                </StChatBtn>
+                <StWishBtn>
+                  <StZZimImg onClick={ZZim} src={emptyHeart} alt="wish" />
+                  찜하기
+                </StWishBtn>
+              </StBtnBox>
+            )}
+          </>
+        )}
       </StContainer>
     </StWrapper>
   );
 };
 
 export default PostDetail;
-
