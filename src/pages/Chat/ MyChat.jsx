@@ -76,7 +76,6 @@ const MyChat = () => {
   };
 
   useEffect(() => {
-    console.log(userId);
     socket.current.emit("login", userId);
     socket.current.emit("enter", {
       roomId: roomId,

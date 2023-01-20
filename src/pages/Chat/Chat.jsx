@@ -12,6 +12,7 @@ const Chat = () => {
   const { postId } = useParams();
   const { ownerId } = useParams();
   const navigate = useNavigate();
+  const profile = useSelector((state) => state.mypageSlice.profile);
   const { userInfo } = useSelector((state) => state.userSlice);
   const { data } = useSelector((state) => state.mypageSlice);
   const socket = useRef(
@@ -43,7 +44,7 @@ const Chat = () => {
   const sendMsg = () => {
     if (msg !== "") {
       socket.current.emit("send", {
-        userId: userInfo.userId,
+        userId: profile.userId,
         roomId: roomId,
         content: msg,
       });
@@ -62,7 +63,7 @@ const Chat = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && msg !== "") {
       socket.current.emit("send", {
-        userId: userInfo.userId,
+        userId: profile.userId,
         roomId: roomId,
         content: msg,
       });
@@ -77,9 +78,9 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.current.emit("login", userInfo?.userId);
+    socket.current.emit("login", profile.userId);
     socket.current.emit("join", {
-      senderId: userInfo.userId,
+      senderId: profile.userId,
       postId: Number(postId),
       ownerId: Number(ownerId),
     });
@@ -118,7 +119,7 @@ const Chat = () => {
           <h2>채팅</h2>
         </StTopContainer>
         {data?.list?.map((el, idx) => {
-          if (el.ownerId === userInfo.userId) {
+          if (el.ownerId === profile.userId) {
             return (
               <StCard key={el.roomId + idx} onClick={linkOtherChat}>
                 <Avatar>
@@ -163,7 +164,7 @@ const Chat = () => {
         </StTopContainer>
         <StChatBox ref={chatWindow}>
           {chatRecord?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === profile.userId) {
               return (
                 <StSendDiv key={el.chatId + idx}>
                   <StChatSend>{el.content}</StChatSend>
@@ -180,7 +181,7 @@ const Chat = () => {
             }
           })}
           {newMsg?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === profile.userId) {
               return (
                 <StSendDiv key={el.chatId}>
                   <StChatSend>{el.content}</StChatSend>
