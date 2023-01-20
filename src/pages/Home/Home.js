@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import CardList from './CardList';
 import {__getHelpUsFalse,__setBoolHelpUs } from '../../redux/modules/postSlice';
 import Card from '../../components/Card';
-import { StMainWrapper, StCarouselTitle, StCarouselContainer, StLeftButton, StRightButton, StCarousel, StCarouselItem, StTransFormY, StTopImg, StCarouselWrapper, StMain, StSubTitle, StTopSubTilte, StTopTitle, StTitleWrapper, StTest } from './Style/StHome';
+import { StMainWrapper, StCarouselTitle, StCarouselContainer, StLeftButton, StRightButton, StCarousel, StCarouselItem, StTransFormY, StTopImg, StCarouselWrapper, StMain, StSubTitle, StTopSubTilte, StTopTitle, StTitleWrapper, StTest, StCarouselWith } from './Style/StHome';
 import { __getWishPost } from '../../redux/modules/mypageSlice';
 import { StFlex } from './Style/StCardList';
 const Home = () => {
@@ -44,10 +44,11 @@ const Home = () => {
     helpUsRef.current.style.color = "#fff"
   }
 
-
+  const logedIn = useSelector((state) => state.userSlice)
+console.log('loge:',logedIn)
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide*680}px)`; 
+    slideRef.current.style.transform = `translateX(-${currentSlide*1300}px)`; 
   }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
@@ -71,13 +72,13 @@ const Home = () => {
             <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>더보기</StSubTitle></StCarouselTitle>
             <StFlex>
               <StLeftButton onClick={PrevSlide}></StLeftButton>
-              <StTest>
+              <StCarouselWith>
                 <StCarouselContainer>
                   <StCarousel ref={slideRef}>
                     {data?.map((item,idx) => { return <StCarouselItem key={idx}><Card type={"케러셀"} data={item} /> </StCarouselItem>})}
                   </StCarousel>
                 </StCarouselContainer>
-              </StTest>
+              </StCarouselWith>
               <StRightButton onClick={NextSlide}></StRightButton>
             </StFlex>
           </StCarouselWrapper>

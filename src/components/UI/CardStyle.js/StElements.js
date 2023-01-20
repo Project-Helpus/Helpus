@@ -47,6 +47,15 @@ z-index: 1;
 position: relative;
 background-color:green;
 `
+export const StAllPostDeadLine = styled.div`
+color:#fff;
+width:50px;
+bottom: 300px;
+left: 10px;
+z-index: 1;
+position: relative;
+background-color:green;
+`
 
 export const StHeart = styled.img`
 width:20px;
@@ -95,5 +104,9 @@ width:50px;
 top: -149px;
 z-index: 1;
 position: relative;
+
+`
+export const StMarginTop10 = styled.div`
+margin-top:10px;
 `
 
