@@ -260,7 +260,9 @@ const PostCreate = () => {
           />
         </StCol>
         <StRow>
-          <StButton onClick={clickHandler}>게시</StButton>
+          <StButton mode="pinkMdBtn" onClick={clickHandler}>
+            게시
+          </StButton>
         </StRow>
       </StContainer>
     </StWrapper>
@@ -386,7 +388,8 @@ const StCategory = styled.button`
 const StSelectedCategory = styled.button`
   width: 200px;
   height: 44px;
-  background-color: black;
+  background-color: ${(props) => props.theme.colors.subPink};
+  color: white;
   cursor: pointer;
   border: none;
   border-radius: 10px;
