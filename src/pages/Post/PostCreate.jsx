@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
@@ -11,7 +11,6 @@ import arrow_forward_pink from "../../asset/arrow_forward.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
 
 const PostCreate = () => {
-  const { flag } = useSelector((state) => state.postSlice);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state, city } = 행정구역;
@@ -78,6 +77,7 @@ const PostCreate = () => {
       formData.append("appointed", day);
       formData.append("tag", tags);
       dispatch(__createPost(formData));
+      navigate("/");
     }
   };
 
@@ -97,15 +97,6 @@ const PostCreate = () => {
       setTag("");
     }
   };
-
-  useEffect(() => {
-    if (flag === 1) {
-      window.alert("게시 성공");
-      navigate("/");
-    } else if (flag === 2) {
-      window.alert("알 수 없는 오류가 발생했습니다. 다시 시도해 주세요");
-    }
-  }, [flag]);
 
   return (
     <StWrapper>
@@ -371,7 +362,6 @@ const StTagButton = styled.button`
   border: 0.5px solid white;
   border-radius: 50%;
   color: white;
-
   background-color: transparent;
   cursor: pointer;
 `;
