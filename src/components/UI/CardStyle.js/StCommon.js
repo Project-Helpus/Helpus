@@ -12,8 +12,8 @@ export const StCirclePhoto = styled.img`
   cursor: pointer;
 `;
 export const StMySquarePhoto = styled.img`
-width:320px;
-height:180px;
+width:240px;
+height:135px;
 border-radius:20px;
 cursor: pointer;`
 
@@ -46,7 +46,8 @@ export const StContentsTitle = styled.p`
   font-weight: 700;
 `;
 export const StMainContentsTitle = styled.p`
-font-size:24px;
+font-size:18px;
+font-weight:400;
 `
 export const StNickname = styled.p`
   font-size: 14px;
