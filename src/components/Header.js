@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
+import whiteBell from "../asset/whiteBell.svg";
 import { io } from "socket.io-client";
+import StButton from "./UI/StButton";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -60,6 +62,8 @@ const Header = () => {
     dispatch(__getMyPage());
   }, [isLogin, isLoginkakao]);
 
+  useEffect(() => {});
+
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
   if (locationNow.pathname === "/auth/kakao/state") return null;
@@ -84,36 +88,36 @@ const Header = () => {
         ></input>
         <button>검색</button>
       </StSearch>
-      <button
-        onClick={() => {
-          setOpen(!open);
-          handleRead();
-        }}
-      >
-        알림
-        {notifications.length > 0 && <div>{notifications.length}</div>}
-      </button>
-
       {open && <div>{notifications.map((n) => displayNotification(n))}</div>}
-      <StLogin>
+      <StBox>
         {!(isLogin || isLoginkakao) && (
-          <StLogin>
-            <button onClick={() => navigate("/login")}>로그인</button>
-            <span>|</span>
-            <button onClick={() => navigate("/signup")}>회원가입</button>
-          </StLogin>
+          <>
+            <StButton
+              onClick={() => {
+                setOpen(!open);
+                handleRead();
+              }}
+            >
+              <img src={whiteBell} alt="notification" />
+              {notifications.length > 0 && <div>{notifications.length}</div>}
+            </StButton>
+            <StBox>
+              <button onClick={() => navigate("/login")}>로그인</button>
+              <button onClick={() => navigate("/signup")}>회원가입</button>
+            </StBox>
+          </>
         )}
         {(isLogin || isLoginkakao) && (
           <div>
             <StProfile onClick={() => navigate("/mypage")}>
-              <img src={userInfo?.userImage} alt="" />
-              <span>{userInfo?.userName}</span>
+              <img src={profile?.userImage} alt="" />
+              <span>{profile?.userName}</span>
             </StProfile>
             <span>|</span>
             <button onClick={logoutButton}>로그아웃</button>
           </div>
         )}
-      </StLogin>
+      </StBox>
     </StHeaderWrapper>
   );
 };
@@ -151,9 +155,9 @@ const StLogo = styled.div`
   font-size: 30px;
   color: #ff00ff;
 `;
-const StLogin = styled.div`
+const StBox = styled.div`
   display: flex;
-  right: 0;
+  gap: 15px;
   button {
     border: none;
     background-color: transparent;
