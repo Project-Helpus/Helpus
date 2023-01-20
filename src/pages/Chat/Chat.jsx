@@ -162,10 +162,10 @@ const Chat = () => {
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>
-          {chatRecord?.map((el) => {
+          {chatRecord?.map((el, idx) => {
             if (el.userId === userInfo.userId) {
               return (
-                <StSendDiv key={el.chatId}>
+                <StSendDiv key={el.chatId + idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
