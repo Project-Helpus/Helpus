@@ -45,7 +45,7 @@ import {
 
 const PostDetail = () => {
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
-  const userId = useSelector((state) => state.mypageSlice.profile.userId);
+  const userId = useSelector((state) => state.mypageSlice.profile?.createrId);
   const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
   const detail = useSelector((state) => state.postSlice.postInfo);
@@ -87,7 +87,7 @@ const PostDetail = () => {
       e.target.src = fullHeart;
     }
   };
-
+  console.log("indo:", detail);
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, []);
@@ -102,36 +102,27 @@ const PostDetail = () => {
             <img src={arrow_forward} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {logedIn === false || (
+            {userId !== detail.userId || (
               <>
-                {userId !== state.data.userId || (
+                {deadLine === 2 ? (
                   <>
-                    {" "}
-                    {deadLine === 2 ? (
-                      <>
-                        <StDeadLineButton onClick={changeDeadLine}>
-                          마감취소
-                        </StDeadLineButton>
-                      </>
-                    ) : (
-                      <StDeadLineButton onClick={changeDeadLine}>
-                        마감
-                      </StDeadLineButton>
-                    )}
+                    <StDeadLineButton onClick={changeDeadLine}>
+                      마감취소
+                    </StDeadLineButton>
                   </>
+                ) : (
+                  <StDeadLineButton onClick={changeDeadLine}>
+                    마감
+                  </StDeadLineButton>
                 )}
               </>
             )}
-            {logedIn === false || (
-              <>
-                {userId !== state.data.userId || (
-                  <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
-                )}
-              </>
+            {userId !== detail.userId || (
+              <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
             )}
             {logedIn === false || (
               <>
-                {userId !== state.data.userId || (
+                {userId !== detail.userId || (
                   <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
                 )}
               </>
@@ -140,14 +131,14 @@ const PostDetail = () => {
         </StSpaceBetween>
         <StUserInfo>
           <StFlex>
-            <StProfile src={state.data.userImage}></StProfile>
+            <StProfile src={detail.userImage}></StProfile>
             <div>
               <StFlex>
-                <StTitle>{state.data.title}</StTitle>
+                <StTitle>{detail.title}</StTitle>
               </StFlex>
-              <div>{state.data?.userName}</div>
+              <div>{detail.userName}</div>
               <StLocation>
-                {state.data?.location1}&gt;{state.data?.location2}
+                {detail.location1}&gt;{detail.location2}
               </StLocation>
             </div>
           </StFlex>
@@ -171,11 +162,11 @@ const PostDetail = () => {
         <StFlex></StFlex>
         {logedIn === false || (
           <>
-            {state.data.userId !== userId && (
+            {detail.userId !== userId && (
               <StBtnBox>
                 <StChatBtn
                   onClick={() => {
-                    navigate(`/chat/${postId}/${state.data?.userId}`);
+                    navigate(`/chat/${postId}/${detail.userId}`);
                   }}
                 >
                   문의하기
