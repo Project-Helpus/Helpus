@@ -52,8 +52,7 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { state } = useLocation();
-  const curr = new Date(state.data?.createdAt);
+  const curr = new Date(detail.appointed);
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
   const kRTimeDiff = 9 * 60 * 60 * 1000;
   const KrCurr = new Date(utc + kRTimeDiff);

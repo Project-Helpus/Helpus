@@ -76,7 +76,7 @@ const Card = ({ type, data, onClick }) => {
     const title15 = data.title.slice(0, 15);
     const deadLine = data.isDeadLine;
     const moveDetail = (id) => {
-      navigate(`/post/${id}`, { state: { data: data } });
+      navigate(`/post/${id}`);
     };
 
     const ZZim = (e) => {
@@ -100,21 +100,30 @@ const Card = ({ type, data, onClick }) => {
       case "세로":
         return (
           <StColumnCard>
-          <StAllPostWrapper>
-            <StAllPostSquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StAllPostSquarePhoto>
-            <StFlex>
-              <StCirclePhoto src={data.userImage}></StCirclePhoto>
-              <StMarginTop10>
-                <StContentsTitle>{data.title}</StContentsTitle>
-                <StAllPostNickName>{data.userName}</StAllPostNickName>
-              </StMarginTop10>
-            </StFlex>
-            <StFlex>
-              {deadLine === 1 ?  <StEmptyDiv /> : <StAllPostDeadLine>마감</StAllPostDeadLine>}
-              {tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag> })}
-            </StFlex>
+            <StAllPostWrapper>
+              <StAllPostSquarePhoto
+                src={data.imageUrl1}
+                onClick={() => moveDetail(data.postId)}
+              ></StAllPostSquarePhoto>
+              <StFlex>
+                <StCirclePhoto src={data.userImage}></StCirclePhoto>
+                <StMarginTop10>
+                  <StContentsTitle>{data.title}</StContentsTitle>
+                  <StAllPostNickName>{data.userName}</StAllPostNickName>
+                </StMarginTop10>
+              </StFlex>
+              <StFlex>
+                {deadLine === 1 ? (
+                  <StEmptyDiv />
+                ) : (
+                  <StAllPostDeadLine>마감</StAllPostDeadLine>
+                )}
+                {tag.map((item, idx) => {
+                  return <StTag key={idx}>{item}</StTag>;
+                })}
+              </StFlex>
             </StAllPostWrapper>
-            </StColumnCard>
+          </StColumnCard>
         );
       // case "세로":
       //   return (
