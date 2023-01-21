@@ -31,6 +31,18 @@ export const __getMyPage = createAsyncThunk(
   }
 );
 
+export const __test = createAsyncThunk(
+  "mypage/test",
+  async (data, thunkAPI) => {
+    try {
+      const res = await MypageAPI.test(data);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 // 내 게시글 조회
 export const __getMyposts = createAsyncThunk(
   "mypage/getMyposts",
