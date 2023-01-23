@@ -25,8 +25,12 @@ const PostList = () => {
   const allRef = useRef(null);
   const locationRef = useRef(null);
 
-  const userLocation1 = useSelector((state) => state.mypageSlice.profile.state1)
-  const userLocation2 = useSelector((state) => state.mypageSlice.profile.state2)
+  const userLocation1 = useSelector(
+    (state) => state.mypageSlice.profile?.state1
+  );
+  const userLocation2 = useSelector(
+    (state) => state.mypageSlice.profile?.state2
+  );
   const { isLogin } = useSelector((state) => state.userSlice);
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
@@ -94,7 +98,6 @@ const PostList = () => {
     helperRef.current.style.borderBottom = "4px solid #B4B4B4";
     helpUsRef.current.style.borderBottom = "4px solid #B4B4B4";
     allRef.current.style.borderBottom = "4px solid #B4B4B4";
-
   };
 
   const setBoolLocationTrue = () => {
@@ -115,9 +118,13 @@ const PostList = () => {
     <>
       <StWrapper>
         <StTitleButtonWrapper>
-          <StLocation>{userLocation1}&gt;{userLocation2}</StLocation>
-          <StWriteButton onClick={()=>navigate('/post')}>글쓰기</StWriteButton>
-          </StTitleButtonWrapper>
+          <StLocation>
+            {userLocation1}&gt;{userLocation2}
+          </StLocation>
+          <StWriteButton onClick={() => navigate("/post")}>
+            글쓰기
+          </StWriteButton>
+        </StTitleButtonWrapper>
         <StTabWrapper>
           <StTap ref={allRef} onClick={setBoolAllTrue}>
             전체
@@ -141,16 +148,16 @@ const PostList = () => {
           ) : (
             <>{boolAll ? <AllFalse /> : null}</>
           )}
-            {storeBooLocation ? (
-              <>{boolHelpee ? <HelpeeTrue /> : null}</>
-            ) : (
-              <>{boolHelpee ? <HelpeeFalse /> : null}</>
-            )}
-            {storeBooLocation ? (
-              <>{boolHelper ? <HelperTrue /> : null}</>
-            ) : (
-              <>{boolHelper ? <HelperFalse /> : null}</>
-            )}
+          {storeBooLocation ? (
+            <>{boolHelpee ? <HelpeeTrue /> : null}</>
+          ) : (
+            <>{boolHelpee ? <HelpeeFalse /> : null}</>
+          )}
+          {storeBooLocation ? (
+            <>{boolHelper ? <HelperTrue /> : null}</>
+          ) : (
+            <>{boolHelper ? <HelperFalse /> : null}</>
+          )}
           {storeBooLocation ? (
             <>{boolHelpUs ? <HelpUsTrue /> : null}</>
           ) : (
@@ -168,12 +175,12 @@ const StTabWrapper = styled.div`
   display: flex;
   flex-direction: flex-start;
   width: 100%;
-  max-width:1280px;
+  max-width: 1280px;
   margin: 3em 0 3em 0;
   div {
-    padding-bottom:10px;
-    margin-right:3px;
-    border-bottom: 4px solid #B4B4B4;
+    padding-bottom: 10px;
+    margin-right: 3px;
+    border-bottom: 4px solid #b4b4b4;
   }
 `;
 
@@ -185,30 +192,28 @@ const StCardContainer = styled.div`
   gap: 2.25% 3.125%;
 `;
 const StTap = styled.div`
-  width:100px;
-  color:#B4B4B4;
-  text-align:center;
-`
+  width: 100px;
+  color: #b4b4b4;
+  text-align: center;
+`;
 const StTitleButtonWrapper = styled.div`
-  max-width:1280px;
-  margin-top:50px;
-  width:100%;
-  display:flex;
-  justify-content:space-between
-`
+  max-width: 1280px;
+  margin-top: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
 const StLocation = styled.p`
-font-size:28px;
-color: #EA9DB4
-
-`
+  font-size: 28px;
+  color: #ea9db4;
+`;
 const StWriteButton = styled.button`
-width:150px;
-height:50px;
-font-size:18px;
-font-weight:700;
-color:#fff;
-  background-color: #EA9DB4;
-  border-radius:20px;
-  border:none;
-`
-
+  width: 150px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background-color: #ea9db4;
+  border-radius: 20px;
+  border: none;
+`;
