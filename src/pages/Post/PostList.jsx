@@ -105,10 +105,12 @@ const PostList = () => {
       alert("로그인시 이용할 수 있습니다");
     } else {
       if (storeBooLocation === true) {
-        locationRef.current.style.color = "black";
+        locationRef.current.style.color = "blue";
+        locationRef.current.style.borderBottom = "4px solid blue";
         dispatch(__setBoolLocationFalse());
       } else {
-        locationRef.current.style.color = "blue";
+        locationRef.current.style.borderBottom = "4px solid #B4B4B4";
+        locationRef.current.style.color = "#B4B4B4";
         dispatch(__setBoolLocationTrue());
       }
     }
