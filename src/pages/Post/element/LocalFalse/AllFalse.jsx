@@ -35,17 +35,23 @@ const AllFalse = () => {
 
   return (
     <>
-      {data?.map((item, idx) => {
-        return <Card type={"세로"} data={item} key={idx} />;
-      })}
-      {!isLoading && (
-        <div
-          ref={observerTarget}
-          style={{
-            height: "1px",
-            width: "100%",
-          }}
-        ></div>
+      {data?.length === 0 ? (
+        <p>게시글이 없습니다</p>
+      ) : (
+        <>
+          {data?.map((item, idx) => {
+            return <Card type={"세로"} data={item} key={idx} />;
+          })}
+          {!isLoading && (
+            <div
+              ref={observerTarget}
+              style={{
+                height: "1px",
+                width: "100%",
+              }}
+            ></div>
+          )}
+        </>
       )}
     </>
   );
