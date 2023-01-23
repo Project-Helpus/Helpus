@@ -146,7 +146,7 @@ export const __getHelpeeTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllTrue(searchValue);
+      const res = await PostAPI.getHelpeeTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -214,12 +214,15 @@ const postSlice = createSlice({
       state.boolHelpee = false;
       state.boolHelpUs = false;
       state.boolAll = false;
+      // console.log("작동");
     },
     __setBoolHelpee: (state) => {
       state.boolHelpee = true;
       state.boolHelper = false;
       state.boolHelpUs = false;
       state.boolAll = false;
+      console.log("작동");
+      console.log("storeBool:", state.boolHelpee);
     },
     __setBoolHelpUs: (state) => {
       state.boolHelpUs = true;
