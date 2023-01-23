@@ -4,6 +4,7 @@ const cookie = new Cookies();
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
+  withCredentials: true,
 });
 
 export const ChatAPI = {
@@ -14,7 +15,7 @@ export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
   postUpdate: (id, Form) => client.put(`api/post/${id}`, Form),
   postDelete: (id) => client.delete(`api/post/${id}`),
-  postZZim:(id)=>client.post(`api/wish/${id}`),
+  postZZim: (id) => client.post(`api/wish/${id}`),
   getAllFalse: (count, searchValue) =>
     client.get(
       `api/post/all-location?q=${count}&category=&search=${searchValue}`
@@ -83,17 +84,10 @@ client.interceptors.request.use(
 
 client.interceptors.response.use(
   function (response) {
-    if (response.data.token) {
-      cookie.set("token", response.data.token, { path: "/" });
-    }
     return response;
   },
 
   function (error) {
-    if (error?.response.status === 401) {
-      cookie.remove("token", { path: "/" });
-      return error;
-    }
     return error;
   }
 );
