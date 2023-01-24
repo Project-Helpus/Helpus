@@ -214,15 +214,12 @@ const postSlice = createSlice({
       state.boolHelpee = false;
       state.boolHelpUs = false;
       state.boolAll = false;
-      // console.log("작동");
     },
     __setBoolHelpee: (state) => {
       state.boolHelpee = true;
       state.boolHelper = false;
       state.boolHelpUs = false;
       state.boolAll = false;
-      console.log("작동");
-      console.log("storeBool:", state.boolHelpee);
     },
     __setBoolHelpUs: (state) => {
       state.boolHelpUs = true;

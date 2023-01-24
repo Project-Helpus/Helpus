@@ -146,24 +146,24 @@ const PostList = () => {
         </StTabWrapper>
         <StCardContainer>
           {storeBooLocation ? (
-            <>{boolAll === false || <AllTrue />}</>
+            <>{boolAll && <AllTrue />}</>
           ) : (
-            <>{boolAll === false || <AllFalse />}</>
+            <>{boolAll && <AllFalse />}</>
           )}
           {storeBooLocation ? (
-            <>{boolHelpee === false || <HelpeeTrue />}</>
+            <>{boolHelpee && <HelpeeTrue />}</>
           ) : (
-            <>{boolHelpee === false || <HelpeeFalse />}</>
+            <>{boolHelpee && <HelpeeFalse />}</>
           )}
           {storeBooLocation ? (
-            <>{boolHelper === false || <HelperTrue />}</>
+            <>{boolHelper && <HelperTrue />}</>
           ) : (
-            <>{boolHelper === false || <HelperFalse />}</>
+            <>{boolHelper && <HelperFalse />}</>
           )}
           {storeBooLocation ? (
-            <>{boolHelpUs === false || <HelpUsTrue />}</>
+            <>{boolHelpUs && <HelpUsTrue />}</>
           ) : (
-            <>{boolHelpUs === false || <HelpUsFalse />}</>
+            <>{boolHelpUs && <HelpUsFalse />}</>
           )}
         </StCardContainer>
       </StWrapper>
