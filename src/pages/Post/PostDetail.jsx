@@ -45,7 +45,7 @@ import {
 
 const PostDetail = () => {
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
-  const userId = useSelector((state) => state.mypageSlice.profile?.createrId);
+  const userId = useSelector((state) => state.mypageSlice.profile?.userId);
   const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
   const detail = useSelector((state) => state.postSlice.postInfo);
@@ -86,7 +86,6 @@ const PostDetail = () => {
       e.target.src = fullHeart;
     }
   };
-  console.log("indo:", detail);
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, []);
