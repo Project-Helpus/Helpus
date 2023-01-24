@@ -86,7 +86,6 @@ const PostDetail = () => {
       e.target.src = fullHeart;
     }
   };
-  console.log("indo:", detail);
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, []);
