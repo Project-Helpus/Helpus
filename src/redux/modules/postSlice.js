@@ -146,7 +146,7 @@ export const __getHelpeeTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllTrue(searchValue);
+      const res = await PostAPI.getHelpeeTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();

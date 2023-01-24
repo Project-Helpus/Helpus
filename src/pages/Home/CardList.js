@@ -84,7 +84,7 @@ const CardList = () => {
         </StHelper>
         <StHelpee>
           <StTitle
-            onClick={linkHelper}
+            onClick={linkHelpee}
             onMouseOver={onMouseOverHandlerHelpee}
             onMouseOut={onMouseOutHandlerHelpee}
           >
