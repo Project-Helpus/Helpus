@@ -41,9 +41,8 @@ const PostCreate = () => {
     const file = e.target.files;
     const fileUrl = [];
 
-    // file count
-    if (file.length > 3) {
-      alert("최대 3개 첨부 가능합니다");
+    if (file.length > 10) {
+      alert("최대 10개 까지 첨부 가능합니다");
       return;
     }
 
@@ -67,15 +66,15 @@ const PostCreate = () => {
       const formData = new FormData();
       const day = date.toISOString();
 
+      formData.append("appointed", day);
+      formData.append("tag", tags);
+
       for (const property in input) {
         formData.append(`${property}`, input[property]);
       }
       for (let i = 0; i < img.length; i++) {
-        formData.append("post-image", img[i]);
+        formData.append("post-images", img[i]);
       }
-
-      formData.append("appointed", day);
-      formData.append("tag", tags);
       dispatch(__createPost(formData));
       navigate("/");
     }
