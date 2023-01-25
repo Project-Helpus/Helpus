@@ -243,6 +243,7 @@ const userSlice = createSlice({
     },
     [__kakaoSignOut.fulfilled]: (state, action) => {
       state.isLoginkakao = false;
+      storage.removeItem("persist:root");
     },
     [__kakaoSignOut.rejected]: (state, action) => {
       state.error = false;
@@ -255,6 +256,7 @@ const userSlice = createSlice({
     },
     [__signOut.fulfilled]: (state, action) => {
       state.isLogin = false;
+      storage.removeItem("persist:root");
     },
     [__signOut.rejected]: (state, action) => {
       state.error = false;
