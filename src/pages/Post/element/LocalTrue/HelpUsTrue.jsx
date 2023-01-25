@@ -14,9 +14,15 @@ const HelpUsTrue = () => {
 
   return (
     <>
-      {data?.map((item, idx) => {
-        return <Card type={"세로"} data={item} key={idx} />;
-      })}
+      {data?.length === 0 ? (
+        <p>게시글이 없습니다</p>
+      ) : (
+        <>
+          {data?.map((item, idx) => {
+            return <Card type={"세로"} data={item} key={idx} />;
+          })}
+        </>
+      )}
     </>
   );
 };

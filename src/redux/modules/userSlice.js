@@ -1,16 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserAPI } from "../../api/axios";
-import { Cookies } from "react-cookie";
-const cookie = new Cookies();
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
-  userid: 0,
-  email: "",
-  userName: "",
-  isConfirm: false,
   dupCheck: false,
-  state1: "",
-  state2: "",
   isLogin: false,
   isSignup: false,
   kakaoInfo: "",
@@ -68,6 +61,25 @@ export const __postLogin = createAsyncThunk(
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      window.alert(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// 로그아웃 DELETE
+export const __logout = createAsyncThunk(
+  "user/logout",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await UserAPI.logout();
+      if (res.status === 200) {
+        window.alert("로그아웃 성공");
+        return thunkAPI.fulfillWithValue();
+      } else {
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -149,24 +161,7 @@ export const __signOut = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    __checkLogin: (state) => {
-      if (cookie.get("token")) {
-        state.isLogin = true;
-      } else {
-        state.isLogin = false;
-      }
-    },
-    __logout: (state) => {
-      if ((state.isLogin = true)) {
-        cookie.remove("token", { path: "/" });
-        state.isLogin = false;
-      } else {
-        return;
-      }
-    },
-  },
-
+  reducers: {},
   extraReducers: {
     [__signUp.pending]: (state) => {
       state.isLoading = true;
@@ -191,7 +186,6 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = true;
     },
-
     //__postLogin
     [__postLogin.pending]: (state) => {
       state.isLoading = true;
@@ -202,6 +196,19 @@ const userSlice = createSlice({
       state.userInfo = action.payload;
     },
     [__postLogin.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    //__logout
+    [__logout.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__logout.fulfilled]: (state) => {
+      state.isLoading = false;
+      state.isLogin = false;
+      storage.removeItem("persist:root");
+    },
+    [__logout.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -256,5 +263,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { __checkLogin, __logout } = userSlice.actions;
+export const { __checkLogin } = userSlice.actions;
 export default userSlice.reducer;

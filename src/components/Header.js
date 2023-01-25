@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
-import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
 import { io } from "socket.io-client";
 import theme from "../styles/theme";
@@ -22,7 +21,6 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const profile = useSelector((state) => state.mypageSlice.profile);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
@@ -30,7 +28,7 @@ const Header = () => {
   //로그아웃
   const logoutButton = (e) => {
     e.preventDefault();
-    dispatch(__logout(isLogin));
+    dispatch(__logout());
     navigate("/");
   };
 
@@ -49,7 +47,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    dispatch(__getMyPage());
     if (userInfo?.userId) {
       const socket = io(process.env.REACT_APP_CHAT_SERVER, {
         transports: ["websocket"],
@@ -59,14 +56,9 @@ const Header = () => {
         socket.disconnect();
       };
     }
-  }, [isLogin]);
-
-  //프로필 이미지 불러오기
-  useEffect(() => {
-    dispatch(__getMyPage());
   }, [isLogin, isLoginkakao]);
 
-  useEffect(() => {});
+  //프로필 이미지 불러오기
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -112,8 +104,8 @@ const Header = () => {
               {notifications.length > 0 && <div>{notifications.length}</div>}
             </StButton>
             <StProfile onClick={() => navigate("/mypage")}>
-              <img src={profile?.userImage} alt="" />
-              <span>{profile?.userName} 님</span>
+              <img src={userInfo?.userImage} alt="" />
+              <span>{userInfo?.userName}</span>
             </StProfile>
             <Modal></Modal>
             {/* <button onClick={logoutButton}>로그아웃</button> */}

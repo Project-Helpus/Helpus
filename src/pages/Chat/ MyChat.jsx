@@ -19,7 +19,7 @@ const MyChat = () => {
     io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
   );
   const chatWindow = useRef(null);
-  const { userInfo } = useSelector((state) => state.userSlice);
+  const { userId } = useSelector((state) => state.mypageSlice.profile);
   const { data } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
@@ -42,7 +42,7 @@ const MyChat = () => {
   const sendMsg = () => {
     if (msg !== "") {
       socket.current.emit("send", {
-        userId: userInfo.userId,
+        userId: userId,
         roomId: roomId,
         content: msg,
       });
@@ -67,7 +67,7 @@ const MyChat = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && msg !== "") {
       socket.current.emit("send", {
-        userId: userInfo.userId,
+        userId: userId,
         roomId: roomId,
         content: msg,
       });
@@ -76,7 +76,7 @@ const MyChat = () => {
   };
 
   useEffect(() => {
-    socket.current.emit("login", userInfo?.userId);
+    socket.current.emit("login", userId);
     socket.current.emit("enter", {
       roomId: roomId,
     });
@@ -109,7 +109,7 @@ const MyChat = () => {
           <h2>채팅</h2>
         </StTopContainer>
         {state.data.list.map((el, idx) => {
-          if (el.ownerId === userInfo.userId) {
+          if (el.ownerId === userId) {
             return (
               <StCard
                 key={el.roomId + idx}
@@ -157,7 +157,7 @@ const MyChat = () => {
         </StTopContainer>
         <StChatBox ref={chatWindow}>
           {chatRecord?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === userId) {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
@@ -174,7 +174,7 @@ const MyChat = () => {
             }
           })}
           {newMsg?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === userId) {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
