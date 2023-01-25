@@ -60,6 +60,7 @@ export const __postLogin = createAsyncThunk(
       if (res.status === 200) {
         return thunkAPI.fulfillWithValue(res.data);
       } else {
+        window.alert("가입하신 이메일, 비밀번호와 다릅니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
