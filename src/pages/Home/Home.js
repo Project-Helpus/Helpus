@@ -30,7 +30,7 @@ import { __getWishPost } from "../../redux/modules/mypageSlice";
 import { StFlex } from "./Style/StCardList";
 
 const Home = () => {
-  const data = useSelector((state) => state.postSlice.helpUsFalseDate.result);
+  const data = useSelector((state) => state.postSlice.helpUsFalseDate?.result);
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();

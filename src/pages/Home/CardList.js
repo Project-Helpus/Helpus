@@ -19,10 +19,10 @@ import {
 
 const CardList = () => {
   const HelperData = useSelector(
-    (state) => state.postSlice.helperFalseDate.result
+    (state) => state.postSlice.helperFalseDate?.result
   );
   const HelpeeData = useSelector(
-    (state) => state.postSlice.helpeeFalseDate.result
+    (state) => state.postSlice.helpeeFalseDate?.result
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
