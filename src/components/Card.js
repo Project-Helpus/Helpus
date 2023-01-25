@@ -61,7 +61,7 @@ import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
   const [count, setCount] = useState(1);
 
-  const tag = data.tag.split(",", 3);
+  const tag = data.tag?.split(",", 3);
   const Model = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -100,21 +100,30 @@ const Card = ({ type, data, onClick }) => {
       case "세로":
         return (
           <StColumnCard>
-          <StAllPostWrapper>
-            <StAllPostSquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StAllPostSquarePhoto>
-            <StFlex>
-              <StCirclePhoto src={data.userImage}></StCirclePhoto>
-              <StMarginTop10>
-                <StContentsTitle>{data.title}</StContentsTitle>
-                <StAllPostNickName>{data.userName}</StAllPostNickName>
-              </StMarginTop10>
-            </StFlex>
-            <StFlex>
-              {deadLine === 1 ?  <StEmptyDiv /> : <StAllPostDeadLine>마감</StAllPostDeadLine>}
-              {tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag> })}
-            </StFlex>
+            <StAllPostWrapper>
+              <StAllPostSquarePhoto
+                src={data.imageUrl1}
+                onClick={() => moveDetail(data.postId)}
+              ></StAllPostSquarePhoto>
+              <StFlex>
+                <StCirclePhoto src={data.userImage}></StCirclePhoto>
+                <StMarginTop10>
+                  <StContentsTitle>{data.title}</StContentsTitle>
+                  <StAllPostNickName>{data.userName}</StAllPostNickName>
+                </StMarginTop10>
+              </StFlex>
+              <StFlex>
+                {deadLine === 1 ? (
+                  <StEmptyDiv />
+                ) : (
+                  <StAllPostDeadLine>마감</StAllPostDeadLine>
+                )}
+                {tag.map((item, idx) => {
+                  return <StTag key={idx}>{item}</StTag>;
+                })}
+              </StFlex>
             </StAllPostWrapper>
-            </StColumnCard>
+          </StColumnCard>
         );
       // case "세로":
       //   return (
@@ -245,7 +254,7 @@ const Card = ({ type, data, onClick }) => {
                 </StFlex>
 
                 <StMargin60>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StTag key={idx}>{item}</StTag>;
                   })}
                 </StMargin60>
