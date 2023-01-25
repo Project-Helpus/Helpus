@@ -61,7 +61,7 @@ import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
   const [count, setCount] = useState(1);
 
-  const tag = data.tag.split(",", 3);
+  const tag = data.tag?.split(",", 3);
   const Model = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -254,7 +254,7 @@ const Card = ({ type, data, onClick }) => {
                 </StFlex>
 
                 <StMargin60>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StTag key={idx}>{item}</StTag>;
                   })}
                 </StMargin60>
