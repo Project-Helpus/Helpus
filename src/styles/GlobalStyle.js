@@ -11,7 +11,12 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;  
-    font-family: "Malgun Gothic","맑은 고딕",helvetica,"Apple SD Gothic Neo",sans-serif;  
+    font-family: "Noto Sans KR", "Malgun Gothic","맑은 고딕",helvetica,"Apple SD Gothic Neo",sans-serif; 
+    font-weight: 400;
+    letter-spacing: -0.01em;
+   -webkit-font-smoothin
+    letter-spacing: 0;
+    word-spacing: 0;
   }
 
   button {

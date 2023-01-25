@@ -5,10 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../redux/modules/userSlice";
 import { __getMyPage } from "../redux/modules/mypageSlice";
 import { __giveInput } from "../redux/modules/postSlice";
-import whiteBell from "../asset/whiteBell.svg";
 import { io } from "socket.io-client";
+import theme from "../styles/theme";
+import Modal from "../components/Modal";
 import top_logo from "../asset/top_logo.svg";
 import StButton from "./UI/StButton";
+import icon_search from "../asset/icon_search.svg";
+import icon_bell from "../asset/icon_bell.svg";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -81,19 +84,20 @@ const Header = () => {
       <StSearch onSubmit={searching}>
         <input
           type="text"
-          placeholder="search"
+          placeholder="검색어를 입력해주세요."
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
           }}
-        ></input>
+        />
+        <img src={icon_search} alt="" />
       </StSearch>
       <StBox>
         {!(isLogin || isLoginkakao) && (
           <StBox>
-            <button onClick={() => navigate("/login")}>로그인</button>
-            <span>|</span>
-            <button onClick={() => navigate("/signup")}>회원가입</button>
+            <button onClick={() => navigate("/login")}>
+              로그인 / 회원가입
+            </button>
           </StBox>
         )}
         {(isLogin || isLoginkakao) && (
@@ -104,15 +108,15 @@ const Header = () => {
                 handleRead();
               }}
             >
-              <img src={whiteBell} alt="notification" />
+              <img src={icon_bell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
             </StButton>
             <StProfile onClick={() => navigate("/mypage")}>
               <img src={profile?.userImage} alt="" />
-              <span>{profile?.userName}</span>
+              <span>{profile?.userName} 님</span>
             </StProfile>
-            <span>|</span>
-            <button onClick={logoutButton}>로그아웃</button>
+            <Modal></Modal>
+            {/* <button onClick={logoutButton}>로그아웃</button> */}
           </StBox>
         )}
       </StBox>
@@ -127,17 +131,31 @@ const StHeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 80px;
+  background-color: white;
 `;
 
 const StSearch = styled.form`
+  position: relative;
   input {
-    border: 1px solid #efefef;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 4px;x;
-    height: 46px;
-    border-radius: 7px;
-    outline: none;
+    width: 400px;
+    height: 44px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+    padding-left: 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+  }
+  input::placeholder {
+    color: ${(props) => props.theme.colors.lightGray};
+  }
+  input:focus {
+    outline: ${(props) => props.theme.colors.mainPink};
+  }
+  img {
+    position: absolute;
+    right: 0.8em;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 `;
 const StLogo = styled.div`
@@ -146,25 +164,32 @@ const StLogo = styled.div`
 `;
 const StBox = styled.div`
   display: flex;
-  gap: 15px;
-  padding: 0 15px;
+  padding: 0 18px;
   align-items: center;
+  color: ${(props) => props.theme.colors.middleGray};
   button {
     border: none;
+    font-size: 12px;
     background-color: transparent;
+    border-radius: 100px;
+    font-weight: 600;
+    padding-left: 15px;
   }
   span {
     padding: 0 4px;
+    font-size: 16px;
+    vertical-align: middle;
+    padding-right: 10px;
+    font-weight: 600;
   }
 `;
 
 const StProfile = styled.button`
   text-align: center;
-  line-height: 60px;
   img {
-    width: 25px;
-    height: 25px;
-    border-radius: 100px;
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
     vertical-align: middle;
   }
 `;

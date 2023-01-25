@@ -220,7 +220,7 @@ const SignUp = () => {
             ></input>
 
             <span>{nicknameText}</span>
-            <label>패스워드</label>
+            <label>비밀번호</label>
             <input
               name="password"
               type="password"
@@ -230,7 +230,7 @@ const SignUp = () => {
               autoComplete="off"
             ></input>
             <span>{passwordText}</span>
-            <label></label>
+            <label>비밀번호 확인</label>
             <input
               name="confirm"
               type="password"

@@ -4,6 +4,7 @@ const cookie = new Cookies();
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
+  withCredentials: true,
 });
 
 export const ChatAPI = {
