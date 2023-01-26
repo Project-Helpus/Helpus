@@ -60,7 +60,7 @@ export const __postLogin = createAsyncThunk(
       if (res.status === 200) {
         return thunkAPI.fulfillWithValue(res.data);
       } else {
-        window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
+        window.alert("가입하신 이메일, 비밀번호와 다릅니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -244,6 +244,7 @@ const userSlice = createSlice({
     },
     [__kakaoSignOut.fulfilled]: (state, action) => {
       state.isLoginkakao = false;
+      storage.removeItem("persist:root");
     },
     [__kakaoSignOut.rejected]: (state, action) => {
       state.error = false;
@@ -256,6 +257,7 @@ const userSlice = createSlice({
     },
     [__signOut.fulfilled]: (state, action) => {
       state.isLogin = false;
+      storage.removeItem("persist:root");
     },
     [__signOut.rejected]: (state, action) => {
       state.error = false;
