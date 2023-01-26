@@ -43,17 +43,7 @@ const Header = () => {
     setNotifications([]);
   };
 
-  useEffect(() => {
-    if (userInfo?.userId) {
-      const socket = io(process.env.REACT_APP_CHAT_SERVER, {
-        transports: ["websocket"],
-      });
-      socket.emit("login", userInfo.userId);
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, [isLogin, isLoginkakao]);
+  useEffect(() => {}, [isLogin, isLoginkakao]);
 
   //프로필 이미지 불러오기
 
