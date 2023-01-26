@@ -9,7 +9,6 @@ import {
 } from "../../redux/modules/mypageSlice";
 import {
   __kakaoSignOut,
-  __logout,
   __signOut,
   __kakaoState,
 } from "../../redux/modules/userSlice";
@@ -25,7 +24,7 @@ const MypageDetail = () => {
   //프로필 정보 불러오기
   const profile = useSelector((state) => state.mypageSlice.profile);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
-  const isLogin = useSelector((state) => state.userSlice.isLogin);
+  //const isLogin = useSelector((state) => state.userSlice.isLogin);
 
   //수정 input 넣는 state
   const [input, setInput] = useState({
@@ -106,7 +105,6 @@ const MypageDetail = () => {
   //카카오 탈퇴 버튼
   const kakaosignOutHandler = () => {
     dispatch(__kakaoSignOut());
-    //dispatch(__logout(isLogin));
     alert("탈퇴완료");
     navigate("/");
   };

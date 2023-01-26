@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __logout } from "../redux/modules/userSlice";
 import { __giveInput } from "../redux/modules/postSlice";
 import { io } from "socket.io-client";
-import theme from "../styles/theme";
-import Modal from "../components/Modal";
+import styled from "styled-components";
 import top_logo from "../asset/top_logo.svg";
 import StButton from "./UI/StButton";
 import icon_search from "../asset/icon_search.svg";
 import icon_bell from "../asset/icon_bell.svg";
+import DropdownMenu from "./DropdownMenu";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -24,13 +22,6 @@ const Header = () => {
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
-
-  //로그아웃
-  const logoutButton = (e) => {
-    e.preventDefault();
-    dispatch(__logout());
-    navigate("/");
-  };
 
   //검색 기능
   const searching = (e) => {
@@ -57,8 +48,6 @@ const Header = () => {
       };
     }
   }, [isLogin, isLoginkakao]);
-
-  //프로필 이미지 불러오기
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -103,12 +92,7 @@ const Header = () => {
               <img src={icon_bell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
             </StButton>
-            <StProfile onClick={() => navigate("/mypage")}>
-              <img src={userInfo?.userImage} alt="" />
-              <span>{userInfo?.userName}</span>
-            </StProfile>
-            <Modal></Modal>
-            {/* <button onClick={logoutButton}>로그아웃</button> */}
+            <DropdownMenu />
           </StBox>
         )}
       </StBox>
@@ -161,27 +145,10 @@ const StBox = styled.div`
   color: ${(props) => props.theme.colors.middleGray};
   button {
     border: none;
-    font-size: 12px;
+    font-size: 14px;
     background-color: transparent;
     border-radius: 100px;
     font-weight: 600;
-    padding-left: 15px;
-  }
-  span {
-    padding: 0 4px;
-    font-size: 16px;
-    vertical-align: middle;
-    padding-right: 10px;
-    font-weight: 600;
-  }
-`;
-
-const StProfile = styled.button`
-  text-align: center;
-  img {
-    width: 26px;
-    height: 26px;
-    border-radius: 10px;
-    vertical-align: middle;
+    padding-left: 18px;
   }
 `;

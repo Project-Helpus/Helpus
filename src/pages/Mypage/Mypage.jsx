@@ -9,7 +9,6 @@ import {
 } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
-import theme from "../../styles/theme";
 import heart_fill from "../../asset/heart_fill.svg";
 import heart from "../../asset/heart.svg";
 
@@ -17,10 +16,10 @@ const Mypage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const profile = useSelector((state) => state.mypageSlice.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
-  const data = useSelector((state) => state.mypageSlice.data);
-  const wish = useSelector((state) => state.mypageSlice.wish);
+  const profile = useSelector((state) => state.mypageSlice?.profile);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts?.result);
+  const data = useSelector((state) => state.mypageSlice?.data);
+  const wish = useSelector((state) => state.mypageSlice?.wish);
 
   useEffect(() => {
     dispatch(__getMyPage());
@@ -61,7 +60,7 @@ const Mypage = () => {
             <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-            {data.list?.map((el) => (
+            {data?.list.map((el) => (
               <StChatTitle
                 key={el.roomId}
                 onClick={() => {

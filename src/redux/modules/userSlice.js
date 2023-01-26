@@ -206,6 +206,7 @@ const userSlice = createSlice({
     [__logout.fulfilled]: (state) => {
       state.isLoading = false;
       state.isLogin = false;
+      state.isLoginkakao = false;
       storage.removeItem("persist:root");
     },
     [__logout.rejected]: (state, action) => {
@@ -217,8 +218,9 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
+      state.isLoading = false;
       state.isLoginkakao = true;
-      state.kakaoInfo = action.payload;
+      state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
@@ -229,7 +231,6 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoState.fulfilled]: (state, action) => {
-      state.isLoginkakao = true;
       state.kakaoState = action.payload;
     },
     [__kakaoState.rejected]: (state, action) => {
@@ -263,5 +264,4 @@ const userSlice = createSlice({
   },
 });
 
-export const { __checkLogin } = userSlice.actions;
 export default userSlice.reducer;
