@@ -28,7 +28,6 @@ const Mypage = () => {
     dispatch(__getChat());
     dispatch(__getWishPost());
   }, [dispatch]);
-
   return (
     <StWarp>
       <StProfile>
@@ -61,25 +60,49 @@ const Mypage = () => {
             <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-            {data.list?.map((el) => (
-              <StChatTitle
-                key={el.roomId}
-                onClick={() => {
-                  navigate(`/mypage/chat/${el.roomId}`, {
-                    state: { data: data },
-                  });
-                }}
-              >
-                <StOwnerImageWrap>
-                  <StOwnerImage src={el.ownerImage} alt=""></StOwnerImage>
-                  <StOwnerName>{el.ownerName}</StOwnerName>
-                </StOwnerImageWrap>
-                <StOwnerTextWrap>
-                  <StDate>{el.appointed.split("T")[0]}</StDate>
-                  <StTitle>{el.title}</StTitle>
-                </StOwnerTextWrap>
-              </StChatTitle>
-            ))}
+            {data.list?.map((el) => {
+              if (profile.userId === el.ownerId) {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.senderImage} alt=""></StImage>
+                      <StChatName>{el.senderName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              } else {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.ownerImage} alt=""></StImage>
+                      <StChatName>{el.ownerName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              }
+            })}
           </StChatWrap>
         </div>
         <div>
@@ -176,14 +199,14 @@ const StState = styled.div`
   margin-top: 8px;
 `;
 
-const StOwnerImage = styled.img`
+const StImage = styled.img`
   width: 50px;
   height: 50px;
   box-shadow: 0 0 0 2px #efefef inset;
   padding: 4px;
   border-radius: 100%;
 `;
-const StOwnerName = styled.p`
+const StChatName = styled.p`
   font-size: 14px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
@@ -200,11 +223,11 @@ const StDate = styled.p`
   color: ${(props) => props.theme.colors.middleGray};
 `;
 
-const StOwnerImageWrap = styled.div`
+const StImageWrap = styled.div`
   width: 20%;
   text-align: center;
 `;
-const StOwnerTextWrap = styled.div`
+const StTextWrap = styled.div`
   width: 80%;
 `;
 const StChatTitle = styled.div`
