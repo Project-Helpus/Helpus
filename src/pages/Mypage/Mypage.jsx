@@ -37,7 +37,7 @@ const Mypage = () => {
     dispatch(__getChat());
     dispatch(__getWishPost());
   }, [dispatch]);
-  
+
   return (
     <StWarp>
       <StProfile>
@@ -77,7 +77,7 @@ const Mypage = () => {
             <StheartImg src={lcon_score10} alt=""></StheartImg>
           )}
         </StheartWrap>
-        <StState>{profile?.score}/10점</StState>
+        <StHeartText>{profile?.score}/10점</StHeartText>
         <StState>
           {userInfo?.state1} {userInfo?.state2}
         </StState>
@@ -96,49 +96,49 @@ const Mypage = () => {
             <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-          {chatList.list?.map((el) => {
-            if (userInfo.userId === el.ownerId) {
-              return (
-                <StChatTitle
-                  key={el.roomId}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { data: data },
-                    });
-                  }}
-                >
-                  <StImageWrap>
-                    <StImage src={el.senderImage} alt=""></StImage>
-                    <StChatName>{el.senderName}</StChatName>
-                  </StImageWrap>
-                  <StTextWrap>
-                    <StDate>{el.appointed.split("T")[0]}</StDate>
-                    <StTitle>{el.title}</StTitle>
-                  </StTextWrap>
-                </StChatTitle>
-              );
-            } else {
-              return (
-                <StChatTitle
-                  key={el.roomId}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { data: data },
-                    });
-                  }}
-                >
-                  <StImageWrap>
-                    <StImage src={el.ownerImage} alt=""></StImage>
-                    <StChatName>{el.ownerName}</StChatName>
-                  </StImageWrap>
-                  <StTextWrap>
-                    <StDate>{el.appointed.split("T")[0]}</StDate>
-                    <StTitle>{el.title}</StTitle>
-                  </StTextWrap>
-                </StChatTitle>
-              );
-            }
-          })}
+            {chatList.list?.map((el) => {
+              if (userInfo.userId === el.ownerId) {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.senderImage} alt=""></StImage>
+                      <StChatName>{el.senderName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              } else {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.ownerImage} alt=""></StImage>
+                      <StChatName>{el.ownerName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              }
+            })}
           </StChatWrap>
         </div>
         <div>
@@ -192,6 +192,7 @@ const StProfile = styled.div`
     background-color: ${(props) => props.theme.colors.subPink};
     border: none;
     border-radius: 7px;
+    color: white;
   }
 `;
 
@@ -287,3 +288,7 @@ const StheartWrap = styled.div`
   padding-top: 10px;
 `;
 const StheartImg = styled.img``;
+
+const StHeartText = styled.span`
+  color: ${(props) => props.theme.colors.subPink};
+`;

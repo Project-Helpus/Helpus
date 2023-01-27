@@ -152,7 +152,6 @@ const SignUp = () => {
     }
     formData.delete("confirm");
     dispatch(__signUp(formData));
-    alert("회원가입 완료");
     navigate("/login");
   };
 
@@ -345,7 +344,7 @@ const Stupwrap = styled.div`
       border: 0;
       width: 100%;
       height: 40px;
-      background-color: #ffc3d5;
+      background-color: ${(props) => props.theme.colors.subPink};
       border-radius: 7px;
       color: white;
       margin-top: 12px;
