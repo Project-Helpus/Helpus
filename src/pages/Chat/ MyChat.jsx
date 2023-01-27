@@ -1,25 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { io } from "socket.io-client";
 import { StButton } from "../../components/UI/StIndex";
+import * as chatSocket from "../../utils/socket";
 import arrow_forward from "../../asset/arrow_forward.svg";
 
 const MyChat = () => {
+  const navigate = useNavigate();
   const { roomId } = useParams();
   const { state } = useLocation();
-  const navigate = useNavigate();
-
-  const [invitaionCard, setInvitationCard] = useState(false);
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
-  const socket = useRef(
-    io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
-  );
+  const [invitaionCard, setInvitationCard] = useState(false);
+
+  const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
-  const { userId } = useSelector((state) => state.mypageSlice.profile);
+  const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { data } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
@@ -41,11 +39,14 @@ const MyChat = () => {
 
   const sendMsg = () => {
     if (msg !== "") {
-      socket.current.emit("send", {
-        userId: userId,
-        roomId: roomId,
-        content: msg,
-      });
+      chatSocket.sendMessage(userId, roomId, msg);
+      setMsg("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && msg !== "") {
+      chatSocket.sendMessage(userId, roomId, msg);
       setMsg("");
     }
   };
@@ -64,27 +65,18 @@ const MyChat = () => {
     });
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && msg !== "") {
-      socket.current.emit("send", {
-        userId: userId,
-        roomId: roomId,
-        content: msg,
-      });
-      setMsg("");
-    }
-  };
-
   useEffect(() => {
-    socket.current.emit("login", userId);
-    socket.current.emit("enter", {
-      roomId: roomId,
-    });
+    // connection checking
+    const interval = setInterval(() => console.log(socket.current), 2000);
+
+    chatSocket.loginChat(userId);
+    chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
     });
     return () => {
-      socket.current.disconnect();
+      chatSocket.quitChatRoom(roomId);
+      clearInterval(interval);
     };
   }, []);
 
@@ -92,7 +84,7 @@ const MyChat = () => {
     socket.current.on("broadcast", (data) => {
       setNewMsg((prev) => [...prev, data]);
     });
-    socket.current.emit("read", { roomId: roomId });
+    chatSocket.readMessage(roomId);
   }, [socket.current]);
 
   useEffect(() => {
@@ -111,10 +103,7 @@ const MyChat = () => {
         {state.data.list.map((el, idx) => {
           if (el.ownerId === userId) {
             return (
-              <StCard
-                key={el.roomId + idx}
-                onClick={() => linkOtherChat(el.roomId)}
-              >
+              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -166,7 +155,7 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StSendDiv key={el.chatId}>
+                <StSendDiv key={idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
@@ -183,7 +172,7 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StSendDiv key={el.chatId}>
+                <StSendDiv key={idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
