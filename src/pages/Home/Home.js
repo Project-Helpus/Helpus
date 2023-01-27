@@ -26,7 +26,7 @@ import {
   StTitleWrapper,
   StCarouselWith,
 } from "./Style/StHome";
-import { __getWishPost, __test } from "../../redux/modules/mypageSlice";
+import { __getWishPost } from "../../redux/modules/mypageSlice";
 import { StFlex } from "./Style/StCardList";
 
 const Home = () => {
@@ -78,10 +78,6 @@ const Home = () => {
   }, [dispatch]);
   useEffect(() => {
     dispatch(__getWishPost());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(__test());
   }, [dispatch]);
 
   return (

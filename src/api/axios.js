@@ -60,7 +60,6 @@ export const UserAPI = {
 
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
-  test: () => client.get("/api/user/test"),
   getMyposts: () => client.get("/api/user/myposts"),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),

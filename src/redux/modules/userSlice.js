@@ -300,7 +300,6 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__patchMypage.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.userInfo = { ...state.userInfo, ...action.payload };
     },
     [__patchMypage.rejected]: (state) => {
