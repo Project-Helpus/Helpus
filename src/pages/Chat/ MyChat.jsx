@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { StButton } from "../../components/UI/StIndex";
 import * as chatSocket from "../../utils/socket";
 import arrow_forward from "../../asset/arrow_forward.svg";
+import AppointmentCard from "./element/AppointmentCard"
 
 const MyChat = () => {
   const navigate = useNavigate();
@@ -23,8 +24,9 @@ const MyChat = () => {
   const { chatList } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
+    
     const chat = new Date(time).toLocaleTimeString();
-    return chat;
+    return chat.split(":",2)[0]+":"+chat.split(":",2)[1];
   };
 
   const changeInputHandler = (e) => {
@@ -56,6 +58,7 @@ const MyChat = () => {
   const sendAppointment = () => {
     if (window.confirm("확정 하시겠습니까?")) {
       chatSocket.appointment(userId, roomId);
+      setInvitationCard(!invitaionCard);
     }
   };
 
@@ -64,6 +67,12 @@ const MyChat = () => {
       chatSocket.deleteChatRoom(roomId);
     }
   };
+
+  const completeBoard = () => {
+    if (window.confirm("재능 기부가 끝났나요?")) {
+      
+    }
+  }
 
   useEffect(() => {
     chatSocket.loginChat(userId);
@@ -112,7 +121,7 @@ const MyChat = () => {
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
                 <StCol>
-                  <span>{el.title}</span>
+                  <StPostTitle>{el.title}</StPostTitle>
                   <span>{el.senderName}</span>
                 </StCol>
                 <StCol></StCol>
@@ -132,7 +141,7 @@ const MyChat = () => {
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
                 <StCol>
-                  <span>{el.title}</span>
+                  <StPostTitle>{el.title}</StPostTitle>
                   <span>{el.ownerName}</span>
                 </StCol>
               </StCard>
@@ -147,13 +156,9 @@ const MyChat = () => {
           </StBackBtn>
           <StAppointment>
             <span>약속날짜</span>
-
-            <StButton mode="pinkSmBtn" onClick={sendAppointment}>
-              약속하기
-            </StButton>
-            <StButton mode="pinkSmBtn">취소하기</StButton>
+            {invitaionCard ? <StButton mode="pinkSmBtn">취소하기</StButton> : <StButton mode="pinkSmBtn" onClick={sendAppointment}>약속하기</StButton>}
+        
             <StButton mode="yellowSmBtn">완료</StButton>
-
             <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
               나가기
             </StButton>
@@ -161,13 +166,17 @@ const MyChat = () => {
         </StTopContainer>
         <StChatBox ref={chatWindow}>
           {chatRecord?.map((el, idx) => {
-            if (el.userId === userId) {
+            if (el.userId === userId && el.content !== "`card`0") {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
               );
+            } else if (el.userId === userId && el.content === "`card`0") {
+              return  <StReceiveDiv><AppointmentCard/></StReceiveDiv>
+            } else if (el.userId !== userId && el.content === "`card`0") {
+              return  <StSendDiv><AppointmentCard/></StSendDiv>
             } else {
               return (
                 <StSendDiv key={idx}>
@@ -186,9 +195,9 @@ const MyChat = () => {
                 </StReceiveDiv>
               );
             } else if (el.userId === userId && el.content === "`card`0") {
-              return <div>카드!!!</div>;
+              return  <StReceiveDiv><AppointmentCard/></StReceiveDiv>
             } else if (el.userId !== userId && el.content === "`card`0") {
-              return <div>카드!!!</div>;
+              return  <StSendDiv><AppointmentCard/></StSendDiv>
             } else {
               return (
                 <StSendDiv key={idx}>
@@ -198,6 +207,7 @@ const MyChat = () => {
               );
             }
           })}
+        
         </StChatBox>
         <StInputBox>
           <StInput
@@ -218,7 +228,7 @@ const StContainer = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
-  flex-diretion: row;
+  flex-direction: row;
   margin: 2em 0 2em 0;
 `;
 
@@ -250,6 +260,14 @@ const StChatBox = styled.div`
   row-gap: 1em;
   background-color: white;
   overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const StPostTitle = styled.span`
+  font-weight: 700;
 `;
 
 const Avatar = styled.div`
@@ -270,6 +288,7 @@ const StCard = styled.article`
   flex-direction: row;
   width: 100%;
   padding: 12px 20px;
+  gap: 4px;
   background: transparent;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -341,6 +360,7 @@ const StSendBtn = styled.button`
 const StCol = styled.div`
   display: flex;
   flex-direction: column;
+  gap:4px;
 `;
 
 const StBackBtn = styled.button`

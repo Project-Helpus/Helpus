@@ -6,6 +6,7 @@ import { StButton } from "../../components/UI/StIndex";
 import { __getChat } from "../../redux/modules/mypageSlice";
 import * as chatSocket from "../../utils/socket";
 import arrow_forward from "../../asset/arrow_forward.svg";
+import AppointmentCard from './element/AppointmentCard';
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -170,6 +171,9 @@ const Chat = () => {
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
               );
+            } else if (el.userId !== userId && el.content === "`card`0") {
+              
+              return <AppointmentCard/>;
             } else {
               return (
                 <StSendDiv key={idx}>
@@ -199,7 +203,7 @@ const StContainer = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
-  flex-diretion: row;
+  flex-direction: row;
   margin: 2em 0 2em 0;
 `;
 
@@ -231,6 +235,10 @@ const StChatBox = styled.div`
   row-gap: 1em;
   background-color: white;
   overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Avatar = styled.div`
