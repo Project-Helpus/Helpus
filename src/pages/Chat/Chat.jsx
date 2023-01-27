@@ -13,7 +13,7 @@ const Chat = () => {
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { postId } = useParams();
   const { ownerId } = useParams();
-  const { data } = useSelector((state) => state.mypageSlice);
+  const { chatList } = useSelector((state) => state.mypageSlice);
 
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
@@ -42,7 +42,6 @@ const Chat = () => {
 
   const sendByBtn = (e) => {
     if (msg !== "") {
-
       chatSocket.sendMessage(userId, roomId, msg);
       setMsg("");
     }
@@ -57,14 +56,11 @@ const Chat = () => {
 
   const linkChatRoom = () => {
     navigate(`/mypage/chat/${roomId}`, {
-      state: { data: data },
+      state: { chatList: chatList },
     });
   };
 
   useEffect(() => {
-    // connection checking
-    const interval = setInterval(() => console.log(socket.current), 2000);
-
     chatSocket.loginChat(userId);
     chatSocket.openChatRoom(userId, postId, ownerId);
     socket.current.on("roomId", (data) => {
@@ -75,7 +71,6 @@ const Chat = () => {
     });
     return () => {
       chatSocket.quitChatRoom(roomId);
-      clearInterval(interval);
     };
   }, []);
 
@@ -103,7 +98,7 @@ const Chat = () => {
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {data?.list?.map((el, idx) => {
+        {chatList?.list.map((el, idx) => {
           if (el.ownerId === userId) {
             return (
               <StCard key={idx} onClick={linkChatRoom}>

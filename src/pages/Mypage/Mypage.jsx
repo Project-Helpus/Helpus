@@ -37,7 +37,7 @@ const Mypage = () => {
     dispatch(__getChat());
     dispatch(__getWishPost());
   }, [dispatch]);
-  
+
   return (
     <StWarp>
       <StProfile>
@@ -96,49 +96,49 @@ const Mypage = () => {
             <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-          {chatList.list?.map((el) => {
-            if (userInfo.userId === el.ownerId) {
-              return (
-                <StChatTitle
-                  key={el.roomId}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { data: data },
-                    });
-                  }}
-                >
-                  <StImageWrap>
-                    <StImage src={el.senderImage} alt=""></StImage>
-                    <StChatName>{el.senderName}</StChatName>
-                  </StImageWrap>
-                  <StTextWrap>
-                    <StDate>{el.appointed.split("T")[0]}</StDate>
-                    <StTitle>{el.title}</StTitle>
-                  </StTextWrap>
-                </StChatTitle>
-              );
-            } else {
-              return (
-                <StChatTitle
-                  key={el.roomId}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { data: data },
-                    });
-                  }}
-                >
-                  <StImageWrap>
-                    <StImage src={el.ownerImage} alt=""></StImage>
-                    <StChatName>{el.ownerName}</StChatName>
-                  </StImageWrap>
-                  <StTextWrap>
-                    <StDate>{el.appointed.split("T")[0]}</StDate>
-                    <StTitle>{el.title}</StTitle>
-                  </StTextWrap>
-                </StChatTitle>
-              );
-            }
-          })}
+            {chatList.list?.map((el) => {
+              if (userInfo.userId === el.ownerId) {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { chatList: chatList },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.senderImage} alt=""></StImage>
+                      <StChatName>{el.senderName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              } else {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { chatList: chatList },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.ownerImage} alt=""></StImage>
+                      <StChatName>{el.ownerName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              }
+            })}
           </StChatWrap>
         </div>
         <div>

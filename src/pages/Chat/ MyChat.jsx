@@ -18,7 +18,7 @@ const MyChat = () => {
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const { userId } = useSelector((state) => state.userSlice.userInfo);
-  const { data } = useSelector((state) => state.mypageSlice);
+  const { chatList } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -59,16 +59,7 @@ const MyChat = () => {
     );
   };
 
-  const linkOtherChat = (roomId) => {
-    navigate(`/mypage/chat/${roomId}`, {
-      state: { data: data },
-    });
-  };
-
   useEffect(() => {
-    // connection checking
-    const interval = setInterval(() => console.log(socket.current), 2000);
-
     chatSocket.loginChat(userId);
     chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
@@ -76,9 +67,8 @@ const MyChat = () => {
     });
     return () => {
       chatSocket.quitChatRoom(roomId);
-      clearInterval(interval);
     };
-  }, []);
+  }, [roomId]);
 
   useEffect(() => {
     socket.current.on("broadcast", (data) => {
@@ -100,10 +90,17 @@ const MyChat = () => {
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {state.data.list.map((el, idx) => {
+        {state?.chatList.list.map((el, idx) => {
           if (el.ownerId === userId) {
             return (
-              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
+              <StCard
+                key={idx}
+                onClick={() =>
+                  navigate(`/mypage/chat/${el.roomId}`, {
+                    state: { chatList: chatList },
+                  })
+                }
+              >
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
                 </Avatar>
@@ -116,7 +113,14 @@ const MyChat = () => {
             );
           } else {
             return (
-              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
+              <StCard
+                key={idx}
+                onClick={() =>
+                  navigate(`/mypage/chat/${el.roomId}`, {
+                    state: { chatList: chatList },
+                  })
+                }
+              >
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
@@ -131,7 +135,7 @@ const MyChat = () => {
       </StChatList>
       <StInnerBox>
         <StTopContainer>
-          <StBackBtn onClick={() => navigate(-1)}>
+          <StBackBtn onClick={() => navigate("/mypage")}>
             <img src={arrow_forward} alt="back_button" />
           </StBackBtn>
           <StAppointment>
