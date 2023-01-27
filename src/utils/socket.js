@@ -45,3 +45,15 @@ export const readMessage = (roomId) => {
 export const quitChatRoom = (roomId) => {
   socket.emit("leave", { roomId: roomId });
 };
+
+export const deleteChatRoom = (roomId) => {
+  socket.emit("deleteRoom", { roomId: roomId });
+};
+
+export const appointment = (userId, roomId) => {
+  socket.emit("send", {
+    userId: userId,
+    roomId: roomId,
+    content: "`card`0",
+  });
+};
