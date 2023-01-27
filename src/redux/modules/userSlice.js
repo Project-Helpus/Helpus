@@ -239,6 +239,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isLogin = false;
       state.isLoginkakao = false;
+      state = initialState;
       storage.removeItem("persist:root");
     },
     [__logout.rejected]: (state, action) => {
