@@ -47,12 +47,11 @@ const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { userId } = useSelector((state) => state.mypageSlice.userInfo);
+  const { userId } = useSelector((state) => state.userSlice.userInfo);
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
   const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
   const detail = useSelector((state) => state.postSlice.postInfo);
-
   const curr = new Date(detail.appointed);
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
   const kRTimeDiff = 9 * 60 * 60 * 1000;
@@ -92,7 +91,7 @@ const PostDetail = () => {
   }, []);
 
   useEffect(() => {}, [deadLine]);
-
+  console.log(userId, detail.userId);
   return (
     <StWrapper>
       <StContainer>
@@ -101,7 +100,7 @@ const PostDetail = () => {
             <img src={arrow_forward} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {userId !== detail.userId || (
+            {userId === detail?.userId && (
               <>
                 {deadLine === 2 ? (
                   <>
@@ -116,12 +115,12 @@ const PostDetail = () => {
                 )}
               </>
             )}
-            {userId !== detail.userId || (
+            {userId === detail?.userId && (
               <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
             )}
-            {logedIn === false || (
+            {logedIn && (
               <>
-                {userId !== detail.userId || (
+                {userId === detail.userId && (
                   <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
                 )}
               </>
@@ -130,14 +129,14 @@ const PostDetail = () => {
         </StSpaceBetween>
         <StUserInfo>
           <StFlex>
-            <StProfile src={detail.userImage}></StProfile>
+            <StProfile src={detail?.userImage}></StProfile>
             <div>
               <StFlex>
-                <StTitle>{detail.title}</StTitle>
+                <StTitle>{detail?.title}</StTitle>
               </StFlex>
-              <div>{detail.userName}</div>
+              <div>{detail?.userName}</div>
               <StLocation>
-                {detail.location1}&gt;{detail.location2}
+                {detail?.location1}&gt;{detail?.location2}
               </StLocation>
             </div>
           </StFlex>
@@ -148,9 +147,9 @@ const PostDetail = () => {
           </StInnerRowBox>
         </StProfileBox>
         <StGroupImgs>
-          <StImage src={detail.imageUrl1} />
-          <StImage src={detail.imageUrl2} />
-          <StImage src={detail.imageUrl3} />
+          <StImage src={detail?.imageUrl1} />
+          <StImage src={detail?.imageUrl2} />
+          <StImage src={detail?.imageUrl3} />
         </StGroupImgs>
         <StFlex>
           {tag?.map((item, idx) => {
@@ -159,13 +158,13 @@ const PostDetail = () => {
         </StFlex>
         <p>{detail.content}</p>
         <StFlex></StFlex>
-        {logedIn === false || (
+        {logedIn && (
           <>
-            {detail.userId !== userId && (
+            {userId !== detail?.userId && (
               <StBtnBox>
                 <StChatBtn
                   onClick={() => {
-                    navigate(`/chat/${postId}/${detail.userId}`);
+                    navigate(`/chat/${postId}/${detail?.userId}`);
                   }}
                 >
                   문의하기
