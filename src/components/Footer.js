@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import logo_heart from "../asset/logo_heart.svg";
 import helpus from "../asset/Helpus.svg";
-import theme from "../styles/theme";
 import { useLocation } from "react-router-dom";
 
 const Footer = () => {

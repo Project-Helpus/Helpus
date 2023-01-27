@@ -2,10 +2,11 @@ import "styled-components";
 
 const theme = {
   colors: {
-    mainPink: "#FFC3D5",
-    yellow: "#FFCD4D",
-    middleGray: "#7C7C7C",
-    lightGray: "#B1B1B1",
+    mainPink: "#E8447F",
+    yellow: "#FED441",
+    middleGray: "#747474",
+    lightGray: "#CECECE",
+    gray: "#F5F5F5",
     subPink: "#EA9DB4",
     basicBlue: "#00C2FF",
     greenBlue: "#40F5EB",
