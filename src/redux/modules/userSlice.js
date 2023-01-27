@@ -7,7 +7,14 @@ const initialState = {
   isLogin: false,
   isSignup: false,
   kakaoInfo: "",
-  userInfo: "",
+  userInfo: {
+    userImage: "",
+    userName: "",
+    userId: 0,
+    email: "",
+    state1: "",
+    state2: "",
+  },
   kakaoState: "",
   isLoginkakao: false,
   isLoading: false,
@@ -156,6 +163,31 @@ export const __signOut = createAsyncThunk(
     }
   }
 );
+// 마이페이지 프로필 수정
+export const __patchMypage = createAsyncThunk(
+  "mypage/patchMypage",
+  async (data, thunkAPI) => {
+    try {
+      const res = await UserAPI.patchMypage(data);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+// 마이페이지 프로필 이미지 수정
+export const __userImage = createAsyncThunk(
+  "mypage/userImage",
+  async (data, thunkAPI) => {
+    try {
+      const res = await UserAPI.userImage(data);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 //slice 데이터 저장
 const userSlice = createSlice({
@@ -262,6 +294,27 @@ const userSlice = createSlice({
     [__signOut.rejected]: (state, action) => {
       state.error = false;
       state.error = action.payload;
+    },
+    //프로필 수정
+    [__patchMypage.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__patchMypage.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.userInfo = { ...state.userInfo, ...action.payload };
+    },
+    [__patchMypage.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    //프로필 이미지 수정
+    [__userImage.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__userImage.fulfilled]: (state, action) => {
+      state.userInfo = { ...state.userInfo, ...action.payload };
+    },
+    [__userImage.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });

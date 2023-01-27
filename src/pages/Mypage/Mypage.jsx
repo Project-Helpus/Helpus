@@ -9,8 +9,16 @@ import {
 } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
-import heart_fill from "../../asset/heart_fill.svg";
-import heart from "../../asset/heart.svg";
+import lcon_score1 from "../../asset/lcon_score1.svg";
+import lcon_score2 from "../../asset/lcon_score2.svg";
+import lcon_score3 from "../../asset/lcon_score3.svg";
+import lcon_score4 from "../../asset/lcon_score4.svg";
+import lcon_score5 from "../../asset/lcon_score5.svg";
+import lcon_score6 from "../../asset/lcon_score6.svg";
+import lcon_score7 from "../../asset/lcon_score7.svg";
+import lcon_score8 from "../../asset/lcon_score8.svg";
+import lcon_score9 from "../../asset/lcon_score9.svg";
+import lcon_score10 from "../../asset/lcon_score10.svg";
 
 const Mypage = () => {
   const dispatch = useDispatch();
@@ -19,7 +27,9 @@ const Mypage = () => {
   const profile = useSelector((state) => state.mypageSlice?.profile);
   const myPosts = useSelector((state) => state.mypageSlice.myPosts?.result);
   const data = useSelector((state) => state.mypageSlice?.data);
+  const chatList = useSelector((state) => state.mypageSlice?.chatList);
   const wish = useSelector((state) => state.mypageSlice?.wish);
+  const { userInfo } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
     dispatch(__getMyPage());
@@ -32,18 +42,44 @@ const Mypage = () => {
     <StWarp>
       <StProfile>
         <StProfileImg src={profile?.userImage} alt="" />
-        <StName>{profile?.userName}</StName>
+        <StName>{userInfo?.userName}</StName>
         <StEmail>{profile?.email}</StEmail>
         <StheartWrap>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart} alt=""></StheartImg>
-          <StheartImg src={heart} alt=""></StheartImg>
+          {profile?.score === 0 && <span>평가없음</span>}
+          {profile?.score === 1 && (
+            <StheartImg src={lcon_score1} alt=""></StheartImg>
+          )}
+          {profile?.score === 2 && (
+            <StheartImg src={lcon_score2} alt=""></StheartImg>
+          )}
+          {profile?.score === 3 && (
+            <StheartImg src={lcon_score3} alt=""></StheartImg>
+          )}
+          {profile?.score === 4 && (
+            <StheartImg src={lcon_score4} alt=""></StheartImg>
+          )}
+          {profile?.score === 5 && (
+            <StheartImg src={lcon_score5} alt=""></StheartImg>
+          )}
+          {profile?.score === 6 && (
+            <StheartImg src={lcon_score6} alt=""></StheartImg>
+          )}
+          {profile?.score === 7 && (
+            <StheartImg src={lcon_score7} alt=""></StheartImg>
+          )}
+          {profile?.score === 8 && (
+            <StheartImg src={lcon_score8} alt=""></StheartImg>
+          )}
+          {profile?.score === 9 && (
+            <StheartImg src={lcon_score9} alt=""></StheartImg>
+          )}
+          {profile?.score === 10 && (
+            <StheartImg src={lcon_score10} alt=""></StheartImg>
+          )}
         </StheartWrap>
         <StState>{profile?.score}/10점</StState>
         <StState>
-          {profile?.state1} {profile?.state2}
+          {userInfo?.state1} {userInfo?.state2}
         </StState>
         <button
           onClick={() => {
@@ -60,25 +96,49 @@ const Mypage = () => {
             <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-            {data?.list.map((el) => (
-              <StChatTitle
-                key={el.roomId}
-                onClick={() => {
-                  navigate(`/mypage/chat/${el.roomId}`, {
-                    state: { data: data },
-                  });
-                }}
-              >
-                <StOwnerImageWrap>
-                  <StOwnerImage src={el.ownerImage} alt=""></StOwnerImage>
-                  <StOwnerName>{el.ownerName}</StOwnerName>
-                </StOwnerImageWrap>
-                <StOwnerTextWrap>
-                  <StDate>{el.appointed.split("T")[0]}</StDate>
-                  <StTitle>{el.title}</StTitle>
-                </StOwnerTextWrap>
-              </StChatTitle>
-            ))}
+            {chatList.list?.map((el) => {
+              if (userInfo.userId === el.ownerId) {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.senderImage} alt=""></StImage>
+                      <StChatName>{el.senderName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              } else {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { data: data },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.ownerImage} alt=""></StImage>
+                      <StChatName>{el.ownerName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              }
+            })}
           </StChatWrap>
         </div>
         <div>
@@ -110,6 +170,7 @@ export default Mypage;
 
 const StWarp = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
   margin: 0 auto;
 `;
@@ -175,14 +236,14 @@ const StState = styled.div`
   margin-top: 8px;
 `;
 
-const StOwnerImage = styled.img`
+const StImage = styled.img`
   width: 50px;
   height: 50px;
   box-shadow: 0 0 0 2px #efefef inset;
   padding: 4px;
   border-radius: 100%;
 `;
-const StOwnerName = styled.p`
+const StChatName = styled.p`
   font-size: 14px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
@@ -199,17 +260,16 @@ const StDate = styled.p`
   color: ${(props) => props.theme.colors.middleGray};
 `;
 
-const StOwnerImageWrap = styled.div`
+const StImageWrap = styled.div`
   width: 20%;
   text-align: center;
 `;
-const StOwnerTextWrap = styled.div`
+const StTextWrap = styled.div`
   width: 80%;
 `;
 const StChatTitle = styled.div`
   display: flex;
   width: 33.33%;
-
   margin-bottom: 24px;
 `;
 
@@ -226,8 +286,4 @@ const StheartWrap = styled.div`
   gap: 4px;
   padding-top: 10px;
 `;
-const StheartImg = styled.img`
-  width: 20px;
-  height: 20px;
-  border-radius: 0px;
-`;
+const StheartImg = styled.img``;

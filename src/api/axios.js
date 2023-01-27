@@ -54,6 +54,8 @@ export const UserAPI = {
   logout: () => client.delete("/api/token"),
   kakaoSignOut: () => client.delete("/api/user/delete/kakao"),
   signOut: () => client.delete("/api/user/delete"),
+  patchMypage: (userData) => client.patch("api/user/detail", userData),
+  userImage: (formData) => client.patch("api/user/image", formData),
 };
 
 export const MypageAPI = {
@@ -62,8 +64,6 @@ export const MypageAPI = {
   getMyposts: () => client.get("/api/user/myposts"),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),
-  patchMypage: (userData) => client.patch("api/user/detail", userData),
-  userImage: (formData) => client.patch("api/user/image", formData),
   patchPassword: (changePassword) =>
     client.patch("api/user/password", changePassword),
   getUserPage: (userId) => client.get(`/api/user/${userId}/detail`),
