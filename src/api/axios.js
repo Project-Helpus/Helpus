@@ -6,7 +6,7 @@ export const client = axios.create({
 });
 
 export const ChatAPI = {
-  // ChatAPI
+  patchScore: (userId) => client.patch(`api/score/${userId}`)
 };
 
 export const PostAPI = {

@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ChatAPI } from '../../api/axios';
 
-export const __function = createAsyncThunk(
+export const __score = createAsyncThunk(
   "mypageSlice/",
-  async (data, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const response = ChatAPI(data);
+      const res= ChatAPI.patchScore(userId);
       return thunkAPI.fulfillWithValue();
     } catch (err) {
       return thunkAPI.rejectWithValue();
