@@ -60,6 +60,12 @@ const Chat = () => {
     });
   };
 
+  const deleteChatRoom = () => {
+    if (window.confirm("채팅방을 나가시겠습니까?")) {
+      chatSocket.deleteChatRoom(roomId);
+    }
+  };
+
   useEffect(() => {
     chatSocket.loginChat(userId);
     chatSocket.openChatRoom(userId, postId, ownerId);
@@ -133,7 +139,9 @@ const Chat = () => {
             <img src={arrow_forward} alt="back_button" />
           </StBackBtn>
           <StAppointment>
-            <StButton mode="orangeSmBtn">나가기</StButton>
+            <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
+              나가기
+            </StButton>
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>

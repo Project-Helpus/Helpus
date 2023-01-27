@@ -13,6 +13,8 @@ const MyChat = () => {
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
+
+  const [ownerInfo, setOwner] = useState({});
   const [invitaionCard, setInvitationCard] = useState(false);
 
   const socket = useRef(chatSocket.socket);
@@ -51,12 +53,16 @@ const MyChat = () => {
     }
   };
 
-  const sendAppointmentCard = () => {
-    return (
-      <StInvitation>
-        <button>수락</button>
-      </StInvitation>
-    );
+  const sendAppointment = () => {
+    if (window.confirm("확정 하시겠습니까?")) {
+      chatSocket.appointment(userId, roomId);
+    }
+  };
+
+  const deleteChatRoom = () => {
+    if (window.confirm("채팅방을 나가시겠습니까?")) {
+      chatSocket.deleteChatRoom(roomId);
+    }
   };
 
   useEffect(() => {
@@ -65,6 +71,7 @@ const MyChat = () => {
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
     });
+
     return () => {
       chatSocket.quitChatRoom(roomId);
     };
@@ -90,7 +97,7 @@ const MyChat = () => {
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {state?.chatList.list.map((el, idx) => {
+        {state.chatList?.list.map((el, idx) => {
           if (el.ownerId === userId) {
             return (
               <StCard
@@ -140,12 +147,16 @@ const MyChat = () => {
           </StBackBtn>
           <StAppointment>
             <span>약속날짜</span>
-            <StButton mode="pinkSmBtn" onClick={sendAppointmentCard}>
+
+            <StButton mode="pinkSmBtn" onClick={sendAppointment}>
               약속하기
             </StButton>
             <StButton mode="pinkSmBtn">취소하기</StButton>
-            <StButton mode="orangeSmBtn">나가기</StButton>
             <StButton mode="yellowSmBtn">완료</StButton>
+
+            <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
+              나가기
+            </StButton>
           </StAppointment>
         </StTopContainer>
         <StChatBox ref={chatWindow}>
@@ -167,13 +178,17 @@ const MyChat = () => {
             }
           })}
           {newMsg?.map((el, idx) => {
-            if (el.userId === userId) {
+            if (el.userId === userId && el.content !== "`card`0") {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
                   <StChatReceive>{el.content}</StChatReceive>
                 </StReceiveDiv>
               );
+            } else if (el.userId === userId && el.content === "`card`0") {
+              return <div>카드!!!</div>;
+            } else if (el.userId !== userId && el.content === "`card`0") {
+              return <div>카드!!!</div>;
             } else {
               return (
                 <StSendDiv key={idx}>
@@ -259,14 +274,6 @@ const StCard = styled.article`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
-`;
-
-const StDropdownBtn = styled.button`
-  height: 30px;
-  margin-right: 10px;
-  background: transparent;
-  border: 0;
-  outline: 0;
 `;
 
 const StAppointment = styled.div`
