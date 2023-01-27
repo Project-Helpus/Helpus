@@ -44,14 +44,15 @@ import {
 } from "./StPostDetail";
 
 const PostDetail = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { postId } = useParams();
+  const { userId } = useSelector((state) => state.mypageSlice.userInfo);
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
-  const userId = useSelector((state) => state.mypageSlice.profile?.userId);
   const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
   const detail = useSelector((state) => state.postSlice.postInfo);
-  const navigate = useNavigate();
-  const { postId } = useParams();
-  const dispatch = useDispatch();
+
   const curr = new Date(detail.appointed);
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
   const kRTimeDiff = 9 * 60 * 60 * 1000;
