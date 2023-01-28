@@ -71,6 +71,11 @@ export const StAppointment = styled.div`
   align-items: center;
   gap: 24px;
 `;
+export const StAppointedDay = styled.div`
+  padding: 12px 14px;
+  background-color: white;
+  border-radius: 10px;
+`;
 export const StSendDiv = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -100,6 +105,7 @@ export const StInputBox = styled.div`
   justify-content: center;
   align-items: center;
   background-color: white;
+  border-radius: 0 0 10px 10px;
   img {
     position: absolute;
     top: 25%;
