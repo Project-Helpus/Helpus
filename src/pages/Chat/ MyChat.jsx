@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,29 +8,35 @@ import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_a_photo from "../../asset/add_a_photo.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
+import { __getChat } from "../../redux/modules/mypageSlice";
+import { __getSenderInfo } from "./../../redux/modules/chatSlice";
 
 const MyChat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { state } = useLocation();
+  const { userId } = useSelector((state) => state.userSlice.userInfo);
+  const { chatList } = useSelector((state) => state.mypageSlice);
+  const [ownerInfo, setOwner] = useState({});
   const [image, setImage] = useState("");
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
-
-  const [ownerInfo, setOwner] = useState({});
-  const [invitaionCard, setInvitationCard] = useState(false);
+  const [invitationCard, setInvitationCard] = useState(false);
 
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
-  const { userId } = useSelector((state) => state.userSlice.userInfo);
-  const { chatList } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
     return chat.split(":", 2)[0] + ":" + chat.split(":", 2)[1];
+  };
+
+  const appointedTime = (time) => {
+    const chat = time.split("T", 1);
+    return chat;
   };
 
   const changeInputHandler = (e) => {
@@ -65,13 +70,18 @@ const MyChat = () => {
   const sendAppointment = () => {
     if (window.confirm("확정 하시겠습니까?")) {
       chatSocket.appointment(userId, roomId);
-      setInvitationCard(!invitaionCard);
+      setInvitationCard(!invitationCard);
     }
   };
 
-  const deleteChatRoom = () => {
+  console.log(state);
+  const deleteChatRoom = async () => {
     if (window.confirm("채팅방을 나가시겠습니까?")) {
-      chatSocket.deleteChatRoom(roomId);
+      const res = await chatSocket
+        .deleteChatRoom(roomId, userId, state.chatInfo.leave)
+        .then((res) => {
+          navigate("mypage");
+        });
     }
   };
 
@@ -81,12 +91,12 @@ const MyChat = () => {
   };
 
   useEffect(() => {
+    dispatch(__getChat());
     chatSocket.loginChat(userId);
     chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
     });
-
     return () => {
       chatSocket.quitChatRoom(roomId);
     };
@@ -113,14 +123,14 @@ const MyChat = () => {
           <StChat.StTopContainer>
             <StChat.StTitle>채팅</StChat.StTitle>
           </StChat.StTopContainer>
-          {state.chatList?.list.map((el, idx) => {
+          {chatList.list?.map((el, idx) => {
             if (el.ownerId === userId) {
               return (
                 <StChat.StCard
                   key={idx}
                   onClick={() =>
                     navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { chatList: chatList },
+                      state: { chatInfo: el },
                     })
                   }
                 >
@@ -141,7 +151,7 @@ const MyChat = () => {
                   key={idx}
                   onClick={() =>
                     navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { chatList: chatList },
+                      state: { chatInfo: el },
                     })
                   }
                 >
@@ -164,8 +174,10 @@ const MyChat = () => {
               <img src={arrow_forward_pink} alt="back_button" />
             </StChat.StBackBtn>
             <StChat.StAppointment>
-              <span>약속날짜</span>
-              {invitaionCard ? (
+              <StChat.StAppointedDay>
+                {appointedTime(state.chatInfo.appointed)}
+              </StChat.StAppointedDay>
+              {invitationCard ? (
                 <StButton mode="pinkSmBtn">취소하기</StButton>
               ) : (
                 <StButton mode="pinkSmBtn" onClick={sendAppointment}>

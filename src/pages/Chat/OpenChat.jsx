@@ -36,6 +36,11 @@ const OpenChat = () => {
     return chat;
   };
 
+  const appointedTime = (time) => {
+    const chat = time.split("T", 1);
+    return chat;
+  };
+
   const moveScrollToReceiveMessage = useCallback(() => {
     if (chatWindow.current) {
       chatWindow.current.scrollTo({
@@ -60,12 +65,6 @@ const OpenChat = () => {
     }
   };
 
-  const linkChatRoom = () => {
-    navigate(`/mypage/chat/${roomId}`, {
-      state: { chatList: chatList },
-    });
-  };
-
   const deleteChatRoom = () => {
     if (window.confirm("채팅방을 나가시겠습니까?")) {
       chatSocket.deleteChatRoom(roomId);
@@ -73,6 +72,7 @@ const OpenChat = () => {
   };
 
   useEffect(() => {
+    dispatch(__getChat());
     chatSocket.loginChat(userId);
     chatSocket.openChatRoom(userId, postId, ownerId);
     socket.current.on("roomId", (data) => {
@@ -115,7 +115,10 @@ const OpenChat = () => {
           {chatList.list?.map((el, idx) => {
             if (el.ownerId === userId) {
               return (
-                <StChat.StCard key={idx} onClick={linkChatRoom}>
+                <StChat.StCard
+                  key={idx}
+                  onClick={() => navigate(`/mypage/chat/${roomId}`)}
+                >
                   <StChat.StImage
                     src={el.senderImage}
                     alt="sender_profile_image"
@@ -129,7 +132,10 @@ const OpenChat = () => {
               );
             } else {
               return (
-                <StChat.StCard key={idx} onClick={linkChatRoom}>
+                <StChat.StCard
+                  key={idx}
+                  onClick={() => navigate(`/mypage/chat/${roomId}`)}
+                >
                   <StChat.StImage
                     src={el.ownerImage}
                     alt="sender_profile_image"
@@ -149,6 +155,7 @@ const OpenChat = () => {
               <img src={arrow_forward_ios} alt="back_button" />
             </StChat.StBackBtn>
             <StChat.StAppointment>
+              <StChat.StAppointedDay>약속 시간</StChat.StAppointedDay>
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
               </StButton>
