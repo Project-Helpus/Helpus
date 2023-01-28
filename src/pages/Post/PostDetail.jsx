@@ -8,7 +8,7 @@ import {
   __updatePost,
   __postZZim,
 } from "../../redux/modules/postSlice";
-import arrow_forward from "../../asset/arrow_forward.svg";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
 import {
@@ -97,7 +97,7 @@ const PostDetail = () => {
       <StContainer>
         <StSpaceBetween>
           <StBackBtn onClick={() => navigate(-1)}>
-            <img src={arrow_forward} alt="back_button" />
+            <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
             {userId === detail?.userId && (
