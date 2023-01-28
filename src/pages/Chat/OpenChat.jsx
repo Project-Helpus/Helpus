@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,19 +5,22 @@ import { StButton } from "../../components/UI/StIndex";
 import { __getChat } from "../../redux/modules/mypageSlice";
 import * as chatSocket from "../../utils/socket";
 import * as StChat from "./StChat";
+import add_a_photo from "../../asset/add_a_photo.svg";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import AppointmentCard from "./element/AppointmentCard";
+import { __sendImage } from "../../redux/modules/chatSlice";
 
-const Chat = () => {
+const OpenChat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { postId } = useParams();
   const { ownerId } = useParams();
+  const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { chatList } = useSelector((state) => state.mypageSlice);
 
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
+  const fileInput = useRef(null);
 
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
@@ -46,6 +48,15 @@ const Chat = () => {
     if (e.key === "Enter" && msg !== "") {
       chatSocket.sendMessage(userId, roomId, msg);
       setMsg("");
+    }
+  };
+
+  const sendImage = (e) => {
+    if (e.target.files[0]) {
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      formData.append("roomId", roomId);
+      dispatch(__sendImage(formData));
     }
   };
 
@@ -91,6 +102,7 @@ const Chat = () => {
 
   useEffect(() => {
     dispatch(__getChat());
+    // dispatch(__());
   }, []);
 
   return (
@@ -98,7 +110,7 @@ const Chat = () => {
       <StChat.StContainer>
         <StChat.StChatList>
           <StChat.StTopContainer>
-            <h2>채팅</h2>
+            <StChat.StTitle>채팅</StChat.StTitle>
           </StChat.StTopContainer>
           {chatList.list?.map((el, idx) => {
             if (el.ownerId === userId) {
@@ -183,9 +195,26 @@ const Chat = () => {
           <StChat.StInputBox>
             <StChat.StInput
               value={msg}
-              onKeyPress={(e) => sendMsg(e)}
+              onKeyDown={(e) => sendMsg(e)}
               onChange={changeInputHandler}
+              placeholder="메세지 입력"
             ></StChat.StInput>
+            <input
+              style={{ display: "none" }}
+              accept="image/jpg, image/png, image/gif"
+              id="image"
+              name="image"
+              type="file"
+              ref={fileInput}
+              onChange={sendImage}
+            />
+            <img
+              onClick={() => {
+                fileInput.current.click();
+              }}
+              src={add_a_photo}
+              alt="image_upload"
+            />
           </StChat.StInputBox>
         </StChat.StInnerBox>
       </StChat.StContainer>
@@ -193,4 +222,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default OpenChat;
