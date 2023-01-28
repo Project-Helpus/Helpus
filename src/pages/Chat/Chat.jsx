@@ -5,8 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { StButton } from "../../components/UI/StIndex";
 import { __getChat } from "../../redux/modules/mypageSlice";
 import * as chatSocket from "../../utils/socket";
-import arrow_forward from "../../asset/arrow_forward.svg";
-import AppointmentCard from './element/AppointmentCard';
+import * as StChat from "./StChat";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
+import AppointmentCard from "./element/AppointmentCard";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -41,14 +42,7 @@ const Chat = () => {
     }
   }, []);
 
-  const sendByBtn = (e) => {
-    if (msg !== "") {
-      chatSocket.sendMessage(userId, roomId, msg);
-      setMsg("");
-    }
-  };
-
-  const sendByEnter = (e) => {
+  const sendMsg = (e) => {
     if (e.key === "Enter" && msg !== "") {
       chatSocket.sendMessage(userId, roomId, msg);
       setMsg("");
@@ -100,255 +94,103 @@ const Chat = () => {
   }, []);
 
   return (
-    <StContainer>
-      <StChatList>
-        <StTopContainer>
-          <h2>채팅</h2>
-        </StTopContainer>
-        {chatList?.list.map((el, idx) => {
-          if (el.ownerId === userId) {
-            return (
-              <StCard key={idx} onClick={linkChatRoom}>
-                <Avatar>
-                  <img src={el.senderImage} alt="sender_profile_image" />
-                </Avatar>
-                <StCol>
-                  <span>{el.title}</span>
-                  <span>{el.senderName}</span>
-                </StCol>
-                <StCol></StCol>
-              </StCard>
-            );
-          } else {
-            return (
-              <StCard key={idx} onClick={linkChatRoom}>
-                <Avatar>
-                  <img src={el.ownerImage} alt="owner_profile_image" />
-                </Avatar>
-                <StCol>
-                  <span>{el.title}</span>
-                  <span>{el.ownerName}</span>
-                </StCol>
-              </StCard>
-            );
-          }
-        })}
-      </StChatList>
-      <StInnerBox>
-        <StTopContainer>
-          <StBackBtn onClick={() => navigate(`/post/${postId}`)}>
-            <img src={arrow_forward} alt="back_button" />
-          </StBackBtn>
-          <StAppointment>
-            <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
-              나가기
-            </StButton>
-          </StAppointment>
-        </StTopContainer>
-        <StChatBox ref={chatWindow}>
-          {chatRecord?.map((el, idx) => {
-            if (el.userId === userId) {
+    <StChat.StWrapper>
+      <StChat.StContainer>
+        <StChat.StChatList>
+          <StChat.StTopContainer>
+            <h2>채팅</h2>
+          </StChat.StTopContainer>
+          {chatList.list?.map((el, idx) => {
+            if (el.ownerId === userId) {
               return (
-                <StReceiveDiv key={idx}>
-                  <span>{chatTime(el.createdAt)}</span>
-                  <StChatReceive>{el.content}</StChatReceive>
-                </StReceiveDiv>
+                <StChat.StCard key={idx} onClick={linkChatRoom}>
+                  <StChat.StImage
+                    src={el.senderImage}
+                    alt="sender_profile_image"
+                  />
+                  <StChat.StCol>
+                    <span>{el.title}</span>
+                    <span>{el.senderName}</span>
+                  </StChat.StCol>
+                  <StChat.StCol></StChat.StCol>
+                </StChat.StCard>
               );
             } else {
               return (
-                <StSendDiv key={idx}>
-                  <StChatSend>{el.content}</StChatSend>
-                  <span>{chatTime(el.createdAt)}</span>
-                </StSendDiv>
+                <StChat.StCard key={idx} onClick={linkChatRoom}>
+                  <StChat.StImage
+                    src={el.ownerImage}
+                    alt="sender_profile_image"
+                  />
+                  <StChat.StCol>
+                    <span>{el.title}</span>
+                    <span>{el.ownerName}</span>
+                  </StChat.StCol>
+                </StChat.StCard>
               );
             }
           })}
-          {newMsg?.map((el, idx) => {
-            if (el.userId === userId) {
-              return (
-                <StReceiveDiv key={idx}>
-                  <span>{chatTime(el.createdAt)}</span>
-                  <StChatReceive>{el.content}</StChatReceive>
-                </StReceiveDiv>
-              );
-            } else if (el.userId !== userId && el.content === "`card`0") {
-              
-              return <AppointmentCard/>;
-            } else {
-              return (
-                <StSendDiv key={idx}>
-                  <StChatSend>{el.content}</StChatSend>
-                  <span>{chatTime(el.createdAt)}</span>
-                </StSendDiv>
-              );
-            }
-          })}
-        </StChatBox>
-        <StInputBox>
-          <StInput
-            value={msg}
-            onKeyPress={(e) => sendByEnter(e)}
-            onChange={changeInputHandler}
-          ></StInput>
-          <StSendBtn onClick={sendByBtn}>전송</StSendBtn>
-        </StInputBox>
-      </StInnerBox>
-    </StContainer>
+        </StChat.StChatList>
+        <StChat.StInnerBox>
+          <StChat.StTopContainer>
+            <StChat.StBackBtn onClick={() => navigate(`/post/${postId}`)}>
+              <img src={arrow_forward_ios} alt="back_button" />
+            </StChat.StBackBtn>
+            <StChat.StAppointment>
+              <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
+                나가기
+              </StButton>
+            </StChat.StAppointment>
+          </StChat.StTopContainer>
+          <StChat.StChatBox ref={chatWindow}>
+            {chatRecord?.map((el, idx) => {
+              if (el.userId === userId) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    <span>{chatTime(el.createdAt)}</span>
+                    <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
+                  </StChat.StReceiveDiv>
+                );
+              } else {
+                return (
+                  <StChat.StSendDiv key={idx}>
+                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
+                    <span>{chatTime(el.createdAt)}</span>
+                  </StChat.StSendDiv>
+                );
+              }
+            })}
+            {newMsg?.map((el, idx) => {
+              if (el.userId === userId) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    <span>{chatTime(el.createdAt)}</span>
+                    <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
+                  </StChat.StReceiveDiv>
+                );
+              } else if (el.userId !== userId && el.content === "`card`0") {
+                return <AppointmentCard />;
+              } else {
+                return (
+                  <StChat.StSendDiv key={idx}>
+                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
+                    <span>{chatTime(el.createdAt)}</span>
+                  </StChat.StSendDiv>
+                );
+              }
+            })}
+          </StChat.StChatBox>
+          <StChat.StInputBox>
+            <StChat.StInput
+              value={msg}
+              onKeyPress={(e) => sendMsg(e)}
+              onChange={changeInputHandler}
+            ></StChat.StInput>
+          </StChat.StInputBox>
+        </StChat.StInnerBox>
+      </StChat.StContainer>
+    </StChat.StWrapper>
   );
 };
 
 export default Chat;
-
-const StContainer = styled.div`
-  width: 100%;
-  height: 90%;
-  display: flex;
-  flex-direction: row;
-  margin: 2em 0 2em 0;
-`;
-
-const StChatList = styled.section`
-  width: 30%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StTopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  height: 44px;
-  padding: 0 10px;
-`;
-
-const StInnerBox = styled.section`
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StChatBox = styled.div`
-  height: 100%;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 1em;
-  background-color: white;
-  overflow-y: auto;
-  overflow-x: hidden;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const Avatar = styled.div`
-  width: 36px;
-  height: 36px;
-  object-fit: cover;
-  border-radius: 100%;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const StCard = styled.article`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  padding: 12px 20px;
-  background: transparent;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const StDropdownBtn = styled.button`
-  height: 30px;
-  margin-right: 10px;
-  background: transparent;
-  border: 0;
-  outline: 0;
-`;
-
-const StAppointment = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 24px;
-`;
-
-const StSendDiv = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-`;
-
-const StReceiveDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-`;
-
-const StChatSend = styled.p`
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.colors.backgroundGray};
-  padding: 10px;
-`;
-
-const StChatReceive = styled.p`
-  border-radius: 10px;
-  background-color: #ffc4d5;
-  padding: 10px;
-`;
-
-const StInputBox = styled.div`
-  display: flex;
-  align-items: center;
-
-  border-radius: 10px;
-`;
-
-const StInput = styled.input`
-  position: relative;
-  width: 100%;
-  height: 60px;
-  border: none;
-  border-radius: 10px;
-  padding-left: 10px;
-  font-size: 20px;
-  background-color: ${(props) => props.theme.colors.backgroundGray};
-  &:focus {
-    outline: none;
-  }
-`;
-
-const StSendBtn = styled.button`
-  width: 63px;
-  height: 44px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 10px;
-  background-color: white;
-`;
-
-const StCol = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StBackBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-`;
-
-const StInvitation = styled.div`
-  width: 200px;
-  height: 280px;
-  border-radius: 7px;
-`;
