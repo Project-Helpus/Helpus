@@ -46,8 +46,12 @@ export const quitChatRoom = (roomId) => {
   socket.emit("leave", { roomId: roomId });
 };
 
-export const deleteChatRoom = (roomId) => {
-  socket.emit("deleteRoom", { roomId: roomId });
+export const deleteChatRoom = (roomId, userId, leave) => {
+  socket.emit("deleteRoom", {
+    roomId: roomId,
+    userId: userId,
+    leave: leave,
+  });
 };
 
 export const appointment = (userId, roomId) => {
@@ -55,5 +59,11 @@ export const appointment = (userId, roomId) => {
     userId: userId,
     roomId: roomId,
     content: "`card`0",
+  });
+};
+
+export const accepttion = (roomId) => {
+  socket.emit("acceptCard", {
+    roomId: roomId,
   });
 };
