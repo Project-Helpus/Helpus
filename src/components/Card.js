@@ -33,6 +33,11 @@ import {
   StImg,
   StRowTitle,
   StRowContent,
+  StCrsPost,
+  StCrsProfile,
+  StCrsTitle,
+  StCrsNickname,
+  StProfileWrapper,
 } from "./UI/CardStyle.js/Row";
 import {
   StFlex,
@@ -72,8 +77,6 @@ const Card = ({ type, data, onClick }) => {
     const KoreaDate = KrCurr.toLocaleDateString();
     // toLocaleDateString = 브라우저에서 설정된 국가에서 사용되는 날짜를 뽑아줌
     const category = data.category == 1 ? "헬피" : "헬퍼";
-    const content = data.content.slice(0, 26);
-    const title15 = data.title.slice(0, 15);
     const deadLine = data.isDeadLine;
     const moveDetail = (id) => {
       navigate(`/post/${id}`);
@@ -271,13 +274,19 @@ const Card = ({ type, data, onClick }) => {
         );
       case "케러셀":
         return (
-          <StMarginRight>
-            <StMySquarePhoto
-              src={data.imageUrl1}
+          <>
+            <StCrsPost
+              src={data.imageUrls[0]}
               onClick={() => moveDetail(data.postId)}
-            ></StMySquarePhoto>
-            <StMainContentsTitle>{title15}...</StMainContentsTitle>
-          </StMarginRight>
+            ></StCrsPost>
+            <StProfileWrapper>
+              <StCrsProfile src={data.userImage}></StCrsProfile>
+              <div>
+                <StCrsTitle>{data.title.slice(0, 10)}</StCrsTitle>
+                <StCrsNickname>{data.userName.slice(0, 10)}</StCrsNickname>
+              </div>
+            </StProfileWrapper>
+          </>
         );
       default:
         return;
