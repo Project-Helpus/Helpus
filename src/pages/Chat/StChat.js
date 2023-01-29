@@ -47,7 +47,7 @@ export const StChatBox = styled.div`
 export const StPostTitle = styled.span`
   font-weight: 700;
 `;
-export const StImage = styled.img`
+export const StProfileImage = styled.img`
   width: 50px;
   height: 50px;
   box-shadow: 0 0 0 2px white inset;
@@ -78,16 +78,21 @@ export const StAppointedDay = styled.div`
 `;
 export const StSendDiv = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   gap: 10px;
 `;
 export const StReceiveDiv = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
 `;
+export const StImage = styled.img`
+  width: 200px;
+  height: 280px;
+`;
+
 export const StChatSend = styled.p`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.backgroundGray};

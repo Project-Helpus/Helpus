@@ -58,12 +58,15 @@ const MyChat = () => {
     }
   };
 
-  const sendImage = (e) => {
+  const sendImage = async (e) => {
     if (e.target.files[0]) {
-      const formData = new FormData();
-      formData.append("image", e.target.files[0]);
-      formData.append("roomId", roomId);
-      dispatch(__sendImage(formData));
+      try {
+        const formData = new FormData();
+        formData.append("image", e.target.files[0]);
+        formData.append("roomId", roomId);
+        const result = await dispatch(__sendImage(formData));
+        // chatSocket.sendMessage(userId, roomId, result.payload.content);
+      } catch (err) {}
     }
   };
 
@@ -74,14 +77,10 @@ const MyChat = () => {
     }
   };
 
-  console.log(state);
-  const deleteChatRoom = async () => {
+  const deleteChatRoom = () => {
     if (window.confirm("채팅방을 나가시겠습니까?")) {
-      const res = await chatSocket
-        .deleteChatRoom(roomId, userId, state.chatInfo.leave)
-        .then((res) => {
-          navigate("mypage");
-        });
+      chatSocket.deleteChatRoom(roomId, userId, state.chatInfo.leave);
+      navigate("/mypage");
     }
   };
 
@@ -134,7 +133,7 @@ const MyChat = () => {
                     })
                   }
                 >
-                  <StChat.StImage
+                  <StChat.StProfileImage
                     src={el.senderImage}
                     alt="sender_profile_image"
                   />
@@ -155,7 +154,7 @@ const MyChat = () => {
                     })
                   }
                 >
-                  <StChat.StImage
+                  <StChat.StProfileImage
                     src={el.ownerImage}
                     alt="sender_profile_image"
                   />
@@ -177,14 +176,14 @@ const MyChat = () => {
               <StChat.StAppointedDay>
                 {appointedTime(state.chatInfo.appointed)}
               </StChat.StAppointedDay>
-              {invitationCard ? (
-                <StButton mode="pinkSmBtn">취소하기</StButton>
-              ) : (
-                <StButton mode="pinkSmBtn" onClick={sendAppointment}>
-                  약속하기
-                </StButton>
+              {userId === state.chatInfo.ownerId && (
+                <>
+                  <StButton mode="pinkSmBtn" onClick={sendAppointment}>
+                    약속하기
+                  </StButton>
+                  <StButton mode="pinkSmBtn">취소하기</StButton>
+                </>
               )}
-
               <StButton mode="yellowSmBtn">완료</StButton>
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
@@ -193,60 +192,117 @@ const MyChat = () => {
           </StChat.StTopContainer>
           <StChat.StChatBox ref={chatWindow}>
             {chatRecord?.map((el, idx) => {
-              if (el.userId === userId && el.content !== "`card`0") {
+              console.log(el.content.split("`")[2]);
+              if (
+                el.userId === userId &&
+                el.content !== "`card`0" &&
+                el.content?.split("`")[1] !== "image"
+              ) {
                 return (
-                  <StChat.StReceiveDiv key={idx}>
+                  <StChat.StSendDiv key={idx}>
                     <span>{chatTime(el.createdAt)}</span>
                     <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
+                  </StChat.StSendDiv>
+                );
+              } else if (
+                el.userId !== userId &&
+                el.content !== "`card`0" &&
+                el.content?.split("`")[1] !== "image"
+              ) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    {userId === state.chatInfo.ownerId ? (
+                      <StChat.StProfileImage
+                        src={state.chatInfo.senderImage}
+                        alt="sender_profile_image"
+                      />
+                    ) : (
+                      <StChat.StProfileImage
+                        src={state.chatInfo.ownerImage}
+                        alt="sender_profile_image"
+                      />
+                    )}
+                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
+                    <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId && el.content === "`card`0") {
                 return (
-                  <StChat.StReceiveDiv>
+                  <StChat.StSendDiv key={idx}>
                     <AppointmentCard />
-                  </StChat.StReceiveDiv>
+                  </StChat.StSendDiv>
                 );
               } else if (el.userId !== userId && el.content === "`card`0") {
                 return (
-                  <StChat.StSendDiv>
+                  <StChat.StReceiveDiv key={idx}>
                     <AppointmentCard />
-                  </StChat.StSendDiv>
+                  </StChat.StReceiveDiv>
                 );
-              } else {
+              } else if (el.userId === userId) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
-                    <span>{chatTime(el.createdAt)}</span>
+                    <StChat.StImage
+                      src={el.content.split("`")[2]}
+                      alt="receive_image"
+                    />
                   </StChat.StSendDiv>
+                );
+              } else if (el.userId !== userId) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    <StChat.StImage
+                      src={el.content.split("`")[2]}
+                      alt="send_image"
+                    />
+                  </StChat.StReceiveDiv>
                 );
               }
             })}
             {newMsg?.map((el, idx) => {
-              if (el.userId === userId && el.content !== "`card`0") {
+              if (
+                el.userId === userId &&
+                el.content !== "`card`0" &&
+                el.content?.split("`")[1] !== "image"
+              ) {
                 return (
-                  <StChat.StReceiveDiv key={idx}>
+                  <StChat.StSendDiv key={idx}>
                     <span>{chatTime(el.createdAt)}</span>
                     <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
+                  </StChat.StSendDiv>
+                );
+              } else if (
+                el.userId !== userId &&
+                el.content !== "`card`0" &&
+                el.content?.split("`")[1] !== "image"
+              ) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    {userId === state.chatInfo.ownerId ? (
+                      <StChat.StProfileImage
+                        src={state.chatInfo.senderImage}
+                        alt="sender_profile_image"
+                      />
+                    ) : (
+                      <StChat.StProfileImage
+                        src={state.chatInfo.ownerImage}
+                        alt="sender_profile_image"
+                      />
+                    )}
+                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
+                    <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId && el.content === "`card`0") {
                 return (
-                  <StChat.StReceiveDiv>
+                  <StChat.StSendDiv key={idx}>
                     <AppointmentCard />
-                  </StChat.StReceiveDiv>
+                  </StChat.StSendDiv>
                 );
               } else if (el.userId !== userId && el.content === "`card`0") {
                 return (
-                  <StChat.StSendDiv>
+                  <StChat.StReceiveDiv key={idx}>
                     <AppointmentCard />
-                  </StChat.StSendDiv>
-                );
-              } else {
-                return (
-                  <StChat.StSendDiv key={idx}>
-                    <StChat.StChatSend>{el.content}</StChat.StChatSend>
-                    <span>{chatTime(el.createdAt)}</span>
-                  </StChat.StSendDiv>
+                  </StChat.StReceiveDiv>
                 );
               }
             })}
@@ -254,7 +310,7 @@ const MyChat = () => {
           <StChat.StInputBox>
             <StChat.StInput
               value={msg}
-              onKeyDown={(e) => sendMsg(e)}
+              onKeyPress={(e) => sendMsg(e)}
               onChange={changeInputHandler}
               placeholder="메세지 입력"
             ></StChat.StInput>

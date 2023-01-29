@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ChatAPI } from "../../api/axios";
 
 const initialState = {
-  info: "",
+  chatImage: "",
 };
 
 export const __score = createAsyncThunk(
@@ -50,13 +50,13 @@ const chatSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [__getSenderInfo.pending]: (state) => {
+    [__sendImage.pending]: (state) => {
       state.isLoading = true;
     },
-    [__getSenderInfo.fulfilled]: (state, action) => {
-      state.info = action.payload;
+    [__sendImage.fulfilled]: (state, action) => {
+      state.chatImage = action.payload;
     },
-    [__getSenderInfo.rejected]: (state) => {},
+    [__sendImage.rejected]: (state) => {},
   },
 });
 
