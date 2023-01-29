@@ -202,7 +202,7 @@ const OpenChat = () => {
           <StChat.StInputBox>
             <StChat.StInput
               value={msg}
-              onKeyDown={(e) => sendMsg(e)}
+              onKeyPress={(e) => sendMsg(e)}
               onChange={changeInputHandler}
               placeholder="메세지 입력"
             ></StChat.StInput>
