@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserAPI } from "../../api/axios";
-import { Cookies } from "react-cookie";
-const cookie = new Cookies();
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
-  userid: 0,
-  email: "",
-  userName: "",
-  isConfirm: false,
   dupCheck: false,
-  state1: "",
-  state2: "",
   isLogin: false,
   isSignup: false,
   kakaoInfo: "",
-  userInfo: "",
+  userInfo: {
+    userImage: "",
+    userName: "",
+    userId: 0,
+    email: "",
+    state1: "",
+    state2: "",
+  },
   kakaoState: "",
   isLoginkakao: false,
   isLoading: false,
@@ -67,7 +67,26 @@ export const __postLogin = createAsyncThunk(
       if (res.status === 200) {
         return thunkAPI.fulfillWithValue(res.data);
       } else {
-        window.alert("가입하신 이메일, 비밀번호와 다릅니다!!");
+        window.alert("가입하신 이메일, 비밀번호와 다릅니다.");
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (error) {
+      window.alert(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// 로그아웃 DELETE
+export const __logout = createAsyncThunk(
+  "user/logout",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await UserAPI.logout();
+      if (res.status === 200) {
+        window.alert("로그아웃 성공");
+        return thunkAPI.fulfillWithValue();
+      } else {
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -144,29 +163,37 @@ export const __signOut = createAsyncThunk(
     }
   }
 );
+// 마이페이지 프로필 수정
+export const __patchMypage = createAsyncThunk(
+  "mypage/patchMypage",
+  async (data, thunkAPI) => {
+    try {
+      const res = await UserAPI.patchMypage(data);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+// 마이페이지 프로필 이미지 수정
+export const __userImage = createAsyncThunk(
+  "mypage/userImage",
+  async (data, thunkAPI) => {
+    try {
+      const res = await UserAPI.userImage(data);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 //slice 데이터 저장
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    __checkLogin: (state) => {
-      if (cookie.get("token")) {
-        state.isLogin = true;
-      } else {
-        state.isLogin = false;
-      }
-    },
-    __logout: (state) => {
-      if ((state.isLogin = true)) {
-        cookie.remove("token", { path: "/" });
-        state.isLogin = false;
-      } else {
-        return;
-      }
-    },
-  },
-
+  reducers: {},
   extraReducers: {
     [__signUp.pending]: (state) => {
       state.isLoading = true;
@@ -191,7 +218,6 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = true;
     },
-
     //__postLogin
     [__postLogin.pending]: (state) => {
       state.isLoading = true;
@@ -205,13 +231,29 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    //__logout
+    [__logout.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__logout.fulfilled]: (state) => {
+      state.isLoading = false;
+      state.isLogin = false;
+      state.isLoginkakao = false;
+      state = initialState;
+      storage.removeItem("persist:root");
+    },
+    [__logout.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
     //kakaoLogin
     [__kakaoLogin.pending]: (state) => {
       state.isLoading = true;
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
+      state.isLoading = false;
       state.isLoginkakao = true;
-      state.kakaoInfo = action.payload;
+      state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
       state.error = false;
@@ -222,7 +264,6 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoState.fulfilled]: (state, action) => {
-      state.isLoginkakao = true;
       state.kakaoState = action.payload;
     },
     [__kakaoState.rejected]: (state, action) => {
@@ -236,6 +277,7 @@ const userSlice = createSlice({
     },
     [__kakaoSignOut.fulfilled]: (state, action) => {
       state.isLoginkakao = false;
+      storage.removeItem("persist:root");
     },
     [__kakaoSignOut.rejected]: (state, action) => {
       state.error = false;
@@ -248,13 +290,33 @@ const userSlice = createSlice({
     },
     [__signOut.fulfilled]: (state, action) => {
       state.isLogin = false;
+      storage.removeItem("persist:root");
     },
     [__signOut.rejected]: (state, action) => {
       state.error = false;
       state.error = action.payload;
     },
+    //프로필 수정
+    [__patchMypage.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__patchMypage.fulfilled]: (state, action) => {
+      state.userInfo = { ...state.userInfo, ...action.payload };
+    },
+    [__patchMypage.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    //프로필 이미지 수정
+    [__userImage.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__userImage.fulfilled]: (state, action) => {
+      state.userInfo = { ...state.userInfo, ...action.payload };
+    },
+    [__userImage.rejected]: (state) => {
+      state.isLoading = false;
+    },
   },
 });
 
-export const { __checkLogin, __logout } = userSlice.actions;
 export default userSlice.reducer;

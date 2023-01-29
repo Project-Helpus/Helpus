@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __kakaoState } from "../../redux/modules/userSlice";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ import location_searching from "../../asset/location_searching.svg";
 const State = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { kakaoInfo } = useSelector((state) => state.userSlice);
+  const { userInfo } = useSelector((state) => state.userSlice);
   const kakao = window["kakao"];
   const [state1, setState1] = useState();
   const [state2, setState2] = useState();
@@ -48,7 +48,7 @@ const State = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     const paylode = {
-      userId: kakaoInfo?.userid,
+      userId: userInfo?.userId,
       state1: state1,
       state2: state2,
     };
@@ -68,7 +68,7 @@ const State = () => {
         }}
       ></Starrow>
       <StProfile>
-        <StProfileImg src={kakaoInfo?.userImage} alt="" />
+        <StProfileImg src={userInfo?.userImage} alt="" />
         <form>
           <StStateBtn onClick={currentLocation}>
             <StLocation src={location_searching} alt="" />내 위치 가져오기

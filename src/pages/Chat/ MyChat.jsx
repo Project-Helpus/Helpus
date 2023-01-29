@@ -1,26 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { io } from "socket.io-client";
 import { StButton } from "../../components/UI/StIndex";
+import * as chatSocket from "../../utils/socket";
 import arrow_forward from "../../asset/arrow_forward.svg";
 
 const MyChat = () => {
+  const navigate = useNavigate();
   const { roomId } = useParams();
   const { state } = useLocation();
-  const navigate = useNavigate();
-
-  const [invitaionCard, setInvitationCard] = useState(false);
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
-  const socket = useRef(
-    io(process.env.REACT_APP_CHAT_SERVER, { transports: ["websocket"] })
-  );
+  const [invitaionCard, setInvitationCard] = useState(false);
+
+  const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
-  const { userInfo } = useSelector((state) => state.userSlice);
-  const { data } = useSelector((state) => state.mypageSlice);
+  const { userId } = useSelector((state) => state.userSlice.userInfo);
+  const { chatList } = useSelector((state) => state.mypageSlice);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -41,11 +39,14 @@ const MyChat = () => {
 
   const sendMsg = () => {
     if (msg !== "") {
-      socket.current.emit("send", {
-        userId: userInfo.userId,
-        roomId: roomId,
-        content: msg,
-      });
+      chatSocket.sendMessage(userId, roomId, msg);
+      setMsg("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && msg !== "") {
+      chatSocket.sendMessage(userId, roomId, msg);
       setMsg("");
     }
   };
@@ -58,41 +59,22 @@ const MyChat = () => {
     );
   };
 
-  const linkOtherChat = (roomId) => {
-    navigate(`/mypage/chat/${roomId}`, {
-      state: { data: data },
-    });
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && msg !== "") {
-      socket.current.emit("send", {
-        userId: userInfo.userId,
-        roomId: roomId,
-        content: msg,
-      });
-      setMsg("");
-    }
-  };
-
   useEffect(() => {
-    socket.current.emit("login", userInfo?.userId);
-    socket.current.emit("enter", {
-      roomId: roomId,
-    });
+    chatSocket.loginChat(userId);
+    chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
     });
     return () => {
-      socket.current.disconnect();
+      chatSocket.quitChatRoom(roomId);
     };
-  }, []);
+  }, [roomId]);
 
   useEffect(() => {
     socket.current.on("broadcast", (data) => {
       setNewMsg((prev) => [...prev, data]);
     });
-    socket.current.emit("read", { roomId: roomId });
+    chatSocket.readMessage(roomId);
   }, [socket.current]);
 
   useEffect(() => {
@@ -108,12 +90,16 @@ const MyChat = () => {
         <StTopContainer>
           <h2>채팅</h2>
         </StTopContainer>
-        {state.data.list.map((el, idx) => {
-          if (el.ownerId === userInfo.userId) {
+        {state?.chatList.list.map((el, idx) => {
+          if (el.ownerId === userId) {
             return (
               <StCard
-                key={el.roomId + idx}
-                onClick={() => linkOtherChat(el.roomId)}
+                key={idx}
+                onClick={() =>
+                  navigate(`/mypage/chat/${el.roomId}`, {
+                    state: { chatList: chatList },
+                  })
+                }
               >
                 <Avatar>
                   <img src={el.senderImage} alt="sender_profile_image" />
@@ -127,7 +113,14 @@ const MyChat = () => {
             );
           } else {
             return (
-              <StCard key={idx} onClick={() => linkOtherChat(el.roomId)}>
+              <StCard
+                key={idx}
+                onClick={() =>
+                  navigate(`/mypage/chat/${el.roomId}`, {
+                    state: { chatList: chatList },
+                  })
+                }
+              >
                 <Avatar>
                   <img src={el.ownerImage} alt="owner_profile_image" />
                 </Avatar>
@@ -142,7 +135,7 @@ const MyChat = () => {
       </StChatList>
       <StInnerBox>
         <StTopContainer>
-          <StBackBtn onClick={() => navigate(-1)}>
+          <StBackBtn onClick={() => navigate("/mypage")}>
             <img src={arrow_forward} alt="back_button" />
           </StBackBtn>
           <StAppointment>
@@ -157,7 +150,7 @@ const MyChat = () => {
         </StTopContainer>
         <StChatBox ref={chatWindow}>
           {chatRecord?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === userId) {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
@@ -166,7 +159,7 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StSendDiv key={el.chatId}>
+                <StSendDiv key={idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
@@ -174,7 +167,7 @@ const MyChat = () => {
             }
           })}
           {newMsg?.map((el, idx) => {
-            if (el.userId === userInfo.userId) {
+            if (el.userId === userId) {
               return (
                 <StReceiveDiv key={idx}>
                   <span>{chatTime(el.createdAt)}</span>
@@ -183,7 +176,7 @@ const MyChat = () => {
               );
             } else {
               return (
-                <StSendDiv key={el.chatId}>
+                <StSendDiv key={idx}>
                   <StChatSend>{el.content}</StChatSend>
                   <span>{chatTime(el.createdAt)}</span>
                 </StSendDiv>
