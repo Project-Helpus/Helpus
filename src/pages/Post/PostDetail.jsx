@@ -23,16 +23,22 @@ import {
   StChatBtn,
   StContainer,
   StContent,
+  StCrsImg,
+  StCrsLeftButton,
+  StCrsRightButton,
   StDate,
   StDeadLineButton,
   StDeleteButton,
   StGroupImgs,
+  StHidden,
   StHopeDay,
   StImage,
   StInnerColBox,
   StInnerRowBox,
   StLocation,
   StMagam,
+  StMainImg,
+  StNickname,
   StProfile,
   StProfileBox,
   StTags,
@@ -42,7 +48,10 @@ import {
   StWishBtn,
   StZZimImg,
 } from "./StPostDetail";
-
+import CrsLeft from "../../asset/CrsLeft.svg";
+import CrsRight from "../../asset/CrsRight.svg";
+import { useRef } from "react";
+import { useState } from "react";
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,7 +67,11 @@ const PostDetail = () => {
   const KrCurr = new Date(utc + kRTimeDiff);
   const KoreaDate = KrCurr.toLocaleDateString();
   const tag = detail.tag?.split(",");
-
+  const crsRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const TotalSlides = 10;
+  const [preImg, setPreImg] = useState("");
+  console.log("detail:", detail);
   const deletePost = () => {
     dispatch(__deletePost(postId));
     alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
@@ -86,9 +99,34 @@ const PostDetail = () => {
       e.target.src = fullHeart;
     }
   };
+
+  const moveCrsLeft = () => {
+    if (currentSlide === 0) {
+      setCurrentSlide(TotalSlides);
+      // 마지막 사진으로 이동
+    } else {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+  const moveCrsRight = () => {
+    if (currentSlide >= TotalSlides) {
+      //더 이상 넘어갈 슬라이드가 없으면
+      setCurrentSlide(0); //1번째 사진으로 넘어간다
+    } else {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
+  const preview = (img) => {
+    setPreImg(img);
+  };
+
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, []);
+  useEffect(() => {
+    crsRef.current.style.transition = "all 0.5s ease-in-out";
+    crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
+  }, [currentSlide]);
 
   useEffect(() => {}, [deadLine]);
   console.log(userId, detail.userId);
@@ -127,37 +165,56 @@ const PostDetail = () => {
             )}
           </StFlex>
         </StSpaceBetween>
+        <StTitle>{detail?.title}</StTitle>
         <StUserInfo>
           <StFlex>
             <StProfile src={detail?.userImage}></StProfile>
             <div>
-              <StFlex>
-                <StTitle>{detail?.title}</StTitle>
-              </StFlex>
-              <div>{detail?.userName}</div>
+              <StNickname>{detail?.userName}</StNickname>
               <StLocation>
                 {detail?.location1}&gt;{detail?.location2}
               </StLocation>
             </div>
           </StFlex>
         </StUserInfo>
-        <StProfileBox>
-          <StInnerRowBox>
-            <StHopeDay>희망일:{KoreaDate}</StHopeDay>
-          </StInnerRowBox>
-        </StProfileBox>
-        <StGroupImgs>
-          <StImage src={detail?.imageUrl1} />
+
+        <StHopeDay>희망일:{KoreaDate}</StHopeDay>
+
+        <StMainImg src={preImg}></StMainImg>
+        <StGroupImgs value={currentSlide + 1}>
+          <StCrsLeftButton
+            src={CrsLeft}
+            onClick={moveCrsLeft}
+          ></StCrsLeftButton>
+          <StCrsRightButton
+            src={CrsRight}
+            onClick={moveCrsRight}
+          ></StCrsRightButton>
+
+          <StHidden>
+            <StFlex ref={crsRef}>
+              {detail.imageUrls?.map((item, idx) => {
+                return (
+                  <StCrsImg
+                    src={item}
+                    key={idx}
+                    onClick={() => preview(item)}
+                  />
+                );
+              })}
+            </StFlex>
+          </StHidden>
+          {/* <StImage src={detail?.imageUrl1} />
           <StImage src={detail?.imageUrl2} />
-          <StImage src={detail?.imageUrl3} />
+          <StImage src={detail?.imageUrl3} /> */}
         </StGroupImgs>
+
         <StFlex>
           {tag?.map((item, idx) => {
             return <StTags key={idx}>{item}</StTags>;
           })}
         </StFlex>
         <p>{detail.content}</p>
-        <StFlex></StFlex>
         {logedIn && (
           <>
             {userId !== detail?.userId && (
