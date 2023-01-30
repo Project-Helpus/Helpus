@@ -52,7 +52,7 @@ export const appointment = (userId, roomId) => {
     content: "`card`0",
   });
 };
-export const accepttion = (roomId) => {
+export const acception = (roomId) => {
   socket.emit("acceptCard", {
     roomId: roomId,
   });

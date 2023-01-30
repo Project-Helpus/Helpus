@@ -9,7 +9,6 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
 import { __getChat } from "../../redux/modules/mypageSlice";
-import { __getSenderInfo } from "./../../redux/modules/chatSlice";
 
 const MyChat = () => {
   const dispatch = useDispatch();
@@ -18,13 +17,11 @@ const MyChat = () => {
   const { state } = useLocation();
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { chatList } = useSelector((state) => state.mypageSlice);
-  const [ownerInfo, setOwner] = useState({});
-  const [image, setImage] = useState("");
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
-  const [chatRecord, setChatRecord] = useState(null);
-  const [invitationCard, setInvitationCard] = useState(false);
-
+  const [chatRecord, setChatRecord] = useState([]);
+  const [invitation, setInvitation] = useState(false);
+  const [acception, setAcception] = useState(false);
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
@@ -60,20 +57,31 @@ const MyChat = () => {
 
   const sendImage = async (e) => {
     if (e.target.files[0]) {
-      try {
-        const formData = new FormData();
-        formData.append("image", e.target.files[0]);
-        formData.append("roomId", roomId);
-        const result = await dispatch(__sendImage(formData));
-        // chatSocket.sendMessage(userId, roomId, result.payload.content);
-      } catch (err) {}
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      formData.append("roomId", roomId);
+      const result = await dispatch(__sendImage(formData));
+      chatSocket.sendMessage(userId, roomId, result.payload.content);
     }
   };
 
   const sendAppointment = () => {
     if (window.confirm("확정 하시겠습니까?")) {
       chatSocket.appointment(userId, roomId);
-      setInvitationCard(!invitationCard);
+      setAcception(true);
+    }
+  };
+
+  const cancelAppointment = () => {
+    if (window.confirm("약속을 취소 하시겠습니까?")) {
+      setAcception(false);
+    }
+  };
+
+  const acceptRequest = () => {
+    if (window.confirm("수락 하시겠습니까?")) {
+      chatSocket.acception(roomId);
+      setInvitation(true);
     }
   };
 
@@ -84,11 +92,12 @@ const MyChat = () => {
     }
   };
 
-  const completeBoard = () => {
+  const completePost = () => {
     if (window.confirm("재능 기부가 완료 되었나요?")) {
     }
   };
 
+  // 채팅방 입장 시 소켓 생성, 채팅방 참여, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
     chatSocket.loginChat(userId);
@@ -101,6 +110,7 @@ const MyChat = () => {
     };
   }, [roomId]);
 
+  // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
     socket.current.on("broadcast", (data) => {
       setNewMsg((prev) => [...prev, data]);
@@ -108,6 +118,7 @@ const MyChat = () => {
     chatSocket.readMessage(roomId);
   }, [socket.current]);
 
+  // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
     chatWindow.current.scrollTo({
       top: chatWindow.current.scrollHeight,
@@ -178,10 +189,15 @@ const MyChat = () => {
               </StChat.StAppointedDay>
               {userId === state.chatInfo.ownerId && (
                 <>
-                  <StButton mode="pinkSmBtn" onClick={sendAppointment}>
-                    약속하기
-                  </StButton>
-                  <StButton mode="pinkSmBtn">취소하기</StButton>
+                  {!acception ? (
+                    <StButton mode="pinkSmBtn" onClick={sendAppointment}>
+                      약속하기
+                    </StButton>
+                  ) : (
+                    <StButton mode="pinkSmBtn" onClick={cancelAppointment}>
+                      취소하기
+                    </StButton>
+                  )}
                 </>
               )}
               <StButton mode="yellowSmBtn">완료</StButton>
@@ -191,11 +207,11 @@ const MyChat = () => {
             </StChat.StAppointment>
           </StChat.StTopContainer>
           <StChat.StChatBox ref={chatWindow}>
+            {/* 이전 메세지 수신 */}
             {chatRecord?.map((el, idx) => {
-              console.log(el.content.split("`")[2]);
               if (
                 el.userId === userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -206,7 +222,7 @@ const MyChat = () => {
                 );
               } else if (
                 el.userId !== userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -226,16 +242,32 @@ const MyChat = () => {
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId && el.content === "`card`0") {
+              } else if (
+                el.userId === userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      invitation={invitation}
+                      accepted={el.content}
+                      userId={el.userId}
+                      acceptRequest={acceptRequest}
+                    />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId && el.content === "`card`0") {
+              } else if (
+                el.userId !== userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      invitation={invitation}
+                      accepted={el.content}
+                      acceptRequest={acceptRequest}
+                      userId={el.userId}
+                    />
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId) {
@@ -258,10 +290,11 @@ const MyChat = () => {
                 );
               }
             })}
+            {/* 새로운 메세지 송, 수신 */}
             {newMsg?.map((el, idx) => {
               if (
                 el.userId === userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -272,7 +305,7 @@ const MyChat = () => {
                 );
               } else if (
                 el.userId !== userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -292,16 +325,50 @@ const MyChat = () => {
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId && el.content === "`card`0") {
+              } else if (
+                el.userId === userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      invitation={invitation}
+                      accepted={el.content}
+                      acceptRequest={acceptRequest}
+                      userId={el.userId}
+                    />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId && el.content === "`card`0") {
+              } else if (
+                el.userId !== userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      invitation={invitation}
+                      accepted={el.content}
+                      acceptRequest={acceptRequest}
+                      userId={el.userId}
+                    />
+                  </StChat.StReceiveDiv>
+                );
+              } else if (el.userId === userId) {
+                return (
+                  <StChat.StSendDiv key={idx}>
+                    <StChat.StImage
+                      src={el.content.split("`")[2]}
+                      alt="receive_image"
+                    />
+                  </StChat.StSendDiv>
+                );
+              } else if (el.userId !== userId) {
+                return (
+                  <StChat.StReceiveDiv key={idx}>
+                    <StChat.StImage
+                      src={el.content.split("`")[2]}
+                      alt="send_image"
+                    />
                   </StChat.StReceiveDiv>
                 );
               }
