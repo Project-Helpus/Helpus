@@ -26,7 +26,6 @@ import {
   StTitleWrapper,
   StCarouselWith,
 } from "./Style/StHome";
-import { __getWishPost } from "../../redux/modules/mypageSlice";
 import { StFlex } from "./Style/StCardList";
 
 const Home = () => {
@@ -68,16 +67,12 @@ const Home = () => {
     helpUsRef.current.style.color = "#fff";
   };
 
-  const logedIn = useSelector((state) => state.userSlice);
   useEffect(() => {
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${currentSlide * 1300}px)`;
   }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(__getWishPost());
   }, [dispatch]);
 
   return (

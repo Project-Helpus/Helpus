@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
+  baseURL: process.env.REACT_APP_SERVER_TEST,
   withCredentials: true,
 });
 
@@ -82,7 +82,14 @@ client.interceptors.response.use(
     return response;
   },
 
-  function (error) {
-    return error;
+  async function (error) {
+    if (error.response.data.errorMessage === "토큰 재발급 필요") {
+      await client.get("api/token");
+      client.request(error.config);
+      return;
+    } else if (error.response.data.errorMessage === "로그인 필요 2") {
+      window.alert("다시 로그인 해주세요");
+      window.location.replace("/login");
+    } else return error;
   }
 );
