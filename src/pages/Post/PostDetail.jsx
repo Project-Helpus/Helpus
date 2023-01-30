@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StWrapper } from "../../components/UI/StIndex";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   __detailPost,
@@ -164,7 +164,9 @@ const PostDetail = () => {
               <StBtnBox>
                 <StChatBtn
                   onClick={() => {
-                    navigate(`/chat/${postId}/${detail?.userId}`);
+                    navigate(`/chat/${postId}/${detail?.userId}`, {
+                      state: { chatInfo: detail },
+                    });
                   }}
                 >
                   문의하기
