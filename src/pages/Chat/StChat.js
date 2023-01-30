@@ -91,6 +91,7 @@ export const StReceiveDiv = styled.div`
 export const StImage = styled.img`
   width: 200px;
   height: 280px;
+  border-radius: 10px;
 `;
 
 export const StChatSend = styled.p`
