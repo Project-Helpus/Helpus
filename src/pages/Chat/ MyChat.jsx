@@ -9,6 +9,7 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
 import { __getChat } from "../../redux/modules/mypageSlice";
+import Rating from "./element/Rating";
 
 const MyChat = () => {
   const dispatch = useDispatch();
@@ -200,7 +201,8 @@ const MyChat = () => {
                   )}
                 </>
               )}
-              <StButton mode="yellowSmBtn">완료</StButton>
+              {/* <StButton mode="yellowSmBtn">완료</StButton> */}
+              <Rating></Rating>
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
               </StButton>
