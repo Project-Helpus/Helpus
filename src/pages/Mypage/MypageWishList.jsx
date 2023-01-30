@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import {
-  __getChat,
-  __getMyPage,
-  __getMyposts,
-  __getWishPost,
-} from "../../redux/modules/mypageSlice";
+import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
 import lcon_score1 from "../../asset/lcon_score1.svg";
@@ -25,17 +20,37 @@ const Mypage = () => {
   const navigate = useNavigate();
 
   const profile = useSelector((state) => state.mypageSlice?.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts?.result);
-  const data = useSelector((state) => state.mypageSlice?.data);
-  const chatList = useSelector((state) => state.mypageSlice?.chatList);
   const wish = useSelector((state) => state.mypageSlice?.wish);
   const { userInfo } = useSelector((state) => state.userSlice);
+  const { isLoading } = useSelector((state) => state.mypageSlice);
+
+  const observerTarget = useRef(null);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let observer = new IntersectionObserver(
+      (e, io) => {
+        e.forEach((e) => {
+          if (e.isIntersecting) {
+            io.unobserve(e.target);
+            setTimeout(() => {
+              if (wish !== 0) {
+                dispatch(__getMyposts(count));
+                setCount((prev) => prev + 6);
+              }
+            }, 300);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    if (observerTarget.current) observer.observe(observerTarget.current);
+    return () => observer.disconnect();
+  }, [wish]);
 
   useEffect(() => {
     dispatch(__getMyPage());
     dispatch(__getMyposts());
-    dispatch(__getChat());
-    dispatch(__getWishPost());
   }, [dispatch]);
 
   return (
@@ -81,96 +96,24 @@ const Mypage = () => {
         <StState>
           {userInfo?.state1} {userInfo?.state2}
         </StState>
-        <button
-          onClick={() => {
-            navigate("/mypage/detail");
-          }}
-        >
-          정보 수정
-        </button>
       </StProfile>
       <div>
-        <div>
-          <StMypageTitle>
-            <h2>채팅</h2>
-          </StMypageTitle>
-          <StChatWrap>
-            {chatList.list?.map((el) => {
-              if (userInfo.userId === el.ownerId) {
-                return (
-                  <StChatTitle
-                    key={el.roomId}
-                    onClick={() => {
-                      navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { data: data },
-                      });
-                    }}
-                  >
-                    <StImageWrap>
-                      <StImage src={el.senderImage} alt=""></StImage>
-                      <StChatName>{el.senderName}</StChatName>
-                    </StImageWrap>
-                    <StTextWrap>
-                      <StDate>{el.appointed.split("T")[0]}</StDate>
-                      <StTitle>{el.title}</StTitle>
-                    </StTextWrap>
-                  </StChatTitle>
-                );
-              } else {
-                return (
-                  <StChatTitle
-                    key={el.roomId}
-                    onClick={() => {
-                      navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { data: data },
-                      });
-                    }}
-                  >
-                    <StImageWrap>
-                      <StImage src={el.ownerImage} alt=""></StImage>
-                      <StChatName>{el.ownerName}</StChatName>
-                    </StImageWrap>
-                    <StTextWrap>
-                      <StDate>{el.appointed.split("T")[0]}</StDate>
-                      <StTitle>{el.title}</StTitle>
-                    </StTextWrap>
-                  </StChatTitle>
-                );
-              }
-            })}
-          </StChatWrap>
-        </div>
-        <div>
-          <StMypageTitle>
-            <h2>내 게시물</h2>
-            <span
-              onClick={() => {
-                navigate("/mypage/myposts");
-              }}
-            >
-              더보기
-            </span>
-          </StMypageTitle>
-          <StZZimWrap>
-            {myPosts?.map((el, index) => (
-              <Card type="찜 게시물" data={el} key={index}></Card>
-            ))}
-          </StZZimWrap>
-        </div>
         <StMypageTitle>
-          <h2>찜한 게시물</h2>
-          <span
-            onClick={() => {
-              navigate("/mypage/mywish");
-            }}
-          >
-            더보기
-          </span>
+          <h2>찜한 목록</h2>
         </StMypageTitle>
         <StZZimWrap>
           {wish?.map((el, index) => (
-            <Card type="찜 게시물" data={el} key={index}></Card>
+            <Card type="찜 가로 게시물" data={el} key={index}></Card>
           ))}
+          {!isLoading && (
+            <div
+              ref={observerTarget}
+              style={{
+                height: "1px",
+                width: "100%",
+              }}
+            ></div>
+          )}
         </StZZimWrap>
       </div>
     </StWarp>
@@ -231,7 +174,6 @@ const StMypageTitle = styled.div`
   span {
     color: ${(props) => props.theme.colors.middleGray};
     font-size: 14px;
-    cursor: pointer;
   }
 `;
 const StName = styled.div`
@@ -247,49 +189,6 @@ const StEmail = styled.div`
 const StState = styled.div`
   color: ${(props) => props.theme.colors.middleGray};
   margin-top: 8px;
-`;
-
-const StImage = styled.img`
-  width: 50px;
-  height: 50px;
-  box-shadow: 0 0 0 2px #efefef inset;
-  padding: 4px;
-  border-radius: 100%;
-`;
-const StChatName = styled.p`
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.middleGray};
-`;
-const StTitle = styled.p`
-  font-size: 18px;
-  font-weight: 600;
-  padding: 8px 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-const StDate = styled.p`
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.middleGray};
-`;
-
-const StImageWrap = styled.div`
-  width: 20%;
-  text-align: center;
-`;
-const StTextWrap = styled.div`
-  width: 80%;
-`;
-const StChatTitle = styled.div`
-  display: flex;
-  width: 33.33%;
-  margin-bottom: 24px;
-`;
-
-const StChatWrap = styled.div`
-  display: flex;
-  width: 1032px;
-  flex-wrap: wrap;
 `;
 
 const StheartWrap = styled.div`

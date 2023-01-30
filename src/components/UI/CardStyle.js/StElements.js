@@ -132,6 +132,9 @@ export const StZZimTitle = styled.p`
   font-size: 18px;
   font-weight: 600;
   padding: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 // export const St

@@ -56,6 +56,19 @@ import {
   StAllPostSquarePhoto,
   StAllPostNickName,
 } from "./UI/CardStyle.js/StCommon";
+
+import {
+  StMyContainer,
+  StMyImg,
+  StMyCirclePhoto,
+  StMyContents,
+  StMyNickName,
+  StMyTitle,
+  StMySubTitle,
+  StMyCaption,
+  StMyImgWrap,
+} from "../pages/Mypage/Style/StMypage";
+
 import emptyHeart from "../asset/emptyHeart.svg";
 import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
@@ -165,29 +178,86 @@ const Card = ({ type, data, onClick }) => {
       case "내 게시물":
         return (
           <>
-            <StFlex>
-              <StMySquarePhoto
+            <StMyContainer>
+              <StMyImg
                 src={data.imageUrl1}
                 onClick={() => moveDetail(data.postId)}
-              ></StMySquarePhoto>
-              <div>
-                <StFlex>
-                  <StCirclePhoto src={data.userImage}></StCirclePhoto>
-                  <StNickname>{data.userName}</StNickname>
-                  <StDate>{KoreaDate}</StDate>
-                  <StAddress>상세주소</StAddress>
-                  {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-                </StFlex>
-                <StContentsTitle></StContentsTitle>
-                <StContentsInfo>게시물 내용</StContentsInfo>
-                <StFlex>
-                  {/* map 돌리기(내 게시물에 참여한 사람들 프로필 사진) */}
-                  <img></img>
-                  <img></img>
-                  <img></img>
-                </StFlex>
-              </div>
-            </StFlex>
+                alt=""
+              ></StMyImg>
+              <StMyContents>
+                <StMyNickName>
+                  <StMyCirclePhoto
+                    src={data.userImage}
+                    alt=""
+                  ></StMyCirclePhoto>
+                  <span>{data.userName}</span>
+                </StMyNickName>
+                <StMyTitle>{data.title}</StMyTitle>
+                <StMySubTitle>{data.content}</StMySubTitle>
+                <StMyCaption>
+                  <span>{KoreaDate}</span>
+                  <span>
+                    {data.location1} {data.location2}
+                  </span>
+                </StMyCaption>
+                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StMyContents>
+            </StMyContainer>
+          </>
+        );
+      case "찜 가로 게시물":
+        return (
+          <>
+            <StMyContainer>
+              <StMyImgWrap>
+                <StMyImg
+                  src={data.imageUrl1}
+                  onClick={() => moveDetail(data.postId)}
+                  alt=""
+                ></StMyImg>
+                {count % 2 === 1 ? (
+                  <StZZimHeart
+                    onClick={ZZim}
+                    src={fullHeart}
+                    alt="wish1"
+                  ></StZZimHeart>
+                ) : (
+                  <StZZimHeart
+                    onClick={ZZim}
+                    src={emptyHeart}
+                    alt="wish2"
+                  ></StZZimHeart>
+                )}
+              </StMyImgWrap>
+              <StMyContents>
+                <StMyNickName>
+                  <StMyCirclePhoto
+                    src={data.userImage}
+                    alt=""
+                  ></StMyCirclePhoto>
+                  <span>{data.userName}</span>
+                </StMyNickName>
+                <StMyTitle>{data.title}</StMyTitle>
+                <StMySubTitle>{data.content}</StMySubTitle>
+                <StMyCaption>
+                  <span>{KoreaDate}</span>
+                  <span>
+                    {data.location1} {data.location2}
+                  </span>
+                </StMyCaption>
+                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StMyContents>
+            </StMyContainer>
           </>
         );
       case "찜 게시물":
@@ -252,7 +322,6 @@ const Card = ({ type, data, onClick }) => {
                     <StNickname>{data.userName}</StNickname>
                   </div>
                 </StFlex>
-
                 <StMargin60>
                   {tag?.map((item, idx) => {
                     return <StTag key={idx}>{item}</StTag>;
