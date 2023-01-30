@@ -3,6 +3,7 @@ import { ChatAPI } from "../../api/axios";
 
 const initialState = {
   chatImage: "",
+  senderInfo: null,
 };
 
 export const __score = createAsyncThunk(
@@ -22,7 +23,6 @@ export const __sendImage = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const res = await ChatAPI.postImage(formData);
-      console.log(res);
       if (res.status === 201) return thunkAPI.fulfillWithValue(res.data);
       else alert("이미지 업로드에 실패 했습니다.");
     } catch (err) {
@@ -35,7 +35,7 @@ export const __getSenderInfo = createAsyncThunk(
   "mypageSlice/",
   async (roomId, thunkAPI) => {
     try {
-      const res = await ChatAPI.getSenderInfo(roomId).then(res);
+      const res = await ChatAPI.getSenderInfo(roomId);
       console.log(res);
       if (res.status === 201) return thunkAPI.fulfillWithValue(res.data);
       else alert("정보 불러오기에 실패 했습니다.");
@@ -57,6 +57,13 @@ const chatSlice = createSlice({
       state.chatImage = action.payload;
     },
     [__sendImage.rejected]: (state) => {},
+    [__getSenderInfo.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getSenderInfo.fulfilled]: (state, action) => {
+      state.senderInfo = action.payload;
+    },
+    [__getSenderInfo.rejected]: (state) => {},
   },
 });
 

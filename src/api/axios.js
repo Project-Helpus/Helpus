@@ -8,7 +8,7 @@ export const client = axios.create({
 export const ChatAPI = {
   patchScore: (userId) => client.patch(`api/score/${userId}`),
   postImage: (formData) => client.post("api/chat/image", formData),
-  getSenderInfo: (roomId) => client.get("/api/chat/info", roomId),
+  getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
 };
 
 export const PostAPI = {
