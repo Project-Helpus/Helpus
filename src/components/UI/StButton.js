@@ -1,31 +1,75 @@
 import React from "react";
 import styled from "styled-components";
 
-const StButton = ({ mode, children, onClick }) => {
+const StButton = ({ mode, children, onClick, innerRef }) => {
   const Button = () => {
     switch (mode) {
       case "pinkLgBtn":
-        return <StPinkLgBtn onClick={onClick}>{children}</StPinkLgBtn>;
+        return (
+          <StPinkLgBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StPinkLgBtn>
+        );
       case "pinkMdBtn":
-        return <StPinkMdBtn onClick={onClick}>{children}</StPinkMdBtn>;
+        return (
+          <StPinkMdBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StPinkMdBtn>
+        );
       case "pinkSmBtn":
-        return <StPinkSmBtn onClick={onClick}>{children}</StPinkSmBtn>;
+        return (
+          <StPinkSmBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StPinkSmBtn>
+        );
       case "greenBtn":
-        return <StGreenBtn onClick={onClick}>{children}</StGreenBtn>;
+        return (
+          <StGreenBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StGreenBtn>
+        );
       case "yellowMdBtn":
-        return <StYellowMdBtn onClick={onClick}>{children}</StYellowMdBtn>;
+        return (
+          <StYellowMdBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StYellowMdBtn>
+        );
       case "yellowSmBtn":
-        return <StYellowSmBtn onClick={onClick}>{children}</StYellowSmBtn>;
+        return (
+          <StYellowSmBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StYellowSmBtn>
+        );
       case "orangeMdBtn":
-        return <StOrangeMdBtn onClick={onClick}>{children}</StOrangeMdBtn>;
+        return (
+          <StOrangeMdBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOrangeMdBtn>
+        );
       case "orangeSmBtn":
-        return <StOrangSmBtn onClick={onClick}>{children}</StOrangSmBtn>;
+        return (
+          <StOrangSmBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOrangSmBtn>
+        );
       case "outlineBtn":
-        return <StOutlineBtn onClick={onClick}>{children}</StOutlineBtn>;
+        return (
+          <StOutlineBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOutlineBtn>
+        );
       case "greenBlueBtn":
-        return <StGreenBlueBtn onClick={onClick}>{children}</StGreenBlueBtn>;
+        return (
+          <StGreenBlueBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StGreenBlueBtn>
+        );
       default:
-        return <StDefaultBtn onClick={onClick}>{children}</StDefaultBtn>;
+        return (
+          <StDefaultBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StDefaultBtn>
+        );
     }
   };
   return <Button />;
