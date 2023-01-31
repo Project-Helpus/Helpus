@@ -37,6 +37,7 @@ import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import HomeMain from "../../asset/HomeMain.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";
+
 const Home = () => {
   const HelpUsData = useSelector(
     (state) => state.postSlice.helpUsFalseDate?.result
@@ -77,7 +78,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(__getHelpeeFalse(""));
   }, [dispatch]);
-
+  
   useEffect(() => {
     crsHelperRef.current.style.transition = "all 1s ease-in-out";
     crsHelpUsRef.current.style.transition = "all 1s ease-in-out";
