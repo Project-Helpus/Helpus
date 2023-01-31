@@ -1,4 +1,5 @@
 import axios from "axios";
+import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
@@ -82,7 +83,16 @@ client.interceptors.response.use(
     return response;
   },
 
-  function (error) {
-    return error;
+  async function (error) {
+    if (error.response.data.errorMessage === "토큰 재발급 필요") {
+      await client.get("api/token");
+      client.request(error.config);
+      return;
+    } else if (error.response.data.errorMessage === "로그인 필요 2") {
+      await client.delete("api/token");
+      storage.removeItem("persist:root");
+      window.alert("다시 로그인 해주세요");
+      window.location.replace("/login");
+    } else return error;
   }
 );
