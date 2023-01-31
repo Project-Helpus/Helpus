@@ -64,7 +64,6 @@ export const UserAPI = {
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
   getMyposts: (count) => client.get(`/api/user/myposts?q=${count}`),
-  // getMypostsDetile: (count) => client.get(`api/user/myposts?q=${count}`),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),
   patchPassword: (changePassword) =>
