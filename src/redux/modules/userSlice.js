@@ -8,12 +8,11 @@ const initialState = {
   isSignup: false,
   kakaoInfo: "",
   userInfo: {
+    state1: null,
+    state2: null,
+    userId: 0,
     userImage: "",
     userName: "",
-    userId: 0,
-    email: "",
-    state1: "",
-    state2: "",
   },
   kakaoState: "",
   isLoginkakao: false,
@@ -220,7 +219,7 @@ const userSlice = createSlice({
     },
     [__postDupEmail.rejected]: (state) => {
       state.isLoading = false;
-      state.error = true;
+      state.dupCheck = false;
     },
     //__postLogin
     [__postLogin.pending]: (state) => {

@@ -14,10 +14,14 @@ const KakaoLogin = () => {
   const navigate = useNavigate();
 
   //카카오 인가코드 보내기
-  const sendAuth = () => {
+  const sendAuth = async () => {
     const code = location.search.split("=")[1];
-    dispatch(__kakaoLogin(code));
-    navigate("/auth/kakao/state");
+    const res = await dispatch(__kakaoLogin(code));
+    if (res.payload.state1 === null && res.payload.state2 === null) {
+      navigate("/auth/kakao/state");
+    } else {
+      navigate("/");
+    }
   };
 
   useEffect(() => {
