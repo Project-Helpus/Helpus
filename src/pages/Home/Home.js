@@ -33,7 +33,7 @@ import {
   StWriteButton,
   StWrBtnWrapper,
 } from "./Style/StHome";
-import { StFlex } from "../../components/UI/CardStyle.js/StCommon";
+import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import HomeMain from "../../asset/HomeMain.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";

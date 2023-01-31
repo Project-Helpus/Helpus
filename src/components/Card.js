@@ -26,7 +26,7 @@ import {
   StZZimTag,
   StMarginTop10,
   StAllPostDeadLine,
-} from "./UI/CardStyle.js/StElements";
+} from "./UI/CardStyle/StElements";
 import {
   StRowCard,
   StRowImgWrapper,
@@ -38,7 +38,7 @@ import {
   StCrsTitle,
   StCrsNickname,
   StProfileWrapper,
-} from "./UI/CardStyle.js/Row";
+} from "./UI/CardStyle/Row";
 import {
   StFlex,
   StCirclePhoto,
@@ -60,7 +60,7 @@ import {
   StAllPostWrapper,
   StAllPostSquarePhoto,
   StAllPostNickName,
-} from "./UI/CardStyle.js/StCommon";
+} from "./UI/CardStyle/StCommon";
 import emptyHeart from "../asset/emptyHeart.svg";
 import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
