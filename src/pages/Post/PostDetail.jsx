@@ -91,7 +91,6 @@ const PostDetail = () => {
   }, []);
 
   useEffect(() => {}, [deadLine]);
-  console.log(userId, detail.userId);
   return (
     <StWrapper>
       <StContainer>
