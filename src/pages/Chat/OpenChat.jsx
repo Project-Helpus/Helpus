@@ -75,7 +75,9 @@ const OpenChat = () => {
   };
 
   const deleteChatRoom = () => {
-    if (window.confirm("채팅방을 나가시겠습니까?")) {
+    if (
+      window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
+    ) {
       chatSocket.deleteChatRoom(roomId);
     }
   };
@@ -122,7 +124,6 @@ const OpenChat = () => {
     dispatch(__getChat());
   }, []);
 
-  console.log(state);
   return (
     <StChat.StWrapper>
       <StChat.StContainer>

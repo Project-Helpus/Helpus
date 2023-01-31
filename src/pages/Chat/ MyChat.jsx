@@ -87,7 +87,9 @@ const MyChat = () => {
   };
 
   const deleteChatRoom = () => {
-    if (window.confirm("채팅방을 나가시겠습니까?")) {
+    if (
+      window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
+    ) {
       chatSocket.deleteChatRoom(roomId, userId, state.chatInfo.leave);
       navigate("/mypage");
     }
@@ -201,8 +203,6 @@ const MyChat = () => {
                   )}
                 </>
               )}
-              {/* <StButton mode="yellowSmBtn">완료</StButton> */}
-              <Rating></Rating>
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
               </StButton>
