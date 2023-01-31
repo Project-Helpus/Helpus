@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { address } from "./element/Address";
 import { StSelector } from "../../components/UI/StIndex";
@@ -16,6 +16,8 @@ const SignUp = () => {
   const [nicknameText, setNicknameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
   const [confirmText, setConfirmText] = useState("");
+
+  const dupCheck = useSelector((state) => state.userSlice.dupCheck);
 
   const { state, city } = address;
 
@@ -35,6 +37,7 @@ const SignUp = () => {
     isUserName: false,
     isPassword: false,
     isConfirm: false,
+    isdupCheck: false,
     isState1: "",
     isState2: "",
   });
@@ -68,10 +71,11 @@ const SignUp = () => {
   const emailRegExp =
     /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
   const nickRegExp = /^[A-Za-z가-힣]{2,}$/;
-  const pwRegExp = /^[A-Za-z0-9]{4,}$/;
+  const pwRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
   //input 이벤트 핸들러
   const onChangeHandler = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
 
@@ -86,6 +90,7 @@ const SignUp = () => {
         setIsValid({ ...isValid, isEmail: true });
       }
     }
+
     //nickname 유효성 검사
     if (name === "userName") {
       if (!nickRegExp.test(value)) {
@@ -101,8 +106,10 @@ const SignUp = () => {
     //password 유효성 검사
     if (name === "password") {
       if (!pwRegExp.test(value)) {
-        //비밀번호의 길이(length)가 4글자 이하일 때
-        setPasswordText("4글자 이상 작성해주세요.");
+        //비밀번호의 값이 숫자+영문자+특수문자 조합 8자리 이상이 아닐때
+        setPasswordText(
+          "숫자+영문자+특수문자 조합으로 8자리이상 입력해주세요."
+        );
         setIsValid({ ...isValid, isPassword: false });
       } else {
         setPasswordText("");
@@ -152,13 +159,15 @@ const SignUp = () => {
     }
     formData.delete("confirm");
     dispatch(__signUp(formData));
-    alert("회원가입 완료");
     navigate("/login");
   };
 
   //email 중복확인
-  const dupEmail = () => {
-    dispatch(__postDupEmail(input.email));
+  const dupEmail = async () => {
+    const res = await dispatch(__postDupEmail(input.email));
+    if (res.payload.message === "사용 가능") {
+      setIsValid({ ...isValid, isdupCheck: dupCheck });
+    }
   };
 
   return (
@@ -224,7 +233,7 @@ const SignUp = () => {
             <input
               name="password"
               type="password"
-              placeholder="비밀번호는 4글자 이상으로 입력해 주세요."
+              placeholder="숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요."
               onChange={onChangeHandler}
               value={input.password}
               autoComplete="off"
@@ -268,6 +277,7 @@ const SignUp = () => {
             disabled={
               !(
                 isValid.isEmail &&
+                isValid.isdupCheck &&
                 isValid.isUserName &&
                 isValid.isPassword &&
                 isValid.isConfirm &&
@@ -333,6 +343,7 @@ const Stupwrap = styled.div`
       border-radius: 7px;
       background-color: #fafafa;
       padding-left: 6px;
+      box-sizing: border-box;
     }
     span {
       display: flex;
@@ -345,7 +356,7 @@ const Stupwrap = styled.div`
       border: 0;
       width: 100%;
       height: 40px;
-      background-color: #ffc3d5;
+      background-color: ${(props) => props.theme.colors.subPink};
       border-radius: 7px;
       color: white;
       margin-top: 12px;

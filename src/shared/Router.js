@@ -16,6 +16,8 @@ import KakaoLogin from "../pages/User/KakaoLogin";
 import MypageDetail from "../pages/Mypage/MypageDetail";
 import State from "../pages/User/State";
 import PostUpdate from "../pages/Post/PostUpdate";
+import MypagePostsDetail from "../pages/Mypage/MypagePostsDetail";
+import MypageWishList from "../pages/Mypage/MypageWishList";
 
 const Router = () => {
   return (
@@ -27,6 +29,8 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/detail" element={<MypageDetail />} />
+        <Route path="/mypage/myposts" element={<MypagePostsDetail />} />
+        <Route path="/mypage/mywish" element={<MypageWishList />} />
         <Route path="/auth/kakao" element={<KakaoLogin />} />
         <Route path="/auth/kakao/state" element={<State />} />
         <Route path="/postlist" element={<PostList />} />

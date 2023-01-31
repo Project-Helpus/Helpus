@@ -19,7 +19,7 @@ export default StUserWrap;
 const StLeft = styled.div`
   display: flex;
   position: relative;
-  width: 50%;
+  width: 40%;
   height: 100vh;
   background: url(${login_bg});
   background-size: cover;
@@ -27,7 +27,7 @@ const StLeft = styled.div`
 const StLeftOj = styled.div`
   position: absolute;
   text-align: center;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   img {

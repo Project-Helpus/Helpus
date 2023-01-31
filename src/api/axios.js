@@ -2,7 +2,7 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_TEST,
+  baseURL: process.env.REACT_APP_SERVER,
   withCredentials: true,
 });
 
@@ -63,7 +63,7 @@ export const UserAPI = {
 
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
-  getMyposts: () => client.get("/api/user/myposts"),
+  getMyposts: (count) => client.get(`/api/user/myposts?q=${count}`),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),
   patchPassword: (changePassword) =>

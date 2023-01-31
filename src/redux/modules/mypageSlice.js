@@ -10,6 +10,7 @@ const initialState = {
   data: "",
   chatList: "",
   wish: [],
+  dataLength: "",
 };
 
 //프로필 조회
@@ -98,6 +99,7 @@ const mypageSlice = createSlice({
     },
     [__getMyposts.fulfilled]: (state, action) => {
       state.myPosts = action.payload;
+      state.isLoading = false;
     },
     [__getMyposts.rejected]: (state) => {
       state.isLoading = false;

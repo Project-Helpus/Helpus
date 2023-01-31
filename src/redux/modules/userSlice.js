@@ -8,12 +8,11 @@ const initialState = {
   isSignup: false,
   kakaoInfo: "",
   userInfo: {
+    state1: null,
+    state2: null,
+    userId: 0,
     userImage: "",
     userName: "",
-    userId: 0,
-    email: "",
-    state1: "",
-    state2: "",
   },
   kakaoState: "",
   isLoginkakao: false,
@@ -28,6 +27,7 @@ export const __signUp = createAsyncThunk(
     try {
       const res = await UserAPI.signUp(payload);
       if (res.status === 201) {
+        window.alert("회원가입이 완료되었습니다.");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("회원가입에 실패했습니다.");
@@ -138,6 +138,7 @@ export const __kakaoSignOut = createAsyncThunk(
     try {
       const response = await UserAPI.kakaoSignOut();
       if (response.status === 200) {
+        window.alert("탈퇴가 완료되었습니다.");
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
@@ -155,6 +156,7 @@ export const __signOut = createAsyncThunk(
     try {
       const response = await UserAPI.signOut();
       if (response.status === 200) {
+        window.alert("탈퇴가 완료되었습니다.");
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
@@ -217,7 +219,7 @@ const userSlice = createSlice({
     },
     [__postDupEmail.rejected]: (state) => {
       state.isLoading = false;
-      state.error = true;
+      state.dupCheck = false;
     },
     //__postLogin
     [__postLogin.pending]: (state) => {
