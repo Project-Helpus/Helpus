@@ -32,6 +32,7 @@ export const __getMyposts = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getMyposts(data);
+      console.log("🚀 ~ file: mypageSlice.js:35 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -71,6 +72,7 @@ export const __getWishPost = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getWishlist(data);
+      console.log("🚀 ~ file: mypageSlice.js:74 ~ res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -98,12 +100,13 @@ const mypageSlice = createSlice({
       state.isLoading = true;
     },
     [__getMyposts.fulfilled]: (state, action) => {
-      state.myPosts = action.payload.result;
+      state.myPosts = action.payload;
+      console.log("🚀 ~ file: mypageSlice.js:104 ~ myPosts", state.myPosts);
       state.isLoading = false;
-      state.dataLength = action.payload.result.length;
-      if (state.dataLength !== 0) {
-        state.myPosts = [...state.myPosts, ...action.payload.result];
-      }
+      // state.dataLength = action.payload.result.length;
+      // if (state.dataLength !== 0) {
+      //   state.myPosts = [...state.myPosts, ...action.payload.result];
+      // }
     },
     [__getMyposts.rejected]: (state) => {
       state.isLoading = false;
@@ -115,6 +118,7 @@ const mypageSlice = createSlice({
     },
     [__getChat.fulfilled]: (state, action) => {
       state.chatList = action.payload;
+      console.log("🚀 ~ file: mypageSlice.js:121 ~ chatList", state.chatList);
     },
     [__getChat.rejected]: (state) => {
       state.isLoading = false;

@@ -24,19 +24,26 @@ const Mypage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const profile = useSelector((state) => state.mypageSlice?.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts?.result);
-  const data = useSelector((state) => state.mypageSlice?.data);
-  const chatList = useSelector((state) => state.mypageSlice?.chatList);
-  const wish = useSelector((state) => state.mypageSlice?.wish);
+  const profile = useSelector((state) => state.mypageSlice.profile);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+  console.log("🚀 ~ file: Mypage.jsx:29 ~ Mypage ~ myPosts", myPosts);
+  const data = useSelector((state) => state.mypageSlice.data);
+  console.log("🚀 ~ file: Mypage.jsx:31 ~ Mypage ~ data", data);
+  const chatList = useSelector((state) => state.mypageSlice.chatList);
+  console.log("🚀 ~ file: Mypage.jsx:33 ~ Mypage ~ chatList", chatList);
+  const wish = useSelector((state) => state.mypageSlice.wish);
+  console.log("🚀 ~ file: Mypage.jsx:32 ~ Mypage ~ wish", wish);
   const { userInfo } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
-    dispatch(__getMyPage());
-    dispatch(__getMyposts());
-    dispatch(__getChat());
-    dispatch(__getWishPost());
-  }, [dispatch]);
+    const loadData = async () => {
+      await dispatch(__getMyPage());
+      await dispatch(__getMyposts());
+      await dispatch(__getChat());
+      await dispatch(__getWishPost());
+    };
+    loadData();
+  }, []);
 
   return (
     <StWarp>
@@ -102,7 +109,7 @@ const Mypage = () => {
                     key={el.roomId}
                     onClick={() => {
                       navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { data: data },
+                        state: { chatInfo: el },
                       });
                     }}
                   >
@@ -122,7 +129,7 @@ const Mypage = () => {
                     key={el.roomId}
                     onClick={() => {
                       navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { data: data },
+                        state: { chatInfo: el },
                       });
                     }}
                   >

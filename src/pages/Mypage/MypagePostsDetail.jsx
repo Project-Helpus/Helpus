@@ -19,8 +19,9 @@ const Mypage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const profile = useSelector((state) => state.mypageSlice?.profile);
-  const myPosts = useSelector((state) => state.mypageSlice?.myPosts);
+  const profile = useSelector((state) => state.mypageSlice.profile);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+
   const { userInfo } = useSelector((state) => state.userSlice);
   // const { isLoading } = useSelector((state) => state.mypageSlice);
   // const data = useSelector((state) => state.postSlice.AllFalseDate);

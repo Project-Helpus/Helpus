@@ -26,14 +26,19 @@ import {
   StZZimTag,
   StMarginTop10,
   StAllPostDeadLine,
-} from "./UI/CardStyle.js/StElements";
+} from "./UI/CardStyle/StElements";
 import {
   StRowCard,
   StRowImgWrapper,
   StImg,
   StRowTitle,
   StRowContent,
-} from "./UI/CardStyle.js/Row";
+  StCrsPost,
+  StCrsProfile,
+  StCrsTitle,
+  StCrsNickname,
+  StProfileWrapper,
+} from "./UI/CardStyle/Row";
 import {
   StFlex,
   StCirclePhoto,
@@ -55,7 +60,7 @@ import {
   StAllPostWrapper,
   StAllPostSquarePhoto,
   StAllPostNickName,
-} from "./UI/CardStyle.js/StCommon";
+} from "./UI/CardStyle/StCommon";
 
 import {
   StMyContainer,
@@ -138,23 +143,6 @@ const Card = ({ type, data, onClick }) => {
             </StAllPostWrapper>
           </StColumnCard>
         );
-      // case "세로":
-      //   return (
-      //     <StColumnCard>
-      //       <StColumnImgWrapper>
-      //         <StImg alt="thumbnail" src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} />
-      //       </StColumnImgWrapper>
-      //       <StFlex>
-      //         <StColumnNickName>{data.userName}</StColumnNickName>
-      //         <StColumnCity>
-      //           {data.location1} {data.location2}
-      //         </StColumnCity>
-      //         {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-      //       </StFlex>
-      //       <StColumnTitle>{data.title}</StColumnTitle>
-      //       <StColumnDate>{KoreaDate}</StColumnDate>
-      //     </StColumnCard>
-      //   );
       case "채팅":
         return (
           <>
@@ -180,7 +168,7 @@ const Card = ({ type, data, onClick }) => {
           <>
             <StMyContainer>
               <StMyImg
-                src={data.imageUrl1}
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
                 alt=""
               ></StMyImg>
@@ -216,7 +204,7 @@ const Card = ({ type, data, onClick }) => {
             <StMyContainer>
               <StMyImgWrap>
                 <StMyImg
-                  src={data.imageUrl1}
+                  src={data.thumbnail}
                   onClick={() => moveDetail(data.postId)}
                   alt=""
                 ></StMyImg>
@@ -265,7 +253,7 @@ const Card = ({ type, data, onClick }) => {
           <>
             <StZZimWrap>
               <StZZimImg
-                src={data.imageUrl1}
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
               ></StZZimImg>
               {count % 2 === 1 ? (
@@ -282,7 +270,6 @@ const Card = ({ type, data, onClick }) => {
                 ></StZZimHeart>
               )}
               <StZZimTitle>{data.title}</StZZimTitle>
-              {/* <StContentsInfo>{data.content}</StContentsInfo> */}
               {deadLine === 1 ? (
                 <StEmptyDiv />
               ) : (
@@ -298,10 +285,6 @@ const Card = ({ type, data, onClick }) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
-                {/* <StDate>{KoreaDate}</StDate>
-                  <StAddress>
-                    {data.location1} {data.location2}
-                  </StAddress> */}
               </StZZimWrapContents>
             </StZZimWrap>
           </>
@@ -332,21 +315,25 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StDeadLine>마감</StDeadLine>
                 )}
-
-                {/* </StSpaceBetween> */}
               </StMainContentsWrapper>
             </StFlex>
           </StMainWrapper>
         );
       case "케러셀":
         return (
-          <StMarginRight>
-            <StMySquarePhoto
-              src={data.imageUrl1}
+          <>
+            <StCrsPost
+              src={data.thumbnail}
               onClick={() => moveDetail(data.postId)}
-            ></StMySquarePhoto>
-            <StMainContentsTitle>{title15}...</StMainContentsTitle>
-          </StMarginRight>
+            ></StCrsPost>
+            <StProfileWrapper>
+              <StCrsProfile src={data.userImage}></StCrsProfile>
+              <div>
+                <StCrsTitle>{data.title}</StCrsTitle>
+                <StCrsNickname>{data.userName.slice(0, 10)}</StCrsNickname>
+              </div>
+            </StProfileWrapper>
+          </>
         );
       default:
         return;
