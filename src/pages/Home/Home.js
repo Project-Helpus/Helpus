@@ -31,10 +31,12 @@ import {
   StMainImg,
   StMainImg2,
   StWriteButton,
+  StWrBtnWrapper,
 } from "./Style/StHome";
 import { StFlex } from "../../components/UI/CardStyle.js/StCommon";
 import HomeMain from "../../asset/HomeMain.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
+import "../../static/fonts/font.css";
 const Home = () => {
   const HelpUsData = useSelector(
     (state) => state.postSlice.helpUsFalseDate?.result
@@ -50,7 +52,7 @@ const Home = () => {
   const crsHelperRef = useRef(null);
   const crsHelpUsRef = useRef(null);
   const crsHelpeeRef = useRef(null);
-
+  const isLogedIn = useSelector((state) => state.userSlice.isLogin);
   const linkHelpUs = () => {
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
@@ -84,17 +86,17 @@ const Home = () => {
       crsHelperRef.current.style.transform = `translateX(-57.5em)`;
       crsHelpUsRef.current.style.transform = `translateX(-57.5em)`;
       crsHelpeeRef.current.style.transform = `translateX(-57.5em)`;
-    }, 2000);
+    }, 3000);
     setTimeout(() => {
       crsHelperRef.current.style.transform = `translateX(-115em)`;
       crsHelpUsRef.current.style.transform = `translateX(-115em)`;
       crsHelpeeRef.current.style.transform = `translateX(-115em)`;
-    }, 4000);
+    }, 6000);
     setTimeout(() => {
       crsHelperRef.current.style.transform = `translateX(0)`;
       crsHelpUsRef.current.style.transform = `translateX(0)`;
       crsHelpeeRef.current.style.transform = `translateX(0)`;
-    }, 6000);
+    }, 9000);
   }, []);
 
   return (
@@ -116,7 +118,14 @@ const Home = () => {
       </StTopImg>
 
       <StTest>
-        <StWriteButton onClick={() => navigate("/post")}>글쓰기</StWriteButton>
+        {isLogedIn === true ? (
+          <StWrBtnWrapper>
+            <StWriteButton onClick={() => navigate("/post")}>
+              글쓰기
+            </StWriteButton>
+          </StWrBtnWrapper>
+        ) : null}
+
         <StContentsContainer>
           <StPostInfo>
             <StPostTitle>HelpUs</StPostTitle>
@@ -185,7 +194,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const StDiv = styled.div`
-  max-width: 1370px;
-`;

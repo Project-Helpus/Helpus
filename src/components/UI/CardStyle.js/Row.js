@@ -32,6 +32,7 @@ export const StCrsPost = styled.img`
   width: 26.25em;
   height: 18.13em;
   margin-right: 2.5em;
+  border: 1px solid rgb(240, 240, 240);
   border-radius: 1.25em;
   cursor: pointer;
 `;
@@ -46,8 +47,12 @@ export const StCrsProfile = styled.img`
   margin-right: 0.44em;
 `;
 export const StCrsTitle = styled.p`
+  width: 20.12em;
   font-size: 1.13em;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0.2em 0 0.35em 0;
 `;
 export const StCrsNickname = styled.p`

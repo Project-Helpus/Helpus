@@ -266,8 +266,6 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StDeadLine>마감</StDeadLine>
                 )}
-
-                {/* </StSpaceBetween> */}
               </StMainContentsWrapper>
             </StFlex>
           </StMainWrapper>
@@ -282,7 +280,7 @@ const Card = ({ type, data, onClick }) => {
             <StProfileWrapper>
               <StCrsProfile src={data.userImage}></StCrsProfile>
               <div>
-                <StCrsTitle>{data.title.slice(0, 10)}</StCrsTitle>
+                <StCrsTitle>{data.title}</StCrsTitle>
                 <StCrsNickname>{data.userName.slice(0, 10)}</StCrsNickname>
               </div>
             </StProfileWrapper>
