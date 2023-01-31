@@ -26,13 +26,9 @@ const Mypage = () => {
 
   const profile = useSelector((state) => state.mypageSlice.profile);
   const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
-  console.log("🚀 ~ file: Mypage.jsx:29 ~ Mypage ~ myPosts", myPosts);
   const data = useSelector((state) => state.mypageSlice.data);
-  console.log("🚀 ~ file: Mypage.jsx:31 ~ Mypage ~ data", data);
   const chatList = useSelector((state) => state.mypageSlice.chatList);
-  console.log("🚀 ~ file: Mypage.jsx:33 ~ Mypage ~ chatList", chatList);
   const wish = useSelector((state) => state.mypageSlice.wish);
-  console.log("🚀 ~ file: Mypage.jsx:32 ~ Mypage ~ wish", wish);
   const { userInfo } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
