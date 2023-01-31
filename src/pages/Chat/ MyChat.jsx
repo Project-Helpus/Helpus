@@ -9,7 +9,6 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
 import { __getChat } from "../../redux/modules/mypageSlice";
-import Rating from "./element/Rating";
 
 const MyChat = () => {
   const dispatch = useDispatch();
@@ -23,6 +22,7 @@ const MyChat = () => {
   const [chatRecord, setChatRecord] = useState([]);
   const [invitation, setInvitation] = useState(false);
   const [acception, setAcception] = useState(false);
+  const [appointmentState, setAppointmentState] = useState(0);
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
@@ -75,6 +75,7 @@ const MyChat = () => {
 
   const cancelAppointment = () => {
     if (window.confirm("약속을 취소 하시겠습니까?")) {
+      setInvitation(false);
       setAcception(false);
     }
   };
@@ -85,6 +86,8 @@ const MyChat = () => {
       setInvitation(true);
     }
   };
+
+  console.log(appointmentState);
 
   const deleteChatRoom = () => {
     if (
@@ -109,6 +112,7 @@ const MyChat = () => {
       setChatRecord(data);
     });
     return () => {
+      setNewMsg([]);
       chatSocket.quitChatRoom(roomId);
     };
   }, [roomId]);
@@ -119,13 +123,13 @@ const MyChat = () => {
       setNewMsg((prev) => [...prev, data]);
     });
     chatSocket.readMessage(roomId);
+    socket.current.on("updateState", (data) => {
+      setAppointmentState(data.state);
+    });
   }, [socket.current]);
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
-    chatWindow.current.scrollTo({
-      top: chatWindow.current.scrollHeight,
-    });
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
 
@@ -192,11 +196,12 @@ const MyChat = () => {
               </StChat.StAppointedDay>
               {userId === state.chatInfo.ownerId && (
                 <>
-                  {!acception ? (
+                  {appointmentState === 0 && (
                     <StButton mode="pinkSmBtn" onClick={sendAppointment}>
                       약속하기
                     </StButton>
-                  ) : (
+                  )}
+                  {appointmentState === 2 && (
                     <StButton mode="pinkSmBtn" onClick={cancelAppointment}>
                       취소하기
                     </StButton>

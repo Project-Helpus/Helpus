@@ -9,7 +9,6 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
-import { __getSenderInfo } from "./../../redux/modules/chatSlice";
 
 const OpenChat = () => {
   const dispatch = useDispatch();
@@ -99,6 +98,7 @@ const OpenChat = () => {
       setChatRecord(data);
     });
     return () => {
+      setNewMsg([]);
       chatSocket.quitChatRoom(roomId);
     };
   }, []);
@@ -113,9 +113,6 @@ const OpenChat = () => {
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
-    chatWindow.current.scrollTo({
-      top: chatWindow.current.scrollHeight,
-    });
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
 
