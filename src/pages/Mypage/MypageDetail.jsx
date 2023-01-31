@@ -19,7 +19,7 @@ const MypageDetail = () => {
   const navigate = useNavigate();
 
   //프로필 정보 불러오기
-  const profile = useSelector((state) => state.userSlice.profile);
+  const profile = useSelector((state) => state.mypageSlice.profile);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
   const { userInfo } = useSelector((state) => state.userSlice);
 
@@ -101,16 +101,22 @@ const MypageDetail = () => {
 
   //카카오 탈퇴 버튼
   const kakaosignOutHandler = () => {
-    dispatch(__kakaoSignOut());
-    alert("탈퇴완료");
-    navigate("/");
+    if (window.confirm("정말 탈퇴하시겠습니까?")) {
+      dispatch(__kakaoSignOut());
+      navigate("/");
+    } else {
+      alert("취소합니다.");
+    }
   };
 
   //로컬 탈퇴 버튼
   const signOutHandler = () => {
-    dispatch(__signOut());
-    alert("탈퇴완료");
-    navigate("/");
+    if (window.confirm("정말 탈퇴하시겠습니까?")) {
+      dispatch(__signOut());
+      navigate("/");
+    } else {
+      alert("취소합니다.");
+    }
   };
 
   //프로필 정보 불러오기
@@ -242,9 +248,10 @@ const StProfile = styled.div`
     margin: 10px auto;
     width: 300px;
     height: 44px;
-    background-color: #ea9db4;
+    background-color: ${(props) => props.theme.colors.subPink};
     border: none;
     border-radius: 7px;
+    color: white;
   }
   input {
     width: 300px;
@@ -283,5 +290,5 @@ const StState = styled.div`
 
 const StSingOut = styled.div`
   font-size: 14px;
-  color: #999999;
+  color: ${(props) => props.theme.colors.middleGray};
 `;
