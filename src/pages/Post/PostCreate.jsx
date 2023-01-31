@@ -7,7 +7,7 @@ import { __createPost } from "../../redux/modules/postSlice";
 import { 행정구역 } from "./element/address";
 import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
-import arrow_forward_pink from "../../asset/arrow_forward.svg";
+import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
 
 const PostCreate = () => {
@@ -245,7 +245,7 @@ const PostCreate = () => {
             name="tag"
             id="tag"
             onChange={addTag}
-            onKeyPress={(e) => handleKeyPress(e)}
+            onKeyDown={(e) => handleKeyPress(e)}
             value={tag}
           />
         </StCol>

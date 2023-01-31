@@ -15,6 +15,7 @@ export const StMyImg = styled.img`
   width: 20em;
   height: 11.25em;
   border-radius: 10px;
+  border: 1px solid ${(props) => props.theme.colors.gray};
   cursor: pointer;
 `;
 

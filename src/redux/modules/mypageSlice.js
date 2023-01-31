@@ -98,12 +98,8 @@ const mypageSlice = createSlice({
       state.isLoading = true;
     },
     [__getMyposts.fulfilled]: (state, action) => {
-      state.myPosts = action.payload.result;
+      state.myPosts = action.payload;
       state.isLoading = false;
-      state.dataLength = action.payload.result.length;
-      if (state.dataLength !== 0) {
-        state.myPosts = [...state.myPosts, ...action.payload.result];
-      }
     },
     [__getMyposts.rejected]: (state) => {
       state.isLoading = false;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
@@ -6,12 +7,14 @@ export const client = axios.create({
 });
 
 export const ChatAPI = {
-  // ChatAPI
+  patchScore: (userId) => client.patch(`api/score/${userId}`),
+  postImage: (formData) => client.post("api/chat/image", formData),
+  getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
 };
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
-  postUpdate: (id, Form) => client.put(`api/post/${id}`, Form),
+  postUpdate: (id, data) => client.put(`api/post/${id}`, data),
   postDelete: (id) => client.delete(`api/post/${id}`),
   postZZim: (id) => client.post(`api/wish/${id}`),
   getAllFalse: (count, searchValue) =>
@@ -61,7 +64,6 @@ export const UserAPI = {
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
   getMyposts: (count) => client.get(`/api/user/myposts?q=${count}`),
-  // getMypostsDetile: (count) => client.get(`api/user/myposts?q=${count}`),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),
   patchPassword: (changePassword) =>
@@ -83,7 +85,16 @@ client.interceptors.response.use(
     return response;
   },
 
-  function (error) {
-    return error;
+  async function (error) {
+    if (error.response.data.errorMessage === "토큰 재발급 필요") {
+      await client.get("api/token");
+      client.request(error.config);
+      return;
+    } else if (error.response.data.errorMessage === "로그인 필요 2") {
+      await client.delete("api/token");
+      storage.removeItem("persist:root");
+      window.alert("다시 로그인 해주세요");
+      window.location.replace("/login");
+    } else return error;
   }
 );

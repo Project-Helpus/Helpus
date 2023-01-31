@@ -20,11 +20,14 @@ export const __updatePost = createAsyncThunk(
   "mypageSlice/updatePost",
   async (payload, thunkAPI) => {
     try {
+      console.log("pay:", payload);
       const Id = payload.id;
-      const Form = payload.formData;
-      const res = await PostAPI.postUpdate(Id, Form);
+      const data = payload.data;
+      const res = await PostAPI.postUpdate(Id, data);
+      console.log("response:", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
+      console.log("error:", err);
       return thunkAPI.rejectWithValue();
     }
   }

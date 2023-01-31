@@ -19,35 +19,36 @@ const Mypage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const profile = useSelector((state) => state.mypageSlice?.profile);
-  const myPosts = useSelector((state) => state.mypageSlice?.myPosts);
+  const profile = useSelector((state) => state.mypageSlice.profile);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+
   const { userInfo } = useSelector((state) => state.userSlice);
-  const data = useSelector((state) => state.postSlice.AllFalseDate);
-  const { isLoading } = useSelector((state) => state.mypageSlice);
+  // const { isLoading } = useSelector((state) => state.mypageSlice);
+  // const data = useSelector((state) => state.postSlice.AllFalseDate);
 
-  const observerTarget = useRef(null);
-  const [count, setCount] = useState(0);
+  // const observerTarget = useRef(null);
+  // const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    let observer = new IntersectionObserver(
-      (e, io) => {
-        e.forEach((e) => {
-          if (e.isIntersecting) {
-            io.unobserve(e.target);
-            setTimeout(() => {
-              if (myPosts !== 0) {
-                dispatch(__getMyposts(count));
-                setCount((prev) => prev + 6);
-              }
-            }, 300);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    if (observerTarget.current) observer.observe(observerTarget.current);
-    return () => observer.disconnect();
-  }, [myPosts]);
+  // useEffect(() => {
+  //   let observer = new IntersectionObserver(
+  //     (e, io) => {
+  //       e.forEach((e) => {
+  //         if (e.isIntersecting) {
+  //           io.unobserve(e.target);
+  //           setTimeout(() => {
+  //             if (myPosts !== 0) {
+  //               dispatch(__getMyposts(count));
+  //               setCount((prev) => prev + 6);
+  //             }
+  //           }, 300);
+  //         }
+  //       });
+  //     },
+  //     { threshold: 0.5 }
+  //   );
+  //   if (observerTarget.current) observer.observe(observerTarget.current);
+  //   return () => observer.disconnect();
+  // }, [myPosts]);
 
   useEffect(() => {
     dispatch(__getMyPage());
@@ -106,7 +107,7 @@ const Mypage = () => {
           {myPosts?.map((el, index) => (
             <Card type="내 게시물" data={el} key={index}></Card>
           ))}
-          {!isLoading && (
+          {/* {!isLoading && (
             <div
               ref={observerTarget}
               style={{
@@ -114,7 +115,7 @@ const Mypage = () => {
                 width: "100%",
               }}
             ></div>
-          )}
+          )} */}
         </StZZimWrap>
       </div>
     </StWarp>
