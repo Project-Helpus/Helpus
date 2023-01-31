@@ -31,7 +31,6 @@ const Login = () => {
   useEffect(() => {
     if (!isLogin) return;
     if (isLogin) {
-      alert("로그인 성공");
       navigate("/");
     }
   }, [isLogin]);
@@ -114,6 +113,7 @@ const StLoginWrap = styled.div`
       margin: 6px;
       background-color: #fafafa;
       padding-left: 8px;
+      box-sizing: border-box;
     }
     button {
       border: 0;
@@ -122,6 +122,7 @@ const StLoginWrap = styled.div`
       background-color: #ffc3d5;
       border-radius: 7px;
       margin: 6px;
+      font-size: 1.1em;
     }
     img {
       margin: 6px;
