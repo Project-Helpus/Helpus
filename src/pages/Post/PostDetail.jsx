@@ -8,7 +8,7 @@ import {
   __updatePost,
   __postZZim,
 } from "../../redux/modules/postSlice";
-import arrow_forward from "../../asset/arrow_forward.svg";
+import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
 import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle/StCommon";
@@ -78,17 +78,13 @@ const PostDetail = () => {
   };
 
   const changeDeadLine = () => {
-    // const formData = new FormData();
     if (deadLine === 1) {
-      // formData.append("isDeadLine", 2);
       dispatch(__updatePost({ data: { isDeadLine: parseInt(2) }, id: postId }));
     } else {
-      // formData.append("isDeadLine", 1);
-      // dispatch(__updatePost({ formData, id: postId }));
       dispatch(__updatePost({ data: { isDeadLine: parseInt(1) }, id: postId }));
     }
   };
-  console.log("deadLine:", deadLine);
+  
   const ZZim = (e) => {
     dispatch(__postZZim(postId));
     if (zMsg === "찜") {
@@ -100,15 +96,16 @@ const PostDetail = () => {
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
-      // 마지막 사진으로 이동
-    } else {
+    } 
+    // 마지막 사진으로 이동
+    else {
       setCurrentSlide(currentSlide - 1);
     }
   };
   const moveCrsRight = () => {
     if (currentSlide >= TotalSlides) {
-      //더 이상 넘어갈 슬라이드가 없으면
-      setCurrentSlide(0); //1번째 사진으로 넘어간다
+      //더 이상 넘어갈 슬라이드가 없으면 1번째 사진으로 넘어간다
+      setCurrentSlide(0);
     } else {
       setCurrentSlide(currentSlide + 1);
     }
@@ -119,7 +116,6 @@ const PostDetail = () => {
 
   useEffect(() => {
     dispatch(__detailPost(postId));
-    console.log("디스패치 됩니다");
   }, [deadLine]);
   useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
@@ -131,7 +127,7 @@ const PostDetail = () => {
       <StContainer>
         <StSpaceBetween>
           <StBackBtn onClick={() => navigate(-1)}>
-            <img src={arrow_forward} alt="back_button" />
+            <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
             {userId === detail?.userId && (
@@ -217,7 +213,9 @@ const PostDetail = () => {
               <StBtnBox>
                 <StChatBtn
                   onClick={() => {
-                    navigate(`/chat/${postId}/${detail?.userId}`);
+                    navigate(`/chat/${postId}/${detail?.userId}`, {
+                      state: { chatInfo: detail },
+                    });
                   }}
                 >
                   문의하기

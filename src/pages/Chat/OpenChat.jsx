@@ -1,31 +1,37 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { StButton } from "../../components/UI/StIndex";
+import { __getChat } from "../../redux/modules/mypageSlice";
 import * as chatSocket from "../../utils/socket";
 import * as StChat from "./StChat";
-import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_a_photo from "../../asset/add_a_photo.svg";
+import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
-import { __getChat } from "../../redux/modules/mypageSlice";
-import Rating from "./element/Rating";
+import { __getSenderInfo } from "./../../redux/modules/chatSlice";
 
-const MyChat = () => {
+const OpenChat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { roomId } = useParams();
+  const { postId } = useParams();
+  const { ownerId } = useParams();
   const { state } = useLocation();
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const { chatList } = useSelector((state) => state.mypageSlice);
-  const [msg, setMsg] = useState("");
-  const [newMsg, setNewMsg] = useState([]);
-  const [chatRecord, setChatRecord] = useState([]);
-  const [invitation, setInvitation] = useState(false);
-  const [acception, setAcception] = useState(false);
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
+
+  const [msg, setMsg] = useState("");
+  const [newMsg, setNewMsg] = useState([]);
+  const [chatRecord, setChatRecord] = useState(null);
+  const [roomId, setRoomId] = useState(null);
+  const [invitation, setInvitation] = useState(false);
+
+  const changeInputHandler = (e) => {
+    setMsg(e.target.value);
+  };
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -37,17 +43,13 @@ const MyChat = () => {
     return chat;
   };
 
-  const changeInputHandler = (e) => {
-    setMsg(e.target.value);
-  };
-
-  const moveScrollToReceiveMessage = () => {
+  const moveScrollToReceiveMessage = useCallback(() => {
     if (chatWindow.current) {
       chatWindow.current.scrollTo({
         top: chatWindow.current.scrollHeight,
       });
     }
-  };
+  }, []);
 
   const sendMsg = (e) => {
     if (e.key === "Enter" && msg !== "") {
@@ -65,20 +67,6 @@ const MyChat = () => {
       chatSocket.sendMessage(userId, roomId, result.payload.content);
     }
   };
-
-  const sendAppointment = () => {
-    if (window.confirm("확정 하시겠습니까?")) {
-      chatSocket.appointment(userId, roomId);
-      setAcception(true);
-    }
-  };
-
-  const cancelAppointment = () => {
-    if (window.confirm("약속을 취소 하시겠습니까?")) {
-      setAcception(false);
-    }
-  };
-
   const acceptRequest = () => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
@@ -90,8 +78,7 @@ const MyChat = () => {
     if (
       window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
     ) {
-      chatSocket.deleteChatRoom(roomId, userId, state.chatInfo.leave);
-      navigate("/mypage");
+      chatSocket.deleteChatRoom(roomId);
     }
   };
 
@@ -100,18 +87,21 @@ const MyChat = () => {
     }
   };
 
-  // 채팅방 입장 시 소켓 생성, 채팅방 참여, 이전 채팅기록 로딩
+  // 채팅방 처음 생성 시 소켓 생성, 채팅방 생성, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
     chatSocket.loginChat(userId);
-    chatSocket.enterChatRoom(roomId);
+    chatSocket.openChatRoom(userId, postId, ownerId);
+    socket.current.on("roomId", (data) => {
+      setRoomId(data);
+    });
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
     });
     return () => {
       chatSocket.quitChatRoom(roomId);
     };
-  }, [roomId]);
+  }, []);
 
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
@@ -129,6 +119,11 @@ const MyChat = () => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
 
+  // 채팅 리스트 불러오기
+  useEffect(() => {
+    dispatch(__getChat());
+  }, []);
+
   return (
     <StChat.StWrapper>
       <StChat.StContainer>
@@ -141,11 +136,11 @@ const MyChat = () => {
               return (
                 <StChat.StCard
                   key={idx}
-                  onClick={() =>
+                  onClick={() => {
                     navigate(`/mypage/chat/${el.roomId}`, {
                       state: { chatInfo: el },
-                    })
-                  }
+                    });
+                  }}
                 >
                   <StChat.StProfileImage
                     src={el.senderImage}
@@ -162,11 +157,11 @@ const MyChat = () => {
               return (
                 <StChat.StCard
                   key={idx}
-                  onClick={() =>
+                  onClick={() => {
                     navigate(`/mypage/chat/${el.roomId}`, {
                       state: { chatInfo: el },
-                    })
-                  }
+                    });
+                  }}
                 >
                   <StChat.StProfileImage
                     src={el.ownerImage}
@@ -183,33 +178,19 @@ const MyChat = () => {
         </StChat.StChatList>
         <StChat.StInnerBox>
           <StChat.StTopContainer>
-            <StChat.StBackBtn onClick={() => navigate("/mypage")}>
+            <StChat.StBackBtn onClick={() => navigate(`/post/${postId}`)}>
               <img src={arrow_forward_pink} alt="back_button" />
             </StChat.StBackBtn>
             <StChat.StAppointment>
               <StChat.StAppointedDay>
                 {appointedTime(state.chatInfo.appointed)}
               </StChat.StAppointedDay>
-              {userId === state.chatInfo.ownerId && (
-                <>
-                  {!acception ? (
-                    <StButton mode="pinkSmBtn" onClick={sendAppointment}>
-                      약속하기
-                    </StButton>
-                  ) : (
-                    <StButton mode="pinkSmBtn" onClick={cancelAppointment}>
-                      취소하기
-                    </StButton>
-                  )}
-                </>
-              )}
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
               </StButton>
             </StChat.StAppointment>
           </StChat.StTopContainer>
           <StChat.StChatBox ref={chatWindow}>
-            {/* 이전 메세지 수신 */}
             {chatRecord?.map((el, idx) => {
               if (
                 el.userId === userId &&
@@ -229,47 +210,24 @@ const MyChat = () => {
               ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    {userId === state.chatInfo.ownerId ? (
-                      <StChat.StProfileImage
-                        src={state.chatInfo.senderImage}
-                        alt="sender_profile_image"
-                      />
-                    ) : (
-                      <StChat.StProfileImage
-                        src={state.chatInfo.ownerImage}
-                        alt="sender_profile_image"
-                      />
-                    )}
+                    <StChat.StProfileImage
+                      src={state.chatInfo.userImage}
+                      alt="sender_profile_image"
+                    />
                     <StChat.StChatSend>{el.content}</StChat.StChatSend>
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (
-                el.userId === userId &&
-                el.content.includes("`card`") === true
-              ) {
+              } else if (el.userId === userId && el.content === "`card`0") {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      userId={el.userId}
-                      acceptRequest={acceptRequest}
-                    />
+                    <AppointmentCard userId={el.userId} />
                   </StChat.StSendDiv>
                 );
-              } else if (
-                el.userId !== userId &&
-                el.content.includes("`card`") === true
-              ) {
+              } else if (el.userId !== userId && el.content === "`card`0") {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
-                      userId={el.userId}
-                    />
+                    <AppointmentCard userId={el.userId} />
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId) {
@@ -292,11 +250,10 @@ const MyChat = () => {
                 );
               }
             })}
-            {/* 새로운 메세지 송, 수신 */}
             {newMsg?.map((el, idx) => {
               if (
                 el.userId === userId &&
-                el.content.includes("`card`") === false &&
+                el.content !== "`card`0" &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -307,52 +264,29 @@ const MyChat = () => {
                 );
               } else if (
                 el.userId !== userId &&
-                el.content.includes("`card`") === false &&
+                el.content !== "`card`0" &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    {userId === state.chatInfo.ownerId ? (
-                      <StChat.StProfileImage
-                        src={state.chatInfo.senderImage}
-                        alt="sender_profile_image"
-                      />
-                    ) : (
-                      <StChat.StProfileImage
-                        src={state.chatInfo.ownerImage}
-                        alt="sender_profile_image"
-                      />
-                    )}
+                    <StChat.StProfileImage
+                      src={state.chatInfo.userImage}
+                      alt="sender_profile_image"
+                    />
                     <StChat.StChatSend>{el.content}</StChat.StChatSend>
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (
-                el.userId === userId &&
-                el.content.includes("`card`") === true
-              ) {
+              } else if (el.userId === userId && el.content === "`card`0") {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
-                      userId={el.userId}
-                    />
+                    <AppointmentCard />
                   </StChat.StSendDiv>
                 );
-              } else if (
-                el.userId !== userId &&
-                el.content.includes("`card`") === true
-              ) {
+              } else if (el.userId !== userId && el.content === "`card`0") {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
-                      userId={el.userId}
-                    />
+                    <AppointmentCard />
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId) {
@@ -406,4 +340,4 @@ const MyChat = () => {
   );
 };
 
-export default MyChat;
+export default OpenChat;

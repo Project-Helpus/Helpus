@@ -106,7 +106,7 @@ const Mypage = () => {
                     key={el.roomId}
                     onClick={() => {
                       navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { chatList: chatList },
+                        state: { chatInfo: el },
                       });
                     }}
                   >
@@ -126,7 +126,7 @@ const Mypage = () => {
                     key={el.roomId}
                     onClick={() => {
                       navigate(`/mypage/chat/${el.roomId}`, {
-                        state: { chatList: chatList },
+                        state: { chatInfo: el },
                       });
                     }}
                   >

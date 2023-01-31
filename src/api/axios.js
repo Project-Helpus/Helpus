@@ -2,12 +2,14 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
+  baseURL: process.env.REACT_APP_SERVER_TEST,
   withCredentials: true,
 });
 
 export const ChatAPI = {
-  // ChatAPI
+  patchScore: (userId) => client.patch(`api/score/${userId}`),
+  postImage: (formData) => client.post("api/chat/image", formData),
+  getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
 };
 
 export const PostAPI = {
