@@ -32,11 +32,14 @@ const Mypage = () => {
   const { userInfo } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
-    dispatch(__getMyPage());
-    dispatch(__getMyposts());
-    dispatch(__getChat());
-    dispatch(__getWishPost());
-  }, [dispatch]);
+    const loadData = async () => {
+      await dispatch(__getMyPage());
+      await dispatch(__getMyposts());
+      await dispatch(__getChat());
+      await dispatch(__getWishPost());
+    };
+    loadData();
+  }, []);
 
   return (
     <StWarp>

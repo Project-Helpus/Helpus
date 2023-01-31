@@ -6,33 +6,28 @@ import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __updatePost } from "../../redux/modules/postSlice";
 import { 행정구역 } from "./element/address";
 import Calender from "./element/Calender";
+import { StRedFont } from "./StPostDetail";
 
 const PostCreate = () => {
-  const userInfo = useSelector((state) => state.postSlice.postInfo);
+  const postInfo = useSelector((state) => state.postSlice.postInfo);
   const { state, city } = 행정구역;
-  const tagData = userInfo.tag?.split(",");
+  const tagData = postInfo.tag?.split(",");
   const [tags, setTags] = useState(tagData);
   const [tag, setTag] = useState("");
-  const [date, setDate] = useState(new Date(userInfo.appointed));
+  const [date, setDate] = useState(new Date(postInfo.appointed));
   const [input, setInput] = useState({
-    location1: `${userInfo.location1}`,
-    location2: `${userInfo.location2}`,
+    location1: `${postInfo.location1}`,
+    location2: `${postInfo.location2}`,
   });
-  const [titleInput, setTitleInput] = useState(userInfo.title);
-  const [contentsInput, setContentsInput] = useState(userInfo.content);
+  const [titleInput, setTitleInput] = useState(postInfo.title);
+  const [contentsInput, setContentsInput] = useState(postInfo.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const helpeeRef = useRef(null);
   const helperRef = useRef(null);
   const helpUsRef = useRef(null);
-  const [img, setImg1] = useState();
-  const [img2, setImg2] = useState();
-  const [img3, setImg3] = useState();
-  const [pr, setPrImg1] = useState(userInfo.imageUrl1);
-  const [pr2, setPrImg2] = useState(userInfo.imageUrl2);
-  const [pr3, setPrImg3] = useState(userInfo.imageUrl3);
 
-  const category = userInfo.category;
+  const category = postInfo.category;
   const [categories, setCategories] = useState(category);
 
   const changeInputHandler = (e) => {
@@ -57,62 +52,48 @@ const PostCreate = () => {
     helperRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
   };
-  const change = (e) => {
-    setImg1(e.target.files[0]);
-    const pr = e.target.files[0];
-    const reader1 = new FileReader();
-    reader1.readAsDataURL(pr);
-    reader1.onloadend = () => {
-      setPrImg1(reader1.result);
-    };
-  };
-  const change2 = (e) => {
-    setImg2(e.target.files[0]);
-    const pr2 = e.target.files[0];
-    const reader2 = new FileReader();
-    reader2.readAsDataURL(pr2);
-    reader2.onloadend = () => {
-      setPrImg2(reader2.result);
-    };
-  };
-  const change3 = (e) => {
-    setImg3(e.target.files[0]);
-    const pr3 = e.target.files[0];
-    const reader3 = new FileReader();
-    reader3.readAsDataURL(pr3);
-    reader3.onloadend = () => {
-      setPrImg3(reader3.result);
-    };
-  };
 
   const clickHandler = (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("title", titleInput);
-    formData.append("content", contentsInput);
-    formData.append("category", categories);
+    // const payload ={{"title":titleInput},}
     const value = date.toISOString();
-    formData.append("appointed", value);
-    formData.append("isDeadLine", parseInt(1));
-    for (const property in input) {
-      formData.append(`${property}`, input[property]);
-    }
+    const dete = {
+      title: titleInput,
+      content: contentsInput,
+      category: categories,
+      appointed: value,
+      tag: tags,
+      location1: input.location1,
+      location2: input.location2,
+    };
+    // const formData = new FormData();
+    // formData.append("title", titleInput);
+    // formData.append("content", contentsInput);
+    // formData.append("category", categories);
+    // formData.append("appointed", value);
+    // formData.append("isDeadLine", parseInt(1));
+    // for (const property in input) {
+    //   formData.append(`${property}`, input[property]);
+    // }
+    // for (const property in input) {
+    //   dete = (`${property}`, input[property]);
+    // }
+    console.log("data:", dete);
+    // if (img !== undefined) {
+    //   formData.append("imageUrl1", img);
+    // }
+    // if (img2 !== undefined) {
+    //   formData.append("imageUrl2", img2);
+    // }
+    // if (img3 !== undefined) {
+    //   formData.append("imageUrl3", img3);
+    // }
 
-    if (img !== undefined) {
-      formData.append("imageUrl1", img);
-    }
-    if (img2 !== undefined) {
-      formData.append("imageUrl2", img2);
-    }
-    if (img3 !== undefined) {
-      formData.append("imageUrl3", img3);
-    }
-
-    formData.append("tag", tags);
-    dispatch(__updatePost({ formData, id: userInfo.postId }));
+    // formData.append("tag", tags);
+    dispatch(__updatePost({ data: dete, id: postInfo.postId }));
   };
 
+  console.log("tag:", tag.split(","));
   const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);
@@ -173,7 +154,6 @@ const PostCreate = () => {
         <StCol>
           <StInnerBox>
             <StLabel>카테고리 선택</StLabel>
-            {/* <StInnerContainer> */}
             <StCategory value={1} ref={helpeeRef} onClick={changeHelpeeColor}>
               헬피
             </StCategory>
@@ -184,57 +164,13 @@ const PostCreate = () => {
               헬퍼스
             </StCategory>
             <span>(헬퍼스:단체 봉사 활동)</span>
-            {/* </StInnerContainer> */}
           </StInnerBox>
         </StCol>
-        <StGroupImgs>
-          <input
-            style={{ display: "none" }}
-            accept="image/jpg, image/png, image/gif"
-            id="image1"
-            name="image1"
-            type="file"
-            onChange={change}
-          />
-          <label htmlFor="image1">
-            <StImg src={pr} alr="inputImage1" />
-          </label>
-          <input
-            style={{ display: "none" }}
-            accept="image/jpg, image/png, image/gif"
-            id="image2"
-            name="image2"
-            type="file"
-            onChange={change2}
-          />
-          {pr2 == null ? (
-            <StImgButton htmlFor="image2">+</StImgButton>
-          ) : (
-            <label htmlFor="image2">
-              <StImg src={pr2} alr="inputImage2" />
-            </label>
-          )}
-          <input
-            style={{ display: "none" }}
-            accept="image/jpg, image/png, image/gif"
-            id="image3"
-            name="image3"
-            type="file"
-            onChange={change3}
-          />
-          {pr3 == null ? (
-            <StImgButton htmlFor="image3">+</StImgButton>
-          ) : (
-            <label htmlFor="image3">
-              <StImg src={pr3} alr="inputImage3" />
-            </label>
-          )}
-        </StGroupImgs>
         <StCol>
           <StLabel>지역 설정</StLabel>
           <StBox>
             <StSelector name="location1" onChange={changeInputHandler}>
-              <option value="">{userInfo.location1}</option>
+              <option value="">{postInfo.location1}</option>
               {state.map((el) => (
                 <option key={el.state} value={el.codeNm}>
                   {el.codeNm}
@@ -242,7 +178,7 @@ const PostCreate = () => {
               ))}
             </StSelector>
             <StSelector name="location2" onChange={changeInputHandler}>
-              <option value="">{userInfo.location2}</option>
+              <option value="">{postInfo.location2}</option>
               {city
                 .filter((el) => el.state === input.location1)
                 .map((el) => (
@@ -253,6 +189,7 @@ const PostCreate = () => {
             </StSelector>
           </StBox>
         </StCol>
+        <StRedFont>사진수정은 불가능 합니다</StRedFont>
         <StCol>
           <StLabel htmlFor="tag">태그</StLabel>
           <StTagContainer>
