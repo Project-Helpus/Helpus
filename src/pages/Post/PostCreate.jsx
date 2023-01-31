@@ -9,6 +9,7 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
+import Carousel from "../../components/Carousel";
 
 const PostCreate = () => {
   const dispatch = useDispatch();
@@ -162,7 +163,7 @@ const PostCreate = () => {
                 );
               }
             })}
-            <span>(헬퍼스:단체 봉사 활동)</span>
+            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
@@ -176,7 +177,8 @@ const PostCreate = () => {
               사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
             </StLabel>
           )}
-          <input
+          <Carousel />
+          {/* <input
             style={{ display: "none" }}
             accept="image/jpg, image/png, image/gif"
             id="image"
@@ -205,7 +207,7 @@ const PostCreate = () => {
                 </StImgButton>
               </>
             )}
-          </StRow>
+          </StRow> */}
         </StCol>
         <StCol>
           <StLabel>지역 설정</StLabel>
