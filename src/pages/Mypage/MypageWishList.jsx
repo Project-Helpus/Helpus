@@ -22,31 +22,31 @@ const Mypage = () => {
   const profile = useSelector((state) => state.mypageSlice?.profile);
   const wish = useSelector((state) => state.mypageSlice?.wish);
   const { userInfo } = useSelector((state) => state.userSlice);
-  const { isLoading } = useSelector((state) => state.mypageSlice);
+  // const { isLoading } = useSelector((state) => state.mypageSlice);
 
-  const observerTarget = useRef(null);
-  const [count, setCount] = useState(0);
+  // const observerTarget = useRef(null);
+  // const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    let observer = new IntersectionObserver(
-      (e, io) => {
-        e.forEach((e) => {
-          if (e.isIntersecting) {
-            io.unobserve(e.target);
-            setTimeout(() => {
-              if (wish !== 0) {
-                dispatch(__getMyposts(count));
-                setCount((prev) => prev + 6);
-              }
-            }, 300);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    if (observerTarget.current) observer.observe(observerTarget.current);
-    return () => observer.disconnect();
-  }, [wish]);
+  // useEffect(() => {
+  //   let observer = new IntersectionObserver(
+  //     (e, io) => {
+  //       e.forEach((e) => {
+  //         if (e.isIntersecting) {
+  //           io.unobserve(e.target);
+  //           setTimeout(() => {
+  //             if (wish !== 0) {
+  //               dispatch(__getMyposts(count));
+  //               setCount((prev) => prev + 6);
+  //             }
+  //           }, 300);
+  //         }
+  //       });
+  //     },
+  //     { threshold: 0.5 }
+  //   );
+  //   if (observerTarget.current) observer.observe(observerTarget.current);
+  //   return () => observer.disconnect();
+  // }, [wish]);
 
   useEffect(() => {
     dispatch(__getMyPage());
@@ -105,7 +105,7 @@ const Mypage = () => {
           {wish?.map((el, index) => (
             <Card type="찜 가로 게시물" data={el} key={index}></Card>
           ))}
-          {!isLoading && (
+          {/* {!isLoading && (
             <div
               ref={observerTarget}
               style={{
@@ -113,7 +113,7 @@ const Mypage = () => {
                 width: "100%",
               }}
             ></div>
-          )}
+          )} */}
         </StZZimWrap>
       </div>
     </StWarp>
