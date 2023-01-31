@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StWrapper } from "../../components/UI/StIndex";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   __detailPost,
@@ -16,31 +16,26 @@ import {
   StSpaceBetween,
 } from "../../components/UI/CardStyle.js/StCommon";
 import {
-  Avatar,
   StBackBtn,
-  StBox,
   StBtnBox,
   StChatBtn,
   StContainer,
-  StContent,
+  StContents,
+  StContentsWrapper,
+  StCrsContainer,
   StCrsImg,
   StCrsLeftButton,
   StCrsRightButton,
-  StDate,
   StDeadLineButton,
   StDeleteButton,
   StGroupImgs,
   StHidden,
   StHopeDay,
-  StImage,
-  StInnerColBox,
-  StInnerRowBox,
   StLocation,
   StMagam,
   StMainImg,
   StNickname,
   StProfile,
-  StProfileBox,
   StTags,
   StTitle,
   StUpdateButton,
@@ -52,15 +47,16 @@ import CrsLeft from "../../asset/CrsLeft.svg";
 import CrsRight from "../../asset/CrsRight.svg";
 import { useRef } from "react";
 import { useState } from "react";
+import A from "../../asset/emptyHeart.svg";
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
   const { userId } = useSelector((state) => state.userSlice.userInfo);
-  const zMsg = useSelector((state) => state.postSlice.ZZimMsg.message);
-  const deadLine = useSelector((state) => state.postSlice.postInfo.isDeadLine);
+  const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
-  const detail = useSelector((state) => state.postSlice.postInfo);
+  const detail = useSelector((state) => state?.postSlice?.postInfo);
+  const deadLine = detail?.isDeadLine;
   const curr = new Date(detail.appointed);
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
   const kRTimeDiff = 9 * 60 * 60 * 1000;
@@ -69,9 +65,12 @@ const PostDetail = () => {
   const tag = detail.tag?.split(",");
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const TotalSlides = 10;
-  const [preImg, setPreImg] = useState("");
+  const TotalSlides = detail?.imageUrls?.length - 4;
+
+  const preRef = useRef(null);
+  console.log("user:", userId);
   console.log("detail:", detail);
+
   const deletePost = () => {
     dispatch(__deletePost(postId));
     alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
@@ -82,15 +81,17 @@ const PostDetail = () => {
   };
 
   const changeDeadLine = () => {
-    const formData = new FormData();
+    // const formData = new FormData();
     if (deadLine === 1) {
-      formData.append("isDeadLine", parseInt(2));
-      dispatch(__updatePost({ formData, id: postId }));
+      // formData.append("isDeadLine", 2);
+      dispatch(__updatePost({ data: { isDeadLine: parseInt(2) }, id: postId }));
     } else {
-      formData.append("isDeadLine", 1);
-      dispatch(__updatePost({ formData, id: postId }));
+      // formData.append("isDeadLine", 1);
+      // dispatch(__updatePost({ formData, id: postId }));
+      dispatch(__updatePost({ data: { isDeadLine: parseInt(1) }, id: postId }));
     }
   };
+  console.log("deadLine:", deadLine);
   const ZZim = (e) => {
     dispatch(__postZZim(postId));
     if (zMsg === "찜") {
@@ -99,7 +100,6 @@ const PostDetail = () => {
       e.target.src = fullHeart;
     }
   };
-
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -117,19 +117,18 @@ const PostDetail = () => {
     }
   };
   const preview = (img) => {
-    setPreImg(img);
+    preRef.current.src = img;
   };
 
   useEffect(() => {
     dispatch(__detailPost(postId));
-  }, []);
+    console.log("디스패치 됩니다");
+  }, [deadLine]);
   useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
 
-  useEffect(() => {}, [deadLine]);
-  console.log(userId, detail.userId);
   return (
     <StWrapper>
       <StContainer>
@@ -165,7 +164,10 @@ const PostDetail = () => {
             )}
           </StFlex>
         </StSpaceBetween>
-        <StTitle>{detail?.title}</StTitle>
+        <StFlex>
+          <StTitle>{detail?.title}</StTitle>
+          {deadLine === 1 ? null : <StMagam>마감</StMagam>}
+        </StFlex>
         <StUserInfo>
           <StFlex>
             <StProfile src={detail?.userImage}></StProfile>
@@ -177,10 +179,9 @@ const PostDetail = () => {
             </div>
           </StFlex>
         </StUserInfo>
-
         <StHopeDay>희망일:{KoreaDate}</StHopeDay>
 
-        <StMainImg src={preImg}></StMainImg>
+        <StMainImg ref={preRef} src={detail.mainImage}></StMainImg>
         <StGroupImgs value={currentSlide + 1}>
           <StCrsLeftButton
             src={CrsLeft}
@@ -192,7 +193,7 @@ const PostDetail = () => {
           ></StCrsRightButton>
 
           <StHidden>
-            <StFlex ref={crsRef}>
+            <StCrsContainer ref={crsRef}>
               {detail.imageUrls?.map((item, idx) => {
                 return (
                   <StCrsImg
@@ -202,19 +203,17 @@ const PostDetail = () => {
                   />
                 );
               })}
-            </StFlex>
+            </StCrsContainer>
           </StHidden>
-          {/* <StImage src={detail?.imageUrl1} />
-          <StImage src={detail?.imageUrl2} />
-          <StImage src={detail?.imageUrl3} /> */}
         </StGroupImgs>
-
+        <StContentsWrapper>
+          <StContents>{detail.content}</StContents>
+        </StContentsWrapper>
         <StFlex>
           {tag?.map((item, idx) => {
             return <StTags key={idx}>{item}</StTags>;
           })}
         </StFlex>
-        <p>{detail.content}</p>
         {logedIn && (
           <>
             {userId !== detail?.userId && (
