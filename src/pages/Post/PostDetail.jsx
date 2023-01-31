@@ -11,10 +11,7 @@ import {
 import arrow_forward from "../../asset/arrow_forward.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
-import {
-  StFlex,
-  StSpaceBetween,
-} from "../../components/UI/CardStyle.js/StCommon";
+import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle/StCommon";
 import {
   StBackBtn,
   StBtnBox,
