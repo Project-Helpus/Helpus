@@ -22,7 +22,9 @@ const MyChat = () => {
   const [chatRecord, setChatRecord] = useState([]);
   const [invitation, setInvitation] = useState(false);
   const [acception, setAcception] = useState(false);
-  const [appointmentState, setAppointmentState] = useState(0);
+  const [appointmentState, setAppointmentState] = useState(
+    state.chatInfo.state
+  );
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
@@ -75,6 +77,7 @@ const MyChat = () => {
 
   const cancelAppointment = () => {
     if (window.confirm("약속을 취소 하시겠습니까?")) {
+      chatSocket.cancelCard(roomId);
       setInvitation(false);
       setAcception(false);
     }
@@ -86,8 +89,6 @@ const MyChat = () => {
       setInvitation(true);
     }
   };
-
-  console.log(appointmentState);
 
   const deleteChatRoom = () => {
     if (
@@ -119,13 +120,16 @@ const MyChat = () => {
 
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
-    socket.current.on("broadcast", (data) => {
-      setNewMsg((prev) => [...prev, data]);
-    });
-    chatSocket.readMessage(roomId);
     socket.current.on("updateState", (data) => {
       setAppointmentState(data.state);
     });
+    socket.current.on("broadcast", (data) => {
+      setNewMsg((prev) => [...prev, data]);
+    });
+    socket.current.on("updateState", (data) => {
+      setAppointmentState(data.state);
+    });
+    chatSocket.readMessage(roomId);
   }, [socket.current]);
 
   // 새로운 채팅 감지 시 스크롤 다운
@@ -256,8 +260,7 @@ const MyChat = () => {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
+                      appointment={appointmentState}
                       userId={el.userId}
                       acceptRequest={acceptRequest}
                     />
@@ -270,10 +273,9 @@ const MyChat = () => {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
+                      appointment={appointmentState}
                       userId={el.userId}
+                      acceptRequest={acceptRequest}
                     />
                   </StChat.StReceiveDiv>
                 );
@@ -339,10 +341,9 @@ const MyChat = () => {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
+                      appointment={appointmentState}
                       userId={el.userId}
+                      acceptRequest={acceptRequest}
                     />
                   </StChat.StSendDiv>
                 );
@@ -353,10 +354,9 @@ const MyChat = () => {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <AppointmentCard
-                      invitation={invitation}
-                      accepted={el.content}
-                      acceptRequest={acceptRequest}
+                      appointment={appointmentState}
                       userId={el.userId}
+                      acceptRequest={acceptRequest}
                     />
                   </StChat.StReceiveDiv>
                 );
