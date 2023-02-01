@@ -81,7 +81,7 @@ const PostCreate = () => {
     setGetImg(true);
   };
 
-  const clickHandler = (e) => {
+  const clickHandler = async (e) => {
     e.preventDefault();
     if (window.confirm("게시 하시겠습니까?")) {
       const formData = new FormData();
@@ -96,7 +96,8 @@ const PostCreate = () => {
       for (let i = 0; i < img.length; i++) {
         formData.append("post-images", img[i]);
       }
-      dispatch(__createPost(formData));
+      await dispatch(__createPost(formData));
+      window.alert("게시물 업로드 되었습니다.");
       navigate("/postlist");
     }
   };
