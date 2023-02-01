@@ -137,7 +137,7 @@ const PostCreate = () => {
             <StCategory value={3} ref={helpUsRef} onClick={changeHelpUsColor}>
               헬퍼스
             </StCategory>
-            <span>(헬퍼스:단체 봉사 활동)</span>
+            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
