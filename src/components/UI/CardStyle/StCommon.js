@@ -110,6 +110,7 @@ export const StAllPostWrapper = styled.div`
 export const StSpaceBetween = styled.div`
   justify-content: space-between;
   display: flex;
+  width: 50em;
 `;
 
 export const StEmpty = styled.div`

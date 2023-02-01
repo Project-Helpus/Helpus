@@ -24,14 +24,9 @@ const PostList = () => {
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
-  const locationRef = useRef(null);
 
-  const userLocation1 = useSelector(
-    (state) => state.mypageSlice.profile?.state1
-  );
-  const userLocation2 = useSelector(
-    (state) => state.mypageSlice.profile?.state2
-  );
+  const userLocation1 = useSelector((state) => state.userSlice.userInfo.state1);
+  const userLocation2 = useSelector((state) => state.userSlice.userInfo.state2);
   const { isLogin } = useSelector((state) => state.userSlice);
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
@@ -126,16 +121,23 @@ const PostList = () => {
       dispatch(__setBoolLocationFalse());
     }
   };
+
+  const navigatePostCreate = () => {
+    if (isLogin) {
+      navigate("/post");
+    } else {
+      window.alert("로그인이 필요 합니다.");
+      navigate("/login");
+    }
+  };
   return (
     <>
       <StWrapper>
         <StTitleButtonWrapper>
           <StLocation>
-            {userLocation1}&gt;{userLocation2}
+            {userLocation1}&nbsp;{userLocation2}
           </StLocation>
-          <StWriteButton onClick={() => navigate("/post")}>
-            글쓰기
-          </StWriteButton>
+          <StWriteButton onClick={navigatePostCreate}>글쓰기</StWriteButton>
         </StTitleButtonWrapper>
         <StTabWrapper>
           <StTap ref={allRef} onClick={setBoolAllTrue}>
@@ -150,10 +152,6 @@ const PostList = () => {
           <StTap ref={helpUsRef} onClick={setBoollHelpUsTrue}>
             헬퍼스
           </StTap>
-          {/* <StTap ref={locationRef} onClick={setBoolLocationTrue}>
-            전국
-          </StTap> */}
-
           <StToggleWrapper>
             <StLabelAll ref={leftRef} onClick={toggleLeft}>
               전국
