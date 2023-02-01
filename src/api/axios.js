@@ -17,10 +17,12 @@ export const PostAPI = {
   postUpdate: (id, data) => client.put(`api/post/${id}`, data),
   postDelete: (id) => client.delete(`api/post/${id}`),
   postZZim: (id) => client.post(`api/wish/${id}`),
-  getAllFalse: (count, searchValue) =>
-    client.get(
-      `api/post/all-location?q=${count}&category=&search=${searchValue}`
-    ),
+  // getAllFalse: (count, searchValue) =>
+  //   client.get(
+  //     `api/post/all-location?q=${count}&category=&search=${searchValue}`
+  //   ),
+  getAllFalse: (searchValue) =>
+    client.get(`api/post/all-location?category=&search=${searchValue}`),
   getHelpeeFalse: (searchValue) =>
     client.get(`api/post/all-location?category=1&search=${searchValue}`),
   getHelperFalse: (searchValue) =>
