@@ -3,14 +3,16 @@ import { MypageAPI } from "../../api/axios";
 
 const initialState = {
   profile: "",
-  myPosts: "",
+  myPosts: [],
   isLogin: false,
   error: false,
   isLoading: false,
+  isPostLoading: false,
+  postCount: 0,
   data: "",
   chatList: "",
   wish: [],
-  dataLength: "",
+  dataLength: [],
 };
 
 //프로필 조회
@@ -95,14 +97,14 @@ const mypageSlice = createSlice({
     },
     //내 게시물 조회
     [__getMyposts.pending]: (state) => {
-      state.isLoading = true;
+      state.isPostLoading = true;
     },
     [__getMyposts.fulfilled]: (state, action) => {
-      state.myPosts = action.payload;
-      state.isLoading = false;
+      state.isPostLoading = false;
+      state.myPosts = action.payload.result;
     },
     [__getMyposts.rejected]: (state) => {
-      state.isLoading = false;
+      state.isPostLoading = false;
     },
 
     //내 채팅 목록 조회

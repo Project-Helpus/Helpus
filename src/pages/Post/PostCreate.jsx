@@ -9,7 +9,6 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
-import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import crsLeftButton from "../../asset/CrsLeft.svg";
 import crsRightButton from "../../asset/CrsRight.svg";
 
@@ -109,6 +108,14 @@ const PostCreate = () => {
   };
 
   const addTag = (e) => {
+    if (tags.length > 2) {
+      window.alert("태그는 최대 3개까지 가능합니다.");
+      return;
+    }
+    if (e.target.value.length > 7) {
+      window.alert("최대 8글자 까지 가능합니다.");
+      return;
+    }
     setTag(e.target.value);
   };
 
@@ -154,7 +161,7 @@ const PostCreate = () => {
         <StBox>
           <StLabel htmlFor="date">날짜</StLabel>
           <StInnerBox>
-            <Calender value={date} setDate={setDate} />
+            <Calender selectedDate={date} setDate={setDate} />
           </StInnerBox>
         </StBox>
         <StCol>
@@ -226,13 +233,13 @@ const PostCreate = () => {
                   onClick={moveCrsRight}
                 ></StCrsRightButton>
                 <StHidden>
-                  <StFlex ref={crsRef}>
+                  <StFlexBox ref={crsRef}>
                     {previewImg?.map((el, i) => (
                       <label htmlFor="image" key={i}>
                         <StCrsImg src={el} alt="inputImage" />
                       </label>
                     ))}
-                  </StFlex>
+                  </StFlexBox>
                 </StHidden>
               </StCrsContainser>
             ) : (
@@ -274,7 +281,7 @@ const PostCreate = () => {
           </StBox>
         </StCol>
         <StCol>
-          <StLabel htmlFor="tag">태그</StLabel>
+          <StLabel htmlFor="tag">태그 (최대 3개)</StLabel>
           <StTagContainer>
             {tags.map((e, i) => (
               <StTag key={i}>
@@ -301,6 +308,9 @@ const PostCreate = () => {
     </StWrapper>
   );
 };
+
+export default PostCreate;
+
 const StCrsImg = styled.img`
   width: 185px;
   height: 225px;
@@ -366,7 +376,7 @@ const StCol = styled.div`
 `;
 
 const StLabel = styled.label`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
 `;
 
@@ -400,13 +410,6 @@ const StImgButton = styled.label`
   cursor: pointer;
 `;
 
-const StImg = styled.img`
-  border-radius: 10px;
-  width: 400px;
-  height: 225px;
-  cursor: pointer;
-`;
-
 const StTag = styled.div`
   display: flex;
   justify-content: center;
@@ -435,7 +438,7 @@ const StTagButton = styled.button`
 `;
 
 const StCategory = styled.button`
-  width: 200px;
+  width: 160px;
   height: 44px;
   cursor: pointer;
   border: none;
@@ -444,7 +447,7 @@ const StCategory = styled.button`
 `;
 
 const StSelectedCategory = styled.button`
-  width: 200px;
+  width: 160px;
   height: 44px;
   background-color: ${(props) => props.theme.colors.subPink};
   color: white;
@@ -460,4 +463,6 @@ const StSelector = styled.select`
   border-radius: 10px;
 `;
 
-export default PostCreate;
+const StFlexBox = styled.div`
+  display: flex;
+`;

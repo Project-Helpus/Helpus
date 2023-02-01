@@ -1,33 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
-import lcon_score1 from "../../asset/lcon_score1.svg";
-import lcon_score2 from "../../asset/lcon_score2.svg";
-import lcon_score3 from "../../asset/lcon_score3.svg";
-import lcon_score4 from "../../asset/lcon_score4.svg";
-import lcon_score5 from "../../asset/lcon_score5.svg";
-import lcon_score6 from "../../asset/lcon_score6.svg";
-import lcon_score7 from "../../asset/lcon_score7.svg";
-import lcon_score8 from "../../asset/lcon_score8.svg";
-import lcon_score9 from "../../asset/lcon_score9.svg";
-import lcon_score10 from "../../asset/lcon_score10.svg";
 
 const Mypage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const profile = useSelector((state) => state.mypageSlice.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts);
 
   const { userInfo } = useSelector((state) => state.userSlice);
-  // const { isLoading } = useSelector((state) => state.mypageSlice);
-  // const data = useSelector((state) => state.postSlice.AllFalseDate);
+  const { isPostLoading } = useSelector((state) => state.mypageSlice);
 
-  // const observerTarget = useRef(null);
-  // const [count, setCount] = useState(0);
+  const observerTarget = useRef(null);
+  const [count, setCount] = useState();
 
   // useEffect(() => {
   //   let observer = new IntersectionObserver(
@@ -53,7 +42,7 @@ const Mypage = () => {
   useEffect(() => {
     dispatch(__getMyPage());
     dispatch(__getMyposts());
-  }, [dispatch]);
+  }, []);
 
   return (
     <StWarp>
@@ -61,40 +50,6 @@ const Mypage = () => {
         <StProfileImg src={profile?.userImage} alt="" />
         <StName>{userInfo?.userName}</StName>
         <StEmail>{profile?.email}</StEmail>
-        <StheartWrap>
-          {profile?.score === 0 && <span>평가없음</span>}
-          {profile?.score === 1 && (
-            <StheartImg src={lcon_score1} alt=""></StheartImg>
-          )}
-          {profile?.score === 2 && (
-            <StheartImg src={lcon_score2} alt=""></StheartImg>
-          )}
-          {profile?.score === 3 && (
-            <StheartImg src={lcon_score3} alt=""></StheartImg>
-          )}
-          {profile?.score === 4 && (
-            <StheartImg src={lcon_score4} alt=""></StheartImg>
-          )}
-          {profile?.score === 5 && (
-            <StheartImg src={lcon_score5} alt=""></StheartImg>
-          )}
-          {profile?.score === 6 && (
-            <StheartImg src={lcon_score6} alt=""></StheartImg>
-          )}
-          {profile?.score === 7 && (
-            <StheartImg src={lcon_score7} alt=""></StheartImg>
-          )}
-          {profile?.score === 8 && (
-            <StheartImg src={lcon_score8} alt=""></StheartImg>
-          )}
-          {profile?.score === 9 && (
-            <StheartImg src={lcon_score9} alt=""></StheartImg>
-          )}
-          {profile?.score === 10 && (
-            <StheartImg src={lcon_score10} alt=""></StheartImg>
-          )}
-        </StheartWrap>
-        <StHeartText>{profile?.score}/10점</StHeartText>
         <StState>
           {userInfo?.state1} {userInfo?.state2}
         </StState>
@@ -107,7 +62,7 @@ const Mypage = () => {
           {myPosts?.map((el, index) => (
             <Card type="내 게시물" data={el} key={index}></Card>
           ))}
-          {/* {!isLoading && (
+          {/* {!isPostLoading && (
             <div
               ref={observerTarget}
               style={{
@@ -185,23 +140,10 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 8px;
+  margin-top: 18px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`
   color: ${(props) => props.theme.colors.middleGray};
-  margin-top: 8px;
-`;
-
-const StheartWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  padding-top: 10px;
-`;
-const StheartImg = styled.img``;
-
-const StHeartText = styled.span`
-  color: ${(props) => props.theme.colors.subPink};
+  margin-top: 10px;
 `;
