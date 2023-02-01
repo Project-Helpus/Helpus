@@ -21,7 +21,7 @@ const Header = () => {
 
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
-  const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
+  const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
 
   //검색 기능
   const searching = (e) => {
@@ -37,7 +37,7 @@ const Header = () => {
     setNotifications([]);
   };
 
-  useEffect(() => {}, [isLogin, isLoginkakao]);
+  useEffect(() => {}, [isLogin, isLoginKakao]);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -64,14 +64,14 @@ const Header = () => {
         <img src={icon_search} alt="" />
       </StSearch>
       <StBox>
-        {!(isLogin || isLoginkakao) && (
+        {!(isLogin || isLoginKakao) && (
           <StBox>
             <button onClick={() => navigate("/login")}>
               로그인 / 회원가입
             </button>
           </StBox>
         )}
-        {(isLogin || isLoginkakao) && (
+        {(isLogin || isLoginKakao) && (
           <StBox>
             <StButton
               onClick={() => {
