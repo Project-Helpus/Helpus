@@ -240,8 +240,6 @@ const userSlice = createSlice({
     },
     [__logout.fulfilled]: (state) => {
       state.isLoading = false;
-      state.isLogin = false;
-      state.isLoginkakao = false;
       state = initialState;
       storage.removeItem("persist:root");
     },
