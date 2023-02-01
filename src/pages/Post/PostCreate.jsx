@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,17 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
+import Carousel from "../../components/Carousel";
+import { StFlex } from "../../components/UI/CardStyle.js/StCommon";
+import crsLeftButton from "../../asset/CrsLeft.svg";
+import crsRightButton from "../../asset/CrsRight.svg";
 
 const PostCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state, city } = 행정구역;
   const [getImg, setGetImg] = useState(false);
-  const [previewImg, setPreviewImg] = useState();
+  const [previewImg, setPreviewImg] = useState(null);
   const [img, setImg] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState("");
@@ -28,6 +32,25 @@ const PostCreate = () => {
     location1: "",
     location2: "",
   });
+  const crsRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const TotalSlides = previewImg?.length - 4;
+  const moveCrsLeft = () => {
+    if (currentSlide === 0) {
+      setCurrentSlide(TotalSlides);
+      // 마지막 사진으로 이동
+    } else {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+  const moveCrsRight = () => {
+    if (currentSlide >= TotalSlides) {
+      //더 이상 넘어갈 슬라이드가 없으면 //1번째 사진으로 넘어간다
+      setCurrentSlide(0);
+    } else {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
 
   const changeInputHandler = (e) => {
     const { name, value } = e.target;
@@ -97,6 +120,11 @@ const PostCreate = () => {
     }
   };
 
+  useEffect(() => {
+    crsRef.current.style.transition = "all 0.5s ease-in-out";
+    crsRef.current.style.transform = `translateX(-${currentSlide * 205}px)`;
+  }, [currentSlide]);
+
   return (
     <StWrapper>
       <StContainer>
@@ -162,7 +190,7 @@ const PostCreate = () => {
                 );
               }
             })}
-            <span>(헬퍼스:단체 봉사 활동)</span>
+            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
@@ -176,7 +204,9 @@ const PostCreate = () => {
               사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
             </StLabel>
           )}
+          {/* <Carousel /> */}
           <input
+            ref={crsRef}
             style={{ display: "none" }}
             accept="image/jpg, image/png, image/gif"
             id="image"
@@ -187,11 +217,25 @@ const PostCreate = () => {
           />
           <StRow>
             {previewImg ? (
-              previewImg.map((el, i) => (
-                <label htmlFor="image" key={i}>
-                  <StImg src={el} alt="inputImage" />
-                </label>
-              ))
+              <StCrsContainser value={currentSlide + 1}>
+                <StCrsLeftButton
+                  src={crsLeftButton}
+                  onClick={moveCrsLeft}
+                ></StCrsLeftButton>
+                <StCrsRightButton
+                  src={crsRightButton}
+                  onClick={moveCrsRight}
+                ></StCrsRightButton>
+                <StHidden>
+                  <StFlex ref={crsRef}>
+                    {previewImg?.map((el, i) => (
+                      <label htmlFor="image" key={i}>
+                        <StCrsImg src={el} alt="inputImage" />
+                      </label>
+                    ))}
+                  </StFlex>
+                </StHidden>
+              </StCrsContainser>
             ) : (
               <>
                 <StImgButton htmlFor="image">
@@ -258,7 +302,33 @@ const PostCreate = () => {
     </StWrapper>
   );
 };
-
+const StCrsImg = styled.img`
+  width: 185px;
+  height: 225px;
+  margin-right: 20px;
+  cursor: pointer;
+`;
+const StCrsContainser = styled.div`
+  width: 800px;
+  position: relative;
+`;
+const StCrsLeftButton = styled.img`
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  transform: translateX(-3em);
+`;
+const StCrsRightButton = styled.img`
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  right: 0;
+  transform: translateX(3em);
+`;
+const StHidden = styled.div`
+  overflow: hidden;
+  display: flex;
+`;
 const StTitle = styled.h2`
   text-align: center;
   width: 100%;
@@ -275,7 +345,7 @@ const StContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 55px;
-  width: 1280px;
+  width: 800px;
 `;
 
 const StInnerBox = styled.div`
