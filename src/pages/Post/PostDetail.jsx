@@ -84,7 +84,7 @@ const PostDetail = () => {
       dispatch(__updatePost({ data: { isDeadLine: parseInt(1) }, id: postId }));
     }
   };
-  
+
   const ZZim = (e) => {
     dispatch(__postZZim(postId));
     if (zMsg === "찜") {
@@ -96,7 +96,7 @@ const PostDetail = () => {
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
-    } 
+    }
     // 마지막 사진으로 이동
     else {
       setCurrentSlide(currentSlide - 1);
@@ -167,7 +167,7 @@ const PostDetail = () => {
             <div>
               <StNickname>{detail?.userName}</StNickname>
               <StLocation>
-                {detail?.location1}&gt;{detail?.location2}
+                {detail?.location1}&nbsp;{detail?.location2}
               </StLocation>
             </div>
           </StFlex>
