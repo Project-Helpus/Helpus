@@ -89,8 +89,8 @@ export const StReceiveDiv = styled.div`
   gap: 10px;
 `;
 export const StImage = styled.img`
-  max-width: 500px;
-  max-height: 500px;
+  width: 280px;
+  height: 300px;
   border-radius: 10px;
 `;
 

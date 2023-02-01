@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,15 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
+import crsLeftButton from "../../asset/CrsLeft.svg";
+import crsRightButton from "../../asset/CrsRight.svg";
 
 const PostCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state, city } = 행정구역;
   const [getImg, setGetImg] = useState(false);
-  const [previewImg, setPreviewImg] = useState();
+  const [previewImg, setPreviewImg] = useState(null);
   const [img, setImg] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState("");
@@ -28,6 +30,25 @@ const PostCreate = () => {
     location1: "",
     location2: "",
   });
+  const crsRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const TotalSlides = previewImg?.length - 4;
+  const moveCrsLeft = () => {
+    if (currentSlide === 0) {
+      setCurrentSlide(TotalSlides);
+      // 마지막 사진으로 이동
+    } else {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+  const moveCrsRight = () => {
+    if (currentSlide >= TotalSlides) {
+      //더 이상 넘어갈 슬라이드가 없으면 //1번째 사진으로 넘어간다
+      setCurrentSlide(0);
+    } else {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
 
   const changeInputHandler = (e) => {
     const { name, value } = e.target;
@@ -87,6 +108,14 @@ const PostCreate = () => {
   };
 
   const addTag = (e) => {
+    if (tags.length > 2) {
+      window.alert("태그는 최대 3개까지 가능합니다.");
+      return;
+    }
+    if (e.target.value.length > 7) {
+      window.alert("최대 8글자 까지 가능합니다.");
+      return;
+    }
     setTag(e.target.value);
   };
 
@@ -96,6 +125,11 @@ const PostCreate = () => {
       setTag("");
     }
   };
+
+  useEffect(() => {
+    crsRef.current.style.transition = "all 0.5s ease-in-out";
+    crsRef.current.style.transform = `translateX(-${currentSlide * 205}px)`;
+  }, [currentSlide]);
 
   return (
     <StWrapper>
@@ -127,7 +161,7 @@ const PostCreate = () => {
         <StBox>
           <StLabel htmlFor="date">날짜</StLabel>
           <StInnerBox>
-            <Calender value={date} setDate={setDate} />
+            <Calender selectedDate={date} setDate={setDate} />
           </StInnerBox>
         </StBox>
         <StCol>
@@ -162,7 +196,7 @@ const PostCreate = () => {
                 );
               }
             })}
-            <span>(헬퍼스:단체 봉사 활동)</span>
+            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
@@ -176,7 +210,9 @@ const PostCreate = () => {
               사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
             </StLabel>
           )}
+          {/* <Carousel /> */}
           <input
+            ref={crsRef}
             style={{ display: "none" }}
             accept="image/jpg, image/png, image/gif"
             id="image"
@@ -187,11 +223,25 @@ const PostCreate = () => {
           />
           <StRow>
             {previewImg ? (
-              previewImg.map((el, i) => (
-                <label htmlFor="image" key={i}>
-                  <StImg src={el} alt="inputImage" />
-                </label>
-              ))
+              <StCrsContainser value={currentSlide + 1}>
+                <StCrsLeftButton
+                  src={crsLeftButton}
+                  onClick={moveCrsLeft}
+                ></StCrsLeftButton>
+                <StCrsRightButton
+                  src={crsRightButton}
+                  onClick={moveCrsRight}
+                ></StCrsRightButton>
+                <StHidden>
+                  <StFlexBox ref={crsRef}>
+                    {previewImg?.map((el, i) => (
+                      <label htmlFor="image" key={i}>
+                        <StCrsImg src={el} alt="inputImage" />
+                      </label>
+                    ))}
+                  </StFlexBox>
+                </StHidden>
+              </StCrsContainser>
             ) : (
               <>
                 <StImgButton htmlFor="image">
@@ -231,7 +281,7 @@ const PostCreate = () => {
           </StBox>
         </StCol>
         <StCol>
-          <StLabel htmlFor="tag">태그</StLabel>
+          <StLabel htmlFor="tag">태그 (최대 3개)</StLabel>
           <StTagContainer>
             {tags.map((e, i) => (
               <StTag key={i}>
@@ -259,6 +309,35 @@ const PostCreate = () => {
   );
 };
 
+export default PostCreate;
+
+const StCrsImg = styled.img`
+  width: 185px;
+  height: 225px;
+  margin-right: 20px;
+  cursor: pointer;
+`;
+const StCrsContainser = styled.div`
+  width: 800px;
+  position: relative;
+`;
+const StCrsLeftButton = styled.img`
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  transform: translateX(-3em);
+`;
+const StCrsRightButton = styled.img`
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  right: 0;
+  transform: translateX(3em);
+`;
+const StHidden = styled.div`
+  overflow: hidden;
+  display: flex;
+`;
 const StTitle = styled.h2`
   text-align: center;
   width: 100%;
@@ -275,7 +354,7 @@ const StContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 55px;
-  width: 1280px;
+  width: 800px;
 `;
 
 const StInnerBox = styled.div`
@@ -297,7 +376,7 @@ const StCol = styled.div`
 `;
 
 const StLabel = styled.label`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
 `;
 
@@ -331,13 +410,6 @@ const StImgButton = styled.label`
   cursor: pointer;
 `;
 
-const StImg = styled.img`
-  border-radius: 10px;
-  width: 400px;
-  height: 225px;
-  cursor: pointer;
-`;
-
 const StTag = styled.div`
   display: flex;
   justify-content: center;
@@ -366,7 +438,7 @@ const StTagButton = styled.button`
 `;
 
 const StCategory = styled.button`
-  width: 200px;
+  width: 160px;
   height: 44px;
   cursor: pointer;
   border: none;
@@ -375,7 +447,7 @@ const StCategory = styled.button`
 `;
 
 const StSelectedCategory = styled.button`
-  width: 200px;
+  width: 160px;
   height: 44px;
   background-color: ${(props) => props.theme.colors.subPink};
   color: white;
@@ -391,4 +463,6 @@ const StSelector = styled.select`
   border-radius: 10px;
 `;
 
-export default PostCreate;
+const StFlexBox = styled.div`
+  display: flex;
+`;

@@ -49,6 +49,10 @@ export const StDate = styled.p`
 export const StContentsTitle = styled.p`
   font-size: 18px;
   font-weight: 700;
+  width: 327px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const StMainContentsTitle = styled.p`
@@ -106,6 +110,7 @@ export const StAllPostWrapper = styled.div`
 export const StSpaceBetween = styled.div`
   justify-content: space-between;
   display: flex;
+  width: 50em;
 `;
 
 export const StEmpty = styled.div`
@@ -118,6 +123,6 @@ export const StTag = styled.span`
   font-size: 12px;
   font-weight: 400;
   border-radius: 3px;
-  background-color: pink;
+  background-color: rgb(0, 0, 0, 0.1);
   margin-right: 10px;
 `;

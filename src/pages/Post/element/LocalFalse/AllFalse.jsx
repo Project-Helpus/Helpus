@@ -5,7 +5,7 @@ import Card from "../../../../components/Card";
 
 const AllFalse = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.AllFalseDate);
+  const data = useSelector((state) => state.postSlice?.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
   const { isLoading } = useSelector((state) => state.postSlice);
 

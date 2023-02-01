@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
@@ -10,14 +10,13 @@ const Mypage = () => {
   const navigate = useNavigate();
 
   const profile = useSelector((state) => state.mypageSlice.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts);
 
   const { userInfo } = useSelector((state) => state.userSlice);
-  // const { isLoading } = useSelector((state) => state.mypageSlice);
-  // const data = useSelector((state) => state.postSlice.AllFalseDate);
+  const { isPostLoading } = useSelector((state) => state.mypageSlice);
 
-  // const observerTarget = useRef(null);
-  // const [count, setCount] = useState(0);
+  const observerTarget = useRef(null);
+  const [count, setCount] = useState();
 
   // useEffect(() => {
   //   let observer = new IntersectionObserver(
@@ -43,7 +42,7 @@ const Mypage = () => {
   useEffect(() => {
     dispatch(__getMyPage());
     dispatch(__getMyposts());
-  }, [dispatch]);
+  }, []);
 
   return (
     <StWarp>
@@ -63,7 +62,7 @@ const Mypage = () => {
           {myPosts?.map((el, index) => (
             <Card type="내 게시물" data={el} key={index}></Card>
           ))}
-          {/* {!isLoading && (
+          {/* {!isPostLoading && (
             <div
               ref={observerTarget}
               style={{

@@ -51,12 +51,13 @@ export const StWrBtnWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
 `;
+
 export const StWriteButton = styled.button`
-  width: 6.25em;
-  height: 2.5em;
+  width: 8.25em;
+  height: 2.85em;
   border: 0.13em solid #ea9db4;
   border-radius: 62.44em;
-  font-size: 1em;
+  font-size: 1.3em;
   color: #ea9db4;
   background-color: #fff;
   margin-bottom: 2.19em;

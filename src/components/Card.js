@@ -120,7 +120,7 @@ const Card = ({ type, data, onClick }) => {
           <StColumnCard>
             <StAllPostWrapper>
               <StAllPostSquarePhoto
-                src={data.imageUrl1}
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
               ></StAllPostSquarePhoto>
               <StFlex>
@@ -315,6 +315,7 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StDeadLine>마감</StDeadLine>
                 )}
+                2
               </StMainContentsWrapper>
             </StFlex>
           </StMainWrapper>
