@@ -1,20 +1,23 @@
 import styled from "styled-components";
-import invitation from "../../../asset/invitation.svg";
+import appointmentCard from "../../../asset/appointment_card.svg";
+import logo from "../../../asset/logo.svg";
 import StButton from "../../../components/UI/StButton";
 import { useSelector } from "react-redux";
 
-const AppointmentCard = ({ invitation, accepted, acceptRequest, userId }) => {
+const AppointmentCard = ({ appointment, acceptRequest, userId }) => {
   const myId = useSelector((state) => state.userSlice.userInfo.userId);
 
   return (
     <StCard>
-      <StDiv>
-        {((userId !== myId && accepted !== "`card`1") || invitation) && (
-          <StButton mode="greenBlueBtn" onClick={acceptRequest}>
+      <img src={logo} />
+      <StContent>함께 해요</StContent>
+      <div>
+        {userId !== myId && appointment !== 2 && (
+          <StButton mode="pinkSmBtn" onClick={acceptRequest}>
             수락하기
           </StButton>
         )}
-      </StDiv>
+      </div>
     </StCard>
   );
 };
@@ -22,12 +25,18 @@ const AppointmentCard = ({ invitation, accepted, acceptRequest, userId }) => {
 export default AppointmentCard;
 
 const StCard = styled.div`
-  width: 208px;
-  height: 292px;
-  background-image: url(${invitation});
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 210px;
+  height: 298px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  background-image: url(${appointmentCard});
 `;
 
-const StDiv = styled.div`
-  position: relative;
-  transform: translate(20%, 500%);
+const StContent = styled.div`
+  font-size: 24px;
 `;

@@ -36,7 +36,6 @@ export const __getSenderInfo = createAsyncThunk(
   async (roomId, thunkAPI) => {
     try {
       const res = await ChatAPI.getSenderInfo(roomId);
-      console.log(res);
       if (res.status === 201) return thunkAPI.fulfillWithValue(res.data);
       else alert("정보 불러오기에 실패 했습니다.");
     } catch (err) {

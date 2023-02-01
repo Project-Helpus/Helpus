@@ -57,3 +57,6 @@ export const acception = (roomId) => {
     roomId: roomId,
   });
 };
+export const cancelCard = (roomId) => {
+  socket.emit("cancelCard", { roomId: roomId });
+};
