@@ -10,8 +10,8 @@ import { StRedFont } from "./StPostDetail";
 
 const PostCreate = () => {
   const postInfo = useSelector((state) => state.postSlice.postInfo);
+  const tagData = postInfo.tag.split(",");
   const { state, city } = 행정구역;
-  const tagData = postInfo.tag?.split(",");
   const [tags, setTags] = useState(tagData);
   const [tag, setTag] = useState("");
   const [date, setDate] = useState(new Date(postInfo.appointed));
@@ -122,7 +122,7 @@ const PostCreate = () => {
         <StBox>
           <StLabel htmlFor="date">날짜</StLabel>
           <StInnerBox>
-            <Calender value={date} setDate={setDate} />
+            <Calender selectedDate={date} setDate={setDate} />
           </StInnerBox>
         </StBox>
         <StCol>
@@ -167,7 +167,7 @@ const PostCreate = () => {
         <StCol>
           <StLabel htmlFor="tag">태그</StLabel>
           <StTagContainer>
-            {tags?.map((e, i) => (
+            {tags.map((e, i) => (
               <StTag key={i}>
                 <StTagName>{e}</StTagName>
                 <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
