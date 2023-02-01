@@ -8,6 +8,7 @@ export const StColumnCard = styled.div`
 export const StColumnImgWrapper = styled.div`
   width: 100%;
   height: 65.7%;
+  margin-bottom: 60px;
 `;
 
 export const StColumnNickName = styled.p`
