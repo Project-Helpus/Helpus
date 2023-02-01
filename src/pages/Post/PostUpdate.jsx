@@ -99,7 +99,7 @@ const PostCreate = () => {
       <StContainer>
         <StBox>
           <StBackBtn onClick={() => navigate(-1)} />
-          <StTitle>게시글 작성</StTitle>
+          <StTitle>게시글 수정</StTitle>
         </StBox>
         <StCol>
           <StLabel htmlFor="title">제목</StLabel>
@@ -212,7 +212,7 @@ const StContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 55px;
-  width: 1280px;
+  width: 800px;
 `;
 
 const StInnerBox = styled.div`
