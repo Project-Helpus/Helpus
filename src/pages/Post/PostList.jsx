@@ -101,25 +101,9 @@ const PostList = () => {
     allRef.current.style.borderBottom = "4px solid #B4B4B4";
   };
 
-  // const setBoolLocationTrue = () => {
-  //   if (isLogin === false) {
-  //     alert("로그인시 이용할 수 있습니다");
-  //   } else {
-  //     if (storeBooLocation === true) {
-  //       locationRef.current.style.color = "blue";
-  //       locationRef.current.style.borderBottom = "4px solid blue";
-  //       dispatch(__setBoolLocationFalse());
-  //     } else {
-  //       locationRef.current.style.borderBottom = "4px solid #B4B4B4";
-  //       locationRef.current.style.color = "#B4B4B4";
-  //       dispatch(__setBoolLocationTrue());
-  //     }
-  //   }
-  // };
   const testRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
-  console.log("a:", testRef);
   const toggleRight = () => {
     if (isLogin === false) {
       alert("로그인시 이용할 수 있습니다");

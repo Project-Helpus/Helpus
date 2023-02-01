@@ -68,7 +68,6 @@ const PostCreate = () => {
     dispatch(__updatePost({ data: dete, id: postInfo.postId }));
   };
 
-  console.log("tag:", tag);
   const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);
