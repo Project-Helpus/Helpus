@@ -1,50 +1,74 @@
 import React from "react";
 import styled from "styled-components";
 
-const StButton = ({ mode, children, onClick }) => {
+const StButton = ({ mode, children, onClick, innerRef }) => {
   const Button = () => {
     switch (mode) {
-      case "lgpr":
+      case "pinkLgBtn":
         return (
-          <StLgPrButton onClick={onClick}>
+          <StPinkLgBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StLgPrButton>
+          </StPinkLgBtn>
         );
-      case "lgsd":
+      case "pinkMdBtn":
         return (
-          <StLgSdButton onClick={onClick}>
+          <StPinkMdBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StLgSdButton>
+          </StPinkMdBtn>
         );
-      case "mdpr":
+      case "pinkSmBtn":
         return (
-          <StMdPrButton onClick={onClick}>
+          <StPinkSmBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StMdPrButton>
+          </StPinkSmBtn>
         );
-      case "mdsd":
+      case "greenBtn":
         return (
-          <StMdSdButton onClick={onClick}>
+          <StGreenBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StMdSdButton>
+          </StGreenBtn>
         );
-      case "smpr":
+      case "yellowMdBtn":
         return (
-          <StSmPrButton onClick={onClick}>
+          <StYellowMdBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StSmPrButton>
+          </StYellowMdBtn>
         );
-      case "smsd":
+      case "yellowSmBtn":
         return (
-          <StSmSdButton onClick={onClick}>
+          <StYellowSmBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StSmSdButton>
+          </StYellowSmBtn>
+        );
+      case "orangeMdBtn":
+        return (
+          <StOrangeMdBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOrangeMdBtn>
+        );
+      case "orangeSmBtn":
+        return (
+          <StOrangSmBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOrangSmBtn>
+        );
+      case "outlineBtn":
+        return (
+          <StOutlineBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StOutlineBtn>
+        );
+      case "greenBlueBtn":
+        return (
+          <StGreenBlueBtn ref={innerRef} onClick={onClick}>
+            {children}
+          </StGreenBlueBtn>
         );
       default:
         return (
-          <StLgPrButton onClick={onClick}>
+          <StDefaultBtn ref={innerRef} onClick={onClick}>
             {children}
-          </StLgPrButton>
+          </StDefaultBtn>
         );
     }
   };
@@ -52,78 +76,112 @@ const StButton = ({ mode, children, onClick }) => {
 };
 
 export default StButton;
+
 StButton.defaultProps = {
   onClick: () => {},
 };
-const StLgPrButton = styled.button`
-  width: 300px;
-  height: 60px;
+
+const StDefaultBtn = styled.button`
+  border: none;
+  background-color: transparent;
+`;
+
+const StPinkLgBtn = styled.button`
+  width: 260px;
+  height: 44px;
   color: white;
   border: none;
-  border-radius: 5px;
-  background-color: green;
-  &:hover {
-    background: rgb(49, 101, 195);
-  }
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.subPink};
 `;
 
-const StLgSdButton = styled.button`
-  width: 300px;
-  height: 60px;
-  color: black
-  background-color: green;
-  border: 1px solid black;
-  border-radius: 5px;
-  &:hover {
-    background: rgb(255, 255, 255);
-  }
-`;
-
-const StMdSdButton = styled.button`
-  width: 180px;
-  height: 60px;
+const StPinkMdBtn = styled.button`
+  width: 200px;
+  height: 44px;
   color: white;
-  background-color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  &:hover {
-    background: rgb(255, 255, 255);
-  }
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.subPink};
 `;
 
-const StMdPrButton = styled.button`
-  width: 180px;
-  height: 60px;
-  color: black
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 5px;
-  &:hover {
-    background: rgb(255, 255, 255);
-  }
+const StPinkSmBtn = styled.button`
+  width: 88px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.subPink};
 `;
 
-const StSmPrButton = styled.button`
-  width: 90px;
-  height: 60px;
+const StGreenBtn = styled.button`
+  width: 245px;
+  height: 44px;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.lightGreen};
+`;
+
+const StYellowMdBtn = styled.button`
+  width: 132px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.yellow};
+`;
+
+const StYellowSmBtn = styled.button`
+  width: 88px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.yellow};
+`;
+
+const StOrangeMdBtn = styled.button`
+  width: 132px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.orange};
+`;
+
+const StOrangSmBtn = styled.button`
+  width: 88px;
+  height: 44px;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.orange};
+`;
+
+const StOutlineBtn = styled.button`
+  width: 200px;
+  height: 44px;
   color: black;
   background-color: white;
-  border: 1px solid black;
-  border-radius: 5px;
-  &:hover {
-    background: rgb(0, 0, 0);
-  }
+  border-radius: 10px;
+  font-weight: 600;
+  border: 2px solid ${(props) => props.theme.colors.subPink};
 `;
 
-
-const StSmSdButton = styled.button`
-  width: 90px;
-  height: 60px;
+const StGreenBlueBtn = styled.button`
+  width: 132px;
+  height: 44px;
   color: black;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 5px;
-  &:hover {
-    background: rgb(0, 0, 0);
-  }
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.greenBlue};
 `;

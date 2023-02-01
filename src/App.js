@@ -1,7 +1,6 @@
-import React from 'react';
+import "./App.css";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import Router from "./shared/Router";
-import './App.css';
 
 if (process.env.REACT_APP_NODE_ENV === "production") {
   disableReactDevTools();
@@ -10,7 +9,7 @@ if (process.env.REACT_APP_NODE_ENV === "production") {
 function App() {
   return (
     <div className="App">
-      <Router/>
+      <Router />
     </div>
   );
 }

@@ -1,11 +1,12 @@
+
 import React from 'react';
 
-const Mypage = () => {
+const Form = () => {
   return (
     <div>
-      마이 페이지
+      Form 페이지
     </div>
   );
 };
 
-export default Mypage;
+export default Form;

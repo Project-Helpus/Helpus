@@ -11,11 +11,26 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;  
-    font-family: Roboto, Arial ,sans-serif;   
+    font-family: "Noto Sans KR", "Malgun Gothic","맑은 고딕",helvetica,"Apple SD Gothic Neo",sans-serif; 
+    font-weight: 400;
+    letter-spacing: -0.01em;
+   -webkit-font-smoothin
+    letter-spacing: 0;
+    word-spacing: 0;
   }
 
   button {
     cursor: pointer;
+  }
+
+  input, textarea {
+    border: 0.5px solid ${(props) => props.theme.colors.lightGray};
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 16px;
+    &: focus {
+      outline: none;
+    }
   }
 `;
 

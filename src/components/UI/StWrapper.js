@@ -1,18 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const StWrapper = ({children}) => {
+const StWrapper = ({ children }) => {
   return <Wrapper>{children}</Wrapper>;
 };
 
 export default StWrapper;
 
-const Wrapper = styled.div`
+const Wrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
-  width: 50%;
-
+  margin: 2em 0 4em 0;
 `;
