@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const __score = createAsyncThunk(
-  "mypageSlice/score",
+  "chatSlice/score",
   async (userId, thunkAPI) => {
     try {
       const res = await ChatAPI.patchScore(userId);
@@ -19,7 +19,7 @@ export const __score = createAsyncThunk(
 );
 
 export const __sendImage = createAsyncThunk(
-  "mypageSlice/",
+  "chatSlice/snedImage",
   async (formData, thunkAPI) => {
     try {
       const res = await ChatAPI.postImage(formData);
@@ -32,7 +32,7 @@ export const __sendImage = createAsyncThunk(
 );
 
 export const __getSenderInfo = createAsyncThunk(
-  "mypageSlice/",
+  "chatSlice/",
   async (roomId, thunkAPI) => {
     try {
       const res = await ChatAPI.getSenderInfo(roomId);

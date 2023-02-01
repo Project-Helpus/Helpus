@@ -96,9 +96,10 @@ const PostCreate = () => {
       for (let i = 0; i < img.length; i++) {
         formData.append("post-images", img[i]);
       }
-      await dispatch(__createPost(formData));
-      window.alert("게시물 업로드 되었습니다.");
-      navigate("/postlist");
+      const res = await dispatch(__createPost(formData));
+      if (res.meta.requestStatus === "fulfilled") {
+        navigate("/postlist");
+      }
     }
   };
 
