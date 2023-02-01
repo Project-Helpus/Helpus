@@ -9,8 +9,7 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
-import Carousel from "../../components/Carousel";
-import { StFlex } from "../../components/UI/CardStyle.js/StCommon";
+import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import crsLeftButton from "../../asset/CrsLeft.svg";
 import crsRightButton from "../../asset/CrsRight.svg";
 
