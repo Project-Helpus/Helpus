@@ -22,7 +22,7 @@ const initialState = {
 
 //회원가입 post
 export const __signUp = createAsyncThunk(
-  "user/signUp",
+  "userSlice/signUp",
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.signUp(payload);
@@ -41,7 +41,7 @@ export const __signUp = createAsyncThunk(
 );
 // ID 중복확인 POST
 export const __postDupEmail = createAsyncThunk(
-  "user/dupEmail",
+  "userSlice/dupEmail",
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.emailCheck(payload);
@@ -60,7 +60,7 @@ export const __postDupEmail = createAsyncThunk(
 
 //로그인 POST
 export const __postLogin = createAsyncThunk(
-  "user/postLogin",
+  "userSlice/postLogin",
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.login(payload);
@@ -80,7 +80,7 @@ export const __postLogin = createAsyncThunk(
 
 // 로그아웃 DELETE
 export const __logout = createAsyncThunk(
-  "user/logout",
+  "userSlice/logout",
   async (payload, thunkAPI) => {
     try {
       const res = await UserAPI.logout();
@@ -99,7 +99,7 @@ export const __logout = createAsyncThunk(
 
 //카카오 로그인 get
 export const __kakaoLogin = createAsyncThunk(
-  "user/kakaoLogin",
+  "userSlice/kakaoLogin",
   async (payload, thunkAPI) => {
     try {
       const response = await UserAPI.kakaoLogin(payload);
@@ -116,7 +116,7 @@ export const __kakaoLogin = createAsyncThunk(
 
 //카카오 회원가입 지역 추가
 export const __kakaoState = createAsyncThunk(
-  "user/kakaoLoginState",
+  "userSlice/kakaoLoginState",
   async (payload, thunkAPI) => {
     try {
       const response = await UserAPI.kakaoState(payload);
@@ -151,7 +151,7 @@ export const __kakaoSignOut = createAsyncThunk(
 
 //로컬 탈퇴
 export const __signOut = createAsyncThunk(
-  "user/signOut",
+  "userSlice/signOut",
   async (payload, thunkAPI) => {
     try {
       const response = await UserAPI.signOut();
@@ -168,7 +168,7 @@ export const __signOut = createAsyncThunk(
 );
 // 마이페이지 프로필 수정
 export const __patchMypage = createAsyncThunk(
-  "mypage/patchMypage",
+  "userSlice/patchMypage",
   async (data, thunkAPI) => {
     try {
       const res = await UserAPI.patchMypage(data);
@@ -181,7 +181,7 @@ export const __patchMypage = createAsyncThunk(
 
 // 마이페이지 프로필 이미지 수정
 export const __userImage = createAsyncThunk(
-  "mypage/userImage",
+  "userSlice/userImage",
   async (data, thunkAPI) => {
     try {
       const res = await UserAPI.userImage(data);
@@ -194,7 +194,7 @@ export const __userImage = createAsyncThunk(
 
 //slice 데이터 저장
 const userSlice = createSlice({
-  name: "user",
+  name: "userSlice",
   initialState,
   reducers: {},
   extraReducers: {
@@ -240,6 +240,8 @@ const userSlice = createSlice({
     },
     [__logout.fulfilled]: (state) => {
       state.isLoading = false;
+      state.isLogin = false;
+      state.isLoginkakao = false;
       state = initialState;
       storage.removeItem("persist:root");
     },

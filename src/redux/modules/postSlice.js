@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PostAPI } from "../../api/axios";
 
 export const __createPost = createAsyncThunk(
-  "mypageSlice/createPost",
+  "postSlice/createPost",
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
       if (response.status === 201) {
+        window.alert("게시물이 생성 되었습니다.");
         return thunkAPI.fulfillWithValue();
       } else {
+        window.alert("다시 시도해 주세요.");
         return thunkAPI.rejectWithValue();
       }
     } catch (err) {
@@ -17,7 +19,7 @@ export const __createPost = createAsyncThunk(
   }
 );
 export const __updatePost = createAsyncThunk(
-  "mypageSlice/updatePost",
+  "postSlice/updatePost",
   async (payload, thunkAPI) => {
     try {
       const Id = payload.id;
@@ -35,7 +37,7 @@ export const __updatePost = createAsyncThunk(
   }
 );
 export const __deletePost = createAsyncThunk(
-  "mypageSlice/deletePost",
+  "postSlice/deletePost",
   async (id, thunkAPI) => {
     try {
       const res = await PostAPI.deletePost(id);
@@ -46,7 +48,7 @@ export const __deletePost = createAsyncThunk(
   }
 );
 export const __postZZim = createAsyncThunk(
-  "mypageSlice/postZZim",
+  "postSlice/postZZim",
   async (id, thunkAPI) => {
     try {
       const res = await PostAPI.postZZim(id);
@@ -58,7 +60,7 @@ export const __postZZim = createAsyncThunk(
 );
 
 export const __detailPost = createAsyncThunk(
-  "mypageSlice/detailPost",
+  "postSlice/detailPost",
   async (postId, thunkAPI) => {
     try {
       const response = await PostAPI.getDetailPost(postId);

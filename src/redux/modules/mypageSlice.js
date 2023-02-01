@@ -17,7 +17,7 @@ const initialState = {
 
 //프로필 조회
 export const __getMyPage = createAsyncThunk(
-  "mypage/getMyPage",
+  "mypageSlice/getMyPage",
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getMyPage(data);
@@ -30,7 +30,7 @@ export const __getMyPage = createAsyncThunk(
 
 // 내 게시글 조회
 export const __getMyposts = createAsyncThunk(
-  "mypage/getMyposts",
+  "mypageSlice/getMyposts",
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getMyposts(data);
@@ -43,7 +43,7 @@ export const __getMyposts = createAsyncThunk(
 
 //비밀번호 수정
 export const __patchPassword = createAsyncThunk(
-  "mypage/patchPassword",
+  "mypageSlice/patchPassword",
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.patchPassword(data);
@@ -56,7 +56,7 @@ export const __patchPassword = createAsyncThunk(
 
 //채팅 목록 조회
 export const __getChat = createAsyncThunk(
-  "mypage/getChat",
+  "mypageSlice/getChat",
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.getChat(data);
