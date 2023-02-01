@@ -234,7 +234,7 @@ const StCol = styled.div`
 `;
 
 const StLabel = styled.label`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
 `;
 
@@ -255,42 +255,18 @@ const StRow = styled.div`
   justify-content: center;
   gap: 40px;
 `;
-const StGroupImgs = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
-
-const StImgButton = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  height: 225px;
-  background-color: white;
-  border: 0.5px dashed black;
-  border-radius: 10px;
-  cursor: pointer;
-`;
-
-const StImg = styled.img`
-  border-radius: 10px;
-  width: 400px;
-  height: 225px;
-  cursor: pointer;
-`;
 
 const StTag = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 32px;
-  padding: 0 4px;
+  height: 28px;
+  padding: 2px 8px;
   border-radius: 12px;
   margin-right: 10px;
   background-color: pink;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
 `;
 
@@ -309,7 +285,7 @@ const StTagButton = styled.button`
 `;
 
 const StCategory = styled.button`
-  width: 200px;
+  width: 160px;
   height: 44px;
   cursor: pointer;
   border: none;
