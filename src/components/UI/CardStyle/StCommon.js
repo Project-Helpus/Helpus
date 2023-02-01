@@ -105,6 +105,7 @@ export const StAllPostWrapper = styled.div`
   width: 400px;
   height: 324px;
   margin: 0 40px 50px 0;
+  position: relative;
 `;
 
 export const StSpaceBetween = styled.div`

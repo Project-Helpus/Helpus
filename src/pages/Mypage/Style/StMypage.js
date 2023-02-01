@@ -4,6 +4,7 @@ export const StMyContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 16px;
+  position: relative;
 `;
 export const StMyImgWrap = styled.div`
   width: 20em;
@@ -66,4 +67,18 @@ export const StMyCaption = styled.div`
     font-size: 0.75em;
     padding-bottom: 14px;
   }
+`;
+export const StZZimDeadLine = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 50px;
+  top: 12px;
+  left: 12px;
+  border-radius: 8px;
+  text-align: center;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 600;
+  background-color: ${(props) => props.theme.colors.yellow};
 `;

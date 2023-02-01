@@ -112,7 +112,7 @@ const Mypage = () => {
           </StMypageTitle>
           <StZZimWrap>
             {myPosts?.map((el, index) => (
-              <Card type="찜 게시물" data={el} key={index}></Card>
+              <Card type="내 게시물" data={el} key={index}></Card>
             ))}
           </StZZimWrap>
         </div>
