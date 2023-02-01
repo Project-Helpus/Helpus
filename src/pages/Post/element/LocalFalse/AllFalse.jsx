@@ -12,30 +12,27 @@ const AllFalse = () => {
   const observerTarget = useRef(null);
   const [count, setCount] = useState(0);
 
-  // useEffect(() => {
-  //   let observer = new IntersectionObserver(
-  //     (e, io) => {
-  //       e.forEach((e) => {
-  //         if (e.isIntersecting) {
-  //           io.unobserve(e.target);
-  //           setTimeout(() => {
-  //             if (data !== 0) {
-  //               dispatch(__getAllFalse(count));
-  //               setCount((prev) => prev + 12);
-  //             }
-  //           }, 300);
-  //         }
-  //       });
-  //     },
-  //     { threshold: 0.5 }
-  //   );
-  //   if (observerTarget.current) observer.observe(observerTarget.current);
-  //   return () => observer.disconnect();
-  // }, [data]);
   useEffect(() => {
-    dispatch(__getAllFalse());
-  }, [input]);
-  console.log("data:", data);
+    let observer = new IntersectionObserver(
+      (e, io) => {
+        e.forEach((e) => {
+          if (e.isIntersecting) {
+            io.unobserve(e.target);
+            setTimeout(() => {
+              if (data !== 0) {
+                dispatch(__getAllFalse(count));
+                setCount((prev) => prev + 12);
+              }
+            }, 300);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    if (observerTarget.current) observer.observe(observerTarget.current);
+    return () => observer.disconnect();
+  }, [data]);
+
   return (
     <>
       {data?.length === 0 ? (

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import CrsLeft from "../asset/CrsLeft.svg";
 import CrsRight from "../asset/CrsRight.svg";
-import { StFlex } from "./UI/CardStyle.js/StCommon";
+import { StFlex } from "./UI/CardStyle/StCommon";
 
 const Carousel = ({ children }) => {
   const crsRef = useRef(null);
