@@ -55,45 +55,19 @@ const PostCreate = () => {
 
   const clickHandler = (e) => {
     e.preventDefault();
-    // const payload ={{"title":titleInput},}
     const value = date.toISOString();
     const dete = {
       title: titleInput,
       content: contentsInput,
       category: categories,
       appointed: value,
-      tag: tags,
+      tag: tags.join(),
       location1: input.location1,
       location2: input.location2,
     };
-    // const formData = new FormData();
-    // formData.append("title", titleInput);
-    // formData.append("content", contentsInput);
-    // formData.append("category", categories);
-    // formData.append("appointed", value);
-    // formData.append("isDeadLine", parseInt(1));
-    // for (const property in input) {
-    //   formData.append(`${property}`, input[property]);
-    // }
-    // for (const property in input) {
-    //   dete = (`${property}`, input[property]);
-    // }
-    console.log("data:", dete);
-    // if (img !== undefined) {
-    //   formData.append("imageUrl1", img);
-    // }
-    // if (img2 !== undefined) {
-    //   formData.append("imageUrl2", img2);
-    // }
-    // if (img3 !== undefined) {
-    //   formData.append("imageUrl3", img3);
-    // }
-
-    // formData.append("tag", tags);
     dispatch(__updatePost({ data: dete, id: postInfo.postId }));
   };
 
-  console.log("tag:", tag.split(","));
   const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);

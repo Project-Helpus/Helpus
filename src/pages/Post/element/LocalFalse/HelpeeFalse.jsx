@@ -5,7 +5,7 @@ import Card from "../../../../components/Card";
 
 const HelpeeFalse = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.helpeeFalseDate.result);
+  const data = useSelector((state) => state.postSlice.helpeeFalseDate?.result);
   const input = useSelector((state) => state.postSlice.inputReciver);
 
   useEffect(() => {

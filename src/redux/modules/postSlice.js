@@ -20,14 +20,16 @@ export const __updatePost = createAsyncThunk(
   "mypageSlice/updatePost",
   async (payload, thunkAPI) => {
     try {
-      console.log("pay:", payload);
       const Id = payload.id;
       const data = payload.data;
       const res = await PostAPI.postUpdate(Id, data);
-      console.log("response:", res);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 201) {
+        window.alert("수정이 완료되었습니다");
+        thunkAPI.fulfillWithValue(res.data);
+        return window.location.replace("/mypage");
+      }
     } catch (err) {
-      console.log("error:", err);
+      window.alert("수정 실패");
       return thunkAPI.rejectWithValue();
     }
   }
