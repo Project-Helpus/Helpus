@@ -16,6 +16,7 @@ import {
 import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate } from "react-router";
 import { StFlex } from "../../components/UI/CardStyle/StCommon";
+import { useEffect } from "react";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,6 @@ const PostList = () => {
     helpeeRef.current.style.borderBottom = "4px solid #B4B4B4";
     helperRef.current.style.borderBottom = "4px solid #B4B4B4";
   };
-
   const setBoollHelpUsTrue = () => {
     helpUsRef.current.style.color = "black";
     helpUsRef.current.style.borderBottom = "4px solid #EA9DB4";
@@ -126,6 +126,17 @@ const PostList = () => {
       dispatch(__setBoolLocationFalse());
     }
   };
+  useEffect(() => {
+    if (storeBooLocation === false) {
+      testRef.current.style.left = "0";
+      leftRef.current.style.color = "#fff";
+      rightRef.current.style.color = "#b4b4b4";
+    } else {
+      testRef.current.style.left = "50%";
+      leftRef.current.style.color = "#b4b4b4";
+      rightRef.current.style.color = "#fff";
+    }
+  }, [storeBooLocation]);
   return (
     <>
       <StWrapper>
@@ -222,7 +233,7 @@ const StToggleWrapper = styled.div`
 const StLabelAll = styled.label`
   width: 50%;
   height: 100%;
-  color: #b4b4b4;
+  color: #fff;
   line-height: 50px;
   text-align: center;
   display: inline-block;
@@ -230,7 +241,7 @@ const StLabelAll = styled.label`
 const StLabelMy = styled.label`
   width: 50%;
   height: 100%;
-  color: #fff;
+  color: #b4b4b4;
   line-height: 50px;
   text-align: center;
   display: inline-block;
@@ -239,7 +250,7 @@ const StLabelMy = styled.label`
 const StToggle = styled.input`
   width: 50%;
   height: 100%;
-  left: 50%;
+  left: 0;
   border-radius: 50px;
   background-color: #ea9db4;
   position: absolute;
