@@ -28,7 +28,6 @@ const PostList = () => {
   const userLocation1 = useSelector((state) => state.userSlice.userInfo.state1);
   const userLocation2 = useSelector((state) => state.userSlice.userInfo.state2);
   const { isLogin } = useSelector((state) => state.userSlice);
-  console.log(isLogin);
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
   const storeBoolHepUs = useSelector((state) => state.postSlice.boolHelpUs);

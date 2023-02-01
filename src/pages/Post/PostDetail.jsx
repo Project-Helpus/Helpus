@@ -65,8 +65,6 @@ const PostDetail = () => {
   const TotalSlides = detail?.imageUrls?.length - 4;
 
   const preRef = useRef(null);
-  console.log("user:", userId);
-  console.log("detail:", detail);
 
   const deletePost = () => {
     dispatch(__deletePost(postId));
