@@ -15,6 +15,7 @@ import {
 } from "../../redux/modules/postSlice";
 import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate } from "react-router";
+import { StFlex } from "../../components/UI/CardStyle/StCommon";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const PostList = () => {
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
   const setBoolAllTrue = () => {
     allRef.current.style.color = "black";
-    allRef.current.style.borderBottom = "4px solid #ff00ff";
+    allRef.current.style.borderBottom = "4px solid #EA9DB4";
     setBoolAll(true);
     setBoollHelpUs(false);
     setBoollHelper(false);
@@ -59,7 +60,7 @@ const PostList = () => {
 
   const setBoollHelpUsTrue = () => {
     helpUsRef.current.style.color = "black";
-    helpUsRef.current.style.borderBottom = "4px solid #ff00ff";
+    helpUsRef.current.style.borderBottom = "4px solid #EA9DB4";
     setBoollHelpUs(true);
     setBoollHelper(false);
     setBoollHelpee(false);
@@ -73,7 +74,7 @@ const PostList = () => {
   };
   const setBoollHelperTrue = () => {
     helperRef.current.style.color = "black";
-    helperRef.current.style.borderBottom = "4px solid #ff00ff";
+    helperRef.current.style.borderBottom = "4px solid #EA9DB4";
     setBoollHelpUs(false);
     setBoollHelper(true);
     setBoollHelpee(false);
@@ -87,7 +88,7 @@ const PostList = () => {
   };
   const setBoollHelpeeTrue = () => {
     helpeeRef.current.style.color = "black";
-    helpeeRef.current.style.borderBottom = "4px solid #ff00ff";
+    helpeeRef.current.style.borderBottom = "4px solid #EA9DB4";
     setBoollHelpUs(false);
     setBoollHelper(false);
     setBoollHelpee(true);
@@ -100,22 +101,47 @@ const PostList = () => {
     allRef.current.style.borderBottom = "4px solid #B4B4B4";
   };
 
-  const setBoolLocationTrue = () => {
+  // const setBoolLocationTrue = () => {
+  //   if (isLogin === false) {
+  //     alert("로그인시 이용할 수 있습니다");
+  //   } else {
+  //     if (storeBooLocation === true) {
+  //       locationRef.current.style.color = "blue";
+  //       locationRef.current.style.borderBottom = "4px solid blue";
+  //       dispatch(__setBoolLocationFalse());
+  //     } else {
+  //       locationRef.current.style.borderBottom = "4px solid #B4B4B4";
+  //       locationRef.current.style.color = "#B4B4B4";
+  //       dispatch(__setBoolLocationTrue());
+  //     }
+  //   }
+  // };
+  const testRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  console.log("a:", testRef);
+  const toggleRight = () => {
     if (isLogin === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
-      if (storeBooLocation === true) {
-        locationRef.current.style.color = "blue";
-        locationRef.current.style.borderBottom = "4px solid blue";
-        dispatch(__setBoolLocationFalse());
-      } else {
-        locationRef.current.style.borderBottom = "4px solid #B4B4B4";
-        locationRef.current.style.color = "#B4B4B4";
-        dispatch(__setBoolLocationTrue());
-      }
+      testRef.current.style.transition = "0.3s";
+      testRef.current.style.left = "50%";
+      leftRef.current.style.color = "#b4b4b4";
+      rightRef.current.style.color = "#fff";
+      dispatch(__setBoolLocationTrue());
     }
   };
-
+  const toggleLeft = () => {
+    if (isLogin === false) {
+      alert("로그인시 이용할 수 있습니다");
+    } else {
+      testRef.current.style.transition = "0.3s";
+      testRef.current.style.left = "0";
+      rightRef.current.style.color = "#b4b4b4";
+      leftRef.current.style.color = "#fff";
+      dispatch(__setBoolLocationFalse());
+    }
+  };
   return (
     <>
       <StWrapper>
@@ -140,9 +166,19 @@ const PostList = () => {
           <StTap ref={helpUsRef} onClick={setBoollHelpUsTrue}>
             헬퍼스
           </StTap>
-          <StTap ref={locationRef} onClick={setBoolLocationTrue}>
+          {/* <StTap ref={locationRef} onClick={setBoolLocationTrue}>
             전국
-          </StTap>
+          </StTap> */}
+
+          <StToggleWrapper>
+            <StLabelAll ref={leftRef} onClick={toggleLeft}>
+              전국
+            </StLabelAll>
+            <StToggle ref={testRef}></StToggle>
+            <StLabelMy ref={rightRef} onClick={toggleRight}>
+              내위치
+            </StLabelMy>
+          </StToggleWrapper>
         </StTabWrapper>
         <StCardContainer>
           {storeBooLocation ? (
@@ -176,14 +212,55 @@ export default PostList;
 const StTabWrapper = styled.div`
   display: flex;
   flex-direction: flex-start;
+  height: 50px;
   width: 100%;
   max-width: 1280px;
   margin: 3em 0 3em 0;
+  font-size: 20px;
   div {
     padding-bottom: 10px;
     margin-right: 3px;
+    line-height: 50px;
     border-bottom: 4px solid #b4b4b4;
+    &:nth-child(5) {
+      border-bottom: 1px solid #ffc3d5;
+    }
   }
+`;
+const StToggleWrapper = styled.div`
+  display: inline-block;
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  border: 1px solid #ffc3d5;
+  position: relative;
+`;
+const StLabelAll = styled.label`
+  width: 50%;
+  height: 100%;
+  color: #b4b4b4;
+  line-height: 50px;
+  text-align: center;
+  display: inline-block;
+`;
+const StLabelMy = styled.label`
+  width: 50%;
+  height: 100%;
+  color: #fff;
+  line-height: 50px;
+  text-align: center;
+  display: inline-block;
+`;
+
+const StToggle = styled.input`
+  width: 50%;
+  height: 100%;
+  left: 50%;
+  border-radius: 50px;
+  background-color: #ea9db4;
+  position: absolute;
+  z-index: -1;
+  transition: 0.3s;
 `;
 
 const StCardContainer = styled.div`

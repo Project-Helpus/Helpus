@@ -128,23 +128,6 @@ const Card = ({ type, data, onClick }) => {
             </StAllPostWrapper>
           </StColumnCard>
         );
-      // case "세로":
-      //   return (
-      //     <StColumnCard>
-      //       <StColumnImgWrapper>
-      //         <StImg alt="thumbnail" src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} />
-      //       </StColumnImgWrapper>
-      //       <StFlex>
-      //         <StColumnNickName>{data.userName}</StColumnNickName>
-      //         <StColumnCity>
-      //           {data.location1} {data.location2}
-      //         </StColumnCity>
-      //         {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-      //       </StFlex>
-      //       <StColumnTitle>{data.title}</StColumnTitle>
-      //       <StColumnDate>{KoreaDate}</StColumnDate>
-      //     </StColumnCard>
-      //   );
       case "채팅":
         return (
           <>
