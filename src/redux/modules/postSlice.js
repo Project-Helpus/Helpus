@@ -75,25 +75,12 @@ export const __detailPost = createAsyncThunk(
 
 //    <<<<<<  전국  >>>>>>
 //    <  전국 false  >
-// export const __getAllFalse = createAsyncThunk(
-//   "mypageSlice/getAllFalse",
-//   async (count, thunkAPI) => {
-//     try {
-//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-//       const res = await PostAPI.getAllFalse(count, searchValue);
-//       return thunkAPI.fulfillWithValue(res.data.result);
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue();
-//     }
-//   }
-// );
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
-  async (payload, thunkAPI) => {
+  async (count, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllFalse(searchValue);
-      console.log("res:", res);
+      const res = await PostAPI.getAllFalse(count, searchValue);
       return thunkAPI.fulfillWithValue(res.data.result);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -306,11 +293,10 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // state.dataLength = action.payload.length;
-      // if (state.dataLength !== 0) {
-      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      // }
-      state.AllFalseDate = action.payload;
+      state.dataLength = action.payload.length;
+      if (state.dataLength !== 0) {
+        state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
+      }
     },
     [__getAllFalse.rejected]: (state, action) => {
       state.isLoading = true;
