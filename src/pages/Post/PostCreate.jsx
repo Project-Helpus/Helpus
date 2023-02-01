@@ -9,8 +9,6 @@ import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
-import Carousel from "../../components/Carousel";
-import { StFlex } from "../../components/UI/CardStyle.js/StCommon";
 import crsLeftButton from "../../asset/CrsLeft.svg";
 import crsRightButton from "../../asset/CrsRight.svg";
 
@@ -227,13 +225,13 @@ const PostCreate = () => {
                   onClick={moveCrsRight}
                 ></StCrsRightButton>
                 <StHidden>
-                  <StFlex ref={crsRef}>
+                  <StFlexBox ref={crsRef}>
                     {previewImg?.map((el, i) => (
                       <label htmlFor="image" key={i}>
                         <StCrsImg src={el} alt="inputImage" />
                       </label>
                     ))}
-                  </StFlex>
+                  </StFlexBox>
                 </StHidden>
               </StCrsContainser>
             ) : (
@@ -302,6 +300,9 @@ const PostCreate = () => {
     </StWrapper>
   );
 };
+const StFlexBox = styled.div`
+  display: flex;
+`;
 const StCrsImg = styled.img`
   width: 185px;
   height: 225px;
