@@ -15,7 +15,8 @@ const Mypage = () => {
   const navigate = useNavigate();
 
   const profile = useSelector((state) => state.mypageSlice.profile);
-  const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
+  const myPosts = useSelector((state) => state.mypageSlice.myPosts);
+
   const chatList = useSelector((state) => state.mypageSlice.chatList);
   const wish = useSelector((state) => state.mypageSlice.wish);
   const { userInfo } = useSelector((state) => state.userSlice);
