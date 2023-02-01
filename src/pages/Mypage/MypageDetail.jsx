@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import {
-  __getMyPage,
-  __patchMypage,
-  __userImage,
-  __patchPassword,
-} from "../../redux/modules/mypageSlice";
+import { __getMyPage, __patchPassword } from "../../redux/modules/mypageSlice";
 import {
   __kakaoSignOut,
-  __logout,
   __signOut,
   __kakaoState,
+  __patchMypage,
+  __userImage,
 } from "../../redux/modules/userSlice";
 import { StSelector } from "../../components/UI/StIndex";
 import { address } from "../User/element/Address";
@@ -25,13 +21,13 @@ const MypageDetail = () => {
   //프로필 정보 불러오기
   const profile = useSelector((state) => state.mypageSlice.profile);
   const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
-  const isLogin = useSelector((state) => state.userSlice.isLogin);
+  const { userInfo } = useSelector((state) => state.userSlice);
 
   //수정 input 넣는 state
   const [input, setInput] = useState({
-    userName: profile?.userName,
-    state1: profile?.state1,
-    state2: profile?.state2,
+    userName: userInfo?.userName,
+    state1: userInfo?.state1,
+    state2: userInfo?.state2,
   });
 
   //패쓰워드 수정 state
@@ -42,7 +38,7 @@ const MypageDetail = () => {
 
   //img 넣는 state
   const [imgFile, setImgFile] = useState();
-  const [privewImg, setPrivewImg] = useState(profile?.userImage);
+  const [privewImg, setPrivewImg] = useState(userInfo?.userImage);
 
   //사진 저장하기
   const fileInput = useRef();
@@ -105,17 +101,22 @@ const MypageDetail = () => {
 
   //카카오 탈퇴 버튼
   const kakaosignOutHandler = () => {
-    dispatch(__kakaoSignOut());
-    //dispatch(__logout(isLogin));
-    alert("탈퇴완료");
-    navigate("/");
+    if (window.confirm("정말 탈퇴하시겠습니까?")) {
+      dispatch(__kakaoSignOut());
+      navigate("/");
+    } else {
+      alert("취소합니다.");
+    }
   };
 
   //로컬 탈퇴 버튼
   const signOutHandler = () => {
-    dispatch(__signOut());
-    alert("탈퇴완료");
-    navigate("/");
+    if (window.confirm("정말 탈퇴하시겠습니까?")) {
+      dispatch(__signOut());
+      navigate("/");
+    } else {
+      alert("취소합니다.");
+    }
   };
 
   //프로필 정보 불러오기
@@ -155,7 +156,7 @@ const MypageDetail = () => {
         <input
           onChange={updateOnChange}
           name="userName"
-          defaultValue={profile?.userName || ""}
+          defaultValue={userInfo?.userName || ""}
           required
           autoFocus
         ></input>
@@ -171,7 +172,7 @@ const MypageDetail = () => {
             <StSelector
               name="state1"
               onChange={updateOnChange}
-              defaultValue={profile?.state1 || ""}
+              defaultValue={userInfo?.state1 || ""}
             >
               {state.map((el) => (
                 <option key={el.state} value={el.state}>
@@ -182,7 +183,7 @@ const MypageDetail = () => {
             <StSelector
               name="state2"
               onChange={updateOnChange}
-              defaultValue={profile?.state2 || ""}
+              defaultValue={userInfo?.state2 || ""}
             >
               {city
                 .filter((el) => el.state === input.state1)
@@ -247,9 +248,10 @@ const StProfile = styled.div`
     margin: 10px auto;
     width: 300px;
     height: 44px;
-    background-color: #ea9db4;
+    background-color: ${(props) => props.theme.colors.subPink};
     border: none;
     border-radius: 7px;
+    color: white;
   }
   input {
     width: 300px;
@@ -288,5 +290,5 @@ const StState = styled.div`
 
 const StSingOut = styled.div`
   font-size: 14px;
-  color: #999999;
+  color: ${(props) => props.theme.colors.middleGray};
 `;

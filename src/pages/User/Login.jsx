@@ -11,7 +11,7 @@ import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.userSlice.isLogin);
+
   //input state 초기값
   const [account, setAccount] = useState({ email: "", password: "" });
 
@@ -22,19 +22,13 @@ const Login = () => {
   };
 
   //submit 이벤트 핸들러
-  const loginSubmitHandler = (e) => {
+  const loginSubmitHandler = async (e) => {
     e.preventDefault();
-    dispatch(__postLogin(account));
-  };
-
-  //로그인 성공시
-  useEffect(() => {
-    if (!isLogin) return;
-    if (isLogin) {
-      alert("로그인 성공");
+    const res = await dispatch(__postLogin(account));
+    if (res.meta.requestStatus === "fulfilled") {
       navigate("/");
     }
-  }, [isLogin]);
+  };
 
   return (
     <StWarp>
@@ -114,6 +108,7 @@ const StLoginWrap = styled.div`
       margin: 6px;
       background-color: #fafafa;
       padding-left: 8px;
+      box-sizing: border-box;
     }
     button {
       border: 0;
@@ -122,6 +117,7 @@ const StLoginWrap = styled.div`
       background-color: #ffc3d5;
       border-radius: 7px;
       margin: 6px;
+      font-size: 1.1em;
     }
     img {
       margin: 6px;

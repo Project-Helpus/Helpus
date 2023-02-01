@@ -1,137 +1,197 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import CardList from "./CardList";
 import styled from "styled-components";
 import {
-  __getHelpUsFalse,
   __setBoolHelpUs,
+  __setBoolHelpee,
+  __setBoolHelper,
+  __getHelpUsFalse,
+  __getHelperFalse,
+  __getHelpeeFalse,
 } from "../../redux/modules/postSlice";
 import Card from "../../components/Card";
 import {
   StMainWrapper,
-  StCarouselTitle,
-  StCarouselContainer,
-  StLeftButton,
-  StRightButton,
-  StCarousel,
-  StCarouselItem,
-  StTransFormY,
   StTopImg,
-  StCarouselWrapper,
-  StMain,
-  StSubTitle,
   StTopSubTilte,
   StTopTitle,
   StTitleWrapper,
-  StCarouselWith,
+  StTest,
+  StAutoCarousel,
+  StContentsContainer,
+  StPostInfo,
+  StPostInfoCenter,
+  StPostTitle,
+  StPostSubTitle,
+  StMoreButton,
+  StCrsContainer,
+  StHidden,
+  StTopMainTitle,
+  StMainImg,
+  StMainImg2,
+  StWriteButton,
+  StWrBtnWrapper,
 } from "./Style/StHome";
-import { __getWishPost } from "../../redux/modules/mypageSlice";
-import { StFlex } from "./Style/StCardList";
+import { StFlex } from "../../components/UI/CardStyle/StCommon";
+import HomeMain from "../../asset/HomeMain.png";
+import HomeMain2 from "../../asset/HomeMain2.png";
+import "../../static/fonts/font.css";
 
 const Home = () => {
-  const data = useSelector((state) => state.postSlice.helpUsFalseDate.result);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const HelpUsData = useSelector(
+    (state) => state.postSlice.helpUsFalseDate?.result
+  );
+  const HelperData = useSelector(
+    (state) => state.postSlice.helperFalseDate?.result
+  );
+  const HelpeeData = useSelector(
+    (state) => state.postSlice.helpeeFalseDate?.result
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const slideRef = useRef(null);
-  const helpUsRef = useRef(null);
-  const TotalSlides = 10;
-  //    < next button >
-  const NextSlide = () => {
-    if (currentSlide >= TotalSlides) {
-      //더 이상 넘어갈 슬라이드가 없으면
-      setCurrentSlide(0); //1번째 사진으로 넘어간다
-    } else {
-      setCurrentSlide(currentSlide + 1);
-    }
-  };
-
-  //    <  prev button  >
-  const PrevSlide = () => {
-    if (currentSlide === 0) {
-      setCurrentSlide(TotalSlides);
-      // 마지막 사진으로 이동
-    } else {
-      setCurrentSlide(currentSlide - 1);
-    }
-  };
-
+  const crsHelperRef = useRef(null);
+  const crsHelpUsRef = useRef(null);
+  const crsHelpeeRef = useRef(null);
+  const isLogedIn = useSelector((state) => state.userSlice.isLogin);
   const linkHelpUs = () => {
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
   };
-  const onMouseOverHandlerHelpUs = () => {
-    helpUsRef.current.style.color = "#7C7C7C";
+  const linkHelper = () => {
+    dispatch(__setBoolHelper());
+    navigate("/postlist");
   };
-  const onMouseOutHandlerHelpUs = () => {
-    helpUsRef.current.style.color = "#fff";
+  const linkHelpee = () => {
+    dispatch(__setBoolHelpee());
+    navigate("/postlist");
   };
 
-  const logedIn = useSelector((state) => state.userSlice);
-  useEffect(() => {
-    slideRef.current.style.transition = "all 0.5s ease-in-out";
-    slideRef.current.style.transform = `translateX(-${currentSlide * 1300}px)`;
-  }, [currentSlide]);
   useEffect(() => {
     dispatch(__getHelpUsFalse());
   }, [dispatch]);
+
   useEffect(() => {
-    dispatch(__getWishPost());
+    dispatch(__getHelperFalse(""));
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(__getHelpeeFalse(""));
+  }, [dispatch]);
+  
+  useEffect(() => {
+    crsHelperRef.current.style.transition = "all 1s ease-in-out";
+    crsHelpUsRef.current.style.transition = "all 1s ease-in-out";
+    crsHelpeeRef.current.style.transition = "all 1s ease-in-out";
+    setTimeout(() => {
+      crsHelperRef.current.style.transform = `translateX(-57.5em)`;
+      crsHelpUsRef.current.style.transform = `translateX(-57.5em)`;
+      crsHelpeeRef.current.style.transform = `translateX(-57.5em)`;
+    }, 3000);
+    setTimeout(() => {
+      crsHelperRef.current.style.transform = `translateX(-115em)`;
+      crsHelpUsRef.current.style.transform = `translateX(-115em)`;
+      crsHelpeeRef.current.style.transform = `translateX(-115em)`;
+    }, 6000);
+    setTimeout(() => {
+      crsHelperRef.current.style.transform = `translateX(0)`;
+      crsHelpUsRef.current.style.transform = `translateX(0)`;
+      crsHelpeeRef.current.style.transform = `translateX(0)`;
+    }, 9000);
+  }, []);
 
   return (
     <StMainWrapper>
       <StTopImg>
-        <StTitleWrapper>
-          <StDiv>
+        <StFlex>
+          <StTitleWrapper>
+            <StTopMainTitle>HelpUs</StTopMainTitle>
             <StTopTitle>당신의 솜씨를 나눠주세요.</StTopTitle>
-          </StDiv>
-          <StTopSubTilte>
-            재능기부로 따뜻한 지역사회를 만들어가요.
-          </StTopSubTilte>
-        </StTitleWrapper>
+            <StTopSubTilte>
+              재능기부로 따뜻한 지역사회를 만들어가요.
+            </StTopSubTilte>
+          </StTitleWrapper>
+          <div>
+            <StMainImg src={HomeMain}></StMainImg>
+            <StMainImg2 src={HomeMain2}></StMainImg2>
+          </div>
+        </StFlex>
       </StTopImg>
-      <StTransFormY>
-        <StMain>
-          <StCarouselWrapper value={currentSlide + 1}>
-            <StCarouselTitle
-              onClick={linkHelpUs}
-              onMouseOver={onMouseOverHandlerHelpUs}
-              onMouseOut={onMouseOutHandlerHelpUs}
-            >
-              함께해요 Helpus
-              <StSubTitle ref={helpUsRef} onClick={linkHelpUs}>
-                더보기
-              </StSubTitle>
-            </StCarouselTitle>
-            <StFlex>
-              <StLeftButton onClick={PrevSlide}></StLeftButton>
-              <StCarouselWith>
-                <StCarouselContainer>
-                  <StCarousel ref={slideRef}>
-                    {data?.map((item, idx) => {
-                      return (
-                        <StCarouselItem key={idx}>
-                          <Card type={"케러셀"} data={item} />{" "}
-                        </StCarouselItem>
-                      );
-                    })}
-                  </StCarousel>
-                </StCarouselContainer>
-              </StCarouselWith>
-              <StRightButton onClick={NextSlide}></StRightButton>
-            </StFlex>
-          </StCarouselWrapper>
-          <CardList></CardList>
-        </StMain>
-      </StTransFormY>
+
+      <StTest>
+        {isLogedIn === true ? (
+          <StWrBtnWrapper>
+            <StWriteButton onClick={() => navigate("/post")}>
+              글쓰기
+            </StWriteButton>
+          </StWrBtnWrapper>
+        ) : null}
+
+        <StContentsContainer>
+          <StPostInfo>
+            <StPostTitle>HelpUs</StPostTitle>
+            <StPostSubTitle>자원봉사 함께해요</StPostSubTitle>
+            <StMoreButton onClick={linkHelpUs}>More</StMoreButton>
+          </StPostInfo>
+          <StAutoCarousel>
+            <StHidden>
+              <StCrsContainer ref={crsHelpUsRef}>
+                {HelpUsData?.map((item) => {
+                  return (
+                    <div key={item.postId}>
+                      <Card type={"케러셀"} data={item} />{" "}
+                    </div>
+                  );
+                })}
+              </StCrsContainer>
+            </StHidden>
+          </StAutoCarousel>
+        </StContentsContainer>
+
+        <StContentsContainer>
+          <StAutoCarousel>
+            <StHidden>
+              <StCrsContainer ref={crsHelpeeRef}>
+                {HelpeeData?.map((item) => {
+                  return (
+                    <div key={item.postId}>
+                      <Card type={"케러셀"} data={item} />{" "}
+                    </div>
+                  );
+                })}
+              </StCrsContainer>
+            </StHidden>
+          </StAutoCarousel>
+          <StPostInfoCenter>
+            <StPostTitle>Helpee</StPostTitle>
+            <StPostSubTitle>도움이 필요해요</StPostSubTitle>
+            <StMoreButton onClick={linkHelpee}>More</StMoreButton>
+          </StPostInfoCenter>
+        </StContentsContainer>
+
+        <StContentsContainer>
+          <StPostInfo>
+            <StPostTitle>Helper</StPostTitle>
+            <StPostSubTitle>재능을 기부해요</StPostSubTitle>
+            <StMoreButton onClick={linkHelper}>More</StMoreButton>
+          </StPostInfo>
+          <StAutoCarousel>
+            <StHidden>
+              <StCrsContainer ref={crsHelperRef}>
+                {HelperData?.map((item) => {
+                  return (
+                    <div key={item.postId}>
+                      <Card type={"케러셀"} data={item} />{" "}
+                    </div>
+                  );
+                })}
+              </StCrsContainer>
+            </StHidden>
+          </StAutoCarousel>
+        </StContentsContainer>
+      </StTest>
     </StMainWrapper>
   );
 };
 
 export default Home;
-
-const StDiv = styled.div`
-  max-width: 1370px;
-`;

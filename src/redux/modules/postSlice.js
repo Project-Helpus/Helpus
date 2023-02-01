@@ -21,10 +21,15 @@ export const __updatePost = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const Id = payload.id;
-      const Form = payload.formData;
-      const res = await PostAPI.postUpdate(Id, Form);
-      return thunkAPI.fulfillWithValue(res.data);
+      const data = payload.data;
+      const res = await PostAPI.postUpdate(Id, data);
+      if (res.status === 201) {
+        window.alert("수정이 완료되었습니다");
+        thunkAPI.fulfillWithValue(res.data);
+        return window.location.replace("/mypage");
+      }
     } catch (err) {
+      window.alert("수정 실패");
       return thunkAPI.rejectWithValue();
     }
   }
@@ -70,12 +75,24 @@ export const __detailPost = createAsyncThunk(
 
 //    <<<<<<  전국  >>>>>>
 //    <  전국 false  >
+// export const __getAllFalse = createAsyncThunk(
+//   "mypageSlice/getAllFalse",
+//   async (count, thunkAPI) => {
+//     try {
+//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
+//       const res = await PostAPI.getAllFalse(count, searchValue);
+//       return thunkAPI.fulfillWithValue(res.data.result);
+//     } catch (err) {
+//       return thunkAPI.rejectWithValue();
+//     }
+//   }
+// );
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
-  async (count, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllFalse(count, searchValue);
+      const res = await PostAPI.getAllFalse(searchValue);
       return thunkAPI.fulfillWithValue(res.data.result);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -90,6 +107,7 @@ export const __getHelpeeFalse = createAsyncThunk(
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
       const res = await PostAPI.getHelpeeFalse(searchValue);
+
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -146,7 +164,7 @@ export const __getHelpeeTrue = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllTrue(searchValue);
+      const res = await PostAPI.getHelpeeTrue(searchValue);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -288,10 +306,11 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.dataLength = action.payload.length;
-      if (state.dataLength !== 0) {
-        state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      }
+      // state.dataLength = action.payload.length;
+      // if (state.dataLength !== 0) {
+      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
+      // }
+      state.AllFalseDate = action.payload;
     },
     [__getAllFalse.rejected]: (state, action) => {
       state.isLoading = true;

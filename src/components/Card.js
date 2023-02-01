@@ -26,14 +26,19 @@ import {
   StZZimTag,
   StMarginTop10,
   StAllPostDeadLine,
-} from "./UI/CardStyle.js/StElements";
+} from "./UI/CardStyle/StElements";
 import {
   StRowCard,
   StRowImgWrapper,
   StImg,
   StRowTitle,
   StRowContent,
-} from "./UI/CardStyle.js/Row";
+  StCrsPost,
+  StCrsProfile,
+  StCrsTitle,
+  StCrsNickname,
+  StProfileWrapper,
+} from "./UI/CardStyle/Row";
 import {
   StFlex,
   StCirclePhoto,
@@ -55,13 +60,26 @@ import {
   StAllPostWrapper,
   StAllPostSquarePhoto,
   StAllPostNickName,
-} from "./UI/CardStyle.js/StCommon";
+} from "./UI/CardStyle/StCommon";
+
+import {
+  StMyContainer,
+  StMyImg,
+  StMyCirclePhoto,
+  StMyContents,
+  StMyNickName,
+  StMyTitle,
+  StMySubTitle,
+  StMyCaption,
+  StMyImgWrap,
+} from "../pages/Mypage/Style/StMypage";
+
 import emptyHeart from "../asset/emptyHeart.svg";
 import fullHeart from "../asset/fullHeart.svg";
 const Card = ({ type, data, onClick }) => {
   const [count, setCount] = useState(1);
 
-  const tag = data.tag.split(",", 3);
+  const tag = data.tag?.split(",", 3);
   const Model = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -76,7 +94,7 @@ const Card = ({ type, data, onClick }) => {
     const title15 = data.title.slice(0, 15);
     const deadLine = data.isDeadLine;
     const moveDetail = (id) => {
-      navigate(`/post/${id}`, { state: { data: data } });
+      navigate(`/post/${id}`);
     };
 
     const ZZim = (e) => {
@@ -100,39 +118,31 @@ const Card = ({ type, data, onClick }) => {
       case "세로":
         return (
           <StColumnCard>
-          <StAllPostWrapper>
-            <StAllPostSquarePhoto src={data.imageUrl1} onClick={()=>moveDetail(data.postId)}></StAllPostSquarePhoto>
-            <StFlex>
-              <StCirclePhoto src={data.userImage}></StCirclePhoto>
-              <StMarginTop10>
-                <StContentsTitle>{data.title}</StContentsTitle>
-                <StAllPostNickName>{data.userName}</StAllPostNickName>
-              </StMarginTop10>
-            </StFlex>
-            <StFlex>
-              {deadLine === 1 ?  <StEmptyDiv /> : <StAllPostDeadLine>마감</StAllPostDeadLine>}
-              {tag.map((item, idx) => { return <StTag key={idx}>{item}</StTag> })}
-            </StFlex>
+            <StAllPostWrapper>
+              <StAllPostSquarePhoto
+                src={data.thumbnail}
+                onClick={() => moveDetail(data.postId)}
+              ></StAllPostSquarePhoto>
+              <StFlex>
+                <StCirclePhoto src={data.userImage}></StCirclePhoto>
+                <StMarginTop10>
+                  <StContentsTitle>{data.title}</StContentsTitle>
+                  <StAllPostNickName>{data.userName}</StAllPostNickName>
+                </StMarginTop10>
+              </StFlex>
+              <StFlex>
+                {deadLine === 1 ? (
+                  <StEmptyDiv />
+                ) : (
+                  <StAllPostDeadLine>마감</StAllPostDeadLine>
+                )}
+                {tag.map((item, idx) => {
+                  return <StTag key={idx}>{item}</StTag>;
+                })}
+              </StFlex>
             </StAllPostWrapper>
-            </StColumnCard>
+          </StColumnCard>
         );
-      // case "세로":
-      //   return (
-      //     <StColumnCard>
-      //       <StColumnImgWrapper>
-      //         <StImg alt="thumbnail" src={data.imageUrl1} onClick={()=>moveDetail(data.postId)} />
-      //       </StColumnImgWrapper>
-      //       <StFlex>
-      //         <StColumnNickName>{data.userName}</StColumnNickName>
-      //         <StColumnCity>
-      //           {data.location1} {data.location2}
-      //         </StColumnCity>
-      //         {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-      //       </StFlex>
-      //       <StColumnTitle>{data.title}</StColumnTitle>
-      //       <StColumnDate>{KoreaDate}</StColumnDate>
-      //     </StColumnCard>
-      //   );
       case "채팅":
         return (
           <>
@@ -156,29 +166,86 @@ const Card = ({ type, data, onClick }) => {
       case "내 게시물":
         return (
           <>
-            <StFlex>
-              <StMySquarePhoto
-                src={data.imageUrl1}
+            <StMyContainer>
+              <StMyImg
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
-              ></StMySquarePhoto>
-              <div>
-                <StFlex>
-                  <StCirclePhoto src={data.userImage}></StCirclePhoto>
-                  <StNickname>{data.userName}</StNickname>
-                  <StDate>{KoreaDate}</StDate>
-                  <StAddress>상세주소</StAddress>
-                  {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
-                </StFlex>
-                <StContentsTitle></StContentsTitle>
-                <StContentsInfo>게시물 내용</StContentsInfo>
-                <StFlex>
-                  {/* map 돌리기(내 게시물에 참여한 사람들 프로필 사진) */}
-                  <img></img>
-                  <img></img>
-                  <img></img>
-                </StFlex>
-              </div>
-            </StFlex>
+                alt=""
+              ></StMyImg>
+              <StMyContents>
+                <StMyNickName>
+                  <StMyCirclePhoto
+                    src={data.userImage}
+                    alt=""
+                  ></StMyCirclePhoto>
+                  <span>{data.userName}</span>
+                </StMyNickName>
+                <StMyTitle>{data.title}</StMyTitle>
+                <StMySubTitle>{data.content}</StMySubTitle>
+                <StMyCaption>
+                  <span>{KoreaDate}</span>
+                  <span>
+                    {data.location1} {data.location2}
+                  </span>
+                </StMyCaption>
+                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StMyContents>
+            </StMyContainer>
+          </>
+        );
+      case "찜 가로 게시물":
+        return (
+          <>
+            <StMyContainer>
+              <StMyImgWrap>
+                <StMyImg
+                  src={data.thumbnail}
+                  onClick={() => moveDetail(data.postId)}
+                  alt=""
+                ></StMyImg>
+                {count % 2 === 1 ? (
+                  <StZZimHeart
+                    onClick={ZZim}
+                    src={fullHeart}
+                    alt="wish1"
+                  ></StZZimHeart>
+                ) : (
+                  <StZZimHeart
+                    onClick={ZZim}
+                    src={emptyHeart}
+                    alt="wish2"
+                  ></StZZimHeart>
+                )}
+              </StMyImgWrap>
+              <StMyContents>
+                <StMyNickName>
+                  <StMyCirclePhoto
+                    src={data.userImage}
+                    alt=""
+                  ></StMyCirclePhoto>
+                  <span>{data.userName}</span>
+                </StMyNickName>
+                <StMyTitle>{data.title}</StMyTitle>
+                <StMySubTitle>{data.content}</StMySubTitle>
+                <StMyCaption>
+                  <span>{KoreaDate}</span>
+                  <span>
+                    {data.location1} {data.location2}
+                  </span>
+                </StMyCaption>
+                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StMyContents>
+            </StMyContainer>
           </>
         );
       case "찜 게시물":
@@ -186,7 +253,7 @@ const Card = ({ type, data, onClick }) => {
           <>
             <StZZimWrap>
               <StZZimImg
-                src={data.imageUrl1}
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
               ></StZZimImg>
               {count % 2 === 1 ? (
@@ -203,7 +270,6 @@ const Card = ({ type, data, onClick }) => {
                 ></StZZimHeart>
               )}
               <StZZimTitle>{data.title}</StZZimTitle>
-              {/* <StContentsInfo>{data.content}</StContentsInfo> */}
               {deadLine === 1 ? (
                 <StEmptyDiv />
               ) : (
@@ -219,10 +285,6 @@ const Card = ({ type, data, onClick }) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
-                {/* <StDate>{KoreaDate}</StDate>
-                  <StAddress>
-                    {data.location1} {data.location2}
-                  </StAddress> */}
               </StZZimWrapContents>
             </StZZimWrap>
           </>
@@ -243,9 +305,8 @@ const Card = ({ type, data, onClick }) => {
                     <StNickname>{data.userName}</StNickname>
                   </div>
                 </StFlex>
-
                 <StMargin60>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StTag key={idx}>{item}</StTag>;
                   })}
                 </StMargin60>
@@ -254,21 +315,26 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StDeadLine>마감</StDeadLine>
                 )}
-
-                {/* </StSpaceBetween> */}
+                2
               </StMainContentsWrapper>
             </StFlex>
           </StMainWrapper>
         );
       case "케러셀":
         return (
-          <StMarginRight>
-            <StMySquarePhoto
-              src={data.imageUrl1}
+          <>
+            <StCrsPost
+              src={data.thumbnail}
               onClick={() => moveDetail(data.postId)}
-            ></StMySquarePhoto>
-            <StMainContentsTitle>{title15}...</StMainContentsTitle>
-          </StMarginRight>
+            ></StCrsPost>
+            <StProfileWrapper>
+              <StCrsProfile src={data.userImage}></StCrsProfile>
+              <div>
+                <StCrsTitle>{data.title}</StCrsTitle>
+                <StCrsNickname>{data.userName.slice(0, 10)}</StCrsNickname>
+              </div>
+            </StProfileWrapper>
+          </>
         );
       default:
         return;

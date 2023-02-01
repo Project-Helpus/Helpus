@@ -1,24 +1,28 @@
 import axios from "axios";
-import { Cookies } from "react-cookie";
-const cookie = new Cookies();
+import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
+  baseURL: process.env.REACT_APP_SERVER_TEST,
+  withCredentials: true,
 });
 
 export const ChatAPI = {
-  // ChatAPI
+  patchScore: (userId) => client.patch(`api/score/${userId}`),
+  postImage: (formData) => client.post("api/chat/image", formData),
+  getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
 };
 
 export const PostAPI = {
   postCreate: (formData) => client.post("/api/post", formData),
-  postUpdate: (id, Form) => client.put(`api/post/${id}`, Form),
+  postUpdate: (id, data) => client.put(`api/post/${id}`, data),
   postDelete: (id) => client.delete(`api/post/${id}`),
-  postZZim:(id)=>client.post(`api/wish/${id}`),
-  getAllFalse: (count, searchValue) =>
-    client.get(
-      `api/post/all-location?q=${count}&category=&search=${searchValue}`
-    ),
+  postZZim: (id) => client.post(`api/wish/${id}`),
+  // getAllFalse: (count, searchValue) =>
+  //   client.get(
+  //     `api/post/all-location?q=${count}&category=&search=${searchValue}`
+  //   ),
+  getAllFalse: (searchValue) =>
+    client.get(`api/post/all-location?category=&search=${searchValue}`),
   getHelpeeFalse: (searchValue) =>
     client.get(`api/post/all-location?category=1&search=${searchValue}`),
   getHelperFalse: (searchValue) =>
@@ -41,7 +45,6 @@ export const PostAPI = {
   postReport: (userId, type, reason) =>
     client.post(`/api/report/${userId}`, type, reason),
   postWishList: (postId) => client.post(`/api/board/post/${postId}/wish`),
-  // 검색 확정되면 재 확인 필요
   postSearch: () => client.post("/api/search"),
   getSearch: (keyword, type, location) =>
     client.get(`/api/search?keyword=${keyword}&type=${type}`),
@@ -53,17 +56,18 @@ export const UserAPI = {
   emailCheck: (email) => client.post("/api/user/email", { email }),
   signUp: (formData) => client.post("/api/user/signup", formData),
   login: (loginData) => client.post("/api/user/login", loginData),
+  logout: () => client.delete("/api/token"),
   kakaoSignOut: () => client.delete("/api/user/delete/kakao"),
   signOut: () => client.delete("/api/user/delete"),
+  patchMypage: (userData) => client.patch("api/user/detail", userData),
+  userImage: (formData) => client.patch("api/user/image", formData),
 };
 
 export const MypageAPI = {
   getMyPage: () => client.get("/api/user/detail"),
-  getMyposts: () => client.get("/api/user/myposts"),
+  getMyposts: (count) => client.get(`/api/user/myposts?q=${count}`),
   getWishlist: () => client.get("/api/user/wishlist"),
   getChat: () => client.get("api/chat/list"),
-  patchMypage: (userData) => client.patch("api/user/detail", userData),
-  userImage: (formData) => client.patch("api/user/image", formData),
   patchPassword: (changePassword) =>
     client.patch("api/user/password", changePassword),
   getUserPage: (userId) => client.get(`/api/user/${userId}/detail`),
@@ -71,9 +75,6 @@ export const MypageAPI = {
 
 client.interceptors.request.use(
   function (config) {
-    if (cookie.get("token")) {
-      config.headers.authorization = `Bearer ${cookie.get("token")}`;
-    }
     return config;
   },
   function (error) {
@@ -83,17 +84,19 @@ client.interceptors.request.use(
 
 client.interceptors.response.use(
   function (response) {
-    if (response.data.token) {
-      cookie.set("token", response.data.token, { path: "/" });
-    }
     return response;
   },
 
-  function (error) {
-    if (error?.response.status === 401) {
-      cookie.remove("token", { path: "/" });
-      return error;
-    }
-    return error;
+  async function (error) {
+    if (error.response.data.errorMessage === "토큰 재발급 필요") {
+      await client.get("api/token");
+      client.request(error.config);
+      return;
+    } else if (error.response.data.errorMessage === "로그인 필요 2") {
+      await client.delete("api/token");
+      storage.removeItem("persist:root");
+      window.alert("다시 로그인 해주세요");
+      window.location.replace("/login");
+    } else return error;
   }
 );

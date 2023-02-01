@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import theme from "../../../styles/theme";
 
 export const StColumnCard = styled.div`
   width: 31.25%;
@@ -9,6 +8,7 @@ export const StColumnCard = styled.div`
 export const StColumnImgWrapper = styled.div`
   width: 100%;
   height: 65.7%;
+  margin-bottom: 60px;
 `;
 
 export const StColumnNickName = styled.p`
@@ -100,6 +100,7 @@ export const StZZimWrap = styled.div`
 export const StZZimImg = styled.img`
   width: 320px;
   height: 180px;
+  border: 1px solid ${(props) => props.theme.colors.gray};
   border-radius: 20px;
 `;
 
@@ -132,14 +133,10 @@ export const StZZimTitle = styled.p`
   font-size: 18px;
   font-weight: 600;
   padding: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
-
-// export const St
-//   width:50px;
-//   top: -149px;
-//   z-index: 1;
-//   position: relative;
-// `;
 
 export const StMarginTop10 = styled.div`
   margin-top: 10px;
@@ -169,9 +166,8 @@ export const StZZimTag = styled.span`
   padding: 4px;
   line-height: 20px;
   font-size: 12px;
-  font-weight: 600;
   border-radius: 3px;
-  background-color: ${(props) => props.theme.colors.subPink};
+  background-color: ${(props) => props.theme.colors.gray};
   margin-right: 10px;
-  color: white;
+  color: ${(props) => props.theme.colors.middleGray};
 `;

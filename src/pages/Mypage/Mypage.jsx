@@ -9,9 +9,6 @@ import {
 } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
-import theme from "../../styles/theme";
-import heart_fill from "../../asset/heart_fill.svg";
-import heart from "../../asset/heart.svg";
 
 const Mypage = () => {
   const dispatch = useDispatch();
@@ -19,32 +16,28 @@ const Mypage = () => {
 
   const profile = useSelector((state) => state.mypageSlice.profile);
   const myPosts = useSelector((state) => state.mypageSlice.myPosts.result);
-  const data = useSelector((state) => state.mypageSlice.data);
+  const chatList = useSelector((state) => state.mypageSlice.chatList);
   const wish = useSelector((state) => state.mypageSlice.wish);
+  const { userInfo } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
-    dispatch(__getMyPage());
-    dispatch(__getMyposts());
-    dispatch(__getChat());
-    dispatch(__getWishPost());
-  }, [dispatch]);
+    const loadData = async () => {
+      await dispatch(__getMyPage());
+      await dispatch(__getMyposts());
+      await dispatch(__getChat());
+      await dispatch(__getWishPost());
+    };
+    loadData();
+  }, []);
 
   return (
     <StWarp>
       <StProfile>
         <StProfileImg src={profile?.userImage} alt="" />
-        <StName>{profile?.userName}</StName>
+        <StName>{userInfo?.userName}</StName>
         <StEmail>{profile?.email}</StEmail>
-        <StheartWrap>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart_fill} alt=""></StheartImg>
-          <StheartImg src={heart} alt=""></StheartImg>
-          <StheartImg src={heart} alt=""></StheartImg>
-        </StheartWrap>
-        <StState>{profile?.score}/10점</StState>
         <StState>
-          {profile?.state1} {profile?.state2}
+          {userInfo?.state1} {userInfo?.state2}
         </StState>
         <button
           onClick={() => {
@@ -58,34 +51,63 @@ const Mypage = () => {
         <div>
           <StMypageTitle>
             <h2>채팅</h2>
-            <span>더보기</span>
           </StMypageTitle>
           <StChatWrap>
-            {data.list?.map((el) => (
-              <StChatTitle
-                key={el.roomId}
-                onClick={() => {
-                  navigate(`/mypage/chat/${el.roomId}`, {
-                    state: { data: data },
-                  });
-                }}
-              >
-                <StOwnerImageWrap>
-                  <StOwnerImage src={el.ownerImage} alt=""></StOwnerImage>
-                  <StOwnerName>{el.ownerName}</StOwnerName>
-                </StOwnerImageWrap>
-                <StOwnerTextWrap>
-                  <StDate>{el.appointed.split("T")[0]}</StDate>
-                  <StTitle>{el.title}</StTitle>
-                </StOwnerTextWrap>
-              </StChatTitle>
-            ))}
+            {chatList.list?.map((el) => {
+              if (userInfo.userId === el.ownerId) {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { chatInfo: el },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.senderImage} alt=""></StImage>
+                      <StChatName>{el.senderName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              } else {
+                return (
+                  <StChatTitle
+                    key={el.roomId}
+                    onClick={() => {
+                      navigate(`/mypage/chat/${el.roomId}`, {
+                        state: { chatInfo: el },
+                      });
+                    }}
+                  >
+                    <StImageWrap>
+                      <StImage src={el.ownerImage} alt=""></StImage>
+                      <StChatName>{el.ownerName}</StChatName>
+                    </StImageWrap>
+                    <StTextWrap>
+                      <StDate>{el.appointed.split("T")[0]}</StDate>
+                      <StTitle>{el.title}</StTitle>
+                    </StTextWrap>
+                  </StChatTitle>
+                );
+              }
+            })}
           </StChatWrap>
         </div>
         <div>
           <StMypageTitle>
             <h2>내 게시물</h2>
-            <span>더보기</span>
+            <span
+              onClick={() => {
+                navigate("/mypage/myposts");
+              }}
+            >
+              더보기
+            </span>
           </StMypageTitle>
           <StZZimWrap>
             {myPosts?.map((el, index) => (
@@ -95,7 +117,13 @@ const Mypage = () => {
         </div>
         <StMypageTitle>
           <h2>찜한 게시물</h2>
-          <span>더보기</span>
+          <span
+            onClick={() => {
+              navigate("/mypage/mywish");
+            }}
+          >
+            더보기
+          </span>
         </StMypageTitle>
         <StZZimWrap>
           {wish?.map((el, index) => (
@@ -111,6 +139,7 @@ export default Mypage;
 
 const StWarp = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
   margin: 0 auto;
 `;
@@ -126,12 +155,13 @@ const StProfile = styled.div`
     margin-top: 17px;
   }
   button {
-    margin: 10px auto;
+    margin: 20px auto;
     width: 120px;
     height: 40px;
     background-color: ${(props) => props.theme.colors.subPink};
     border: none;
-    border-radius: 7px;
+    border-radius: 10px;
+    color: white;
   }
 `;
 
@@ -159,6 +189,7 @@ const StMypageTitle = styled.div`
   span {
     color: ${(props) => props.theme.colors.middleGray};
     font-size: 14px;
+    cursor: pointer;
   }
 `;
 const StName = styled.div`
@@ -168,22 +199,22 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 8px;
+  margin-top: 18px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`
   color: ${(props) => props.theme.colors.middleGray};
-  margin-top: 8px;
+  margin-top: 10px;
 `;
 
-const StOwnerImage = styled.img`
+const StImage = styled.img`
   width: 50px;
   height: 50px;
   box-shadow: 0 0 0 2px #efefef inset;
   padding: 4px;
   border-radius: 100%;
 `;
-const StOwnerName = styled.p`
+const StChatName = styled.p`
   font-size: 14px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
@@ -200,17 +231,16 @@ const StDate = styled.p`
   color: ${(props) => props.theme.colors.middleGray};
 `;
 
-const StOwnerImageWrap = styled.div`
+const StImageWrap = styled.div`
   width: 20%;
   text-align: center;
 `;
-const StOwnerTextWrap = styled.div`
+const StTextWrap = styled.div`
   width: 80%;
 `;
 const StChatTitle = styled.div`
   display: flex;
   width: 33.33%;
-
   margin-bottom: 24px;
 `;
 
@@ -218,17 +248,4 @@ const StChatWrap = styled.div`
   display: flex;
   width: 1032px;
   flex-wrap: wrap;
-`;
-
-const StheartWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  padding-top: 10px;
-`;
-const StheartImg = styled.img`
-  width: 20px;
-  height: 20px;
-  border-radius: 0px;
 `;

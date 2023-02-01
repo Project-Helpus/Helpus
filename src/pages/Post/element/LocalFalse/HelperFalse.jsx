@@ -5,7 +5,7 @@ import Card from "../../../../components/Card";
 
 const HelperFalse = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.postSlice.helperFalseDate.result);
+  const data = useSelector((state) => state.postSlice.helperFalseDate?.result);
   const input = useSelector((state) => state.postSlice.inputReciver);
 
   useEffect(() => {
@@ -13,9 +13,15 @@ const HelperFalse = () => {
   }, [input]);
   return (
     <>
-      {data?.map((item, idx) => {
-        return <Card type={"세로"} data={item} key={idx} />;
-      })}
+      {data?.length === 0 ? (
+        <p>게시글이 없습니다</p>
+      ) : (
+        <>
+          {data?.map((item, idx) => {
+            return <Card type={"세로"} data={item} key={idx} />;
+          })}
+        </>
+      )}
     </>
   );
 };
