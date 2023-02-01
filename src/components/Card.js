@@ -105,7 +105,7 @@ const Card = ({ type, data, onClick }) => {
           <StColumnCard>
             <StAllPostWrapper>
               <StAllPostSquarePhoto
-                src={data.imageUrl1}
+                src={data.thumbnail}
                 onClick={() => moveDetail(data.postId)}
               ></StAllPostSquarePhoto>
               <StFlex>
@@ -255,7 +255,6 @@ const Card = ({ type, data, onClick }) => {
                     <StNickname>{data.userName}</StNickname>
                   </div>
                 </StFlex>
-
                 <StMargin60>
                   {tag?.map((item, idx) => {
                     return <StTag key={idx}>{item}</StTag>;
@@ -266,6 +265,7 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StDeadLine>마감</StDeadLine>
                 )}
+                2
               </StMainContentsWrapper>
             </StFlex>
           </StMainWrapper>
@@ -274,7 +274,7 @@ const Card = ({ type, data, onClick }) => {
         return (
           <>
             <StCrsPost
-              src={data.imageUrls[0]}
+              src={data.thumbnail}
               onClick={() => moveDetail(data.postId)}
             ></StCrsPost>
             <StProfileWrapper>
