@@ -16,7 +16,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["userSlice"],
+  whitelist: ["userSlice", "postSlice"],
 };
 
 const reducer = combineReducers({
