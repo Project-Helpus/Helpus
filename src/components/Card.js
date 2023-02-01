@@ -134,7 +134,7 @@ const Card = ({ type, data, onClick }) => {
                 {deadLine === 1 ? (
                   <StEmptyDiv />
                 ) : (
-                  <StAllPostDeadLine>마감</StAllPostDeadLine>
+                  <StZZimDeadLine>마감</StZZimDeadLine>
                 )}
                 {tag.map((item, idx) => {
                   return <StTag key={idx}>{item}</StTag>;
@@ -155,7 +155,9 @@ const Card = ({ type, data, onClick }) => {
                 <StFlex>
                   <StCategoryName>{category} 게시판</StCategoryName>
                   <StDate>&nbsp;{KoreaDate}</StDate>
-                  {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                  {deadLine === 1 ? null : (
+                    <StZZimDeadLine>마감</StZZimDeadLine>
+                  )}
                 </StFlex>
                 <StContentsTitle>{data.title}</StContentsTitle>
                 {data.content}
@@ -164,6 +166,34 @@ const Card = ({ type, data, onClick }) => {
           </>
         );
       case "내 게시물":
+        return (
+          <>
+            <StZZimWrap>
+              <StZZimImg
+                src={data.thumbnail}
+                onClick={() => moveDetail(data.postId)}
+              ></StZZimImg>
+              <StZZimTitle>{data.title}</StZZimTitle>
+              {deadLine === 1 ? (
+                <StEmptyDiv />
+              ) : (
+                <StZZimDeadLine>마감</StZZimDeadLine>
+              )}
+              <StZZimWrapContents>
+                <StFlex>
+                  <StZZimWrapPhoto src={data.userImage}></StZZimWrapPhoto>
+                  <StNickname>{data.userName}</StNickname>
+                </StFlex>
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StZZimWrapContents>
+            </StZZimWrap>
+          </>
+        );
+      case "내 게시물 가로":
         return (
           <>
             <StMyContainer>
@@ -188,7 +218,7 @@ const Card = ({ type, data, onClick }) => {
                     {data.location1} {data.location2}
                   </span>
                 </StMyCaption>
-                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                {deadLine === 1 ? null : <StZZimDeadLine>마감</StZZimDeadLine>}
                 <StZZimWrapTag>
                   {tag.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
@@ -238,7 +268,7 @@ const Card = ({ type, data, onClick }) => {
                     {data.location1} {data.location2}
                   </span>
                 </StMyCaption>
-                {deadLine === 1 ? null : <StDeadLine>마감</StDeadLine>}
+                {deadLine === 1 ? null : <StZZimDeadLine>마감</StZZimDeadLine>}
                 <StZZimWrapTag>
                   {tag.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
@@ -313,7 +343,7 @@ const Card = ({ type, data, onClick }) => {
                 {deadLine === 1 ? (
                   <StEmptyDiv />
                 ) : (
-                  <StDeadLine>마감</StDeadLine>
+                  <StZZimDeadLine>마감</StZZimDeadLine>
                 )}
                 2
               </StMainContentsWrapper>

@@ -83,12 +83,13 @@ const PostDetail = () => {
     }
   };
 
-  const ZZim = (e) => {
-    dispatch(__postZZim(postId));
+  const zzimRef = useRef(null);
+  const ZZim = async (e) => {
+    await dispatch(__postZZim(postId));
     if (zMsg === "찜") {
-      e.target.src = emptyHeart;
+      return (zzimRef.current.src = `${emptyHeart}`);
     } else {
-      e.target.src = fullHeart;
+      return (zzimRef.current.src = `${fullHeart}`);
     }
   };
   const moveCrsLeft = () => {
@@ -218,8 +219,8 @@ const PostDetail = () => {
                 >
                   문의하기
                 </StChatBtn>
-                <StWishBtn>
-                  <StZZimImg onClick={ZZim} src={emptyHeart} alt="wish" />
+                <StWishBtn onClick={ZZim}>
+                  <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
                   찜하기
                 </StWishBtn>
               </StBtnBox>

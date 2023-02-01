@@ -60,7 +60,7 @@ const Mypage = () => {
         </StMypageTitle>
         <StZZimWrap>
           {myPosts?.map((el, index) => (
-            <Card type="내 게시물" data={el} key={index}></Card>
+            <Card type="내 게시물 가로" data={el} key={index}></Card>
           ))}
           {/* {!isPostLoading && (
             <div
