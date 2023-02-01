@@ -2,7 +2,7 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_TEST,
+  baseURL: process.env.REACT_APP_SERVER,
   withCredentials: true,
 });
 
