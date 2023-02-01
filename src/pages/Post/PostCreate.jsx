@@ -97,7 +97,7 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       dispatch(__createPost(formData));
-      navigate("/");
+      navigate("/postlist");
     }
   };
 

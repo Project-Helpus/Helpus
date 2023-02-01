@@ -32,9 +32,7 @@ const AllFalse = () => {
   //   if (observerTarget.current) observer.observe(observerTarget.current);
   //   return () => observer.disconnect();
   // }, [data]);
-  console.log("input:", input);
   useEffect(() => {
-    console.log("useEffect 작동");
     dispatch(__getAllFalse());
   }, [input]);
   return (
