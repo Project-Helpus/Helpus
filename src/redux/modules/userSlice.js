@@ -15,7 +15,7 @@ const initialState = {
     userName: "",
   },
   kakaoState: "",
-  isLoginkakao: false,
+  isLoginKakao: false,
   isLoading: false,
   error: false,
 };
@@ -241,7 +241,7 @@ const userSlice = createSlice({
     [__logout.fulfilled]: (state) => {
       state.isLoading = false;
       state.isLogin = false;
-      state.isLoginkakao = false;
+      state.isLoginKakao = false;
       state = initialState;
       storage.removeItem("persist:root");
     },
@@ -255,7 +255,7 @@ const userSlice = createSlice({
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.isLoginkakao = true;
+      state.isLoginKakao = true;
       state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
@@ -279,7 +279,7 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoSignOut.fulfilled]: (state, action) => {
-      state.isLoginkakao = false;
+      state.isLoginKakao = false;
       storage.removeItem("persist:root");
     },
     [__kakaoSignOut.rejected]: (state, action) => {

@@ -53,7 +53,9 @@ const Home = () => {
   const crsHelperRef = useRef(null);
   const crsHelpUsRef = useRef(null);
   const crsHelpeeRef = useRef(null);
-  const isLogedIn = useSelector((state) => state.userSlice.isLogin);
+  const isLogIn = useSelector((state) => state.userSlice.isLogin);
+  const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
+
   const linkHelpUs = () => {
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
@@ -78,7 +80,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(__getHelpeeFalse(""));
   }, [dispatch]);
-  
+
   useEffect(() => {
     crsHelperRef.current.style.transition = "all 1s ease-in-out";
     crsHelpUsRef.current.style.transition = "all 1s ease-in-out";
@@ -119,7 +121,7 @@ const Home = () => {
       </StTopImg>
 
       <StTest>
-        {isLogedIn === true ? (
+        {(isLoginKakao || isLogIn) === true ? (
           <StWrBtnWrapper>
             <StWriteButton onClick={() => navigate("/post")}>
               글쓰기
