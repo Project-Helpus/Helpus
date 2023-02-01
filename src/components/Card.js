@@ -168,6 +168,34 @@ const Card = ({ type, data, onClick }) => {
       case "내 게시물":
         return (
           <>
+            <StZZimWrap>
+              <StZZimImg
+                src={data.thumbnail}
+                onClick={() => moveDetail(data.postId)}
+              ></StZZimImg>
+              <StZZimTitle>{data.title}</StZZimTitle>
+              {deadLine === 1 ? (
+                <StEmptyDiv />
+              ) : (
+                <StZZimDeadLine>마감</StZZimDeadLine>
+              )}
+              <StZZimWrapContents>
+                <StFlex>
+                  <StZZimWrapPhoto src={data.userImage}></StZZimWrapPhoto>
+                  <StNickname>{data.userName}</StNickname>
+                </StFlex>
+                <StZZimWrapTag>
+                  {tag.map((item, idx) => {
+                    return <StZZimTag key={idx}>{item}</StZZimTag>;
+                  })}
+                </StZZimWrapTag>
+              </StZZimWrapContents>
+            </StZZimWrap>
+          </>
+        );
+      case "내 게시물 가로":
+        return (
+          <>
             <StMyContainer>
               <StMyImg
                 src={data.thumbnail}
