@@ -73,7 +73,7 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            <StButton
+            {/* <StButton
               onClick={() => {
                 setOpen(!open);
                 handleRead();
@@ -81,7 +81,7 @@ const Header = () => {
             >
               <img src={icon_bell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
-            </StButton>
+            </StButton> */}
             <DropdownMenu />
           </StBox>
         )}
