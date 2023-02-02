@@ -27,9 +27,9 @@ const PostCreate = () => {
     title: "",
     content: "",
     category: 0,
-    location1: "",
-    location2: "",
   });
+  const [location1, setLocation1] = useState("");
+  const [location2, setLocation2] = useState("");
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const TotalSlides = previewImg?.length - 4;
@@ -83,12 +83,25 @@ const PostCreate = () => {
 
   const clickHandler = async (e) => {
     e.preventDefault();
+    let day;
     if (window.confirm("게시 하시겠습니까?")) {
       const formData = new FormData();
-      const day = date.toISOString();
+      if (date) {
+        day = date.toISOString();
+        formData.append("appointed", day);
+      }
 
-      formData.append("appointed", day);
-      formData.append("tag", tags);
+      if (tags.length !== 0) {
+        formData.append("tag", tags);
+      }
+
+      if (location1) {
+        formData.append("location1", location1);
+      }
+
+      if (location2) {
+        formData.append("location2", location2);
+      }
 
       for (const property in input) {
         formData.append(`${property}`, input[property]);
@@ -216,7 +229,7 @@ const PostCreate = () => {
           <input
             ref={crsRef}
             style={{ display: "none" }}
-            accept="image/jpg, image/png, image/gif"
+            accept=".jpg, .jpeg, .png"
             id="image"
             name="image"
             type="file"
