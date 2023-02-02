@@ -51,6 +51,7 @@ const PostDetail = () => {
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
+  const kakaoLogedIn = useSelector((state) => state.userSlice?.isLoginKakao);
   const detail = useSelector((state) => state.postSlice?.postInfo);
   const deadLine = detail.isDeadLine;
   const dead = useSelector((state) => state.postSlice.deadLineMsg);
@@ -65,7 +66,6 @@ const PostDetail = () => {
   const TotalSlides = detail?.imageUrls?.length - 4;
 
   const preRef = useRef(null);
-  console.log("msg:", dead);
 
   const deletePost = () => {
     dispatch(__deletePost(postId));
@@ -135,25 +135,29 @@ const PostDetail = () => {
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {userId === detail?.userId && (
+            {(logedIn || kakaoLogedIn) && (
               <>
-                {deadLine === 2 ? (
+                {userId === detail?.userId && (
                   <>
-                    <StDeadLineButton onClick={changeDeadLine}>
-                      마감취소
-                    </StDeadLineButton>
+                    {deadLine === 2 ? (
+                      <>
+                        <StDeadLineButton onClick={changeDeadLine}>
+                          마감취소
+                        </StDeadLineButton>
+                      </>
+                    ) : (
+                      <StDeadLineButton onClick={changeDeadLine}>
+                        마감
+                      </StDeadLineButton>
+                    )}
                   </>
-                ) : (
-                  <StDeadLineButton onClick={changeDeadLine}>
-                    마감
-                  </StDeadLineButton>
                 )}
               </>
             )}
             {userId === detail?.userId && (
               <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
             )}
-            {logedIn && (
+            {(logedIn || kakaoLogedIn) && (
               <>
                 {userId === detail.userId && (
                   <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
@@ -212,7 +216,7 @@ const PostDetail = () => {
             return <StTags key={idx}>{item}</StTags>;
           })}
         </StFlex>
-        {logedIn && (
+        {(logedIn || kakaoLogedIn) && (
           <>
             {userId !== detail?.userId && (
               <StBtnBox>
