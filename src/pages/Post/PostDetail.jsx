@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   __detailPost,
   __deletePost,
-  __updatePost,
   __postZZim,
+  __deadLinePost,
 } from "../../redux/modules/postSlice";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
@@ -44,7 +44,6 @@ import CrsLeft from "../../asset/CrsLeft.svg";
 import CrsRight from "../../asset/CrsRight.svg";
 import { useRef } from "react";
 import { useState } from "react";
-import A from "../../asset/emptyHeart.svg";
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,8 +51,9 @@ const PostDetail = () => {
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
-  const detail = useSelector((state) => state?.postSlice?.postInfo);
-  const deadLine = detail?.isDeadLine;
+  const detail = useSelector((state) => state.postSlice?.postInfo);
+  const deadLine = detail.isDeadLine;
+  const dead = useSelector((state) => state.postSlice.deadLineMsg);
   const curr = new Date(detail.appointed);
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
   const kRTimeDiff = 9 * 60 * 60 * 1000;
@@ -65,6 +65,7 @@ const PostDetail = () => {
   const TotalSlides = detail?.imageUrls?.length - 4;
 
   const preRef = useRef(null);
+  console.log("msg:", dead);
 
   const deletePost = () => {
     dispatch(__deletePost(postId));
@@ -77,9 +78,13 @@ const PostDetail = () => {
 
   const changeDeadLine = () => {
     if (deadLine === 1) {
-      dispatch(__updatePost({ data: { isDeadLine: parseInt(2) }, id: postId }));
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(2) }, id: postId })
+      );
     } else {
-      dispatch(__updatePost({ data: { isDeadLine: parseInt(1) }, id: postId }));
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(1) }, id: postId })
+      );
     }
   };
 
@@ -114,13 +119,14 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
-    dispatch(__detailPost(postId));
-  }, [deadLine]);
-  useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
-
+  console.log("detail:", detail);
+  console.log("dead:", deadLine);
+  useEffect(() => {
+    dispatch(__detailPost(postId));
+  }, [dead]);
   return (
     <StWrapper>
       <StContainer>
@@ -158,7 +164,7 @@ const PostDetail = () => {
         </StSpaceBetween>
         <StFlex>
           <StTitle>{detail?.title}</StTitle>
-          {deadLine === 1 ? null : <StMagam>마감</StMagam>}
+          {deadLine === 2 && <StMagam>마감</StMagam>}
         </StFlex>
         <StUserInfo>
           <StFlex>

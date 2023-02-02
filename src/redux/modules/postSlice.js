@@ -74,7 +74,22 @@ export const __detailPost = createAsyncThunk(
     }
   }
 );
-
+export const __deadLinePost = createAsyncThunk(
+  "mypageSlice/deadLinePost",
+  async (payload, thunkAPI) => {
+    try {
+      console.log("pay:", payload);
+      const Id = payload.id;
+      const isDeadLine = payload.isDeadLine;
+      console.log("isdeadLine:", isDeadLine);
+      const res = await PostAPI.postDeadLine(Id, isDeadLine);
+      console.log("res:", res);
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 //    <<<<<<  전국  >>>>>>
 //    <  전국 false  >
 // export const __getAllFalse = createAsyncThunk(
@@ -223,6 +238,7 @@ const initialState = {
   inputReciver: "",
   postInfo: "",
   ZZimMsg: [],
+  deadLineMsg: "",
 };
 
 const postSlice = createSlice({
@@ -299,6 +315,13 @@ const postSlice = createSlice({
     },
     [__postZZim.rejected]: (state) => {
       state.isLoading = false;
+      state.error = true;
+    },
+    [__deadLinePost.pending]: (state) => {},
+    [__deadLinePost.fulfilled]: (state, action) => {
+      state.deadLineMsg = action.payload;
+    },
+    [__deadLinePost.rejected]: (state) => {
       state.error = true;
     },
 
