@@ -55,11 +55,18 @@ const PostDetail = () => {
   const detail = useSelector((state) => state.postSlice?.postInfo);
   const deadLine = detail.isDeadLine;
   const dead = useSelector((state) => state.postSlice.deadLineMsg);
+
+  // const curr = !detail.appointed ? null : new Date(detail.appointed);
   const curr = new Date(detail.appointed);
+
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+
   const kRTimeDiff = 9 * 60 * 60 * 1000;
+
   const KrCurr = new Date(utc + kRTimeDiff);
-  const KoreaDate = KrCurr.toLocaleDateString();
+
+  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
+
   const tag = detail.tag?.split(",");
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
