@@ -10,15 +10,27 @@ import { StRedFont } from "./StPostDetail";
 
 const PostCreate = () => {
   const postInfo = useSelector((state) => state.postSlice.postInfo);
-  const tagData = postInfo.tag.split(",");
   const { state, city } = 행정구역;
-  const [tags, setTags] = useState(tagData);
+  const [tags, setTags] = useState(
+    !postInfo.tag ? [] : postInfo.tag.split(",")
+  );
   const [tag, setTag] = useState("");
-  const [date, setDate] = useState(new Date(postInfo.appointed));
+
+  const [date, setDate] = useState(
+    !postInfo.appointed ? null : new Date(postInfo.appointed)
+  );
   const [input, setInput] = useState({
-    location1: `${postInfo.location1}`,
-    location2: `${postInfo.location2}`,
+    location1: `${postInfo?.location1}`,
+    location2: `${postInfo?.location2}`,
   });
+
+  const [location1, setLocation1] = useState(
+    !postInfo?.location1 ? null : postInfo.location1
+  );
+  const [location2, setLocation2] = useState(
+    !postInfo?.location2 ? null : postInfo.location2
+  );
+
   const [titleInput, setTitleInput] = useState(postInfo.title);
   const [contentsInput, setContentsInput] = useState(postInfo.content);
   const dispatch = useDispatch();
@@ -27,7 +39,7 @@ const PostCreate = () => {
   const helperRef = useRef(null);
   const helpUsRef = useRef(null);
 
-  const category = postInfo.category;
+  const category = postInfo?.category;
   const [categories, setCategories] = useState(category);
 
   const changeInputHandler = (e) => {
@@ -55,21 +67,41 @@ const PostCreate = () => {
 
   const clickHandler = (e) => {
     e.preventDefault();
-    const value = date.toISOString();
-    const dete = {
+
+    let postData = {};
+    let day;
+    if (date) {
+      day = date.toISOString();
+      postData = { appointed: day };
+    }
+
+    if (tags?.length !== 0) {
+      postData = { ...postData, tag: tags?.join() };
+    } else {
+      postData = { ...postData, tag: null };
+    }
+
+    if (location1) {
+      postData = { ...postData, location1: location1 };
+    }
+
+    if (location2) {
+      postData = { ...postData, location2: location2 };
+    }
+
+    postData = {
+      ...postData,
       title: titleInput,
       content: contentsInput,
       category: categories,
-      appointed: value,
-      tag: tags.join(),
-      location1: input.location1,
-      location2: input.location2,
     };
-    dispatch(__updatePost({ data: dete, id: postInfo.postId }));
+
+    dispatch(__updatePost({ data: postData, id: postInfo.postId }));
   };
 
   const removeTag = (i) => {
     const clonetags = tags.slice();
+    console.log(clonetags);
     clonetags.splice(i, 1);
     setTags(clonetags);
   };
@@ -167,7 +199,7 @@ const PostCreate = () => {
         <StCol>
           <StLabel htmlFor="tag">태그</StLabel>
           <StTagContainer>
-            {tags.map((e, i) => (
+            {tags?.map((e, i) => (
               <StTag key={i}>
                 <StTagName>{e}</StTagName>
                 <StTagButton onClick={() => removeTag(i)}>x</StTagButton>

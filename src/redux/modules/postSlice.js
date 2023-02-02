@@ -78,12 +78,9 @@ export const __deadLinePost = createAsyncThunk(
   "mypageSlice/deadLinePost",
   async (payload, thunkAPI) => {
     try {
-      console.log("pay:", payload);
       const Id = payload.id;
       const isDeadLine = payload.isDeadLine;
-      console.log("isdeadLine:", isDeadLine);
       const res = await PostAPI.postDeadLine(Id, isDeadLine);
-      console.log("res:", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue();
