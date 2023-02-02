@@ -122,8 +122,7 @@ const PostDetail = () => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
-  console.log("detail:", detail);
-  console.log("dead:", deadLine);
+
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, [dead]);
