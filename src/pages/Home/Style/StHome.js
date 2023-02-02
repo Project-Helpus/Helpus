@@ -33,11 +33,16 @@ export const StTopSubTilte = styled.h2`
   font-size: 1.8em;
   font-weight: 400;
   color: #7c7c7c;
+  line-height: 1.5em;
+  font-weight: 600;
 `;
 export const StMainImg = styled.img`
   width: 30em;
-  height: 36.13em;
+  height: 33.13em;
   margin-left: 15.19em;
+  border-radius: 1em;
+  border: 2px solid ${(props) => props.theme.colors.subPink};
+  margin-top: 1.5em;
 `;
 export const StMainImg2 = styled.img`
   width: 28.1em;
@@ -107,6 +112,7 @@ export const StPostSubTitle = styled.p`
   font-weight: 600;
   color: #7c7c7c;
   margin-top: 0.8em;
+  line-height: 1.5em;
 `;
 export const StAutoCarousel = styled.div`
   width: 55em;
