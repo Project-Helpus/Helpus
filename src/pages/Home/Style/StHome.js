@@ -13,7 +13,7 @@ export const StTopImg = styled.div`
   border: 1px solid #ea9db4;
 `;
 export const StTitleWrapper = styled.div`
-  width: 39.81em;
+  width: 45.81em;
 `;
 export const StTopMainTitle = styled.h2`
   font-size: 8.75em;
@@ -73,22 +73,25 @@ export const StTest = styled.div`
   margin: 5.5em auto;
 `;
 export const StContentsContainer = styled.div`
+  position: relative;
   height: 23.56em;
   display: flex;
   margin-bottom: 5em;
 `;
 export const StPostInfo = styled.div`
+  position: relative;
   width: 35em;
   margin-right: 2em;
-  padding: 1em 0 1.5em 1.5em;
+  padding: 1.5em 1.5em 1.5em 1.5em;
   background-color: #f8eded;
   border: 0.1em solid #ea9db4;
   border-radius: 1em;
 `;
 export const StPostInfoCenter = styled.div`
+  position: relative;
   width: 35em;
   margin-left: 2em;
-  padding: 1em 0 1.5em 1.5em;
+  padding: 1.5em 1.5em 1.5em 1.5em;
   background-color: #f8eded;
   border: 0.1em solid #ea9db4;
   border-radius: 1em;
@@ -116,6 +119,9 @@ export const StCrsContainer = styled.div`
   display: flex;
 `;
 export const StMoreButton = styled.button`
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
   width: 5.69em;
   height: 2.5em;
   color: #fff;
@@ -124,7 +130,6 @@ export const StMoreButton = styled.button`
   background: #ea9db4;
   border-radius: 49.95em;
   border: none;
-  margin-top: 9.5em;
   &:hover {
     background-color: #dc6b94;
   }

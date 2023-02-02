@@ -108,9 +108,10 @@ const Home = () => {
         <StFlex>
           <StTitleWrapper>
             <StTopMainTitle>HelpUs</StTopMainTitle>
-            <StTopTitle>당신의 솜씨를 나눠주세요.</StTopTitle>
+            <StTopTitle>Help me, Help you, Help Us.</StTopTitle>
             <StTopSubTilte>
-              재능기부로 따뜻한 지역사회를 만들어가요.
+              도와주고, 도움받는 따뜻한 세상 누구나, 언제든지 따뜻한 손길이
+              필요할 때
             </StTopSubTilte>
           </StTitleWrapper>
           <div>
@@ -132,7 +133,10 @@ const Home = () => {
         <StContentsContainer>
           <StPostInfo>
             <StPostTitle>HelpUs</StPostTitle>
-            <StPostSubTitle>자원봉사 함께해요</StPostSubTitle>
+            <StPostSubTitle>
+              모두가 힘을 합쳐 만드는 아름다운 세상, 우리는 모두 헬퍼! 함께하면
+              더욱 즐거운 봉사활동 어때요?
+            </StPostSubTitle>
             <StMoreButton onClick={linkHelpUs}>More</StMoreButton>
           </StPostInfo>
           <StAutoCarousel>
@@ -166,7 +170,9 @@ const Home = () => {
           </StAutoCarousel>
           <StPostInfoCenter>
             <StPostTitle>Helpee</StPostTitle>
-            <StPostSubTitle>도움이 필요해요</StPostSubTitle>
+            <StPostSubTitle>
+              도움이 필요한 일이 있는 법이죠. 내게 필요한 재능을 어필해보세요.
+            </StPostSubTitle>
             <StMoreButton onClick={linkHelpee}>More</StMoreButton>
           </StPostInfoCenter>
         </StContentsContainer>
@@ -174,7 +180,10 @@ const Home = () => {
         <StContentsContainer>
           <StPostInfo>
             <StPostTitle>Helper</StPostTitle>
-            <StPostSubTitle>재능을 기부해요</StPostSubTitle>
+            <StPostSubTitle>
+              내가 가진 능력을 보여주세요. 사소하지만 자랑하고 싶은, 누군가에게
+              도움이 될 멋진 재능이 있나요?
+            </StPostSubTitle>
             <StMoreButton onClick={linkHelper}>More</StMoreButton>
           </StPostInfo>
           <StAutoCarousel>
