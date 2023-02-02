@@ -136,7 +136,7 @@ const Card = ({ type, data, onClick }) => {
                 ) : (
                   <StZZimDeadLine>마감</StZZimDeadLine>
                 )}
-                {tag.map((item, idx) => {
+                {tag?.map((item, idx) => {
                   return <StTag key={idx}>{item}</StTag>;
                 })}
               </StFlex>
@@ -185,7 +185,7 @@ const Card = ({ type, data, onClick }) => {
                   <StNickname>{data.userName}</StNickname>
                 </StFlex>
                 <StZZimWrapTag>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
@@ -220,7 +220,7 @@ const Card = ({ type, data, onClick }) => {
                 </StMyCaption>
                 {deadLine === 1 ? null : <StZZimDeadLine>마감</StZZimDeadLine>}
                 <StZZimWrapTag>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
@@ -270,7 +270,7 @@ const Card = ({ type, data, onClick }) => {
                 </StMyCaption>
                 {deadLine === 1 ? null : <StZZimDeadLine>마감</StZZimDeadLine>}
                 <StZZimWrapTag>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
@@ -311,7 +311,7 @@ const Card = ({ type, data, onClick }) => {
                   <StNickname>{data.userName}</StNickname>
                 </StFlex>
                 <StZZimWrapTag>
-                  {tag.map((item, idx) => {
+                  {tag?.map((item, idx) => {
                     return <StZZimTag key={idx}>{item}</StZZimTag>;
                   })}
                 </StZZimWrapTag>
