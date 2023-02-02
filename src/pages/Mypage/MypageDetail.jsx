@@ -151,7 +151,7 @@ const MypageDetail = () => {
           ref={fileInput}
           onChange={changeImgHandler}
         ></input>
-        <button onClick={submitHandler}>프로필 수정</button>
+        <button onClick={submitHandler}>프로필 이미지 수정</button>
         <label>닉네임</label>
         <input
           onChange={updateOnChange}

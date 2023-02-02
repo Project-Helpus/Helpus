@@ -101,7 +101,7 @@ const PostList = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const toggleRight = () => {
-    if (isLogin === false || isLoginKakao === false) {
+    if (isLogin === false && isLoginKakao === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
       testRef.current.style.transition = "0.3s";
@@ -112,7 +112,7 @@ const PostList = () => {
     }
   };
   const toggleLeft = () => {
-    if (isLogin === false || isLoginKakao === false) {
+    if (isLogin === false && isLoginKakao === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
       testRef.current.style.transition = "0.3s";

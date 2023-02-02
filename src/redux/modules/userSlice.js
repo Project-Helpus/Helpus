@@ -120,7 +120,7 @@ export const __kakaoState = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await UserAPI.kakaoState(payload);
-      if (response.status === 200) {
+      if (response.status === 201) {
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
@@ -267,7 +267,7 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoState.fulfilled]: (state, action) => {
-      state.kakaoState = action.payload;
+      state.userInfo = action.payload;
     },
     [__kakaoState.rejected]: (state, action) => {
       state.error = false;
