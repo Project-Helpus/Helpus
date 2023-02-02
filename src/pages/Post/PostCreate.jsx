@@ -88,7 +88,9 @@ const PostCreate = () => {
       const day = date.toISOString();
 
       formData.append("appointed", day);
-      formData.append("tag", tags);
+      if (tags.length !== 0) {
+        formData.append("tag", tags);
+      }
 
       for (const property in input) {
         formData.append(`${property}`, input[property]);
@@ -216,7 +218,7 @@ const PostCreate = () => {
           <input
             ref={crsRef}
             style={{ display: "none" }}
-            accept="image/jpg, image/png, image/gif"
+            accept=".jpg, .jpeg, .png"
             id="image"
             name="image"
             type="file"
