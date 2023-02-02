@@ -2,7 +2,7 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_TEST,
+  baseURL: process.env.REACT_APP_SERVER,
   withCredentials: true,
 });
 
@@ -17,6 +17,8 @@ export const PostAPI = {
   postUpdate: (id, data) => client.put(`api/post/${id}`, data),
   postDelete: (id) => client.delete(`api/post/${id}`),
   postZZim: (id) => client.post(`api/wish/${id}`),
+  postDeadLine: (id, isDeadLine) =>
+    client.put(`api/post/deadLine/${id}`, isDeadLine),
   // getAllFalse: (count, searchValue) =>
   //   client.get(
   //     `api/post/all-location?q=${count}&category=&search=${searchValue}`
