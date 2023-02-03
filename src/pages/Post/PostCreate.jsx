@@ -200,16 +200,18 @@ const PostCreate = () => {
             {categoryType.map((el, idx) => {
               if (Number(btnActive) === idx + 1) {
                 return (
-                  <StSelectedCategory
-                    name="category"
-                    id="category"
-                    key={idx}
-                    value={idx + 1}
-                    onClick={changeInputHandler}
-                    readOnly
-                  >
-                    {el}
-                  </StSelectedCategory>
+                  <>
+                    <StSelectedCategory
+                      name="category"
+                      id="category"
+                      key={idx}
+                      value={idx + 1}
+                      onClick={changeInputHandler}
+                      readOnly
+                    >
+                      {el}
+                    </StSelectedCategory>
+                  </>
                 );
               } else {
                 return (
@@ -226,7 +228,6 @@ const PostCreate = () => {
                 );
               }
             })}
-            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
@@ -375,7 +376,7 @@ const StBackBtn = styled.button`
 const StContainer = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 55px;
+  gap: 35px;
   width: 800px;
 `;
 
@@ -464,6 +465,7 @@ const StTagButton = styled.button`
 `;
 
 const StCategory = styled.button`
+  position: relative;
   width: 160px;
   height: 44px;
   cursor: pointer;
@@ -473,6 +475,7 @@ const StCategory = styled.button`
 `;
 
 const StSelectedCategory = styled.button`
+  position: relative;
   width: 160px;
   height: 44px;
   background-color: ${(props) => props.theme.colors.subPink};
