@@ -18,10 +18,12 @@ import State from "../pages/User/State";
 import PostUpdate from "../pages/Post/PostUpdate";
 import MypagePostsDetail from "../pages/Mypage/MypagePostsDetail";
 import MypageWishList from "../pages/Mypage/MypageWishList";
+import ScrollToTop from "../utils/ScrollTop";
 
 const Router = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
