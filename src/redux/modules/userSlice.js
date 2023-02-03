@@ -15,7 +15,7 @@ const initialState = {
     userName: "",
   },
   kakaoState: "",
-  isLoginkakao: false,
+  isLoginKakao: false,
   isLoading: false,
   error: false,
 };
@@ -120,7 +120,7 @@ export const __kakaoState = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const response = await UserAPI.kakaoState(payload);
-      if (response.status === 200) {
+      if (response.status === 201) {
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
@@ -241,7 +241,7 @@ const userSlice = createSlice({
     [__logout.fulfilled]: (state) => {
       state.isLoading = false;
       state.isLogin = false;
-      state.isLoginkakao = false;
+      state.isLoginKakao = false;
       state = initialState;
       storage.removeItem("persist:root");
     },
@@ -255,7 +255,7 @@ const userSlice = createSlice({
     },
     [__kakaoLogin.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.isLoginkakao = true;
+      state.isLoginKakao = true;
       state.userInfo = action.payload;
     },
     [__kakaoLogin.rejected]: (state, action) => {
@@ -267,7 +267,7 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoState.fulfilled]: (state, action) => {
-      state.kakaoState = action.payload;
+      state.userInfo = action.payload;
     },
     [__kakaoState.rejected]: (state, action) => {
       state.error = false;
@@ -279,7 +279,7 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     [__kakaoSignOut.fulfilled]: (state, action) => {
-      state.isLoginkakao = false;
+      state.isLoginKakao = false;
       storage.removeItem("persist:root");
     },
     [__kakaoSignOut.rejected]: (state, action) => {

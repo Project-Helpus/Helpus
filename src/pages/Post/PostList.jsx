@@ -29,6 +29,7 @@ const PostList = () => {
   const userLocation1 = useSelector((state) => state.userSlice.userInfo.state1);
   const userLocation2 = useSelector((state) => state.userSlice.userInfo.state2);
   const { isLogin } = useSelector((state) => state.userSlice);
+  const { isLoginKakao } = useSelector((state) => state.userSlice);
   const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
   const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
   const storeBoolHepUs = useSelector((state) => state.postSlice.boolHelpUs);
@@ -100,7 +101,7 @@ const PostList = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const toggleRight = () => {
-    if (isLogin === false) {
+    if (isLogin === false && isLoginKakao === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
       testRef.current.style.transition = "0.3s";
@@ -111,7 +112,7 @@ const PostList = () => {
     }
   };
   const toggleLeft = () => {
-    if (isLogin === false) {
+    if (isLogin === false && isLoginKakao === false) {
       alert("로그인시 이용할 수 있습니다");
     } else {
       testRef.current.style.transition = "0.3s";
@@ -135,7 +136,7 @@ const PostList = () => {
   }, [storeBooLocation]);
 
   const navigatePostCreate = () => {
-    if (isLogin) {
+    if (isLogin || isLoginKakao) {
       navigate("/post");
     } else {
       window.alert("로그인이 필요 합니다.");

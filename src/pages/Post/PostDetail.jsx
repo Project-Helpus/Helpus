@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   __detailPost,
   __deletePost,
-  __updatePost,
   __postZZim,
+  __deadLinePost,
 } from "../../redux/modules/postSlice";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
@@ -44,7 +44,6 @@ import CrsLeft from "../../asset/CrsLeft.svg";
 import CrsRight from "../../asset/CrsRight.svg";
 import { useRef } from "react";
 import { useState } from "react";
-import A from "../../asset/emptyHeart.svg";
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,13 +51,22 @@ const PostDetail = () => {
   const { userId } = useSelector((state) => state.userSlice.userInfo);
   const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
   const logedIn = useSelector((state) => state.userSlice.isLogin);
-  const detail = useSelector((state) => state?.postSlice?.postInfo);
-  const deadLine = detail?.isDeadLine;
+  const kakaoLogedIn = useSelector((state) => state.userSlice?.isLoginKakao);
+  const detail = useSelector((state) => state.postSlice?.postInfo);
+  const deadLine = detail.isDeadLine;
+  const dead = useSelector((state) => state.postSlice.deadLineMsg);
+
+  // const curr = !detail.appointed ? null : new Date(detail.appointed);
   const curr = new Date(detail.appointed);
+
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+
   const kRTimeDiff = 9 * 60 * 60 * 1000;
+
   const KrCurr = new Date(utc + kRTimeDiff);
-  const KoreaDate = KrCurr.toLocaleDateString();
+
+  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
+
   const tag = detail.tag?.split(",");
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -77,9 +85,13 @@ const PostDetail = () => {
 
   const changeDeadLine = () => {
     if (deadLine === 1) {
-      dispatch(__updatePost({ data: { isDeadLine: parseInt(2) }, id: postId }));
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(2) }, id: postId })
+      );
     } else {
-      dispatch(__updatePost({ data: { isDeadLine: parseInt(1) }, id: postId }));
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(1) }, id: postId })
+      );
     }
   };
 
@@ -114,13 +126,13 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
-    dispatch(__detailPost(postId));
-  }, [deadLine]);
-  useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
 
+  useEffect(() => {
+    dispatch(__detailPost(postId));
+  }, [dead]);
   return (
     <StWrapper>
       <StContainer>
@@ -129,25 +141,29 @@ const PostDetail = () => {
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {userId === detail?.userId && (
+            {(logedIn || kakaoLogedIn) && (
               <>
-                {deadLine === 2 ? (
+                {userId === detail?.userId && (
                   <>
-                    <StDeadLineButton onClick={changeDeadLine}>
-                      마감취소
-                    </StDeadLineButton>
+                    {deadLine === 2 ? (
+                      <>
+                        <StDeadLineButton onClick={changeDeadLine}>
+                          마감취소
+                        </StDeadLineButton>
+                      </>
+                    ) : (
+                      <StDeadLineButton onClick={changeDeadLine}>
+                        마감
+                      </StDeadLineButton>
+                    )}
                   </>
-                ) : (
-                  <StDeadLineButton onClick={changeDeadLine}>
-                    마감
-                  </StDeadLineButton>
                 )}
               </>
             )}
             {userId === detail?.userId && (
               <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
             )}
-            {logedIn && (
+            {(logedIn || kakaoLogedIn) && (
               <>
                 {userId === detail.userId && (
                   <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
@@ -158,7 +174,7 @@ const PostDetail = () => {
         </StSpaceBetween>
         <StFlex>
           <StTitle>{detail?.title}</StTitle>
-          {deadLine === 1 ? null : <StMagam>마감</StMagam>}
+          {deadLine === 2 && <StMagam>마감</StMagam>}
         </StFlex>
         <StUserInfo>
           <StFlex>
@@ -206,7 +222,7 @@ const PostDetail = () => {
             return <StTags key={idx}>{item}</StTags>;
           })}
         </StFlex>
-        {logedIn && (
+        {(logedIn || kakaoLogedIn) && (
           <>
             {userId !== detail?.userId && (
               <StBtnBox>

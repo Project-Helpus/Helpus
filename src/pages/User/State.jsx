@@ -29,8 +29,8 @@ const State = () => {
         const geocoder = new kakao.maps.services.Geocoder();
         const callback = function (result, status) {
           if (status === kakao.maps.services.Status.OK) {
-            setState1(result[0].road_address.address_name.split(" ")[0]);
-            setState2(result[0].road_address.region_2depth_name);
+            setState1(result[0].address.address_name.split(" ")[0]);
+            setState2(result[0].address.region_2depth_name);
           }
         };
         geocoder.coord2Address(

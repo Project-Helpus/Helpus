@@ -20,7 +20,7 @@ const MypageDetail = () => {
 
   //프로필 정보 불러오기
   const profile = useSelector((state) => state.mypageSlice.profile);
-  const isLoginkakao = useSelector((state) => state.userSlice.isLoginkakao);
+  const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
   const { userInfo } = useSelector((state) => state.userSlice);
 
   //수정 input 넣는 state
@@ -125,7 +125,7 @@ const MypageDetail = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(__kakaoState(isLoginkakao));
+    dispatch(__kakaoState(isLoginKakao));
   }, [dispatch]);
 
   return (
@@ -151,7 +151,7 @@ const MypageDetail = () => {
           ref={fileInput}
           onChange={changeImgHandler}
         ></input>
-        <button onClick={submitHandler}>프로필 수정</button>
+        <button onClick={submitHandler}>프로필 이미지 수정</button>
         <label>닉네임</label>
         <input
           onChange={updateOnChange}
@@ -196,7 +196,7 @@ const MypageDetail = () => {
           </StState>
         </div>
         <button onClick={updateHandler}>수정 완료</button>
-        {!isLoginkakao && (
+        {!isLoginKakao && (
           <div>
             <label>기존 비밀번호</label>
             <input
@@ -214,7 +214,7 @@ const MypageDetail = () => {
             <StSingOut onClick={signOutHandler}>로컬회원탈퇴</StSingOut>
           </div>
         )}
-        {isLoginkakao && (
+        {isLoginKakao && (
           <div>
             <StSingOut onClick={kakaosignOutHandler}>카카오회원탈퇴</StSingOut>
           </div>
