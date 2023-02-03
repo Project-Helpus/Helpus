@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useState, useRef, useEffect } from "react";
+import { 행정구역 } from "./element/address";
+import { categoryType } from "./element/categoryType";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
-import { 행정구역 } from "./element/address";
-import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
@@ -33,6 +33,7 @@ const PostCreate = () => {
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const TotalSlides = previewImg?.length - 4;
+
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -43,7 +44,7 @@ const PostCreate = () => {
   };
   const moveCrsRight = () => {
     if (currentSlide >= TotalSlides) {
-      //더 이상 넘어갈 슬라이드가 없으면 //1번째 사진으로 넘어간다
+      //더 이상 넘어갈 슬라이드가 없으면 1번째 사진으로 넘어감
       setCurrentSlide(0);
     } else {
       setCurrentSlide(currentSlide + 1);
@@ -67,7 +68,7 @@ const PostCreate = () => {
       return;
     }
 
-    // file reader
+    // image reader
     for (let i = 0; i < file.length; i++) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -110,8 +111,15 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       const res = await dispatch(__createPost(formData));
-      if (res.meta.requestStatus === "fulfilled") {
+      console.log(res);
+      if (res.payload === 201) {
+        window.alert("게시물이 생성 되었습니다.");
         navigate("/postlist");
+      } else if (res.payload === 400) {
+        window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
+      } else if (res.error.message === "Rejected") {
+        window.alert("로그인이 만료 되었습니다.");
+        navigate("/login");
       }
     }
   };
@@ -156,20 +164,27 @@ const PostCreate = () => {
           <StTitle>게시글 작성</StTitle>
         </StBox>
         <StCol>
-          <StLabel htmlFor="title">제목</StLabel>
+          <StLabel htmlFor="title">
+            제목 * <StLengthCount>({input.title.length}/45)</StLengthCount>
+          </StLabel>
           <input
             name="title"
             id="title"
-            placeholder="제목 입력하시오"
+            placeholder="제목 입력해주세요"
+            maxLength={45}
             onChange={changeInputHandler}
           ></input>
         </StCol>
         <StCol>
-          <StLabel htmlFor="content">내용입력</StLabel>
+          <StLabel htmlFor="content">
+            내용입력 *{" "}
+            <StLengthCount>({input.content.length}/500)</StLengthCount>
+          </StLabel>
           <StTextarea
             name="content"
             id="content"
-            placeholder="내용을 입력하시오."
+            placeholder="내용을 입력해주세요"
+            maxLength={500}
             onChange={changeInputHandler}
           ></StTextarea>
         </StCol>
@@ -181,20 +196,22 @@ const PostCreate = () => {
         </StBox>
         <StCol>
           <StInnerBox>
-            <StLabel>카테고리 선택</StLabel>
+            <StLabel>카테고리 *</StLabel>
             {categoryType.map((el, idx) => {
               if (Number(btnActive) === idx + 1) {
                 return (
-                  <StSelectedCategory
-                    name="category"
-                    id="category"
-                    key={idx}
-                    value={idx + 1}
-                    onClick={changeInputHandler}
-                    readOnly
-                  >
-                    {el}
-                  </StSelectedCategory>
+                  <>
+                    <StSelectedCategory
+                      name="category"
+                      id="category"
+                      key={idx}
+                      value={idx + 1}
+                      onClick={changeInputHandler}
+                      readOnly
+                    >
+                      {el}
+                    </StSelectedCategory>
+                  </>
                 );
               } else {
                 return (
@@ -211,21 +228,16 @@ const PostCreate = () => {
                 );
               }
             })}
-            <span>(헬퍼스:단체 활동)</span>
           </StInnerBox>
         </StCol>
         <StCol>
-          {getImg ? (
-            <StLabel htmlFor="image">
-              사진 첨부(첫번째 이미지는 썸네일로 사용됩니다. 이미지가 없다면
-              임의 사진으로 대체 됩니다.)
-            </StLabel>
-          ) : (
-            <StLabel htmlFor="image">
-              사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
-            </StLabel>
+          <StLabel htmlFor="image">사진</StLabel>
+          {getImg && (
+            <span htmlFor="image">
+              첫번째 이미지는 썸네일로 보여집니다. 이미지가 없다면 임의 사진으로
+              대체 됩니다.
+            </span>
           )}
-          {/* <Carousel /> */}
           <input
             ref={crsRef}
             style={{ display: "none" }}
@@ -262,12 +274,6 @@ const PostCreate = () => {
                 <StImgButton htmlFor="image">
                   <img src={add_circle_outline} alt="image_add" />
                 </StImgButton>
-                <StImgButton htmlFor="image">
-                  <img src={add_circle_outline} alt="image_add" />
-                </StImgButton>
-                <StImgButton htmlFor="image">
-                  <img src={add_circle_outline} alt="image_add" />
-                </StImgButton>
               </>
             )}
           </StRow>
@@ -296,7 +302,9 @@ const PostCreate = () => {
           </StBox>
         </StCol>
         <StCol>
-          <StLabel htmlFor="tag">태그 (최대 3개)</StLabel>
+          <StLabel htmlFor="tag">
+            태그 <StLengthCount>({tags.length}/3)</StLengthCount>
+          </StLabel>
           <StTagContainer>
             {tags.map((e, i) => (
               <StTag key={i}>
@@ -368,7 +376,7 @@ const StBackBtn = styled.button`
 const StContainer = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 55px;
+  gap: 35px;
   width: 800px;
 `;
 
@@ -393,6 +401,10 @@ const StCol = styled.div`
 const StLabel = styled.label`
   font-size: 20px;
   font-weight: 800;
+`;
+
+const StLengthCount = styled.span`
+  color: ${(props) => props.theme.colors.lightGray};
 `;
 
 const StTextarea = styled.textarea`
@@ -453,6 +465,7 @@ const StTagButton = styled.button`
 `;
 
 const StCategory = styled.button`
+  position: relative;
   width: 160px;
   height: 44px;
   cursor: pointer;
@@ -462,6 +475,7 @@ const StCategory = styled.button`
 `;
 
 const StSelectedCategory = styled.button`
+  position: relative;
   width: 160px;
   height: 44px;
   background-color: ${(props) => props.theme.colors.subPink};
