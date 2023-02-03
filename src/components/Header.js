@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __giveInput } from "../redux/modules/postSlice";
+import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 import top_logo from "../asset/top_logo.svg";
@@ -27,6 +27,9 @@ const Header = () => {
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
+    dispatch(__setBollAll());
+    alert("게시글 조회 페이지로 이동합니다");
+    navigate("/postlist");
   };
 
   const displayNotification = ({ senderName }) => {
