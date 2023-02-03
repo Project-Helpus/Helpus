@@ -54,7 +54,7 @@ const State = () => {
     };
     dispatch(__kakaoState(paylode));
     alert("가입완료");
-    navigate("/");
+    navigate("/postlist");
   };
 
   return (
@@ -77,10 +77,6 @@ const State = () => {
             <input type="text" value={state1 || ""} readOnly></input>
             <input type="text" value={state2 || ""} readOnly></input>
           </StStateInputWrap>
-          {/* <div>
-            <StRadio type="radio" />
-            카카오 계정 정보를 헬퍼스에 공유하는 것을 동의합니다.
-          </div> */}
           <StSubmitBtn onClick={submitHandler}>회원가입</StSubmitBtn>
         </form>
       </StProfile>
