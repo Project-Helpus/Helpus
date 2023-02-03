@@ -26,7 +26,7 @@ const PostCreate = () => {
   const [input, setInput] = useState({
     title: "",
     content: "",
-    category: 0,
+    category: "",
   });
   const [location1, setLocation1] = useState("");
   const [location2, setLocation2] = useState("");
@@ -111,7 +111,6 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       const res = await dispatch(__createPost(formData));
-      console.log(res);
       if (res.payload === 201) {
         window.alert("게시물이 생성 되었습니다.");
         navigate("/postlist");
