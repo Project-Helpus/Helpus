@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { useState, useRef, useEffect } from "react";
+import { 행정구역 } from "./element/address";
+import { categoryType } from "./element/categoryType";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
-import { 행정구역 } from "./element/address";
-import { categoryType } from "./element/categoryType";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
@@ -160,7 +160,8 @@ const PostCreate = () => {
           <input
             name="title"
             id="title"
-            placeholder="제목 입력하시오"
+            placeholder="제목 입력해주세요"
+            maxLength={30}
             onChange={changeInputHandler}
           ></input>
         </StCol>
@@ -169,7 +170,8 @@ const PostCreate = () => {
           <StTextarea
             name="content"
             id="content"
-            placeholder="내용을 입력하시오."
+            placeholder="내용을 입력해주세요"
+            maxLength={450}
             onChange={changeInputHandler}
           ></StTextarea>
         </StCol>
@@ -218,7 +220,7 @@ const PostCreate = () => {
           {getImg ? (
             <StLabel htmlFor="image">
               사진 첨부(첫번째 이미지는 썸네일로 사용됩니다. 이미지가 없다면
-              임의 사진으로 대체 됩니다.)
+              임의 사진으로 대체 됩니다)
             </StLabel>
           ) : (
             <StLabel htmlFor="image">
