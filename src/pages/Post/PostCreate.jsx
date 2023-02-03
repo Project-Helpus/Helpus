@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import { 행정구역 } from "./element/address";
 import { categoryType } from "./element/categoryType";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
@@ -33,6 +33,7 @@ const PostCreate = () => {
   const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const TotalSlides = previewImg?.length - 4;
+
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -110,8 +111,15 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       const res = await dispatch(__createPost(formData));
-      if (res.meta.requestStatus === "fulfilled") {
+      console.log(res);
+      if (res.payload === 201) {
+        window.alert("게시물이 생성 되었습니다.");
         navigate("/postlist");
+      } else if (res.payload === 400) {
+        window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
+      } else if (res.error.message === "Rejected") {
+        window.alert("로그인이 만료 되었습니다.");
+        navigate("/login");
       }
     }
   };
@@ -262,12 +270,6 @@ const PostCreate = () => {
               </StCrsContainser>
             ) : (
               <>
-                <StImgButton htmlFor="image">
-                  <img src={add_circle_outline} alt="image_add" />
-                </StImgButton>
-                <StImgButton htmlFor="image">
-                  <img src={add_circle_outline} alt="image_add" />
-                </StImgButton>
                 <StImgButton htmlFor="image">
                   <img src={add_circle_outline} alt="image_add" />
                 </StImgButton>

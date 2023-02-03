@@ -1,17 +1,41 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PostAPI } from "../../api/axios";
 
+const initialState = {
+  isLoading: false,
+  error: false,
+  flag: 0,
+  dataLength: 0,
+  boolHelper: false,
+  boolHelpee: false,
+  boolHelpUs: false,
+  boolAll: false,
+  boolLocation: false,
+  AllFalseDate: [],
+  helpeeFalseDate: [],
+  helperFalseDate: [],
+  helpUsFalseDate: [],
+  AllTrueDate: [],
+  helpeeTrueDate: [],
+  helperTrueDate: [],
+  helpUsTrueDate: [],
+  inputReciver: "",
+  postInfo: "",
+  ZZimMsg: [],
+  deadLineMsg: "",
+};
+
 export const __createPost = createAsyncThunk(
   "postSlice/createPost",
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
       if (response.status === 201) {
-        window.alert("게시물이 생성 되었습니다.");
-        return thunkAPI.fulfillWithValue();
+        return thunkAPI.fulfillWithValue(response.status);
+      } else if (response.response.status === 400) {
+        return thunkAPI.rejectWithValue(response.response.status);
       } else {
-        window.alert("다시 시도해 주세요.");
-        return thunkAPI.rejectWithValue();
+        return thunkAPI.rejectWithValue(response.response.status);
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -87,20 +111,7 @@ export const __deadLinePost = createAsyncThunk(
     }
   }
 );
-//    <<<<<<  전국  >>>>>>
-//    <  전국 false  >
-// export const __getAllFalse = createAsyncThunk(
-//   "mypageSlice/getAllFalse",
-//   async (count, thunkAPI) => {
-//     try {
-//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-//       const res = await PostAPI.getAllFalse(count, searchValue);
-//       return thunkAPI.fulfillWithValue(res.data.result);
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue();
-//     }
-//   }
-// );
+
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
@@ -214,30 +225,6 @@ export const __getHelpUsTrue = createAsyncThunk(
   }
 );
 
-const initialState = {
-  isLoading: false,
-  error: false,
-  flag: 0,
-  dataLength: 0,
-  boolHelper: false,
-  boolHelpee: false,
-  boolHelpUs: false,
-  boolAll: false,
-  boolLocation: false,
-  AllFalseDate: [],
-  helpeeFalseDate: [],
-  helperFalseDate: [],
-  helpUsFalseDate: [],
-  AllTrueDate: [],
-  helpeeTrueDate: [],
-  helperTrueDate: [],
-  helpUsTrueDate: [],
-  inputReciver: "",
-  postInfo: "",
-  ZZimMsg: [],
-  deadLineMsg: "",
-};
-
 const postSlice = createSlice({
   name: "postSlice",
   initialState,
@@ -328,10 +315,6 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // state.dataLength = action.payload.length;
-      // if (state.dataLength !== 0) {
-      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      // }
       state.AllFalseDate = action.payload;
     },
     [__getAllFalse.rejected]: (state, action) => {
