@@ -20,7 +20,7 @@ const KakaoLogin = () => {
     if (res.payload.state1 === null && res.payload.state2 === null) {
       navigate("/auth/kakao/state");
     } else {
-      navigate("/");
+      navigate("/postlist");
     }
   };
 

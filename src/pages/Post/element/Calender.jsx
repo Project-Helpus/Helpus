@@ -18,6 +18,7 @@ const Calender = ({ selectedDate, setDate }) => {
       minDate={new Date()}
       filterTime={filterPassedtime}
       name="date"
+      placeholderText="날짜를 선택해주세요"
       border="none"
     />
   );
