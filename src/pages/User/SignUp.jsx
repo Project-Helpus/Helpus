@@ -223,7 +223,7 @@ const SignUp = () => {
             <input
               name="userName"
               type="text"
-              placeholder="한글/숫자/영문자 2글자 이상"
+              placeholder="영문/한글/숫자로 2글자이상"
               onChange={onChangeHandler}
               value={input.userName}
             ></input>
@@ -233,7 +233,7 @@ const SignUp = () => {
             <input
               name="password"
               type="password"
-              placeholder="숫자+영문자+특수문자 8자리 이상"
+              placeholder="숫자+영문자+특수문자 8자리이상"
               onChange={onChangeHandler}
               value={input.password}
               autoComplete="off"
