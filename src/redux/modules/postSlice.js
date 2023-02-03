@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PostAPI } from "../../api/axios";
+import { PostAPI } from "../api/axios";
 
 const initialState = {
   isLoading: false,

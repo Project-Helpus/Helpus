@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __postLogin } from "../../redux/modules/userSlice";
 import { KAKAO_AUTH_URL } from "./KakaoLogin";
@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault();
     const res = await dispatch(__postLogin(account));
     if (res.meta.requestStatus === "fulfilled") {
-      navigate("/");
+      navigate("/postlist");
     }
   };
 
