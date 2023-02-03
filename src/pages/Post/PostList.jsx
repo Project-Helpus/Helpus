@@ -122,6 +122,21 @@ const PostList = () => {
       dispatch(__setBoolLocationFalse());
     }
   };
+  useEffect(() => {
+    if (boolAll) {
+      allRef.current.style.color = "black";
+      allRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else if (boolHelpUs) {
+      helpUsRef.current.style.color = "black";
+      helpUsRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else if (boolHelpee) {
+      helpeeRef.current.style.color = "black";
+      helpeeRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else {
+      helperRef.current.style.color = "black";
+      helperRef.current.style.borderBottom = "4px solid #EA9DB4";
+    }
+  }, []);
 
   useEffect(() => {
     if (storeBooLocation === false) {
