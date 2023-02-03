@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ChatAPI } from "../../api/axios";
+import { ChatAPI } from "../api/axios";
 
 const initialState = {
   chatImage: "",
