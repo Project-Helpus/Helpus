@@ -43,7 +43,7 @@ const PostCreate = () => {
   };
   const moveCrsRight = () => {
     if (currentSlide >= TotalSlides) {
-      //더 이상 넘어갈 슬라이드가 없으면 //1번째 사진으로 넘어간다
+      //더 이상 넘어갈 슬라이드가 없으면 1번째 사진으로 넘어감
       setCurrentSlide(0);
     } else {
       setCurrentSlide(currentSlide + 1);
@@ -67,7 +67,7 @@ const PostCreate = () => {
       return;
     }
 
-    // file reader
+    // image reader
     for (let i = 0; i < file.length; i++) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -156,22 +156,27 @@ const PostCreate = () => {
           <StTitle>게시글 작성</StTitle>
         </StBox>
         <StCol>
-          <StLabel htmlFor="title">제목</StLabel>
+          <StLabel htmlFor="title">
+            제목 * <StLengthCount>({input.title.length}/45)</StLengthCount>
+          </StLabel>
           <input
             name="title"
             id="title"
             placeholder="제목 입력해주세요"
-            maxLength={30}
+            maxLength={45}
             onChange={changeInputHandler}
           ></input>
         </StCol>
         <StCol>
-          <StLabel htmlFor="content">내용입력</StLabel>
+          <StLabel htmlFor="content">
+            내용입력 *{" "}
+            <StLengthCount>({input.content.length}/500)</StLengthCount>
+          </StLabel>
           <StTextarea
             name="content"
             id="content"
             placeholder="내용을 입력해주세요"
-            maxLength={450}
+            maxLength={500}
             onChange={changeInputHandler}
           ></StTextarea>
         </StCol>
@@ -183,7 +188,7 @@ const PostCreate = () => {
         </StBox>
         <StCol>
           <StInnerBox>
-            <StLabel>카테고리 선택</StLabel>
+            <StLabel>카테고리 *</StLabel>
             {categoryType.map((el, idx) => {
               if (Number(btnActive) === idx + 1) {
                 return (
@@ -217,17 +222,13 @@ const PostCreate = () => {
           </StInnerBox>
         </StCol>
         <StCol>
-          {getImg ? (
-            <StLabel htmlFor="image">
-              사진 첨부(첫번째 이미지는 썸네일로 사용됩니다. 이미지가 없다면
-              임의 사진으로 대체 됩니다)
-            </StLabel>
-          ) : (
-            <StLabel htmlFor="image">
-              사진 첨부(최소 1장의 이미지를 반드시 첨부 해 주세요)
-            </StLabel>
+          <StLabel htmlFor="image">사진</StLabel>
+          {getImg && (
+            <span htmlFor="image">
+              첫번째 이미지는 썸네일로 보여집니다. 이미지가 없다면 임의 사진으로
+              대체 됩니다.
+            </span>
           )}
-          {/* <Carousel /> */}
           <input
             ref={crsRef}
             style={{ display: "none" }}
@@ -298,7 +299,9 @@ const PostCreate = () => {
           </StBox>
         </StCol>
         <StCol>
-          <StLabel htmlFor="tag">태그 (최대 3개)</StLabel>
+          <StLabel htmlFor="tag">
+            태그 <StLengthCount>({tags.length}/3)</StLengthCount>
+          </StLabel>
           <StTagContainer>
             {tags.map((e, i) => (
               <StTag key={i}>
@@ -395,6 +398,10 @@ const StCol = styled.div`
 const StLabel = styled.label`
   font-size: 20px;
   font-weight: 800;
+`;
+
+const StLengthCount = styled.span`
+  color: ${(props) => props.theme.colors.lightGray};
 `;
 
 const StTextarea = styled.textarea`
