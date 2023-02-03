@@ -229,6 +229,12 @@ const postSlice = createSlice({
   name: "postSlice",
   initialState,
   reducers: {
+    __setBollAll: (state) => {
+      state.boolAll = true;
+      state.boolHelper = false;
+      state.boolHelpee = false;
+      state.boolHelpUs = false;
+    },
     __setBoolHelper: (state) => {
       state.boolHelper = true;
       state.boolHelpee = false;
@@ -366,6 +372,7 @@ const postSlice = createSlice({
   },
 });
 export const {
+  __setBollAll,
   __setBoolHelper,
   __setBoolHelpee,
   __setBoolHelpUs,
