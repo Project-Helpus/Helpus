@@ -34,7 +34,6 @@ export const __signUp = createAsyncThunk(
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
-      window.alert("회원가입에 실패했습니다.");
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -46,7 +45,7 @@ export const __postDupEmail = createAsyncThunk(
     try {
       const res = await UserAPI.emailCheck(payload);
       if (res.status === 200) {
-        window.alert("사용 가능한 ID입니다.");
+        window.alert("사용 가능한 이메일입니다.");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("중복된 ID가 있습니다.");
@@ -65,7 +64,6 @@ export const __postLogin = createAsyncThunk(
     try {
       const res = await UserAPI.login(payload);
       if (res.status === 200) {
-        window.alert("로그인 성공");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
         window.alert("가입하신 이메일, 비밀번호와 다릅니다.");

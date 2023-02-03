@@ -70,7 +70,7 @@ const SignUp = () => {
   //정규식
   const emailRegExp =
     /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-  const nickRegExp = /^[A-Za-z가-힣]{2,}$/;
+  const nickRegExp = /^[A-Za-z0-9가-힣]{2,}$/;
   const pwRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
   //input 이벤트 핸들러
@@ -95,7 +95,7 @@ const SignUp = () => {
     if (name === "userName") {
       if (!nickRegExp.test(value)) {
         //nickname 형식이 맞지 않을때
-        setNicknameText("영문 또는 한글로 2글자이상 작성해주세요");
+        setNicknameText("영문/한글/숫자로 2글자이상 입력해주세요");
         setIsValid({ ...isValid, isUserName: false });
       } else {
         setNicknameText("");
@@ -223,7 +223,7 @@ const SignUp = () => {
             <input
               name="userName"
               type="text"
-              placeholder="영문과 숫자를 혼합하여 입력해 주세요."
+              placeholder="한글/숫자/영문자 2글자 이상"
               onChange={onChangeHandler}
               value={input.userName}
             ></input>
@@ -233,7 +233,7 @@ const SignUp = () => {
             <input
               name="password"
               type="password"
-              placeholder="숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요."
+              placeholder="숫자+영문자+특수문자 8자리 이상"
               onChange={onChangeHandler}
               value={input.password}
               autoComplete="off"
