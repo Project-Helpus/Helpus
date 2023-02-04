@@ -78,6 +78,7 @@ const OpenChat = () => {
       window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
     ) {
       chatSocket.deleteChatRoom(roomId);
+      navigate("/mypage");
     }
   };
 
