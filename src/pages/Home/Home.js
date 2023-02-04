@@ -55,9 +55,6 @@ const Home = () => {
   const crsHelpeeRef = useRef(null);
   const isLogIn = useSelector((state) => state.userSlice.isLogin);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
-
-  const search = useSelector((state) => state.postSlice.inputReciver);
-  console.log("search:", search);
   const input = useSelector((state) => state.postSlice.inputReciver);
 
   const linkHelpUs = () => {

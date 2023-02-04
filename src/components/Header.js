@@ -28,7 +28,6 @@ const Header = () => {
     e.preventDefault();
     dispatch(__giveInput(search));
     dispatch(__setBollAll());
-    alert("게시글 조회 페이지로 이동합니다");
     navigate("/postlist");
   };
 
@@ -70,7 +69,12 @@ const Header = () => {
       <StBox>
         {!(isLogin || isLoginKakao) && (
           <StBox>
-            <button onClick={() => navigate("/login")}>
+            <button
+              onClick={() => {
+                navigate("/login");
+                setSearch("");
+              }}
+            >
               로그인 / 회원가입
             </button>
           </StBox>
@@ -86,7 +90,7 @@ const Header = () => {
               <img src={icon_bell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
             </StButton> */}
-            <DropdownMenu />
+            <DropdownMenu setSearch={setSearch} />
           </StBox>
         )}
       </StBox>
