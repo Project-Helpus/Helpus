@@ -39,12 +39,13 @@ export const StChatBtn = styled.button`
   }
 `;
 export const StWishBtn = styled.button`
-  width: 112px;
+  /* width: 112px; */
   vertical-align: middle;
   border: none;
   background: white;
   font-weight: 700;
   font-size: 24px;
+  display: flex;
 `;
 export const StDeadLineButton = styled.button`
   width: 8.25em;
@@ -165,4 +166,7 @@ export const StContents = styled.p`
 export const StContentsWrapper = styled.div`
   margin: 52px 0;
   font: caption;
+`;
+export const StZZimCount = styled.p`
+  margin: 0 10px 0 5px;
 `;
