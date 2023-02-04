@@ -27,9 +27,7 @@ const StFooter = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 80px;
-  margin-bottom: 20px;
-  bottom: 0;
+  height: 140px;
   img {
     width: 3em;
   }

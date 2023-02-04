@@ -73,15 +73,6 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            {/* <StButton
-              onClick={() => {
-                setOpen(!open);
-                handleRead();
-              }}
-            >
-              <img src={icon_bell} alt="notification" />
-              {notifications.length > 0 && <div>{notifications.length}</div>}
-            </StButton> */}
             <DropdownMenu />
           </StBox>
         )}
@@ -97,25 +88,21 @@ const StHeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background-color: white;
+  padding: 20px;
 `;
 
 const StSearch = styled.form`
   position: relative;
   input {
-    width: 400px;
-    height: 44px;
-    border: 1px solid ${(props) => props.theme.colors.lightGray};
-    padding-left: 20px;
+    width: 100%;
+    height: 46px;
+    border: 1px solid lightGray;
     border-radius: 100px;
-    font-size: 12px;
-    border: 1px solid ${(props) => props.theme.colors.lightGray};
+    font-size: 14px;
+    padding-right: 140px;
   }
   input::placeholder {
-    color: ${(props) => props.theme.colors.lightGray};
-  }
-  input:focus {
-    outline: ${(props) => props.theme.colors.mainPink};
+    color: lightGray;
   }
   img {
     position: absolute;
@@ -125,20 +112,22 @@ const StSearch = styled.form`
   }
 `;
 const StLogo = styled.div`
-  margin: 20px;
   cursor: pointer;
 `;
 const StBox = styled.div`
   display: flex;
-  padding: 0 18px;
   align-items: center;
-  color: ${(props) => props.theme.colors.middleGray};
+  color: middleGray;
   button {
     border: none;
+    width: 7.629em;
     font-size: 14px;
     background-color: transparent;
     border-radius: 100px;
     font-weight: 600;
     padding-left: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
