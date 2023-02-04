@@ -6,7 +6,7 @@ import useDetectClose from "../hooks/DropDetectClose";
 import { __logout } from "../redux/modules/userSlice";
 import icon_back from "../asset/icon_back.svg";
 
-const DropdownMenu = () => {
+const DropdownMenu = ({ setSearch }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -14,10 +14,12 @@ const DropdownMenu = () => {
   const { userInfo } = useSelector((state) => state.userSlice);
 
   const mypageClickHandler = () => {
+    setSearch("");
     navigate("/mypage");
   };
   const logoutClickHandler = (e) => {
     e.preventDefault();
+    setSearch("");
     dispatch(__logout());
     navigate("/");
   };

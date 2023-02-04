@@ -129,6 +129,7 @@ const MyChat = () => {
     socket.current.on("updateState", (data) => {
       setAppointmentState(data.state);
     });
+
     chatSocket.readMessage(roomId);
   }, [socket.current]);
 
@@ -220,6 +221,10 @@ const MyChat = () => {
           <StChat.StChatBox ref={chatWindow}>
             {/* 이전 메세지 수신 */}
             {chatRecord?.map((el, idx) => {
+              if (el.content === "`card`0" && appointmentState === 0) {
+                return;
+              }
+
               if (
                 el.userId === userId &&
                 el.content.includes("`card`") === false &&
@@ -301,6 +306,10 @@ const MyChat = () => {
             })}
             {/* 새로운 메세지 송, 수신 */}
             {newMsg?.map((el, idx) => {
+              if (el.content === "`card`0" && appointmentState === 0) {
+                return;
+              }
+
               if (
                 el.userId === userId &&
                 el.content.includes("`card`") === false &&
