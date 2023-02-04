@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { 행정구역 } from "./element/address";
+import { address } from "../../asset/address";
 import { categoryType } from "./element/categoryType";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ import crsRightButton from "../../asset/CrsRight.svg";
 const PostCreate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { state, city } = 행정구역;
+  const { state, city } = address;
   const [getImg, setGetImg] = useState(false);
   const [previewImg, setPreviewImg] = useState(null);
   const [img, setImg] = useState([]);
