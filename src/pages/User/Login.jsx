@@ -7,6 +7,7 @@ import { KAKAO_AUTH_URL } from "./KakaoLogin";
 import kakaoLogin from "../../asset/kakaoLogin.png";
 import StUserWrap from "../../components/UI/StUserWrap";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
+import icon_eye from "../../asset/icon_eye.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,11 +15,17 @@ const Login = () => {
 
   //input state 초기값
   const [account, setAccount] = useState({ email: "", password: "" });
+  const [showPw, setShowPw] = useState(true);
 
   //input 이벤트 핸들러
   const onChangeAccount = (e) => {
     const { name, value } = e.target;
     setAccount({ ...account, [name]: value });
+  };
+
+  //비밀번호 보기 핸들러
+  const toggleHidePassword = () => {
+    setShowPw(!showPw);
   };
 
   //submit 이벤트 핸들러
@@ -52,12 +59,15 @@ const Login = () => {
               onChange={onChangeAccount}
             ></input>
             <label>비밀번호</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="비밀번호를 작성해주세요."
-              onChange={onChangeAccount}
-            ></input>
+            <StPwBtWrap>
+              <input
+                type={showPw ? "password" : "text"}
+                name="password"
+                placeholder="비밀번호를 작성해주세요."
+                onChange={onChangeAccount}
+              ></input>
+              <StPwBt onClick={toggleHidePassword}></StPwBt>
+            </StPwBtWrap>
             <button onClick={loginSubmitHandler}>로그인</button>
             <a href={KAKAO_AUTH_URL}>
               <img src={kakaoLogin} alt="" />
@@ -99,9 +109,10 @@ const StLoginWrap = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+
     input {
       all: unset;
+      width: 300px;
       height: 40px;
       border: 1px solid #e0e0e0;
       border-radius: 7px;
@@ -132,5 +143,18 @@ const StSingOut = styled.div`
   padding: 4px 6px;
   font-size: 14px;
   color: #999999;
+  cursor: pointer;
+`;
+
+const StPwBtWrap = styled.div`
+  position: relative;
+`;
+const StPwBt = styled.div`
+  position: absolute;
+  top: 1.1em;
+  right: 1em;
+  width: 25px;
+  height: 25px;
+  background-image: url(${icon_eye});
   cursor: pointer;
 `;
