@@ -51,6 +51,7 @@ const Header = () => {
       <StLogo
         onClick={() => {
           navigate("/");
+          setSearch("");
         }}
       >
         <img src={top_logo} alt=""></img>
