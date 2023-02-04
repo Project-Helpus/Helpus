@@ -27,7 +27,7 @@ const StLeft = styled.div`
 const StLeftOj = styled.div`
   position: absolute;
   text-align: center;
-  top: 60%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
   img {
