@@ -101,7 +101,6 @@ const PostCreate = () => {
 
   const removeTag = (i) => {
     const clonetags = tags.slice();
-    console.log(clonetags);
     clonetags.splice(i, 1);
     setTags(clonetags);
   };
