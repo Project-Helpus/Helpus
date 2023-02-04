@@ -10,7 +10,7 @@ import {
   __userImage,
 } from "../../redux/modules/userSlice";
 import { StSelector } from "../../components/UI/StIndex";
-import { address } from "../User/element/Address";
+import { address } from "../../asset/address";
 import camera_icon from "../../asset/camera_icon.svg";
 import styled from "styled-components";
 

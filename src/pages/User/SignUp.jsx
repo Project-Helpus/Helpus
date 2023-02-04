@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { address } from "./element/Address";
+import { address } from "../../asset/address";
 import { StSelector } from "../../components/UI/StIndex";
 import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
 import StUserWrap from "../../components/UI/StUserWrap";
