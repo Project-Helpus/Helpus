@@ -9,6 +9,7 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
 import { __getChat } from "../../redux/modules/mypageSlice";
+import { __getState } from "./../../redux/modules/chatSlice";
 
 const MyChat = () => {
   const dispatch = useDispatch();
@@ -22,9 +23,8 @@ const MyChat = () => {
   const [chatRecord, setChatRecord] = useState([]);
   const [invitation, setInvitation] = useState(false);
   const [acception, setAcception] = useState(false);
-  const [appointmentState, setAppointmentState] = useState(
-    state.chatInfo.state
-  );
+  const { cardState } = useSelector((state) => state.chatSlice);
+  const [appointmentState, setAppointmentState] = useState(cardState);
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
@@ -72,6 +72,7 @@ const MyChat = () => {
     if (window.confirm("확정 하시겠습니까?")) {
       chatSocket.appointment(userId, roomId);
       setAcception(true);
+      // setAppointmentState(1);
     }
   };
 
@@ -80,6 +81,7 @@ const MyChat = () => {
       chatSocket.cancelCard(roomId);
       setInvitation(false);
       setAcception(false);
+      // setAppointmentState(0);
     }
   };
 
@@ -87,6 +89,7 @@ const MyChat = () => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
       setInvitation(true);
+      // setAppointmentState(1);
     }
   };
 
@@ -96,11 +99,6 @@ const MyChat = () => {
     ) {
       chatSocket.deleteChatRoom(roomId, userId, state.chatInfo.leave);
       navigate("/mypage");
-    }
-  };
-
-  const completePost = () => {
-    if (window.confirm("재능 기부가 완료 되었나요?")) {
     }
   };
 
@@ -120,18 +118,15 @@ const MyChat = () => {
 
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
-    socket.current.on("updateState", (data) => {
-      setAppointmentState(data.state);
-    });
+    dispatch(__getState({ roomId: roomId }));
     socket.current.on("broadcast", (data) => {
       setNewMsg((prev) => [...prev, data]);
     });
     socket.current.on("updateState", (data) => {
       setAppointmentState(data.state);
     });
-
     chatSocket.readMessage(roomId);
-  }, [socket.current]);
+  }, [socket]);
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
@@ -306,10 +301,6 @@ const MyChat = () => {
             })}
             {/* 새로운 메세지 송, 수신 */}
             {newMsg?.map((el, idx) => {
-              if (el.content === "`card`0" && appointmentState === 0) {
-                return;
-              }
-
               if (
                 el.userId === userId &&
                 el.content.includes("`card`") === false &&

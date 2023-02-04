@@ -82,11 +82,6 @@ const OpenChat = () => {
     }
   };
 
-  const completePost = () => {
-    if (window.confirm("재능 기부가 완료 되었나요?")) {
-    }
-  };
-
   // 채팅방 처음 생성 시 소켓 생성, 채팅방 생성, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
@@ -116,11 +111,6 @@ const OpenChat = () => {
   useEffect(() => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
-
-  // 채팅 리스트 불러오기
-  useEffect(() => {
-    dispatch(__getChat());
-  }, []);
 
   return (
     <StChat.StWrapper>

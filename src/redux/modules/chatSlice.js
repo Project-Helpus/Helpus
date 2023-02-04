@@ -4,7 +4,7 @@ import { ChatAPI } from "../api/axios";
 const initialState = {
   chatImage: "",
   senderInfo: null,
-  appointmentState: 0,
+  cardState: 0,
 };
 
 export const __getState = createAsyncThunk(
@@ -70,7 +70,7 @@ const chatSlice = createSlice({
       state.isLoading = true;
     },
     [__getState.fulfilled]: (state, action) => {
-      state.appointmentState = action.payload;
+      state.cardState = action.payload;
     },
     [__getState.pending]: (state) => {
       state.isLoading = true;
