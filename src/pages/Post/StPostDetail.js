@@ -112,6 +112,9 @@ export const StMainImg = styled.img`
   height: 28.13em;
   border: 1px solid rgb(240, 240, 240);
   border-radius: 10px;
+  object-fit: contain;
+  background-color: black;
+  box-sizing: content-box;
 `;
 export const StCrsLeftButton = styled.img`
   cursor: pointer;
@@ -131,11 +134,15 @@ export const StHidden = styled.div`
   display: flex;
 `;
 export const StCrsImg = styled.img`
-  min-width: 11.38em;
+  min-width: 11.26em;
+  /* min-width: 11.38em; */
   border: 0.06em solid rgb(240, 240, 240);
-  border-radius: 10px;
+  border-radius: 0.63em;
   height: 6.48em;
   margin-right: 1.5em;
+  object-fit: contain;
+  background-color: black;
+  box-sizing: content-box;
 `;
 export const StHopeDay = styled.p`
   font-size: 1em;

@@ -127,6 +127,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
+    // crsRef.current.style.transform = `translateX(-${currentSlide * 12.96}em)`;
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
 
