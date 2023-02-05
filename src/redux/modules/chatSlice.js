@@ -15,7 +15,7 @@ export const __getState = createAsyncThunk(
       if (res.status === 200) return thunkAPI.fulfillWithValue(res.data);
       else {
         alert("정보 불러오기에 실패 했습니다.");
-        thunkAPI.rejectWithValue();
+        return thunkAPI.rejectWithValue();
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
