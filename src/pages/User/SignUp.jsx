@@ -7,19 +7,22 @@ import { StSelector } from "../../components/UI/StIndex";
 import { __signUp, __postDupEmail } from "../../redux/modules/userSlice";
 import StUserWrap from "../../components/UI/StUserWrap";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
+import icon_eye from "../../asset/icon_eye.svg";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const dupCheck = useSelector((state) => state.userSlice.dupCheck);
 
   const [emailText, setEmailText] = useState("");
   const [nicknameText, setNicknameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
   const [confirmText, setConfirmText] = useState("");
 
-  const dupCheck = useSelector((state) => state.userSlice.dupCheck);
-
   const { state, city } = address;
+  const [showPw, setShowPw] = useState(true);
+  const [showPwConfirm, setShowPwConfirm] = useState(true);
 
   //input state 초기값
   const [input, setInput] = useState({
@@ -67,6 +70,7 @@ const SignUp = () => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+
   //정규식
   const emailRegExp =
     /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -170,6 +174,16 @@ const SignUp = () => {
     }
   };
 
+  //비밀번호 보기 핸들러
+  const toggleHidePassword = () => {
+    setShowPw(!showPw);
+  };
+
+  //비밀번호 다시입력 보기 핸들러
+  const toggleHidePasswordConfirm = () => {
+    setShowPwConfirm(!showPwConfirm);
+  };
+
   return (
     <StWarp>
       <StUserWrap></StUserWrap>
@@ -223,31 +237,36 @@ const SignUp = () => {
             <input
               name="userName"
               type="text"
-              placeholder="영문/한글/숫자로 2글자이상"
+              placeholder="한글/숫자/영문자 2글자 이상"
               onChange={onChangeHandler}
               value={input.userName}
             ></input>
-
             <span>{nicknameText}</span>
             <label>비밀번호</label>
-            <input
-              name="password"
-              type="password"
-              placeholder="숫자+영문자+특수문자 8자리이상"
-              onChange={onChangeHandler}
-              value={input.password}
-              autoComplete="off"
-            ></input>
+            <StPwBtWrap>
+              <input
+                name="password"
+                type={showPw ? "password" : "text"}
+                placeholder="숫자+영문자+특수문자 8자리 이상"
+                onChange={onChangeHandler}
+                value={input.password}
+                autoComplete="off"
+              ></input>
+              <StPwBt onClick={toggleHidePassword}></StPwBt>
+            </StPwBtWrap>
             <span>{passwordText}</span>
             <label>비밀번호 확인</label>
-            <input
-              name="confirm"
-              type="password"
-              placeholder="다시 한번 입력해 주세요."
-              onChange={onChangeHandler}
-              value={input.confirm}
-              autoComplete="off"
-            ></input>
+            <StPwBtWrap>
+              <input
+                name="confirm"
+                type={showPwConfirm ? "password" : "text"}
+                placeholder="다시 한번 입력해 주세요."
+                onChange={onChangeHandler}
+                value={input.confirm}
+                autoComplete="off"
+              ></input>
+              <StPwBt onClick={toggleHidePasswordConfirm}></StPwBt>
+            </StPwBtWrap>
             <span>{confirmText}</span>
             <div>
               <label>살고 있는 곳</label>
@@ -319,8 +338,11 @@ const Avatar = styled.div`
   margin-bottom: 40px;
   cursor: pointer;
   img {
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 `;
 
@@ -338,7 +360,7 @@ const Stupwrap = styled.div`
     input {
       all: unset;
       width: 100%;
-      height: 40px;
+      height: 44px;
       border: 1px solid #e0e0e0;
       border-radius: 7px;
       background-color: #fafafa;
@@ -386,5 +408,17 @@ const CheckButton = styled.div`
   background-color: #7d7d7d;
   color: white;
   margin-left: 6px;
+  cursor: pointer;
+`;
+const StPwBtWrap = styled.div`
+  position: relative;
+`;
+const StPwBt = styled.div`
+  position: absolute;
+  top: 0.65em;
+  right: 1em;
+  width: 25px;
+  height: 25px;
+  background-image: url(${icon_eye});
   cursor: pointer;
 `;

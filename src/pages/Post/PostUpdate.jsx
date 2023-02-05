@@ -15,7 +15,6 @@ const PostCreate = () => {
     !postInfo.tag ? [] : postInfo.tag.split(",")
   );
   const [tag, setTag] = useState("");
-
   const [date, setDate] = useState(
     !postInfo.appointed ? null : new Date(postInfo.appointed)
   );
@@ -65,38 +64,40 @@ const PostCreate = () => {
     setCategories(e.target.value);
   };
 
-  const clickHandler = (e) => {
+  const clickHandler = async (e) => {
     e.preventDefault();
-
     let postData = {};
     let day;
     if (date) {
       day = date.toISOString();
       postData = { appointed: day };
     }
-
     if (tags?.length !== 0) {
       postData = { ...postData, tag: tags?.join() };
     } else {
       postData = { ...postData, tag: null };
     }
-
     if (location1) {
       postData = { ...postData, location1: location1 };
     }
-
     if (location2) {
       postData = { ...postData, location2: location2 };
     }
-
     postData = {
       ...postData,
       title: titleInput,
       content: contentsInput,
       category: categories,
     };
-
-    dispatch(__updatePost({ data: postData, id: postInfo.postId }));
+    const res = await dispatch(
+      __updatePost({ data: postData, id: postInfo.postId })
+    );
+    if (res.payload === 201) {
+      window.alert("게시물이 수정 되었습니다.");
+      navigate(`/post/${postInfo.postId}`);
+    } else if (res.payload === 400) {
+      window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
+    }
   };
 
   const removeTag = (i) => {

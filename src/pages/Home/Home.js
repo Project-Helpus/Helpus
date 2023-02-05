@@ -38,7 +38,7 @@ import {
 import HomeMain from "../../asset/main_image.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";
-
+import { __giveInput } from "../../redux/modules/postSlice";
 const Home = () => {
   const HelpUsData = useSelector(
     (state) => state.postSlice.helpUsFalseDate?.result
@@ -57,6 +57,8 @@ const Home = () => {
   const isLogIn = useSelector((state) => state.userSlice.isLogin);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
 
+  const input = useSelector((state) => state.postSlice.inputReciver);
+
   const linkHelpUs = () => {
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
@@ -72,17 +74,18 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(__getHelpUsFalse());
-  }, [dispatch]);
+  }, [input]);
 
   useEffect(() => {
     dispatch(__getHelperFalse(""));
-  }, [dispatch]);
+  }, [input]);
 
   useEffect(() => {
     dispatch(__getHelpeeFalse(""));
-  }, [dispatch]);
+  }, [input]);
 
   useEffect(() => {
+    dispatch(__giveInput(""));
     crsHelperRef.current.style.transition = "all 1s ease-in-out";
     crsHelpUsRef.current.style.transition = "all 1s ease-in-out";
     crsHelpeeRef.current.style.transition = "all 1s ease-in-out";

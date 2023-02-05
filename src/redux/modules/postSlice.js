@@ -30,6 +30,7 @@ export const __createPost = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
+
       if (response.status === 201) {
         return thunkAPI.fulfillWithValue(response.status);
       } else if (response.response.status === 400) {
@@ -46,13 +47,14 @@ export const __updatePost = createAsyncThunk(
   "postSlice/updatePost",
   async (payload, thunkAPI) => {
     try {
-      const Id = payload.id;
-      const data = payload.data;
-      const res = await PostAPI.postUpdate(Id, data);
-      if (res.status === 201) {
-        window.alert("수정이 완료되었습니다");
-        thunkAPI.fulfillWithValue(res.data);
-        return window.location.replace("/mypage");
+      const response = await PostAPI.postUpdate(payload.id, payload.data);
+      if (response.status === 201) {
+        return thunkAPI.fulfillWithValue(response.status);
+      } else if (response.response.status === 400) {
+        console.log(response.response.status);
+        return thunkAPI.rejectWithValue(response.response.status);
+      } else {
+        return thunkAPI.rejectWithValue(response.response.status);
       }
     } catch (err) {
       window.alert("수정 실패");
@@ -290,7 +292,6 @@ const postSlice = createSlice({
     },
     [__updatePost.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.postInfo = action.payload.result;
     },
     [__updatePost.rejected]: (state) => {
       state.isLoading = false;
