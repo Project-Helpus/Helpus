@@ -47,7 +47,12 @@ export const __patchPassword = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await MypageAPI.patchPassword(data);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 200) {
+        window.alert("비밀번호 수정이 완료됐습니다.");
+        return thunkAPI.fulfillWithValue(res.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }

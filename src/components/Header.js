@@ -120,7 +120,7 @@ const StBox = styled.div`
   color: middleGray;
   button {
     border: none;
-    width: 7.629em;
+    width: 8.6289em;
     font-size: 14px;
     background-color: transparent;
     border-radius: 100px;
