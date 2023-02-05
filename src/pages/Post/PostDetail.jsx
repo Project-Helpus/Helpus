@@ -233,7 +233,7 @@ const PostDetail = () => {
                     });
                   }}
                 >
-                  문의하기
+                  채팅하기
                 </StChatBtn>
                 <StWishBtn onClick={ZZim}>
                   <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
