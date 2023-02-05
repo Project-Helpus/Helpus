@@ -14,7 +14,9 @@ import Card from "../../components/Card";
 import {
   StMainWrapper,
   StTopImg,
+  StTopContainer,
   StTopSubTilte,
+  StImgContainer,
   StTopTitle,
   StTitleWrapper,
   StTest,
@@ -33,7 +35,6 @@ import {
   StWriteButton,
   StWrBtnWrapper,
 } from "./Style/StHome";
-import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import HomeMain from "../../asset/main_image.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";
@@ -105,22 +106,22 @@ const Home = () => {
   return (
     <StMainWrapper>
       <StTopImg>
-        <StFlex>
+        <StTopContainer>
           <StTitleWrapper>
             <StTopMainTitle>HelpUs</StTopMainTitle>
             <StTopTitle>Help me, Help you, Help Us.</StTopTitle>
             <StTopSubTilte>
-              도와주고, 도움받는 따뜻한 세상 누구나,
-              <br /> 언제든지 따뜻한 손길이 필요할 때
+              도와주고, 도움받는 따뜻한 세상,
+              <br />
+              누구나 언제든지 따뜻한 손길이 필요할 때
             </StTopSubTilte>
           </StTitleWrapper>
-          <div>
+          <StImgContainer>
             <StMainImg src={HomeMain}></StMainImg>
             <StMainImg2 src={HomeMain2}></StMainImg2>
-          </div>
-        </StFlex>
+          </StImgContainer>
+        </StTopContainer>
       </StTopImg>
-
       <StTest>
         {(isLoginKakao || isLogIn) === true ? (
           <StWrBtnWrapper>
@@ -129,7 +130,6 @@ const Home = () => {
             </StWriteButton>
           </StWrBtnWrapper>
         ) : null}
-
         <StContentsContainer>
           <StPostInfo>
             <StPostTitle>HelpUs</StPostTitle>
@@ -155,7 +155,6 @@ const Home = () => {
             </StHidden>
           </StAutoCarousel>
         </StContentsContainer>
-
         <StContentsContainer>
           <StAutoCarousel>
             <StHidden>
@@ -180,7 +179,6 @@ const Home = () => {
             <StMoreButton onClick={linkHelpee}>More</StMoreButton>
           </StPostInfoCenter>
         </StContentsContainer>
-
         <StContentsContainer>
           <StPostInfo>
             <StPostTitle>Helper</StPostTitle>
