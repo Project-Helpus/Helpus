@@ -91,6 +91,10 @@ client.interceptors.response.use(
       await client.get("api/token");
       client.request(error.config);
       return;
+    } else if (error.response.data.errorMessage === "로그인 필요 1") {
+      storage.removeItem("persist:root");
+      window.alert("다시 로그인 해주세요");
+      window.location.replace("/login");
     } else if (error.response.data.errorMessage === "로그인 필요 2") {
       await client.delete("api/token");
       storage.removeItem("persist:root");
