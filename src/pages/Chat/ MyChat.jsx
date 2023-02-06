@@ -21,13 +21,16 @@ const MyChat = () => {
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState([]);
-  const [invitation, setInvitation] = useState(false);
-  const [acception, setAcception] = useState(false);
-  const { cardState } = useSelector((state) => state.chatSlice);
-  const [appointmentState, setAppointmentState] = useState(cardState);
   const socket = useRef(chatSocket.socket);
+  console.log(socket.current);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
+
+  const { cardState } = useSelector((state) => state.chatSlice);
+  const [appointmentState, setAppointmentState] = useState(cardState);
+
+  // console.log("채팅방 입장 cardState", cardState);
+  // console.log("채팅방 입장 appointmentState", appointmentState);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -71,32 +74,23 @@ const MyChat = () => {
   const sendAppointment = () => {
     if (window.confirm("확정 하시겠습니까?")) {
       chatSocket.appointment(userId, roomId);
-      setAcception(true);
-      // setAppointmentState(1);
     }
   };
 
   const cancelAppointment = () => {
     if (window.confirm("약속을 취소 하시겠습니까?")) {
       chatSocket.cancelCard(roomId);
-      setInvitation(false);
-      setAcception(false);
-      // setAppointmentState(0);
     }
   };
 
   const acceptRequest = () => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
-      setInvitation(true);
-      // setAppointmentState(1);
     }
   };
 
   const deleteChatRoom = () => {
-    if (
-      window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
-    ) {
+    if (window.confirm("방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")) {
       chatSocket.deleteChatRoom(roomId, userId, state.chatInfo.leave);
       navigate("/mypage");
     }
@@ -105,7 +99,8 @@ const MyChat = () => {
   // 채팅방 입장 시 소켓 생성, 채팅방 참여, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
-    chatSocket.loginChat(userId);
+    dispatch(__getState({ roomId: roomId }));
+    chatSocket.login(userId);
     chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
@@ -118,12 +113,11 @@ const MyChat = () => {
 
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
-    dispatch(__getState({ roomId: roomId }));
-    socket.current.on("broadcast", (data) => {
-      setNewMsg((prev) => [...prev, data]);
-    });
     socket.current.on("updateState", (data) => {
       setAppointmentState(data.state);
+    });
+    socket.current.on("broadcast", (data) => {
+      setNewMsg((prev) => [...prev, data]);
     });
     chatSocket.readMessage(roomId);
   }, [socket]);
@@ -132,6 +126,10 @@ const MyChat = () => {
   useEffect(() => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
+
+  useEffect(() => {
+    setAppointmentState(cardState);
+  }, [cardState]);
 
   return (
     <StChat.StWrapper>
@@ -216,10 +214,6 @@ const MyChat = () => {
           <StChat.StChatBox ref={chatWindow}>
             {/* 이전 메세지 수신 */}
             {chatRecord?.map((el, idx) => {
-              if (el.content === "`card`0" && appointmentState === 0) {
-                return;
-              }
-
               if (
                 el.userId === userId &&
                 el.content.includes("`card`") === false &&
@@ -299,7 +293,7 @@ const MyChat = () => {
                 );
               }
             })}
-            {/* 새로운 메세지 송, 수신 */}
+            {/* 새로운 메세지 수신 */}
             {newMsg?.map((el, idx) => {
               if (
                 el.userId === userId &&
@@ -336,7 +330,8 @@ const MyChat = () => {
                 );
               } else if (
                 el.userId === userId &&
-                el.content.includes("`card`") === true
+                el.content.includes("`card`") === true &&
+                appointmentState !== 0
               ) {
                 return (
                   <StChat.StSendDiv key={idx}>
@@ -349,7 +344,8 @@ const MyChat = () => {
                 );
               } else if (
                 el.userId !== userId &&
-                el.content.includes("`card`") === true
+                el.content.includes("`card`") === true &&
+                appointmentState !== 0
               ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
@@ -360,7 +356,10 @@ const MyChat = () => {
                     />
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId) {
+              } else if (
+                el.userId === userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <StChat.StImage
@@ -369,7 +368,10 @@ const MyChat = () => {
                     />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId) {
+              } else if (
+                el.userId !== userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <StChat.StImage
