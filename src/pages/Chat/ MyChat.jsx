@@ -392,7 +392,7 @@ const MyChat = () => {
             ></StChat.StInput>
             <input
               style={{ display: "none" }}
-              accept="image/jpg, image/png, image/gif"
+              accept=".jpg, .jpeg, .png"
               id="image"
               name="image"
               type="file"
