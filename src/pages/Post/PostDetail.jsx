@@ -76,8 +76,8 @@ const PostDetail = () => {
 
   const deletePost = () => {
     dispatch(__deletePost(postId));
-    alert("게시물이 삭제되었습니다.홈으로 돌아갑니다!");
-    navigate("/");
+    alert("게시물이 삭제되었습니다.");
+    navigate("/postlist");
   };
   const updatePost = () => {
     navigate(`/post/update/${postId}`);
@@ -137,7 +137,7 @@ const PostDetail = () => {
     <StWrapper>
       <StContainer>
         <StSpaceBetween>
-          <StBackBtn onClick={() => navigate(-1)}>
+          <StBackBtn onClick={() => navigate("/postlist")}>
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>

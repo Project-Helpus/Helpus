@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { MypageAPI } from "../../api/axios";
+import { MypageAPI } from "../api/axios";
 
 const initialState = {
   profile: "",

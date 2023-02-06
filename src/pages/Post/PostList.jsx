@@ -12,10 +12,10 @@ import AllFalse from "./element/LocalFalse/AllFalse";
 import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
+  __getAllFalse,
 } from "../../redux/modules/postSlice";
 import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate } from "react-router";
-import { StFlex } from "../../components/UI/CardStyle/StCommon";
 import { useEffect } from "react";
 
 const PostList = () => {
@@ -122,6 +122,22 @@ const PostList = () => {
       dispatch(__setBoolLocationFalse());
     }
   };
+  useEffect(() => {
+    if (boolAll) {
+      allRef.current.style.color = "black";
+      allRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else if (boolHelpUs) {
+      helpUsRef.current.style.color = "black";
+      helpUsRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else if (boolHelpee) {
+      helpeeRef.current.style.color = "black";
+      helpeeRef.current.style.borderBottom = "4px solid #EA9DB4";
+    } else {
+      helperRef.current.style.color = "black";
+      helperRef.current.style.borderBottom = "4px solid #EA9DB4";
+      // dispatch(__getAllFalse());
+    }
+  }, []);
 
   useEffect(() => {
     if (storeBooLocation === false) {
@@ -178,24 +194,19 @@ const PostList = () => {
         </StTabWrapper>
         <StCardContainer>
           {storeBooLocation ? (
-            <>{boolAll && <AllTrue />}</>
+            <>
+              {boolHelpee && <HelpeeTrue />}
+              {boolHelper && <HelperTrue />}
+              {boolHelpUs && <HelpUsTrue />}
+              {boolAll && <AllTrue />}
+            </>
           ) : (
-            <>{boolAll && <AllFalse />}</>
-          )}
-          {storeBooLocation ? (
-            <>{boolHelpee && <HelpeeTrue />}</>
-          ) : (
-            <>{boolHelpee && <HelpeeFalse />}</>
-          )}
-          {storeBooLocation ? (
-            <>{boolHelper && <HelperTrue />}</>
-          ) : (
-            <>{boolHelper && <HelperFalse />}</>
-          )}
-          {storeBooLocation ? (
-            <>{boolHelpUs && <HelpUsTrue />}</>
-          ) : (
-            <>{boolHelpUs && <HelpUsFalse />}</>
+            <>
+              {boolHelpee && <HelpeeFalse />}
+              {boolHelper && <HelperFalse />}
+              {boolHelpUs && <HelpUsFalse />}
+              {boolAll && <AllFalse />}
+            </>
           )}
         </StCardContainer>
       </StWrapper>

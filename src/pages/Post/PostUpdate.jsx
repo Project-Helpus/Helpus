@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __updatePost } from "../../redux/modules/postSlice";
-import { 행정구역 } from "./element/address";
+import { address } from "../../asset/address";
 import Calender from "./element/Calender";
 import { StRedFont } from "./StPostDetail";
 
 const PostCreate = () => {
   const postInfo = useSelector((state) => state.postSlice.postInfo);
-  const { state, city } = 행정구역;
+  const { state, city } = address;
   const [tags, setTags] = useState(
     !postInfo.tag ? [] : postInfo.tag.split(",")
   );
@@ -101,7 +101,6 @@ const PostCreate = () => {
 
   const removeTag = (i) => {
     const clonetags = tags.slice();
-    console.log(clonetags);
     clonetags.splice(i, 1);
     setTags(clonetags);
   };

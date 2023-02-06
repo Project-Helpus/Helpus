@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __giveInput } from "../redux/modules/postSlice";
+import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 import top_logo from "../asset/top_logo.svg";
@@ -27,6 +27,8 @@ const Header = () => {
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
+    dispatch(__setBollAll());
+    navigate("/postlist");
   };
 
   const displayNotification = ({ senderName }) => {
@@ -48,6 +50,7 @@ const Header = () => {
       <StLogo
         onClick={() => {
           navigate("/");
+          setSearch("");
         }}
       >
         <img src={top_logo} alt=""></img>
@@ -66,14 +69,28 @@ const Header = () => {
       <StBox>
         {!(isLogin || isLoginKakao) && (
           <StBox>
-            <button onClick={() => navigate("/login")}>
+            <button
+              onClick={() => {
+                navigate("/login");
+                setSearch("");
+              }}
+            >
               로그인 / 회원가입
             </button>
           </StBox>
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            <DropdownMenu />
+            {/* <StButton
+              onClick={() => {
+                setOpen(!open);
+                handleRead();
+              }}
+            >
+              <img src={icon_bell} alt="notification" />
+              {notifications.length > 0 && <div>{notifications.length}</div>}
+            </StButton> */}
+            <DropdownMenu setSearch={setSearch} />
           </StBox>
         )}
       </StBox>

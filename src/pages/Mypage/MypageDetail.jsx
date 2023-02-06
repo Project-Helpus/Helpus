@@ -11,8 +11,8 @@ import {
   __logout,
 } from "../../redux/modules/userSlice";
 import { StSelector } from "../../components/UI/StIndex";
-import { address } from "../User/element/Address";
-import icon_camera from "../../asset/icon_camera.svg";
+import { address } from "../../asset/address";
+import camera_icon from "../../asset/camera_icon.svg";
 import styled from "styled-components";
 
 const MypageDetail = () => {

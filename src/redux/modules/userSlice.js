@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { UserAPI } from "../../api/axios";
+import { UserAPI } from "../api/axios";
 import storage from "redux-persist/lib/storage";
 
 const initialState = {

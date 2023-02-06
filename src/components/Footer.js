@@ -28,6 +28,9 @@ const StFooter = styled.div`
   align-items: center;
   width: 100%;
   height: 140px;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  bottom: 0;
   img {
     width: 3em;
   }
