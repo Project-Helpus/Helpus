@@ -116,9 +116,6 @@ const PostCreate = () => {
         navigate("/postlist");
       } else if (res.payload === 400) {
         window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
-      } else if (res.error.message === "Rejected") {
-        window.alert("로그인이 만료 되었습니다.");
-        navigate("/login");
       }
     }
   };

@@ -38,6 +38,7 @@ import {
   StUpdateButton,
   StUserInfo,
   StWishBtn,
+  StZZimCount,
   StZZimImg,
 } from "./StPostDetail";
 import CrsLeft from "../../asset/CrsLeft.svg";
@@ -97,13 +98,15 @@ const PostDetail = () => {
 
   const zzimRef = useRef(null);
   const ZZim = async (e) => {
-    await dispatch(__postZZim(postId));
-    if (zMsg === "찜") {
-      return (zzimRef.current.src = `${emptyHeart}`);
-    } else {
-      return (zzimRef.current.src = `${fullHeart}`);
-    }
+    dispatch(__postZZim(postId));
   };
+  useEffect(() => {
+    if (zMsg !== undefined) {
+      zMsg === "찜"
+        ? (zzimRef.current.src = `${fullHeart}`)
+        : (zzimRef.current.src = `${emptyHeart}`);
+    }
+  }, [zMsg]);
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -236,7 +239,12 @@ const PostDetail = () => {
                   문의하기
                 </StChatBtn>
                 <StWishBtn onClick={ZZim}>
-                  <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  {detail.isWished === 0 ? (
+                    <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  ) : (
+                    <StZZimImg ref={zzimRef} src={fullHeart} alt="wish" />
+                  )}
+                  <StZZimCount>{detail.Wish}</StZZimCount>
                   찜하기
                 </StWishBtn>
               </StBtnBox>
