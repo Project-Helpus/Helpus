@@ -113,7 +113,7 @@ export const StMainImg = styled.img`
   border: 1px solid rgb(240, 240, 240);
   border-radius: 10px;
   object-fit: contain;
-  background-color: black;
+  background-color: rgb(240, 240, 240);
   box-sizing: content-box;
 `;
 export const StCrsLeftButton = styled.img`
@@ -141,7 +141,7 @@ export const StCrsImg = styled.img`
   height: 6.48em;
   margin-right: 1.5em;
   object-fit: contain;
-  background-color: black;
+  background-color: rgb(240, 240, 240);
   box-sizing: content-box;
 `;
 export const StHopeDay = styled.p`
