@@ -56,7 +56,6 @@ const PostDetail = () => {
   const deadLine = detail.isDeadLine;
   const dead = useSelector((state) => state.postSlice.deadLineMsg);
 
-  // const curr = !detail.appointed ? null : new Date(detail.appointed);
   const curr = new Date(detail.appointed);
 
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
