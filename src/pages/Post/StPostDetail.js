@@ -10,7 +10,6 @@ export const StBackBtn = styled.button`
   background-color: transparent;
 `;
 export const StTitle = styled.h2`
-  /* text-align: center; */
   font-size: 2.25em;
   font-weight: 600;
   margin: 1.13em 0 1.25em 0;
@@ -39,7 +38,6 @@ export const StChatBtn = styled.button`
   }
 `;
 export const StWishBtn = styled.button`
-  /* width: 112px; */
   vertical-align: middle;
   border: none;
   background: white;
