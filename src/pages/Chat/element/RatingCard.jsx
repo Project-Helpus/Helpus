@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import rating_heart from "../../../asset/rating_heart.png";
+import rating_close_icon from "../../../asset/rating_close_icon.svg";
 import { __score } from "../../../redux/modules/chatSlice";
+import { StButton } from "../../../components/UI/StIndex";
 
 const RatingCard = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [rating, setRationg] = useState(0);
   const { state } = useLocation();
-  console.log("🚀 ~ file: RatingCard.jsx:12 ~ RatingCard ~ state", state);
+  const outside = useRef();
 
   //input 이벤트 핸들러
   const onChangeHandler = (e) => {
@@ -25,23 +27,34 @@ const RatingCard = () => {
       score: rating,
     };
     dispatch(__score(paylode));
+    setModal(false);
   };
 
   return (
     <div>
-      <button
+      <StButton
+        mode="yellowSmBtn"
         onClick={() => {
           setModal(!modal);
         }}
       >
-        {!modal ? "open" : "close"}
-      </button>
+        {!modal ? "평점하기" : "평점하기"}
+      </StButton>
       {modal === true ? (
-        <Wrapper>
+        <Wrapper
+          ref={outside}
+          onClick={(e) => {
+            if (e.target === outside.current) setModal(false);
+          }}
+        >
           <SwRatingWrap>
-            <button>x</button>
-            <span>안녕님</span>
-            <span>만족하셨나요?</span>
+            <StCloseBt
+              onClick={() => {
+                setModal(false);
+              }}
+            ></StCloseBt>
+            <span>{state.chatInfo?.ownerName}님</span>
+            <span>어떠셨나요?</span>
             <div>
               <StRatingRadioWrap>
                 {/* // */}
@@ -154,6 +167,8 @@ const RatingCard = () => {
 export default RatingCard;
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
   position: absolute;
   margin: 0 auto;
   display: flex;
@@ -165,16 +180,21 @@ const Wrapper = styled.div`
 `;
 
 const SwRatingWrap = styled.div`
+  position: relative;
   padding: 88px 28px 68px 28px;
   background-color: white;
   border-radius: 20px;
   border: 2px solid #ea9db4;
-  box-shadow: 6px 6px 6px rgb(0 0 0 / 5%);
+  box-shadow: 0 0 20px 5px rgb(0 0 0 / 8%);
   span {
     display: block;
     font-size: 24px;
     font-weight: 600;
     text-align: center;
+    padding: 3px 0;
+    :nth-child(2) {
+      color: #ea9db4;
+    }
   }
   button {
     position: absolute;
@@ -183,10 +203,9 @@ const SwRatingWrap = styled.div`
     border-radius: 100%;
     width: 24px;
     height: 24px;
-    background: white;
-    border: 1px solid #ea9db4;
-    color: #ea9db4;
-    font-weight: 600;
+    background-image: url(${rating_close_icon});
+    border: none;
+    background-color: white;
   }
 `;
 
@@ -213,7 +232,7 @@ const StRatingRadioWrap = styled.div`
   overflow: hidden;
   z-index: 20;
   height: 40px;
-  margin-top: 20px;
+  margin-top: 12px;
   &:after {
     content: "";
     display: block;
@@ -247,4 +266,10 @@ const StRatingRadioWrap = styled.div`
       }
     }
   }
+`;
+
+const StCloseBt = styled.button`
+  width: 25px;
+  height: 25px;
+  background-image: url(${rating_close_icon});
 `;

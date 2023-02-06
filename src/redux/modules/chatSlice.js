@@ -41,7 +41,6 @@ export const __score = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const res = await ChatAPI.patchScore(payload);
-      console.log("🚀 ~ file: chatSlice.js:44 ~ res", res);
       return thunkAPI.fulfillWithValue();
     } catch (err) {
       return thunkAPI.rejectWithValue();
