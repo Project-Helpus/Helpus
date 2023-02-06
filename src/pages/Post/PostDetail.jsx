@@ -38,6 +38,7 @@ import {
   StUpdateButton,
   StUserInfo,
   StWishBtn,
+  StZZimCount,
   StZZimImg,
 } from "./StPostDetail";
 import CrsLeft from "../../asset/CrsLeft.svg";
@@ -56,7 +57,6 @@ const PostDetail = () => {
   const deadLine = detail.isDeadLine;
   const dead = useSelector((state) => state.postSlice.deadLineMsg);
 
-  // const curr = !detail.appointed ? null : new Date(detail.appointed);
   const curr = new Date(detail.appointed);
 
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
@@ -123,13 +123,15 @@ const PostDetail = () => {
 
   const zzimRef = useRef(null);
   const ZZim = async (e) => {
-    await dispatch(__postZZim(postId));
-    if (zMsg === "찜") {
-      return (zzimRef.current.src = `${emptyHeart}`);
-    } else {
-      return (zzimRef.current.src = `${fullHeart}`);
-    }
+    dispatch(__postZZim(postId));
   };
+  useEffect(() => {
+    if (zMsg !== undefined) {
+      zMsg === "찜"
+        ? (zzimRef.current.src = `${fullHeart}`)
+        : (zzimRef.current.src = `${emptyHeart}`);
+    }
+  }, [zMsg]);
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
