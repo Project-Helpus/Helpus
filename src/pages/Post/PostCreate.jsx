@@ -155,7 +155,7 @@ const PostCreate = () => {
       blindText.current.innerHTML = "재능을 기부해 보세요";
       blindText.current.style.color = "red";
     } else {
-      blindText.current.innerHTML = "봉사활동을 신청해보세요";
+      blindText.current.innerHTML = "단체 봉사활동을 모집 해보세요";
       blindText.current.style.color = "red";
     }
   };
