@@ -96,7 +96,7 @@ client.interceptors.response.use(
       window.alert("로그인이 필요한 기능입니다.");
       window.location.replace("/login");
     } else if (
-      error.response.data.errorMessage === "리프레시 토큰 만료, 로그인 필요"
+      error.response.data.errorMessage === "리프레시 토큰 만료. 로그인 필요"
     ) {
       await client.delete("api/token");
       storage.removeItem("persist:root");
