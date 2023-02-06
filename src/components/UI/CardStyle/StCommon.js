@@ -25,6 +25,7 @@ export const StAllPostSquarePhoto = styled.img`
   border-radius: 20px;
   cursor: pointer;
   margin-bottom: 12px;
+  border: 0.06em solid rgb(240, 240, 240);
 `;
 
 export const StZZimSquarePhote = styled.img`
