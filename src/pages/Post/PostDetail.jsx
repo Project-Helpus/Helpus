@@ -38,6 +38,7 @@ import {
   StUpdateButton,
   StUserInfo,
   StWishBtn,
+  StZZimCount,
   StZZimImg,
 } from "./StPostDetail";
 import CrsLeft from "../../asset/CrsLeft.svg";
@@ -56,7 +57,6 @@ const PostDetail = () => {
   const deadLine = detail.isDeadLine;
   const dead = useSelector((state) => state.postSlice.deadLineMsg);
 
-  // const curr = !detail.appointed ? null : new Date(detail.appointed);
   const curr = new Date(detail.appointed);
 
   const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
@@ -75,35 +75,63 @@ const PostDetail = () => {
   const preRef = useRef(null);
 
   const deletePost = () => {
-    dispatch(__deletePost(postId));
-    alert("게시물이 삭제되었습니다.");
-    navigate("/postlist");
+    if (logedIn || kakaoLogedIn) {
+      if (userId === detail?.userId) {
+        dispatch(__deletePost(postId));
+        alert("게시물이 삭제되었습니다.");
+        navigate("/postlist");
+      } else {
+        alert("게시글 작성자만 이용할 수 있습니다");
+      }
+    } else {
+      alert("로그인 시 이용할 수 있습니다");
+    }
   };
   const updatePost = () => {
-    navigate(`/post/update/${postId}`);
+    if (logedIn || kakaoLogedIn) {
+      if (userId === detail?.userId) {
+        navigate(`/post/update/${postId}`);
+      } else {
+        alert("게시글 작성자만 이용할 수 있습니다");
+      }
+    } else {
+      alert("로그인 시 이용할 수 있습니다");
+    }
   };
 
   const changeDeadLine = () => {
-    if (deadLine === 1) {
-      dispatch(
-        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(2) }, id: postId })
-      );
+    if (userId === detail?.userId) {
+      if (deadLine === 1) {
+        dispatch(
+          __deadLinePost({
+            isDeadLine: { isDeadLine: parseInt(2) },
+            id: postId,
+          })
+        );
+      } else {
+        dispatch(
+          __deadLinePost({
+            isDeadLine: { isDeadLine: parseInt(1) },
+            id: postId,
+          })
+        );
+      }
     } else {
-      dispatch(
-        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(1) }, id: postId })
-      );
+      alert("게시글 작성자만 이용할 수 있습니다");
     }
   };
 
   const zzimRef = useRef(null);
   const ZZim = async (e) => {
-    await dispatch(__postZZim(postId));
-    if (zMsg === "찜") {
-      return (zzimRef.current.src = `${emptyHeart}`);
-    } else {
-      return (zzimRef.current.src = `${fullHeart}`);
-    }
+    dispatch(__postZZim(postId));
   };
+  useEffect(() => {
+    if (zMsg !== undefined) {
+      zMsg === "찜"
+        ? (zzimRef.current.src = `${fullHeart}`)
+        : (zzimRef.current.src = `${emptyHeart}`);
+    }
+  }, [zMsg]);
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -141,35 +169,25 @@ const PostDetail = () => {
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {(logedIn || kakaoLogedIn) && (
+            {deadLine === 2 ? (
               <>
-                {userId === detail?.userId && (
-                  <>
-                    {deadLine === 2 ? (
-                      <>
-                        <StDeadLineButton onClick={changeDeadLine}>
-                          마감취소
-                        </StDeadLineButton>
-                      </>
-                    ) : (
-                      <StDeadLineButton onClick={changeDeadLine}>
-                        마감
-                      </StDeadLineButton>
-                    )}
-                  </>
-                )}
+                <StDeadLineButton
+                  onClick={() => {
+                    if (logedIn || kakaoLogedIn) {
+                      changeDeadLine();
+                    } else {
+                      alert("로그인 후에 이용할 수 있습니다");
+                    }
+                  }}
+                >
+                  마감취소
+                </StDeadLineButton>
               </>
+            ) : (
+              <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>
             )}
-            {userId === detail?.userId && (
-              <StUpdateButton onClick={updatePost}>수정</StUpdateButton>
-            )}
-            {(logedIn || kakaoLogedIn) && (
-              <>
-                {userId === detail.userId && (
-                  <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
-                )}
-              </>
-            )}
+            {<StUpdateButton onClick={updatePost}>수정</StUpdateButton>}
+            {<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>}
           </StFlex>
         </StSpaceBetween>
         <StFlex>
@@ -222,27 +240,45 @@ const PostDetail = () => {
             return <StTags key={idx}>{item}</StTags>;
           })}
         </StFlex>
-        {(logedIn || kakaoLogedIn) && (
+        {
           <>
-            {userId !== detail?.userId && (
+            {
               <StBtnBox>
                 <StChatBtn
                   onClick={() => {
-                    navigate(`/chat/${postId}/${detail?.userId}`, {
-                      state: { chatInfo: detail },
-                    });
+                    if (
+                      (logedIn || kakaoLogedIn) &&
+                      userId !== detail?.userId
+                    ) {
+                      navigate(`/chat/${postId}/${detail?.userId}`, {
+                        state: { chatInfo: detail },
+                      });
+                    } else {
+                      alert("로그인 후에 이용해 주세요");
+                    }
                   }}
                 >
                   채팅하기
                 </StChatBtn>
-                <StWishBtn onClick={ZZim}>
+                <StWishBtn
+                  onClick={() => {
+                    if (
+                      (logedIn || kakaoLogedIn) &&
+                      userId !== detail?.userId
+                    ) {
+                      ZZim();
+                    } else {
+                      alert("로그인 후에 이용해 주세요");
+                    }
+                  }}
+                >
                   <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
                   찜하기
                 </StWishBtn>
               </StBtnBox>
-            )}
+            }
           </>
-        )}
+        }
       </StContainer>
     </StWrapper>
   );

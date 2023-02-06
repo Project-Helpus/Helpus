@@ -35,7 +35,7 @@ const StGuideBtn = styled.button`
   position: fixed;
   display: flex;
   align-items: center;
-  bottom: 3.7%;
+  bottom: 6%;
   right: 2%;
   padding: 14px 20px;
   font-weight: 800;
