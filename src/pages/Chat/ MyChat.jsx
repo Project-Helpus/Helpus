@@ -22,15 +22,15 @@ const MyChat = () => {
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState([]);
   const socket = useRef(chatSocket.socket);
-  console.log(socket.current);
+  // console.log(socket.current);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
 
   const { cardState } = useSelector((state) => state.chatSlice);
   const [appointmentState, setAppointmentState] = useState(cardState);
 
-  // console.log("채팅방 입장 cardState", cardState);
-  // console.log("채팅방 입장 appointmentState", appointmentState);
+  console.log("채팅방 입장 cardState", cardState);
+  console.log("채팅방 입장 appointmentState", appointmentState);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
@@ -120,7 +120,7 @@ const MyChat = () => {
       setNewMsg((prev) => [...prev, data]);
     });
     chatSocket.readMessage(roomId);
-  }, [socket]);
+  }, []);
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
