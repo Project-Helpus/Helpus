@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
-import { io } from "socket.io-client";
 import styled from "styled-components";
+import * as chatSocket from "../utils/socket";
 import top_logo from "../asset/top_logo.svg";
-import StButton from "./UI/StButton";
 import icon_search from "../asset/icon_search.svg";
 import icon_bell from "../asset/icon_bell.svg";
 import DropdownMenu from "./DropdownMenu";
+import DropdownNotification from "./DropdownNotification";
 
 const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
+  const socket = useRef(chatSocket.socket);
+  console.log(socket.current);
 
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
@@ -37,9 +38,26 @@ const Header = () => {
 
   const handleRead = () => {
     setNotifications([]);
+    setOpen(!open);
   };
 
-  useEffect(() => {}, [isLogin, isLoginKakao]);
+  useEffect(() => {
+    if (userInfo.userId) {
+      socket.current.emit("login", userInfo.userId);
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("new chat");
+    socket.current.on("new-chat", (data) => {
+      console.log(socket);
+      console.log(data);
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, [socket.current]);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -81,15 +99,20 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            {/* <StButton
+            <button
               onClick={() => {
                 setOpen(!open);
-                handleRead();
               }}
             >
               <img src={icon_bell} alt="notification" />
               {notifications.length > 0 && <div>{notifications.length}</div>}
-            </StButton> */}
+            </button>
+            <DropdownNotification
+              handleRead={handleRead}
+              setSearch={setSearch}
+              notifications={notifications}
+              displayNotification={displayNotification}
+            />
             <DropdownMenu setSearch={setSearch} />
           </StBox>
         )}
@@ -114,7 +137,6 @@ const StSearch = styled.form`
     width: 400px;
     height: 44px;
     border: 1px solid ${(props) => props.theme.colors.lightGray};
-    padding-left: 20px;
     border-radius: 100px;
     font-size: 12px;
     border: 1px solid ${(props) => props.theme.colors.lightGray};
@@ -149,4 +171,19 @@ const StBox = styled.div`
     font-weight: 600;
     padding-left: 18px;
   }
+`;
+
+const StNotification = styled.div`
+  position: absolute;
+  width: 12em;
+  text-align: center;
+  padding: 8px 0;
+  border: 1px solid #f5f5f5;
+  box-shadow: 4px 6px 10px rgb(0 0 0 / 1%), 0 4px 6px rgb(0 0 0 / 5%);
+  border-radius: 10px;
+  background-color: white;
+  font-size: 0.9em;
+  transform: translate(-35%, 45px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  z-index: 9;
 `;
