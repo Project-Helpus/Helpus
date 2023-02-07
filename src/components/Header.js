@@ -1,45 +1,71 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
-import { io } from "socket.io-client";
+import {
+  __giveInput,
+  __setBollAll,
+  __setBoolHelpUs,
+  __setBoolHelpee,
+  __setBoolHelper,
+} from "../redux/modules/postSlice";
 import styled from "styled-components";
+import * as chatSocket from "../utils/socket";
 import top_logo from "../asset/top_logo.svg";
-import StButton from "./UI/StButton";
 import icon_search from "../asset/icon_search.svg";
-import icon_bell from "../asset/icon_bell.svg";
 import DropdownMenu from "./DropdownMenu";
+import DropdownNotification from "./DropdownNotification";
+import { __getNotification } from "../redux/modules/chatSlice";
 
 const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
-
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
 
-  //검색 기능
-  const searching = (e) => {
-    e.preventDefault();
-    dispatch(__giveInput(search));
-    dispatch(__setBollAll());
+  const [search, setSearch] = useState("");
+  const data = useSelector((state) => state.chatSlice.data);
+  const socket = useRef(chatSocket.socket);
+
+  const displayNotification = ({ title, senderName, count }) => {
+    return (
+      <StNotificationContainer>
+        <StTitle>{`${data[0]?.title}`}</StTitle>
+        <span>{`${data[0]?.senderName}님에게 ${data[0]?.count}개의 메세지가 왔습니다.`}</span>
+      </StNotificationContainer>
+    );
+  };
+  const linkHelpUs = () => {
+    dispatch(__setBoolHelpUs());
     navigate("/postlist");
   };
-
-  const displayNotification = ({ senderName }) => {
-    <span>{`${senderName} sends new message`}</span>;
+  const linkHelper = () => {
+    dispatch(__setBoolHelper());
+    navigate("/postlist");
   };
-
+  const linkHelpee = () => {
+    dispatch(__setBoolHelpee());
+    navigate("/postlist");
+  };
   const handleRead = () => {
     setNotifications([]);
+    setOpen(!open);
   };
 
-  useEffect(() => {}, [isLogin, isLoginKakao]);
+  useEffect(() => {
+    chatSocket.login(userInfo.userId);
+  }, []);
+
+  useEffect(() => {
+    socket.current.on("new-chat", (data) => {
+      setNotifications((prev) => [...prev, data]);
+      dispatch(__getNotification());
+    });
+  }, []);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -55,17 +81,9 @@ const Header = () => {
       >
         <img src={top_logo} alt=""></img>
       </StLogo>
-      <StSearch onSubmit={searching}>
-        <input
-          type="text"
-          placeholder="검색어를 입력해주세요."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
-        <img src={icon_search} alt="" />
-      </StSearch>
+      <StNavigateP onClick={linkHelpUs}>HelpUs</StNavigateP>
+      <StNavigateP onClick={linkHelpee}>Helpee</StNavigateP>
+      <StNavigateP onClick={linkHelper}>Helper</StNavigateP>
       <StBox>
         {!(isLogin || isLoginKakao) && (
           <StBox>
@@ -81,15 +99,13 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            {/* <StButton
-              onClick={() => {
-                setOpen(!open);
-                handleRead();
-              }}
-            >
-              <img src={icon_bell} alt="notification" />
-              {notifications.length > 0 && <div>{notifications.length}</div>}
-            </StButton> */}
+            <DropdownNotification
+              handleRead={handleRead}
+              setSearch={setSearch}
+              notifications={notifications}
+              data={data}
+              displayNotification={displayNotification}
+            />
             <DropdownMenu setSearch={setSearch} />
           </StBox>
         )}
@@ -105,48 +121,54 @@ const StHeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background-color: white;
+  padding: 20px;
 `;
 
-const StSearch = styled.form`
-  position: relative;
-  input {
-    width: 400px;
-    height: 44px;
-    border: 1px solid ${(props) => props.theme.colors.lightGray};
-    padding-left: 20px;
-    border-radius: 100px;
-    font-size: 12px;
-    border: 1px solid ${(props) => props.theme.colors.lightGray};
-  }
-  input::placeholder {
-    color: ${(props) => props.theme.colors.lightGray};
-  }
-  input:focus {
-    outline: ${(props) => props.theme.colors.mainPink};
-  }
-  img {
-    position: absolute;
-    right: 0.8em;
-    top: 50%;
-    transform: translate(-50%, -50%);
+const StNavigateP = styled.button`
+  font-family: "LedkerliOne-Regular";
+  font-size: 30px;
+  color: #ea9db4;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  :hover {
+    color: #dc6b94;
   }
 `;
+
 const StLogo = styled.div`
-  margin: 20px;
   cursor: pointer;
 `;
 const StBox = styled.div`
   display: flex;
-  padding: 0 18px;
   align-items: center;
-  color: ${(props) => props.theme.colors.middleGray};
+  color: middleGray;
   button {
     border: none;
+    width: 8.6289em;
     font-size: 14px;
     background-color: transparent;
     border-radius: 100px;
     font-weight: 600;
-    padding-left: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+`;
+
+const StNotificationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px;
+  gap: 4px;
+`;
+
+const StTitle = styled.span`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const StMessage = styled.span`
+  font-size: 14px;
 `;

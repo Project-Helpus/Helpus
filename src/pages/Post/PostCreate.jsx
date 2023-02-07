@@ -116,13 +116,10 @@ const PostCreate = () => {
         navigate("/postlist");
       } else if (res.payload === 400) {
         window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
-      } else if (res.error.message === "Rejected") {
-        window.alert("로그인이 만료 되었습니다.");
-        navigate("/login");
       }
     }
   };
-
+  const blindText = useRef(null);
   const removeTag = (i) => {
     const clonetags = tags.slice();
     clonetags.splice(i, 1);
@@ -147,12 +144,31 @@ const PostCreate = () => {
       setTag("");
     }
   };
-
+  const changeOver = (el) => {
+    if (el === 1) {
+      blindText.current.innerHTML = "재능기부자에게 도움을 받아볼 수 있어요";
+      blindText.current.style.color = "red";
+    } else if (el === 2) {
+      blindText.current.innerHTML = "재능을 기부해 보세요";
+      blindText.current.style.color = "red";
+    } else {
+      blindText.current.innerHTML = "단체 봉사활동을 모집 해보세요";
+      blindText.current.style.color = "red";
+    }
+  };
+  const changeOut = (el) => {
+    if (el === 1) {
+      blindText.current.style.color = "#fff";
+    } else if (el === 2) {
+      blindText.current.style.color = "#fff";
+    } else {
+      blindText.current.style.color = "#fff";
+    }
+  };
   useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 205}px)`;
   }, [currentSlide]);
-
   return (
     <StWrapper>
       <StContainer>
@@ -207,6 +223,7 @@ const PostCreate = () => {
                       value={idx + 1}
                       onClick={changeInputHandler}
                       readOnly
+                      onMouseOut={() => changeOut(idx + 1)}
                     >
                       {el}
                     </StSelectedCategory>
@@ -221,6 +238,8 @@ const PostCreate = () => {
                     value={idx + 1}
                     onClick={changeInputHandler}
                     readOnly
+                    onMouseOver={() => changeOver(idx + 1)}
+                    onMouseOut={() => changeOut(idx + 1)}
                   >
                     {el}
                   </StCategory>
@@ -228,6 +247,7 @@ const PostCreate = () => {
               }
             })}
           </StInnerBox>
+          <StBlindP ref={blindText}>봉사활동</StBlindP>
         </StCol>
         <StCol>
           <StLabel htmlFor="image">사진</StLabel>
@@ -389,6 +409,11 @@ const StBox = styled.article`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+
+const StBlindP = styled.p`
+  margin-left: 150px;
+  color: #fff;
 `;
 
 const StCol = styled.div`

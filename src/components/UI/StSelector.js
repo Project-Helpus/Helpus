@@ -25,6 +25,5 @@ const Select = styled.select`
   cursor: pointer;
   &:focus {
     outline: none;
-    background-color: #efefef;
   }
 `;

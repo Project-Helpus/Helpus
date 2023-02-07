@@ -9,6 +9,7 @@ import {
 } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
+import Rating from "./element/Rating";
 
 const Mypage = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,6 @@ const Mypage = () => {
 
   const profile = useSelector((state) => state.mypageSlice.profile);
   const myPosts = useSelector((state) => state.mypageSlice.myPosts);
-
   const chatList = useSelector((state) => state.mypageSlice.chatList);
   const wish = useSelector((state) => state.mypageSlice.wish);
   const { userInfo } = useSelector((state) => state.userSlice);
@@ -37,6 +37,7 @@ const Mypage = () => {
         <StProfileImg src={profile?.userImage} alt="" />
         <StName>{userInfo?.userName}</StName>
         <StEmail>{profile?.email}</StEmail>
+        <Rating></Rating>
         <StState>
           {userInfo?.state1} {userInfo?.state2}
         </StState>
@@ -48,12 +49,14 @@ const Mypage = () => {
           정보 수정
         </button>
       </StProfile>
-      <div>
+      <StMypage>
         <div>
           <StMypageTitle>
             <h2>채팅</h2>
           </StMypageTitle>
+          <hr></hr>
           <StChatWrap>
+            {chatList.list?.length === 0 && <span>해당 채팅이 없습니다.</span>}
             {chatList.list?.map((el) => {
               if (userInfo.userId === el.ownerId) {
                 return (
@@ -110,7 +113,9 @@ const Mypage = () => {
               더보기
             </span>
           </StMypageTitle>
+          <hr></hr>
           <StZZimWrap>
+            {myPosts.length === 0 && <span>해당 게시물이 없습니다.</span>}
             {myPosts?.map((el, index) => (
               <Card type="내 게시물" data={el} key={index}></Card>
             ))}
@@ -126,12 +131,14 @@ const Mypage = () => {
             더보기
           </span>
         </StMypageTitle>
+        <hr></hr>
         <StZZimWrap>
+          {wish.length === 0 && <p>해당 게시물이 없습니다.</p>}
           {wish?.map((el, index) => (
             <Card type="찜 게시물" data={el} key={index}></Card>
           ))}
         </StZZimWrap>
-      </div>
+      </StMypage>
     </StWarp>
   );
 };
@@ -143,13 +150,25 @@ const StWarp = styled.div`
   justify-content: center;
   width: 100%;
   margin: 0 auto;
+  gap: 5%;
+  padding-bottom: 100px;
+  hr {
+    overflow: hidden;
+    border: 100%;
+    border: thin solid ${(props) => props.theme.colors.subPink};
+    margin-bottom: 20px;
+  }
+`;
+
+const StMypage = styled.div`
+  width: 55%;
 `;
 
 const StProfile = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  width: 448px;
+  width: 128px;
   text-align: center;
   margin-top: 100px;
   span {
@@ -171,21 +190,23 @@ const StProfileImg = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 100px;
+  border: 2px solid #f5f5f5;
 `;
 const StZZimWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 1032px;
   gap: 36px;
 `;
 const StMypageTitle = styled.div`
   display: flex;
   align-items: flex-end;
   margin-top: 100px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   h2 {
     color: ${(props) => props.theme.colors.subPink};
     padding-right: 10px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
   }
   span {
     color: ${(props) => props.theme.colors.middleGray};
@@ -200,12 +221,12 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 18px;
+  margin: 12px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`
-  color: ${(props) => props.theme.colors.middleGray};
-  margin-top: 10px;
+  color: ${(props) => props.theme.colors.subPink};
+  margin-top: 12px;
 `;
 
 const StImage = styled.img`
@@ -241,12 +262,12 @@ const StTextWrap = styled.div`
 `;
 const StChatTitle = styled.div`
   display: flex;
-  width: 33.33%;
+  width: 333px;
   margin-bottom: 24px;
 `;
 
 const StChatWrap = styled.div`
   display: flex;
-  width: 1032px;
+  width: 100%;
   flex-wrap: wrap;
 `;

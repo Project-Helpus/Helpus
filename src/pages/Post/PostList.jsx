@@ -13,10 +13,14 @@ import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
   __getAllFalse,
+  __setBollAll,
+  __giveInput,
 } from "../../redux/modules/postSlice";
 import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { StSearch } from "./StPostDetail";
+import icon_search from "../../asset/icon_search.svg";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -36,6 +40,7 @@ const PostList = () => {
   const storeBoolAll = useSelector((state) => state.postSlice.boolAll);
   const storeBooLocation = useSelector((state) => state.postSlice.boolLocation);
 
+  const [search, setSearch] = useState("");
   const [boolAll, setBoolAll] = useState(storeBoolAll);
   const [boolHelpUs, setBoollHelpUs] = useState(storeBoolHepUs);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
@@ -122,6 +127,12 @@ const PostList = () => {
       dispatch(__setBoolLocationFalse());
     }
   };
+  const searching = (e) => {
+    e.preventDefault();
+    dispatch(__giveInput(search));
+    // dispatch(__setBollAll());
+  };
+
   useEffect(() => {
     if (boolAll) {
       allRef.current.style.color = "black";
@@ -167,6 +178,18 @@ const PostList = () => {
           <StLocation>
             {userLocation1}&nbsp;{userLocation2}
           </StLocation>
+          <StSearch onSubmit={searching}>
+            <input
+              type="text"
+              placeholder="검색어를 입력해주세요."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+            <img src={icon_search} alt="" />
+          </StSearch>
+
           <StWriteButton onClick={navigatePostCreate}>글쓰기</StWriteButton>
         </StTitleButtonWrapper>
         <StTabWrapper>
@@ -202,10 +225,10 @@ const PostList = () => {
             </>
           ) : (
             <>
-              {boolHelpee && <HelpeeFalse />}
+              {boolHelpee && <HelpeeFalse search={search} />}
               {boolHelper && <HelperFalse />}
               {boolHelpUs && <HelpUsFalse />}
-              {boolAll && <AllFalse />}
+              {boolAll && <AllFalse search={search} />}
             </>
           )}
         </StCardContainer>
