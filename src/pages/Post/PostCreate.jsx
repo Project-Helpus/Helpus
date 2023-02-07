@@ -146,13 +146,16 @@ const PostCreate = () => {
   };
   const changeOver = (el) => {
     if (el === 1) {
-      blindText.current.innerHTML = "재능기부자에게 도움을 받아볼 수 있어요";
+      blindText.current.innerHTML =
+        "헬피는 재능기부를 요청하거나 도움을 받아볼 수 있어요.";
       blindText.current.style.color = "red";
     } else if (el === 2) {
-      blindText.current.innerHTML = "재능을 기부해 보세요";
+      blindText.current.innerHTML =
+        "헬퍼는 재능을 기부하거나 도움을 줄수 있어요.";
       blindText.current.style.color = "red";
     } else {
-      blindText.current.innerHTML = "단체 봉사활동을 모집 해보세요";
+      blindText.current.innerHTML =
+        "헬퍼스로 단체 재능기부나 봉사활동을 모집해 보세요.";
       blindText.current.style.color = "red";
     }
   };
@@ -412,7 +415,7 @@ const StBox = styled.article`
 `;
 
 const StBlindP = styled.p`
-  margin-left: 150px;
+  padding: 4px 0;
   color: #fff;
 `;
 
