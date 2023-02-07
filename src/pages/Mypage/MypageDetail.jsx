@@ -176,6 +176,7 @@ const MypageDetail = () => {
         <StFormWrap>
           <label>이메일</label>
           <input
+            style={{ backgroundColor: "white", padding: "0" }}
             value={profile?.email}
             placeholder="카카오 계정입니다."
             readOnly
@@ -348,6 +349,7 @@ const StCameraImg = styled.div`
     top: 24%;
   }
 `;
+
 const StFormWrap = styled.div`
   width: 100%;
   height: 45px;
@@ -366,10 +368,6 @@ const StFormWrap = styled.div`
     border: none;
     :focus {
       outline: none;
-    }
-    :nth-child(1) {
-      background-color: #929292;
-      color: #b3b3b3;
     }
   }
   label {
