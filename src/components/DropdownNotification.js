@@ -7,6 +7,7 @@ const DropdownNotification = ({
   notifications,
   handleRead,
   displayNotification,
+  data,
 }) => {
   const [notificationIsOpen, notificationRef, notificationHandler] =
     useDetectClose(false);
@@ -17,7 +18,7 @@ const DropdownNotification = ({
         <img src={icon_bell} alt="notification" />
         {notifications.length !== 0 && <StCounter></StCounter>}
         <StNotification isDropped={notificationIsOpen}>
-          {notifications.map((n) => displayNotification(n))}
+          {data.map((n) => displayNotification(n))}
 
           <StCheckNotification onClick={handleRead}>읽음</StCheckNotification>
         </StNotification>
@@ -43,7 +44,7 @@ const DropdownContainer = styled.div`
 
 const StNotification = styled.div`
   position: absolute;
-  width: 18em;
+  width: 20em;
   text-align: center;
   margin-top: 1em;
   padding: 8px 0;

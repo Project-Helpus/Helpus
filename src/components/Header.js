@@ -8,6 +8,7 @@ import top_logo from "../asset/top_logo.svg";
 import icon_search from "../asset/icon_search.svg";
 import DropdownMenu from "./DropdownMenu";
 import DropdownNotification from "./DropdownNotification";
+import { __getNotification } from "../redux/modules/chatSlice";
 
 const Header = () => {
   const locationNow = useLocation();
@@ -19,6 +20,8 @@ const Header = () => {
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
+  const data = useSelector((state) => state.chatSlice.data);
+  console.log(data);
   const socket = useRef(chatSocket.socket);
 
   //검색 기능
@@ -30,11 +33,11 @@ const Header = () => {
   };
 
   const displayNotification = ({ title, senderName, count }) => {
-    console.log(count);
+    console.log(data[0]);
     return (
       <StNotificationContainer>
-        <StTitle>{`${title}`}</StTitle>
-        <span>{`${senderName}님에게 ${count}개의 메세지가 왔습니다.`}</span>
+        <StTitle>{`${data[0]?.title}`}</StTitle>
+        <span>{`${data[0]?.senderName}님에게 ${data[0]?.count}개의 메세지가 왔습니다.`}</span>
       </StNotificationContainer>
     );
   };
@@ -55,6 +58,7 @@ const Header = () => {
     socket.current.on("new-chat", (data) => {
       console.log("new-chat", data);
       setNotifications((prev) => [...prev, data]);
+      dispatch(__getNotification());
     });
   }, []);
 
@@ -102,6 +106,7 @@ const Header = () => {
               handleRead={handleRead}
               setSearch={setSearch}
               notifications={notifications}
+              data={data}
               displayNotification={displayNotification}
             />
             <DropdownMenu setSearch={setSearch} />
