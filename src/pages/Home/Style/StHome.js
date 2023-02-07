@@ -5,7 +5,6 @@ export const StMainWrapper = styled.div`
   margin: auto;
 `;
 
-// <<<<<<<<<<<<<<<주석>>>>>>>>>>>>>>>>
 export const StTopImg = styled.div`
   max-width: 120em;
   min-width: 77em;
@@ -16,7 +15,7 @@ export const StTitleWrapper = styled.div``;
 
 export const StTopContainer = styled.div`
   display: flex;
-  width: 73em;
+  width: 78em;
   height: 45em;
   margin: 0 auto;
 `;
@@ -83,7 +82,6 @@ export const StWriteButton = styled.button`
   }
 `;
 
-// <<<<<<<<<<<<<<<주석>>>>>>>>>>>>>>>>
 export const StTest = styled.div`
   max-width: 92.5em;
   margin: 5.5em auto;

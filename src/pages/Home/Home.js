@@ -112,7 +112,7 @@ const Home = () => {
         <StTopContainer>
           <StTitleWrapper>
             <StTopMainTitle>HelpUs</StTopMainTitle>
-            <StTopTitle>Help me, Help you, Help Us.</StTopTitle>
+            <StTopTitle>HelpUs Helper Helpee</StTopTitle>
             <StTopSubTilte>
               도와주고, 도움받는 따뜻한 세상,
               <br />
@@ -137,10 +137,8 @@ const Home = () => {
           <StPostInfo>
             <StPostTitle>HelpUs</StPostTitle>
             <StPostSubTitle>
-              모두가 힘을 합쳐 만드는 아름다운 세상
-              <br />
-              우리는 모두 헬퍼!
-              <br /> 함께하면 더욱 즐거운 봉사활동 어때요?
+              함께 만드는 아름다운 세상, Helpus에 참여해서 함께 가지고 있는
+              재능으로 봉사활동을 해보시는건 어떤가요?
             </StPostSubTitle>
             <StMoreButton onClick={linkHelpUs}>More</StMoreButton>
           </StPostInfo>
@@ -186,9 +184,8 @@ const Home = () => {
           <StPostInfo>
             <StPostTitle>Helper</StPostTitle>
             <StPostSubTitle>
-              내가 가진 능력을 보여주세요.
-              <br /> 사소하지만 자랑하고 싶은, 누군가에게 도움이 될 멋진 재능이
-              있나요?
+              사소하지만 자랑하고 싶은, 누군가에게 도움이 될 멋진 재능이 있는
+              당신, Helper가 되어 내가 가진 능력을 보여주세요.
             </StPostSubTitle>
             <StMoreButton onClick={linkHelper}>More</StMoreButton>
           </StPostInfo>
