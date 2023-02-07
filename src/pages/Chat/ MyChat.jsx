@@ -25,7 +25,6 @@ const MyChat = () => {
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
-
   const { cardState } = useSelector((state) => state.chatSlice);
   const [appointmentState, setAppointmentState] = useState(cardState);
 

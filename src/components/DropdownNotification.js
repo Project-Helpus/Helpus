@@ -4,22 +4,22 @@ import useDetectClose from "../hooks/DropDetectClose";
 import icon_bell from "../asset/icon_bell.svg";
 
 const DropdownNotification = ({
-  notifications,
+  notification,
   handleRead,
   displayNotification,
-  data,
+  notificationMessages,
 }) => {
   const [notificationIsOpen, notificationRef, notificationHandler] =
     useDetectClose(false);
-
   return (
     <Wrapper>
       <DropdownContainer onClick={notificationHandler} ref={notificationRef}>
         <img src={icon_bell} alt="notification" />
-        {notifications.length !== 0 && <StCounter></StCounter>}
+        {(notification.length !== 0 || notificationMessages.length !== 0) && (
+          <StCounter />
+        )}
         <StNotification isDropped={notificationIsOpen}>
-          {data.map((n) => displayNotification(n))}
-
+          {notificationMessages.map((el, idx) => displayNotification(el, idx))}
           <StCheckNotification onClick={handleRead}>읽음</StCheckNotification>
         </StNotification>
       </DropdownContainer>
