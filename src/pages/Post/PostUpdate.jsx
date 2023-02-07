@@ -6,7 +6,6 @@ import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __updatePost } from "../../redux/modules/postSlice";
 import { address } from "../../asset/address";
 import Calender from "./element/Calender";
-import { StRedFont } from "./StPostDetail";
 
 const PostCreate = () => {
   const postInfo = useSelector((state) => state.postSlice.postInfo);
@@ -228,6 +227,9 @@ const PostCreate = () => {
   );
 };
 
+const StRedFont = styled.p`
+  color: red;
+`;
 const StTitle = styled.h2`
   text-align: center;
   width: 100%;

@@ -40,7 +40,7 @@ import {
   StWishBtn,
   StZZimCount,
   StZZimImg,
-} from "./StPostDetail";
+} from "./element/styles/StPostDetail";
 import CrsLeft from "../../asset/CrsLeft.svg";
 import CrsRight from "../../asset/CrsRight.svg";
 import { useRef } from "react";

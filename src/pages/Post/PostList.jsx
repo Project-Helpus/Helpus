@@ -17,7 +17,7 @@ import {
 import { StWrapper } from "../../components/UI/StIndex";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
-import { StSearch } from "./StPostDetail";
+import { StSearch } from "./element/styles/StPostDetail";
 import icon_search from "../../asset/icon_search.svg";
 import {
   StTitleButtonWrapper,
