@@ -19,6 +19,18 @@ import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { StSearch } from "./StPostDetail";
 import icon_search from "../../asset/icon_search.svg";
+import {
+  StTitleButtonWrapper,
+  StLocation,
+  StWriteButton,
+  StTabWrapper,
+  StTap,
+  StToggleWrapper,
+  StLabelAll,
+  StToggle,
+  StLabelMy,
+  StCardContainer,
+} from "./element/styles/StPostList";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -246,91 +258,3 @@ const PostList = () => {
 };
 
 export default PostList;
-
-const StTabWrapper = styled.div`
-  display: flex;
-  flex-direction: flex-start;
-  height: 50px;
-  width: 100%;
-  max-width: 1280px;
-  margin: 3em 0 3em 0;
-  font-size: 20px;
-  div {
-    padding-bottom: 10px;
-    margin-right: 3px;
-    line-height: 50px;
-    border-bottom: 4px solid #b4b4b4;
-    &:nth-child(5) {
-      border-bottom: 1px solid #ffc3d5;
-    }
-  }
-`;
-const StToggleWrapper = styled.div`
-  display: inline-block;
-  width: 200px;
-  height: 50px;
-  border-radius: 50px;
-  border: 1px solid #ffc3d5;
-  position: relative;
-`;
-const StLabelAll = styled.label`
-  width: 50%;
-  height: 100%;
-  color: #fff;
-  line-height: 50px;
-  text-align: center;
-  display: inline-block;
-`;
-const StLabelMy = styled.label`
-  width: 50%;
-  height: 100%;
-  color: #b4b4b4;
-  line-height: 50px;
-  text-align: center;
-  display: inline-block;
-`;
-
-const StToggle = styled.input`
-  width: 50%;
-  height: 100%;
-  left: 0;
-  border-radius: 50px;
-  background-color: #ea9db4;
-  position: absolute;
-  z-index: -1;
-  transition: 0.3s;
-`;
-
-const StCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1280px;
-  width: 100%;
-  gap: 2.25% 3.125%;
-`;
-const StTap = styled.div`
-  width: 100px;
-  color: #b4b4b4;
-  text-align: center;
-`;
-const StTitleButtonWrapper = styled.div`
-  max-width: 1280px;
-  margin-top: 50px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-`;
-const StLocation = styled.p`
-  font-size: 28px;
-  color: #ea9db4;
-`;
-const StWriteButton = styled.button`
-  width: 150px;
-  height: 50px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  background-color: #ea9db4;
-  border-radius: 20px;
-  border: none;
-`;
