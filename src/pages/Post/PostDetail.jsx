@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { StWrapper } from "../../components/UI/StIndex";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,6 +10,9 @@ import {
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
+import CrsLeft from "../../asset/CrsLeft.svg";
+import CrsRight from "../../asset/CrsRight.svg";
+import { StWrapper } from "../../components/UI/StIndex";
 import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle/StCommon";
 import {
   StBackBtn,
@@ -41,10 +43,7 @@ import {
   StZZimCount,
   StZZimImg,
 } from "./element/styles/StPostDetail";
-import CrsLeft from "../../asset/CrsLeft.svg";
-import CrsRight from "../../asset/CrsRight.svg";
-import { useRef } from "react";
-import { useState } from "react";
+
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

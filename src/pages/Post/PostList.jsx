@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import { useNavigate } from "react-router";
 import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
 import HelperFalse from "./element/LocalFalse/HelperFalse";
 import HelpeeFalse from "./element/LocalFalse/HelpeeFalse";
@@ -14,11 +14,9 @@ import {
   __setBoolLocationFalse,
   __giveInput,
 } from "../../redux/modules/postSlice";
-import { StWrapper } from "../../components/UI/StIndex";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
-import { StSearch } from "./element/styles/StPostDetail";
 import icon_search from "../../asset/icon_search.svg";
+import { StWrapper } from "../../components/UI/StIndex";
+import { StSearch } from "./element/styles/StPostDetail";
 import {
   StTitleButtonWrapper,
   StLocation,

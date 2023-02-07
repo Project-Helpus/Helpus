@@ -1,12 +1,28 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __updatePost } from "../../redux/modules/postSlice";
 import { address } from "../../asset/address";
 import Calender from "./element/Calender";
-
+import {
+  StContainer,
+  StBox,
+  StBackBtn,
+  StTitle,
+  StCol,
+  StLabel,
+  StTextarea,
+  StInnerBox,
+  StCategory,
+  StSelector,
+  StRedFont,
+  StTagContainer,
+  StTag,
+  StTagName,
+  StTagButton,
+  StRow,
+} from "./element/styles/StPostUpdate";
 const PostCreate = () => {
   const postInfo = useSelector((state) => state.postSlice.postInfo);
   const { state, city } = address;
@@ -226,122 +242,5 @@ const PostCreate = () => {
     </StWrapper>
   );
 };
-
-const StRedFont = styled.p`
-  color: red;
-`;
-const StTitle = styled.h2`
-  text-align: center;
-  width: 100%;
-`;
-
-const StBackBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-`;
-
-const StContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 55px;
-  width: 800px;
-`;
-
-const StInnerBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-
-const StBox = styled.article`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const StCol = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const StLabel = styled.label`
-  font-size: 20px;
-  font-weight: 800;
-`;
-
-const StTextarea = styled.textarea`
-  resize: none;
-  height: 300px;
-`;
-
-const StTagContainer = styled.div`
-  display: flex;
-  width: 590px;
-  flex-flow: row;
-`;
-
-const StRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 40px;
-`;
-
-const StTag = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 28px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  margin-right: 10px;
-  background-color: pink;
-  color: white;
-  font-size: 16px;
-  font-weight: 800;
-`;
-
-const StTagName = styled.span`
-  margin-right: 10px;
-`;
-
-const StTagButton = styled.button`
-  width: 20px;
-  border: 0.5px solid white;
-  border-radius: 50%;
-  color: white;
-
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const StCategory = styled.button`
-  width: 160px;
-  height: 44px;
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  font-weight: 800;
-`;
-
-const StSelectedCategory = styled.button`
-  width: 200px;
-  height: 44px;
-  background-color: ${(props) => props.theme.colors.subPink};
-  color: white;
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  font-weight: 800;
-`;
-
-const StSelector = styled.select`
-  width: 300px;
-  height: 44px;
-  border-radius: 10px;
-`;
 
 export default PostCreate;
