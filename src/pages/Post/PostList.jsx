@@ -12,8 +12,6 @@ import AllFalse from "./element/LocalFalse/AllFalse";
 import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
-  __getAllFalse,
-  __setBollAll,
   __giveInput,
 } from "../../redux/modules/postSlice";
 import { StWrapper } from "../../components/UI/StIndex";
@@ -30,19 +28,31 @@ const PostList = () => {
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
 
-  const userLocation1 = useSelector((state) => state.userSlice.userInfo.state1);
-  const userLocation2 = useSelector((state) => state.userSlice.userInfo.state2);
-  const { isLogin } = useSelector((state) => state.userSlice);
-  const { isLoginKakao } = useSelector((state) => state.userSlice);
-  const storeBoolHelper = useSelector((state) => state.postSlice.boolHelper);
-  const storeBoolHelpee = useSelector((state) => state.postSlice.boolHelpee);
-  const storeBoolHepUs = useSelector((state) => state.postSlice.boolHelpUs);
-  const storeBoolAll = useSelector((state) => state.postSlice.boolAll);
-  const storeBooLocation = useSelector((state) => state.postSlice.boolLocation);
+  const {
+    isLogin,
+    isLoginKakao,
+    userLocation1,
+    userLocation2,
+    storeBoolHelper,
+    storeBoolHelpee,
+    storeBoolHelpUs,
+    storeBoolAll,
+    storeBoolLocation,
+  } = useSelector((state) => ({
+    isLogin: state.userSlice.isLogin,
+    isLoginKakao: state.userSlice.isLoginKakao,
+    userLocation1: state.userSlice.userInfo.state1,
+    userLocation2: state.userSlice.userInfo.state2,
+    storeBoolHelper: state.postSlice.boolHelper,
+    storeBoolHelpee: state.postSlice.boolHelpee,
+    storeBoolHelpUs: state.postSlice.boolHelpUs,
+    storeBoolAll: state.postSlice.boolAll,
+    storeBoolLocation: state.postSlice.boolLocation,
+  }));
 
   const [search, setSearch] = useState("");
   const [boolAll, setBoolAll] = useState(storeBoolAll);
-  const [boolHelpUs, setBoollHelpUs] = useState(storeBoolHepUs);
+  const [boolHelpUs, setBoollHelpUs] = useState(storeBoolHelpUs);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
   const setBoolAllTrue = () => {
@@ -130,7 +140,6 @@ const PostList = () => {
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
-    // dispatch(__setBollAll());
   };
 
   useEffect(() => {
@@ -146,12 +155,11 @@ const PostList = () => {
     } else {
       helperRef.current.style.color = "black";
       helperRef.current.style.borderBottom = "4px solid #EA9DB4";
-      // dispatch(__getAllFalse());
     }
   }, []);
 
   useEffect(() => {
-    if (storeBooLocation === false) {
+    if (storeBoolLocation === false) {
       testRef.current.style.left = "0";
       leftRef.current.style.color = "#fff";
       rightRef.current.style.color = "#b4b4b4";
@@ -160,7 +168,7 @@ const PostList = () => {
       leftRef.current.style.color = "#b4b4b4";
       rightRef.current.style.color = "#fff";
     }
-  }, [storeBooLocation]);
+  }, [storeBoolLocation]);
 
   const navigatePostCreate = () => {
     if (isLogin || isLoginKakao) {
@@ -216,7 +224,7 @@ const PostList = () => {
           </StToggleWrapper>
         </StTabWrapper>
         <StCardContainer>
-          {storeBooLocation ? (
+          {storeBoolLocation ? (
             <>
               {boolHelpee && <HelpeeTrue />}
               {boolHelper && <HelperTrue />}
