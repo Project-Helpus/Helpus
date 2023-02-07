@@ -137,8 +137,8 @@ const Home = () => {
           <StPostInfo>
             <StPostTitle>HelpUs</StPostTitle>
             <StPostSubTitle>
-              함께 만드는 아름다운 세상, 함께하면 더욱 <br /> 즐거운 Helpus에
-              참여해 보는게 어때요?
+              함께 만드는 아름다운 세상, Helpus에 참여해서 함께 가지고 있는
+              재능으로 봉사활동을 해보시는건 어떤가요?
             </StPostSubTitle>
             <StMoreButton onClick={linkHelpUs}>More</StMoreButton>
           </StPostInfo>
