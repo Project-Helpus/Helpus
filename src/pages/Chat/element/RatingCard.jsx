@@ -23,11 +23,18 @@ const RatingCard = () => {
   //submit 이벤트 핸들러
   const submitHandler = (event) => {
     event.preventDefault();
-    const paylode = {
-      userId: state.chatInfo?.ownerId,
-      score: rating,
-    };
-    dispatch(__score(paylode));
+
+    const payload =
+      userInfo.userId === state.chatInfo.ownerId
+        ? {
+            userId: state.chatInfo?.senderId,
+            score: rating,
+          }
+        : {
+            userId: state.chatInfo?.ownerId,
+            score: rating,
+          };
+    dispatch(__score(payload));
     setModal(false);
   };
 
