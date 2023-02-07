@@ -130,7 +130,7 @@ const PostList = () => {
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
-    dispatch(__setBollAll());
+    // dispatch(__setBollAll());
   };
 
   useEffect(() => {
