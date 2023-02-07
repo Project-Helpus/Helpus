@@ -1,34 +1,26 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
 import useDetectClose from "../hooks/DropDetectClose";
-import { __logout } from "../redux/modules/userSlice";
-import icon_back from "../asset/icon_back.svg";
+import icon_bell from "../asset/icon_bell.svg";
 
 const DropdownNotification = ({
   notifications,
   handleRead,
-  setSearch,
   displayNotification,
 }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const [notificationIsOpen, notificationRef, notificationHandler] =
     useDetectClose(false);
 
   return (
     <Wrapper>
       <DropdownContainer onClick={notificationHandler} ref={notificationRef}>
-        {/* <StProfile
-          onClick={notificationHandler}
-          ref={notificationRef}
-        ></StProfile> */}
-        <Menu isDropped={notificationIsOpen}>
+        <img src={icon_bell} alt="notification" />
+        {notifications.length !== 0 && <StCounter></StCounter>}
+        <StNotification isDropped={notificationIsOpen}>
           {notifications.map((n) => displayNotification(n))}
-          <button onClick={handleRead}>알림 확인</button>
-        </Menu>
+
+          <StCheckNotification onClick={handleRead}>읽음</StCheckNotification>
+        </StNotification>
       </DropdownContainer>
     </Wrapper>
   );
@@ -46,50 +38,47 @@ const Wrapper = styled.div`
 const DropdownContainer = styled.div`
   position: relative;
   text-align: center;
+  padding-right: 15px;
 `;
 
-const Menu = styled.div`
+const StNotification = styled.div`
   position: absolute;
-  width: 12em;
+  width: 18em;
   text-align: center;
+  margin-top: 1em;
   padding: 8px 0;
-  border: 1px solid #f5f5f5;
+  border: 1px solid ${(props) => props.theme.colors.gray};
   box-shadow: 4px 6px 10px rgb(0 0 0 / 1%), 0 4px 6px rgb(0 0 0 / 5%);
   border-radius: 10px;
   opacity: 0;
   visibility: hidden;
   background-color: white;
   font-size: 0.9em;
-  transform: translate(-60%, 20px);
+  transform: translate(-42%, -20px);
   transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-  z-index: 9;
-
   ${({ isDropped }) =>
     isDropped &&
     css`
       opacity: 1;
       visibility: visible;
-      transform: translate(-5%, 0);
+      transform: translate(-42%, 0px);
     `};
 `;
 
-const StProfile = styled.button`
-  text-align: center;
-  img {
-    width: 26px;
-    height: 26px;
-    border-radius: 10px;
-    vertical-align: middle;
-  }
-  img:nth-child(3) {
-    width: 10px;
-    height: 10px;
-    padding-left: 0.1em;
-  }
-  span {
-    padding: 0 4px;
-    font-size: 16px;
-    vertical-align: middle;
-    font-weight: 600;
-  }
+const StCounter = styled.div`
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  top: 0;
+  right: 18px;
+  background-color: red;
+  border-radius: 50%;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+`;
+
+const StCheckNotification = styled.div`
+  font-weight: 600;
+  padding: 4px 6px;
 `;

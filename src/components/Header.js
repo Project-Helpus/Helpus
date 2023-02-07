@@ -6,7 +6,6 @@ import styled from "styled-components";
 import * as chatSocket from "../utils/socket";
 import top_logo from "../asset/top_logo.svg";
 import icon_search from "../asset/icon_search.svg";
-import icon_bell from "../asset/icon_bell.svg";
 import DropdownMenu from "./DropdownMenu";
 import DropdownNotification from "./DropdownNotification";
 
@@ -17,12 +16,10 @@ const Header = () => {
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
-  const socket = useRef(chatSocket.socket);
-  console.log(socket.current);
-
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
+  const socket = useRef(chatSocket.socket);
 
   //검색 기능
   const searching = (e) => {
@@ -32,8 +29,14 @@ const Header = () => {
     navigate("/postlist");
   };
 
-  const displayNotification = ({ senderName }) => {
-    <span>{`${senderName} sends new message`}</span>;
+  const displayNotification = ({ title, senderName, count }) => {
+    console.log(count);
+    return (
+      <StNotificationContainer>
+        <StTitle>{`${title}`}</StTitle>
+        <span>{`${senderName}님에게 ${count}개의 메세지가 왔습니다.`}</span>
+      </StNotificationContainer>
+    );
   };
 
   const handleRead = () => {
@@ -42,22 +45,18 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (userInfo.userId) {
-      socket.current.emit("login", userInfo.userId);
-      return () => {
-        socket.disconnect();
-      };
-    }
+    chatSocket.loginChat(userInfo.userId);
+    socket.current.on("error", (data) => {
+      console.log("error", data);
+    });
   }, []);
 
   useEffect(() => {
-    console.log("new chat");
     socket.current.on("new-chat", (data) => {
-      console.log(socket);
-      console.log(data);
+      console.log("new-chat", data);
       setNotifications((prev) => [...prev, data]);
     });
-  }, [socket.current]);
+  }, []);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -99,14 +98,6 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            <button
-              onClick={() => {
-                setOpen(!open);
-              }}
-            >
-              <img src={icon_bell} alt="notification" />
-              {notifications.length > 0 && <div>{notifications.length}</div>}
-            </button>
             <DropdownNotification
               handleRead={handleRead}
               setSearch={setSearch}
@@ -165,24 +156,25 @@ const StBox = styled.div`
     background-color: transparent;
     border-radius: 100px;
     font-weight: 600;
-    padding-left: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 `;
 
-const StNotification = styled.div`
-  position: absolute;
-  width: 12em;
-  text-align: center;
-  padding: 8px 0;
-  border: 1px solid #f5f5f5;
-  box-shadow: 4px 6px 10px rgb(0 0 0 / 1%), 0 4px 6px rgb(0 0 0 / 5%);
-  border-radius: 10px;
-  background-color: white;
-  font-size: 0.9em;
-  transform: translate(-35%, 45px);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-  z-index: 9;
+const StNotificationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px;
+  gap: 4px;
+`;
+
+const StTitle = styled.span`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const StMessage = styled.span`
+  font-size: 14px;
 `;
