@@ -158,7 +158,6 @@ const PostDetail = () => {
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
 
-  console.log("detail:", detail);
   useEffect(() => {
     dispatch(__detailPost(postId));
   }, [dead, zMsg]);
