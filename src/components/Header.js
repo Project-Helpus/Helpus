@@ -48,9 +48,9 @@ const Header = () => {
   };
 
   useEffect(() => {
-    chatSocket.loginChat(userInfo.userId);
+    chatSocket.login(userInfo.userId);
     socket.current.on("error", (data) => {
-      console.log("error", data);
+      // console.log("error", data);
     });
   }, []);
 

@@ -22,15 +22,11 @@ const MyChat = () => {
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState([]);
   const socket = useRef(chatSocket.socket);
-  // console.log(socket.current);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
 
   const { cardState } = useSelector((state) => state.chatSlice);
   const [appointmentState, setAppointmentState] = useState(cardState);
-
-  console.log("채팅방 입장 cardState", cardState);
-  console.log("채팅방 입장 appointmentState", appointmentState);
 
   const chatTime = (time) => {
     const chat = new Date(time).toLocaleTimeString();
