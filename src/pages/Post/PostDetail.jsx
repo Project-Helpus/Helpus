@@ -158,9 +158,10 @@ const PostDetail = () => {
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
 
+  console.log("detail:", detail);
   useEffect(() => {
     dispatch(__detailPost(postId));
-  }, [dead]);
+  }, [dead, zMsg]);
   return (
     <StWrapper>
       <StContainer>
@@ -272,7 +273,11 @@ const PostDetail = () => {
                     }
                   }}
                 >
-                  <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  {detail.isWished === 0 ? (
+                    <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  ) : (
+                    <StZZimImg ref={zzimRef} src={fullHeart} alt="wish" />
+                  )}
                   <StZZimCount>{detail.Wish}</StZZimCount>
                   찜하기
                 </StWishBtn>
