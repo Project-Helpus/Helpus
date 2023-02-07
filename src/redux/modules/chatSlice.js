@@ -55,9 +55,9 @@ export const __getSenderInfo = createAsyncThunk(
 
 export const __score = createAsyncThunk(
   "chatSlice/score",
-  async (userId, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const res = await ChatAPI.patchScore(userId);
+      const res = await ChatAPI.patchScore(payload);
       return thunkAPI.fulfillWithValue();
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -114,6 +114,9 @@ const chatSlice = createSlice({
       state.chatImage = action.payload;
     },
     [__sendImage.rejected]: (state) => {},
+    [__score.fulfilled]: (state, action) => {
+      state.score = action.payload;
+    },
   },
 });
 
