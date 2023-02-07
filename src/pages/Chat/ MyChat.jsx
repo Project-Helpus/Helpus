@@ -105,6 +105,8 @@ const MyChat = () => {
   // 채팅방 입장 시 소켓 생성, 채팅방 참여, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
+    // dispatch(__isChatRoom());
+    console.log(chatSocket.socket);
     chatSocket.loginChat(userId);
     chatSocket.enterChatRoom(roomId);
     socket.current.on("chat-history", (data) => {
@@ -123,15 +125,25 @@ const MyChat = () => {
       setNewMsg((prev) => [...prev, data]);
     });
     socket.current.on("updateState", (data) => {
+      console.log(data);
       setAppointmentState(data.state);
     });
-    chatSocket.readMessage(roomId);
-  }, [socket]);
+    socket.current.on("error", (data) => {
+      console.log("error", data);
+    });
+  }, []);
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
+
+  useEffect(() => {
+    socket.current.emit("read", { roomId: roomId, userId: userId });
+    socket.current.on("test", (data) => {
+      console.log("test", data);
+    });
+  }, [newMsg]);
 
   return (
     <StChat.StWrapper>
