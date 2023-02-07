@@ -33,7 +33,7 @@ const Login = () => {
     e.preventDefault();
     const res = await dispatch(__postLogin(account));
     if (res.meta.requestStatus === "fulfilled") {
-      navigate("/postlist");
+      navigate("/");
     }
   };
 
