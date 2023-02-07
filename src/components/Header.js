@@ -1,7 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
+import {
+  __giveInput,
+  __setBollAll,
+  __setBoolHelpUs,
+  __setBoolHelpee,
+  __setBoolHelper,
+} from "../redux/modules/postSlice";
 import styled from "styled-components";
 import * as chatSocket from "../utils/socket";
 import top_logo from "../asset/top_logo.svg";
@@ -14,23 +20,17 @@ const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [search, setSearch] = useState("");
+
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
+
+  const [search, setSearch] = useState("");
   const data = useSelector((state) => state.chatSlice.data);
   console.log(data);
   const socket = useRef(chatSocket.socket);
-
-  //검색 기능
-  const searching = (e) => {
-    e.preventDefault();
-    dispatch(__giveInput(search));
-    dispatch(__setBollAll());
-    navigate("/postlist");
-  };
 
   const displayNotification = ({ title, senderName, count }) => {
     console.log(data[0]);
@@ -41,7 +41,18 @@ const Header = () => {
       </StNotificationContainer>
     );
   };
-
+  const linkHelpUs = () => {
+    dispatch(__setBoolHelpUs());
+    navigate("/postlist");
+  };
+  const linkHelper = () => {
+    dispatch(__setBoolHelper());
+    navigate("/postlist");
+  };
+  const linkHelpee = () => {
+    dispatch(__setBoolHelpee());
+    navigate("/postlist");
+  };
   const handleRead = () => {
     setNotifications([]);
     setOpen(!open);
@@ -76,17 +87,9 @@ const Header = () => {
       >
         <img src={top_logo} alt=""></img>
       </StLogo>
-      <StSearch onSubmit={searching}>
-        <input
-          type="text"
-          placeholder="검색어를 입력해주세요."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
-        <img src={icon_search} alt="" />
-      </StSearch>
+      <StNavigateP onClick={linkHelpUs}>HelpUs</StNavigateP>
+      <StNavigateP onClick={linkHelpee}>Helpee</StNavigateP>
+      <StNavigateP onClick={linkHelper}>Helper</StNavigateP>
       <StBox>
         {!(isLogin || isLoginKakao) && (
           <StBox>
@@ -127,26 +130,18 @@ const StHeaderWrapper = styled.header`
   padding: 20px;
 `;
 
-const StSearch = styled.form`
-  position: relative;
-  input {
-    width: 100%;
-    height: 46px;
-    border: 1px solid lightGray;
-    border-radius: 100px;
-    font-size: 14px;
-    padding-right: 140px;
-  }
-  input::placeholder {
-    color: lightGray;
-  }
-  img {
-    position: absolute;
-    right: 0.8em;
-    top: 50%;
-    transform: translate(-50%, -50%);
+const StNavigateP = styled.button`
+  font-family: "LedkerliOne-Regular";
+  font-size: 30px;
+  color: #ea9db4;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  :hover {
+    color: #dc6b94;
   }
 `;
+
 const StLogo = styled.div`
   cursor: pointer;
 `;

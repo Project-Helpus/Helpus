@@ -21,8 +21,12 @@ export const PostAPI = {
   postZZim: (id) => client.post(`api/wish/${id}`),
   postDeadLine: (id, isDeadLine) =>
     client.put(`api/post/deadLine/${id}`, isDeadLine),
-  getAllFalse: (searchValue) =>
-    client.get(`api/post/all-location?category=&search=${searchValue}`),
+  getAllFalse: (payload, searchValue) =>
+    client.get(
+      `api/post/all-location?q=${payload}&category=&search=${searchValue}`
+    ),
+  // getAllFalse: (searchValue) =>
+  //   client.get(`api/post/all-location?category=&search=${searchValue}`),
   getHelpeeFalse: (searchValue) =>
     client.get(`api/post/all-location?category=1&search=${searchValue}`),
   getHelperFalse: (searchValue) =>

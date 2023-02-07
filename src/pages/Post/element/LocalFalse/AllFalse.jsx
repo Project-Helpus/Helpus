@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
+import styled from "styled-components";
 
-const AllFalse = () => {
+const AllFalse = ({ search }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice?.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
@@ -11,30 +12,37 @@ const AllFalse = () => {
 
   const observerTarget = useRef(null);
   const [count, setCount] = useState(0);
+  const searched = useSelector((state) => state.postSlice.searchBool);
 
-  // useEffect(() => {
-  //   let observer = new IntersectionObserver(
-  //     (e, io) => {
-  //       e.forEach((e) => {
-  //         if (e.isIntersecting) {
-  //           io.unobserve(e.target);
-  //           setTimeout(() => {
-  //             if (data !== 0) {
-  //               dispatch(__getAllFalse(count));
-  //               setCount((prev) => prev + 12);
-  //             }
-  //           }, 300);
-  //         }
-  //       });
-  //     },
-  //     { threshold: 0.5 }
-  //   );
-  //   if (observerTarget.current) observer.observe(observerTarget.current);
-  //   return () => observer.disconnect();
-  // }, [data]);
+  let osbRef = useRef(null);
+  const [searchCount, setSearchCount] = useState(0);
+  const [target, setTarget] = useState(false);
+  const boolRef = useRef(false);
+  const [bool, setBool] = useState(false);
+  const callback = (entries, observer) => {
+    entries.forEach(async (entry) => {
+      if (entry.isIntersecting) {
+        await dispatch(__getAllFalse({ count: count, input: input }));
+        setCount((prev) => prev + 12);
+        observer.unobserve(entry.target);
+      } else return;
+    });
+  };
+  console.log("searched:", searched);
   useEffect(() => {
-    dispatch(__getAllFalse());
-  }, [input]);
+    if (search.length > 0) {
+      dispatch(__getAllFalse({ count: searchCount, input: input }));
+      setCount(0);
+    } else {
+      let observer;
+      observer = new IntersectionObserver(callback, { threshold: 1 });
+      observer.observe(osbRef.current);
+      return () => {
+        observer && observer.disconnect();
+      };
+    }
+  }, [count, input]);
+
   return (
     <>
       {data?.length === 0 ? (
@@ -46,8 +54,13 @@ const AllFalse = () => {
           })}
         </>
       )}
+      <Stdiv ref={osbRef}></Stdiv>
     </>
   );
 };
 
 export default AllFalse;
+
+const Stdiv = styled.div`
+  width: 100%;
+`;

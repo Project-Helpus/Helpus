@@ -273,6 +273,7 @@ const PostDetail = () => {
                   }}
                 >
                   <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  <StZZimCount>{detail.Wish}</StZZimCount>
                   찜하기
                 </StWishBtn>
               </StBtnBox>
