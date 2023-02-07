@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __giveInput, __setBollAll } from "../redux/modules/postSlice";
-import { io } from "socket.io-client";
 import styled from "styled-components";
+import * as chatSocket from "../utils/socket";
 import top_logo from "../asset/top_logo.svg";
-import StButton from "./UI/StButton";
 import icon_search from "../asset/icon_search.svg";
-import icon_bell from "../asset/icon_bell.svg";
 import DropdownMenu from "./DropdownMenu";
+import DropdownNotification from "./DropdownNotification";
+import { __getNotification } from "../redux/modules/chatSlice";
 
 const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
-
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
+  const data = useSelector((state) => state.chatSlice.data);
+  console.log(data);
+  const socket = useRef(chatSocket.socket);
 
   //검색 기능
   const searching = (e) => {
@@ -31,15 +32,35 @@ const Header = () => {
     navigate("/postlist");
   };
 
-  const displayNotification = ({ senderName }) => {
-    <span>{`${senderName} sends new message`}</span>;
+  const displayNotification = ({ title, senderName, count }) => {
+    console.log(data[0]);
+    return (
+      <StNotificationContainer>
+        <StTitle>{`${data[0]?.title}`}</StTitle>
+        <span>{`${data[0]?.senderName}님에게 ${data[0]?.count}개의 메세지가 왔습니다.`}</span>
+      </StNotificationContainer>
+    );
   };
 
   const handleRead = () => {
     setNotifications([]);
+    setOpen(!open);
   };
 
-  useEffect(() => {}, [isLogin, isLoginKakao]);
+  useEffect(() => {
+    chatSocket.login(userInfo.userId);
+    socket.current.on("error", (data) => {
+      // console.log("error", data);
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.current.on("new-chat", (data) => {
+      console.log("new-chat", data);
+      setNotifications((prev) => [...prev, data]);
+      dispatch(__getNotification());
+    });
+  }, []);
 
   if (locationNow.pathname === "/login") return null;
   if (locationNow.pathname === "/signup") return null;
@@ -81,15 +102,13 @@ const Header = () => {
         )}
         {(isLogin || isLoginKakao) && (
           <StBox>
-            {/* <StButton
-              onClick={() => {
-                setOpen(!open);
-                handleRead();
-              }}
-            >
-              <img src={icon_bell} alt="notification" />
-              {notifications.length > 0 && <div>{notifications.length}</div>}
-            </StButton> */}
+            <DropdownNotification
+              handleRead={handleRead}
+              setSearch={setSearch}
+              notifications={notifications}
+              data={data}
+              displayNotification={displayNotification}
+            />
             <DropdownMenu setSearch={setSearch} />
           </StBox>
         )}
@@ -142,9 +161,25 @@ const StBox = styled.div`
     background-color: transparent;
     border-radius: 100px;
     font-weight: 600;
-    padding-left: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+`;
+
+const StNotificationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px;
+  gap: 4px;
+`;
+
+const StTitle = styled.span`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const StMessage = styled.span`
+  font-size: 14px;
 `;

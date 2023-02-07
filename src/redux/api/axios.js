@@ -7,6 +7,7 @@ export const client = axios.create({
 });
 
 export const ChatAPI = {
+  getNotification: () => client.get("api/chat/alarm"),
   getState: (roomId) => client.post("api/chat/state", roomId),
   getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
   postImage: (formData) => client.post("api/chat/image", formData),

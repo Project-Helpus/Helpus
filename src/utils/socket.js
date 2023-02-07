@@ -9,7 +9,7 @@ export const initSocketConnection = () => {
   if (socket) return;
   else return initSocketConnection();
 };
-export const loginChat = (userId) => {
+export const login = (userId) => {
   initSocketConnection();
   socket.emit("login", userId);
 };

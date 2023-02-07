@@ -9,6 +9,7 @@ import add_a_photo from "../../asset/add_a_photo.svg";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import AppointmentCard from "./element/AppointmentCard";
 import { __sendImage } from "../../redux/modules/chatSlice";
+import { __getState } from "../../redux/modules/chatSlice";
 
 const OpenChat = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,11 @@ const OpenChat = () => {
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
   const [roomId, setRoomId] = useState(null);
-  const [invitation, setInvitation] = useState(false);
+  const { cardState } = useSelector((state) => state.chatSlice);
+  const [appointmentState, setAppointmentState] = useState(cardState);
+
+  // console.log("채팅방 입장 cardState", cardState);
+  // console.log("채팅방 입장 appointmentState", appointmentState);
 
   const changeInputHandler = (e) => {
     setMsg(e.target.value);
@@ -69,31 +74,24 @@ const OpenChat = () => {
   const acceptRequest = () => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
-      setInvitation(true);
     }
   };
 
   const deleteChatRoom = () => {
-    if (
-      window.confirm("채팅방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")
-    ) {
+    if (window.confirm("방을 나가시겠습니까? (모든 채팅 기록이 사라집니다)")) {
       chatSocket.deleteChatRoom(roomId);
       navigate("/mypage");
-    }
-  };
-
-  const completePost = () => {
-    if (window.confirm("재능 기부가 완료 되었나요?")) {
     }
   };
 
   // 채팅방 처음 생성 시 소켓 생성, 채팅방 생성, 이전 채팅기록 로딩
   useEffect(() => {
     dispatch(__getChat());
-    chatSocket.loginChat(userId);
+    chatSocket.login(userId);
     chatSocket.openChatRoom(userId, postId, ownerId);
     socket.current.on("roomId", (data) => {
       setRoomId(data);
+      dispatch(__getState({ roomId: data }));
     });
     socket.current.on("chat-history", (data) => {
       setChatRecord(data);
@@ -106,21 +104,23 @@ const OpenChat = () => {
 
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
+    socket.current.on("updateState", (data) => {
+      setAppointmentState(data.state);
+    });
     socket.current.on("broadcast", (data) => {
       setNewMsg((prev) => [...prev, data]);
     });
     chatSocket.readMessage(roomId);
-  }, [socket.current]);
+  }, []);
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
 
-  // 채팅 리스트 불러오기
   useEffect(() => {
-    dispatch(__getChat());
-  }, []);
+    setAppointmentState(cardState);
+  }, [cardState]);
 
   return (
     <StChat.StWrapper>
@@ -189,6 +189,7 @@ const OpenChat = () => {
             </StChat.StAppointment>
           </StChat.StTopContainer>
           <StChat.StChatBox ref={chatWindow}>
+            {/* 이전 메세지 수신 */}
             {chatRecord?.map((el, idx) => {
               if (
                 el.userId === userId &&
@@ -216,19 +217,36 @@ const OpenChat = () => {
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId && el.content === "`card`0") {
+              } else if (
+                el.userId === userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard userId={el.userId} />
+                    <AppointmentCard
+                      appointment={appointmentState}
+                      userId={el.userId}
+                      acceptRequest={acceptRequest}
+                    />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId && el.content === "`card`0") {
+              } else if (
+                el.userId !== userId &&
+                el.content.includes("`card`") === true
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard userId={el.userId} />
+                    <AppointmentCard
+                      appointment={appointmentState}
+                      userId={el.userId}
+                      acceptRequest={acceptRequest}
+                    />
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId) {
+              } else if (
+                el.userId === userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <StChat.StImage
@@ -237,7 +255,10 @@ const OpenChat = () => {
                     />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId) {
+              } else if (
+                el.userId !== userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <StChat.StImage
@@ -248,10 +269,11 @@ const OpenChat = () => {
                 );
               }
             })}
+            {/* 새로운 메세지 수신 */}
             {newMsg?.map((el, idx) => {
               if (
                 el.userId === userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -262,7 +284,7 @@ const OpenChat = () => {
                 );
               } else if (
                 el.userId !== userId &&
-                el.content !== "`card`0" &&
+                el.content.includes("`card`") === false &&
                 el.content?.split("`")[1] !== "image"
               ) {
                 return (
@@ -275,16 +297,32 @@ const OpenChat = () => {
                     <span>{chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId && el.content === "`card`0") {
+              } else if (
+                el.userId === userId &&
+                el.content.includes("`card`") === true &&
+                appointmentState !== 0
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      appointment={appointmentState}
+                      userId={el.userId}
+                      acceptRequest={acceptRequest}
+                    />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId && el.content === "`card`0") {
+              } else if (
+                el.userId !== userId &&
+                el.content.includes("`card`") === true &&
+                appointmentState !== 0
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
-                    <AppointmentCard />
+                    <AppointmentCard
+                      appointment={appointmentState}
+                      userId={el.userId}
+                      acceptRequest={acceptRequest}
+                    />
                   </StChat.StReceiveDiv>
                 );
               } else if (el.userId === userId) {
@@ -317,7 +355,7 @@ const OpenChat = () => {
             ></StChat.StInput>
             <input
               style={{ display: "none" }}
-              accept="image/jpg, image/png, image/gif"
+              accept=".jpg, .jpeg, .png"
               id="image"
               name="image"
               type="file"
