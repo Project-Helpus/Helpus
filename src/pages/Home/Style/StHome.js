@@ -5,16 +5,28 @@ export const StMainWrapper = styled.div`
   margin: auto;
 `;
 
+// <<<<<<<<<<<<<<<주석>>>>>>>>>>>>>>>>
 export const StTopImg = styled.div`
-  height: 45em;
-  width: 120em;
-  padding-left: 14.06em;
+  max-width: 120em;
+  min-width: 77em;
   background: #f8eded;
   border: 1px solid #ea9db4;
 `;
-export const StTitleWrapper = styled.div`
-  width: 45.81em;
+export const StTitleWrapper = styled.div``;
+
+export const StTopContainer = styled.div`
+  display: flex;
+  width: 73em;
+  height: 45em;
+  margin: 0 auto;
 `;
+
+export const StImgContainer = styled.div`
+  margin: auto;
+  width: 40em;
+  height: 618px;
+`;
+
 export const StTopMainTitle = styled.h2`
   font-size: 8.75em;
   font-weight: 400;
@@ -38,11 +50,10 @@ export const StTopSubTilte = styled.h2`
 `;
 export const StMainImg = styled.img`
   width: 30em;
-  height: 33.13em;
-  margin-left: 15.19em;
+  height: 30.13em;
+  margin-left: 10.19em;
   border-radius: 1em;
   border: 2px solid ${(props) => props.theme.colors.subPink};
-  margin-top: 1.5em;
 `;
 export const StMainImg2 = styled.img`
   width: 28.1em;
@@ -50,7 +61,6 @@ export const StMainImg2 = styled.img`
   border-radius: 1em;
   position: relative;
   transform: translateY(-5.3em);
-  z-index: 1;
 `;
 export const StWrBtnWrapper = styled.div`
   display: flex;
@@ -73,8 +83,9 @@ export const StWriteButton = styled.button`
   }
 `;
 
+// <<<<<<<<<<<<<<<주석>>>>>>>>>>>>>>>>
 export const StTest = styled.div`
-  width: 92.5em;
+  max-width: 92.5em;
   margin: 5.5em auto;
 `;
 export const StContentsContainer = styled.div`
@@ -85,7 +96,7 @@ export const StContentsContainer = styled.div`
 `;
 export const StPostInfo = styled.div`
   position: relative;
-  width: 35em;
+  width: 34.5em;
   margin-right: 2em;
   padding: 1.5em 1.5em 1.5em 1.5em;
   background-color: #f8eded;
@@ -94,7 +105,7 @@ export const StPostInfo = styled.div`
 `;
 export const StPostInfoCenter = styled.div`
   position: relative;
-  width: 35em;
+  width: 34.5em;
   margin-left: 2em;
   padding: 1.5em 1.5em 1.5em 1.5em;
   background-color: #f8eded;

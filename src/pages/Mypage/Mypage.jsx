@@ -9,6 +9,7 @@ import {
 } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
+import Rating from "./element/Rating";
 
 const Mypage = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const Mypage = () => {
         <StProfileImg src={profile?.userImage} alt="" />
         <StName>{userInfo?.userName}</StName>
         <StEmail>{profile?.email}</StEmail>
+        <Rating></Rating>
         <StState>
           {userInfo?.state1} {userInfo?.state2}
         </StState>
@@ -219,7 +221,7 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 12px;
+  margin: 12px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`

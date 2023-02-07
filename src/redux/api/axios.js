@@ -2,15 +2,16 @@ import axios from "axios";
 import storage from "redux-persist/lib/storage";
 
 export const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
+  baseURL: process.env.REACT_APP_SERVER_TEST,
   withCredentials: true,
 });
 
 export const ChatAPI = {
+  getNotification: () => client.get("api/chat/alarm"),
   getState: (roomId) => client.post("api/chat/state", roomId),
   getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
   postImage: (formData) => client.post("api/chat/image", formData),
-  patchScore: (userId) => client.patch(`api/score/${userId}`),
+  patchScore: (payload) => client.patch("api/user/score", payload),
 };
 
 export const PostAPI = {
@@ -100,7 +101,7 @@ client.interceptors.response.use(
       window.alert("로그인이 필요한 기능입니다.");
       window.location.replace("/login");
     } else if (
-      error.response.data.errorMessage === "리프레시 토큰 만료, 로그인 필요"
+      error.response.data.errorMessage === "리프레시 토큰 만료. 로그인 필요"
     ) {
       await client.delete("api/token");
       storage.removeItem("persist:root");
