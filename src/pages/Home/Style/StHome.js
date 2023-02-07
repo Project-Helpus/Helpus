@@ -42,7 +42,7 @@ export const StTopTitle = styled.h1`
   color: #7c7c7c;
 `;
 export const StTopSubTilte = styled.h2`
-  font-size: 1.8em;
+  font-size: 1.6em;
   font-weight: 400;
   color: #7c7c7c;
   line-height: 1.5em;
