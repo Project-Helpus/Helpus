@@ -29,11 +29,9 @@ const Header = () => {
 
   const [search, setSearch] = useState("");
   const data = useSelector((state) => state.chatSlice.data);
-  console.log(data);
   const socket = useRef(chatSocket.socket);
 
   const displayNotification = ({ title, senderName, count }) => {
-    console.log(data[0]);
     return (
       <StNotificationContainer>
         <StTitle>{`${data[0]?.title}`}</StTitle>
@@ -60,14 +58,10 @@ const Header = () => {
 
   useEffect(() => {
     chatSocket.login(userInfo.userId);
-    socket.current.on("error", (data) => {
-      // console.log("error", data);
-    });
   }, []);
 
   useEffect(() => {
     socket.current.on("new-chat", (data) => {
-      console.log("new-chat", data);
       setNotifications((prev) => [...prev, data]);
       dispatch(__getNotification());
     });

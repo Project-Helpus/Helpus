@@ -87,7 +87,6 @@ const chatSlice = createSlice({
       state.isLoading = true;
     },
     [__getNotification.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.data = action.payload;
     },
     [__getNotification.pending]: (state) => {

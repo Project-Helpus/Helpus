@@ -28,7 +28,6 @@ const AllFalse = ({ search }) => {
       } else return;
     });
   };
-  console.log("searched:", searched);
   useEffect(() => {
     if (search.length > 0) {
       dispatch(__getAllFalse({ count: searchCount, input: input }));

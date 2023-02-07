@@ -13,7 +13,6 @@ const RatingCard = () => {
   const [rating, setRationg] = useState(0);
   const userInfo = useSelector((state) => state.userSlice.userInfo);
   const { state } = useLocation();
-  console.log(state);
   const outside = useRef();
 
   //input 이벤트 핸들러

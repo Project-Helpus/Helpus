@@ -30,9 +30,6 @@ const OpenChat = () => {
   const { cardState } = useSelector((state) => state.chatSlice);
   const [appointmentState, setAppointmentState] = useState(cardState);
 
-  // console.log("채팅방 입장 cardState", cardState);
-  // console.log("채팅방 입장 appointmentState", appointmentState);
-
   const changeInputHandler = (e) => {
     setMsg(e.target.value);
   };
