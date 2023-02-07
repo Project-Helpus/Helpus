@@ -161,7 +161,7 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 12px;
+  margin: 12px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`
