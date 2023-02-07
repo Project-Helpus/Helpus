@@ -113,19 +113,40 @@ export const __deadLinePost = createAsyncThunk(
     }
   }
 );
-
+//    <<<<<<  전국  >>>>>>
+//    <  전국 false  >
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
+    const searchValue = thunkAPI.getState().postSlice.inputReciver;
+    if (payload == undefined) {
+      return;
+    }
     try {
-      const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getAllFalse(searchValue);
-      return thunkAPI.fulfillWithValue(res.data.result);
+      if (searchValue.length !== 0) {
+        const res = await PostAPI.getAllFalse2(payload, searchValue);
+        return thunkAPI.fulfillWithValue(res.data.result);
+      } else {
+        const res = await PostAPI.getAllFalse(payload, searchValue);
+        return thunkAPI.fulfillWithValue(res.data.result);
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
   }
 );
+// export const __getAllFalse = createAsyncThunk(
+//   "mypageSlice/getAllFalse",
+//   async (payload, thunkAPI) => {
+//     try {
+//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
+//       const res = await PostAPI.getAllFalse(searchValue);
+//       return thunkAPI.fulfillWithValue(res.data.result);
+//     } catch (err) {
+//       return thunkAPI.rejectWithValue();
+//     }
+//   }
+// );
 
 //    <  헬피 false  >
 export const __getHelpeeFalse = createAsyncThunk(
@@ -133,6 +154,7 @@ export const __getHelpeeFalse = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
+      console.log("helpeeSearch:", searchValue);
       const res = await PostAPI.getHelpeeFalse(searchValue);
 
       return thunkAPI.fulfillWithValue(res.data);
@@ -322,7 +344,21 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.AllFalseDate = action.payload;
+      // state.AllFalseDate = action.payload;
+      // state.dataLength = action.payload.length;
+      // if (state.dataLength !== 0) {
+      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
+      // }
+      console.log("paylod:", action.payload);
+      // const resLength = state.AllFalseDate.length;
+      // if (resLength <= 23) {
+      //   console.log("search가 되는중");
+      //   state.AllFalseDate = action.payload;
+      // } else {
+      state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
+      //}
+      console.log("payload:", action.payload);
+      console.log("allFalse:", state.AllFalseDate);
     },
     [__getAllFalse.rejected]: (state, action) => {
       state.isLoading = true;
