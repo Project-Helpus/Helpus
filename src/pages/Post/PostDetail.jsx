@@ -77,8 +77,6 @@ const PostDetail = () => {
     if (logedIn || kakaoLogedIn) {
       if (userId === detail?.userId) {
         dispatch(__deletePost(postId));
-        alert("게시물이 삭제되었습니다.");
-        navigate("/postlist");
       } else {
         alert("게시글 작성자만 이용할 수 있습니다");
       }

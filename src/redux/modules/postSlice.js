@@ -67,7 +67,11 @@ export const __deletePost = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await PostAPI.deletePost(id);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 201) {
+        window.alert("게시글이 삭제되었습니다");
+        thunkAPI.fulfillWithValue(res.data);
+        window.location.replace("/mypage");
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -114,7 +118,7 @@ export const __deadLinePost = createAsyncThunk(
   }
 );
 //    <<<<<<  전국  >>>>>>
-//    <  전국 false  >
+//    <  전체 false  >
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
@@ -201,7 +205,7 @@ export const __getHelpUsFalse = createAsyncThunk(
 );
 
 //    <<<<<<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  로컬  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
-//    <  전체 게시물 true  >
+//    <  전체 true  >
 export const __getAllTrue = createAsyncThunk(
   "mypageSlice/getAllTrue",
   async (payload, thunkAPI) => {
