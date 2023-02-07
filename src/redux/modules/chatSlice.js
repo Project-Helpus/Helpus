@@ -5,8 +5,24 @@ const initialState = {
   chatImage: "",
   senderInfo: null,
   cardState: 0,
-  data: [],
+  notificationMessages: [],
 };
+
+export const __delNotification = createAsyncThunk(
+  "chatSlice/delNotification",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await ChatAPI.delNotification();
+      if (res.status === 200) return thunkAPI.fulfillWithValue(res.data);
+      else {
+        alert("정보 불러오기에 실패 했습니다.");
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 export const __getNotification = createAsyncThunk(
   "chatSlice/getNotification",
@@ -87,10 +103,19 @@ const chatSlice = createSlice({
       state.isLoading = true;
     },
     [__getNotification.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      state.notificationMessages = action.payload;
     },
-    [__getNotification.pending]: (state) => {
+    [__getNotification.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    [__delNotification.pending]: (state) => {
       state.isLoading = true;
+    },
+    [__delNotification.fulfilled]: (state, action) => {
+      state.notificationMessages = [];
+    },
+    [__delNotification.rejected]: (state) => {
+      state.isLoading = false;
     },
     [__getState.pending]: (state) => {
       state.isLoading = true;
@@ -98,16 +123,15 @@ const chatSlice = createSlice({
     [__getState.fulfilled]: (state, action) => {
       state.cardState = action.payload;
     },
-    [__getState.pending]: (state) => {
-      state.isLoading = true;
+    [__getState.rejected]: (state) => {
+      state.isLoading = false;
     },
     [__getSenderInfo.fulfilled]: (state, action) => {
       state.senderInfo = action.payload;
     },
     [__getSenderInfo.rejected]: (state) => {},
-    [__getSenderInfo.rejected]: (state) => {},
     [__sendImage.pending]: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     [__sendImage.fulfilled]: (state, action) => {
       state.chatImage = action.payload;
