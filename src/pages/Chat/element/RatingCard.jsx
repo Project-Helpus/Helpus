@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import rating_heart from "../../../asset/rating_heart.png";
@@ -11,7 +11,9 @@ const RatingCard = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [rating, setRationg] = useState(0);
+  const userInfo = useSelector((state) => state.userSlice.userInfo);
   const { state } = useLocation();
+  console.log(state);
   const outside = useRef();
 
   //input 이벤트 핸들러
@@ -38,7 +40,7 @@ const RatingCard = () => {
           setModal(!modal);
         }}
       >
-        {!modal ? "평점하기" : "평점하기"}
+        {!modal ? "평점주기" : "평점주기"}
       </StButton>
       {modal === true ? (
         <Wrapper
@@ -53,7 +55,11 @@ const RatingCard = () => {
                 setModal(false);
               }}
             ></StCloseBt>
-            <span>{state.chatInfo?.ownerName}님</span>
+            {userInfo.userId === state.chatInfo.ownerId ? (
+              <span>{state.chatInfo?.senderName}님</span>
+            ) : (
+              <span>{state.chatInfo?.ownerName}님</span>
+            )}
             <span>어떠셨나요?</span>
             <div>
               <StRatingRadioWrap>
