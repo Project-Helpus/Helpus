@@ -7,6 +7,7 @@ export const client = axios.create({
 });
 
 export const ChatAPI = {
+  getNotification: () => client.get("api/chat/alarm"),
   getState: (roomId) => client.post("api/chat/state", roomId),
   getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
   postImage: (formData) => client.post("api/chat/image", formData),
@@ -91,14 +92,16 @@ client.interceptors.response.use(
       await client.get("api/token");
       client.request(error.config);
       return;
-    } else if (error.response.data.errorMessage === "로그인 필요 1") {
+    } else if (error.response.data.errorMessage === "토큰 없음. 로그인 필요") {
       storage.removeItem("persist:root");
-      window.alert("다시 로그인 해주세요");
+      window.alert("로그인이 필요한 기능입니다.");
       window.location.replace("/login");
-    } else if (error.response.data.errorMessage === "로그인 필요 2") {
+    } else if (
+      error.response.data.errorMessage === "리프레시 토큰 만료, 로그인 필요"
+    ) {
       await client.delete("api/token");
       storage.removeItem("persist:root");
-      window.alert("다시 로그인 해주세요");
+      window.alert("로그인이 필요한 기능입니다.");
       window.location.replace("/login");
     } else return error;
   }

@@ -10,7 +10,6 @@ export const StBackBtn = styled.button`
   background-color: transparent;
 `;
 export const StTitle = styled.h2`
-  /* text-align: center; */
   font-size: 2.25em;
   font-weight: 600;
   margin: 1.13em 0 1.25em 0;
@@ -39,12 +38,12 @@ export const StChatBtn = styled.button`
   }
 `;
 export const StWishBtn = styled.button`
-  width: 112px;
   vertical-align: middle;
   border: none;
   background: white;
   font-weight: 700;
   font-size: 24px;
+  display: flex;
 `;
 export const StDeadLineButton = styled.button`
   width: 8.25em;
@@ -112,6 +111,9 @@ export const StMainImg = styled.img`
   height: 28.13em;
   border: 1px solid rgb(240, 240, 240);
   border-radius: 10px;
+  object-fit: contain;
+  background-color: rgb(240, 240, 240);
+  box-sizing: content-box;
 `;
 export const StCrsLeftButton = styled.img`
   cursor: pointer;
@@ -131,11 +133,15 @@ export const StHidden = styled.div`
   display: flex;
 `;
 export const StCrsImg = styled.img`
-  min-width: 11.38em;
+  min-width: 11.26em;
+  /* min-width: 11.38em; */
   border: 0.06em solid rgb(240, 240, 240);
-  border-radius: 10px;
+  border-radius: 0.63em;
   height: 6.48em;
   margin-right: 1.5em;
+  object-fit: contain;
+  background-color: rgb(240, 240, 240);
+  box-sizing: content-box;
 `;
 export const StHopeDay = styled.p`
   font-size: 1em;
@@ -165,4 +171,7 @@ export const StContents = styled.p`
 export const StContentsWrapper = styled.div`
   margin: 52px 0;
   font: caption;
+`;
+export const StZZimCount = styled.p`
+  margin: 0 10px 0 5px;
 `;

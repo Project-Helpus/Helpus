@@ -83,7 +83,6 @@ export const __logout = createAsyncThunk(
     try {
       const res = await UserAPI.logout();
       if (res.status === 200) {
-        window.alert("로그아웃 성공");
         return thunkAPI.fulfillWithValue();
       } else {
         return thunkAPI.rejectWithValue();

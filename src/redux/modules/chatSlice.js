@@ -4,8 +4,25 @@ import { ChatAPI } from "../api/axios";
 const initialState = {
   chatImage: "",
   senderInfo: null,
-  appointmentState: 0,
+  cardState: 0,
+  data: [],
 };
+
+export const __getNotification = createAsyncThunk(
+  "chatSlice/getNotification",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await ChatAPI.getNotification();
+      if (res.status === 200) return thunkAPI.fulfillWithValue(res.data);
+      else {
+        alert("정보 불러오기에 실패 했습니다.");
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 export const __getState = createAsyncThunk(
   "chatSlice/getState",
@@ -15,7 +32,7 @@ export const __getState = createAsyncThunk(
       if (res.status === 200) return thunkAPI.fulfillWithValue(res.data);
       else {
         alert("정보 불러오기에 실패 했습니다.");
-        thunkAPI.rejectWithValue();
+        return thunkAPI.rejectWithValue();
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -66,11 +83,21 @@ const chatSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
+    [__getNotification.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getNotification.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.data = action.payload;
+    },
+    [__getNotification.pending]: (state) => {
+      state.isLoading = true;
+    },
     [__getState.pending]: (state) => {
       state.isLoading = true;
     },
     [__getState.fulfilled]: (state, action) => {
-      state.appointmentState = action.payload;
+      state.cardState = action.payload;
     },
     [__getState.pending]: (state) => {
       state.isLoading = true;

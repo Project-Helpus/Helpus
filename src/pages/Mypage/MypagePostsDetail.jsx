@@ -4,8 +4,9 @@ import { useNavigate, useLocation } from "react-router";
 import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
+import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 
-const Mypage = () => {
+const MypagePostsDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -46,6 +47,15 @@ const Mypage = () => {
 
   return (
     <StWarp>
+      <Starrow>
+        <img
+          src={arrow_forward_pink}
+          alt=""
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        ></img>
+      </Starrow>
       <StProfile>
         <StProfileImg src={profile?.userImage} alt="" />
         <StName>{userInfo?.userName}</StName>
@@ -54,7 +64,7 @@ const Mypage = () => {
           {userInfo?.state1} {userInfo?.state2}
         </StState>
       </StProfile>
-      <div>
+      <StMypage>
         <StMypageTitle>
           <h2>활동 이력</h2>
         </StMypageTitle>
@@ -72,25 +82,33 @@ const Mypage = () => {
             ></div>
           )} */}
         </StZZimWrap>
-      </div>
+      </StMypage>
     </StWarp>
   );
 };
 
-export default Mypage;
+export default MypagePostsDetail;
 
 const StWarp = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   margin: 0 auto;
+  gap: 5%;
+`;
+
+const Starrow = styled.div`
+  margin: 48px;
+  cursor: pointer;
+`;
+const StMypage = styled.div`
+  width: 55%;
 `;
 
 const StProfile = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  width: 448px;
   text-align: center;
   margin-top: 100px;
   span {
@@ -112,13 +130,15 @@ const StProfileImg = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 100px;
+  border: 2px solid #f5f5f5;
 `;
+
 const StZZimWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 1032px;
   gap: 36px;
 `;
+
 const StMypageTitle = styled.div`
   display: flex;
   align-items: flex-end;
@@ -127,23 +147,28 @@ const StMypageTitle = styled.div`
   h2 {
     color: ${(props) => props.theme.colors.subPink};
     padding-right: 10px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
   }
   span {
     color: ${(props) => props.theme.colors.middleGray};
     font-size: 14px;
   }
 `;
+
 const StName = styled.div`
   font-size: 1.5em;
   font-weight: 500;
   margin-top: 18px;
 `;
+
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 18px;
+  margin-top: 12px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
+
 const StState = styled.div`
-  color: ${(props) => props.theme.colors.middleGray};
-  margin-top: 10px;
+  color: ${(props) => props.theme.colors.subPink};
+  margin-top: 12px;
 `;
