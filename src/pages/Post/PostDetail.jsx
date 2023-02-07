@@ -258,7 +258,7 @@ const PostDetail = () => {
                     }
                   }}
                 >
-                  문의하기
+                  채팅하기
                 </StChatBtn>
                 <StWishBtn
                   onClick={() => {
@@ -273,6 +273,7 @@ const PostDetail = () => {
                   }}
                 >
                   <StZZimImg ref={zzimRef} src={emptyHeart} alt="wish" />
+                  <StZZimCount>{detail.Wish}</StZZimCount>
                   찜하기
                 </StWishBtn>
               </StBtnBox>

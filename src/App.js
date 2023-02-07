@@ -2,7 +2,6 @@ import "./App.css";
 import styled from "styled-components";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import Router from "./shared/Router";
-import ScrollToTop from "./utils/ScrollTop";
 import logo from "./asset/logo_32x32.svg";
 
 if (process.env.REACT_APP_NODE_ENV === "production") {
@@ -13,7 +12,6 @@ function App() {
   return (
     <div className="App">
       <Router />
-
       <StGuideBtn
         onClick={() =>
           window.open(
@@ -35,7 +33,7 @@ const StGuideBtn = styled.button`
   position: fixed;
   display: flex;
   align-items: center;
-  bottom: 3.7%;
+  bottom: 6%;
   right: 2%;
   padding: 14px 20px;
   font-weight: 800;

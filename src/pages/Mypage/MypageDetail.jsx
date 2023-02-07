@@ -12,7 +12,7 @@ import {
 } from "../../redux/modules/userSlice";
 import { StSelector } from "../../components/UI/StIndex";
 import { address } from "../../asset/address";
-import camera_icon from "../../asset/camera_icon.svg";
+import icon_camera from "../../asset/icon_camera.svg";
 import styled from "styled-components";
 
 const MypageDetail = () => {
