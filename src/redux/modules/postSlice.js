@@ -23,6 +23,7 @@ const initialState = {
   postInfo: "",
   ZZimMsg: [],
   deadLineMsg: "",
+  searchBool: false,
 };
 
 export const __createPost = createAsyncThunk(
@@ -51,7 +52,6 @@ export const __updatePost = createAsyncThunk(
       if (response.status === 201) {
         return thunkAPI.fulfillWithValue(response.status);
       } else if (response.response.status === 400) {
-        console.log(response.response.status);
         return thunkAPI.rejectWithValue(response.response.status);
       } else {
         return thunkAPI.rejectWithValue(response.response.status);
@@ -118,17 +118,26 @@ export const __deadLinePost = createAsyncThunk(
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
-    const searchValue = thunkAPI.getState().postSlice.inputReciver;
-    if (payload == undefined) {
+    if (payload.count == undefined) {
       return;
     }
     try {
-      if (searchValue.length !== 0) {
-        const res = await PostAPI.getAllFalse2(payload, searchValue);
-        return thunkAPI.fulfillWithValue(res.data.result);
+      if (payload.input.length > 0) {
+        //검색 결과를 가지고와서 길이가 0보다 크면 작동
+        const res = await PostAPI.getAllFalse(payload.count, payload.input);
+        return thunkAPI.fulfillWithValue({
+          result: res.data.result,
+          input: payload.input,
+        });
       } else {
-        const res = await PostAPI.getAllFalse(payload, searchValue);
-        return thunkAPI.fulfillWithValue(res.data.result);
+        const res = await PostAPI.getAllFalse(
+          payload.count,
+          (payload.input = [])
+        );
+        return thunkAPI.fulfillWithValue({
+          result: res.data.result,
+          input: 0,
+        });
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -154,7 +163,6 @@ export const __getHelpeeFalse = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      console.log("helpeeSearch:", searchValue);
       const res = await PostAPI.getHelpeeFalse(searchValue);
 
       return thunkAPI.fulfillWithValue(res.data);
@@ -349,16 +357,22 @@ const postSlice = createSlice({
       // if (state.dataLength !== 0) {
       //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
       // }
-      console.log("paylod:", action.payload);
+      const q = action.payload;
       // const resLength = state.AllFalseDate.length;
-      // if (resLength <= 23) {
-      //   console.log("search가 되는중");
-      //   state.AllFalseDate = action.payload;
-      // } else {
-      state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      //}
-      console.log("payload:", action.payload);
-      console.log("allFalse:", state.AllFalseDate);
+
+      if (q.input.length > 0) {
+        state.AllFalseDate = q.result;
+        state.searchBool = true;
+      } else {
+        if (state.searchBool === true) {
+          state.AllFalseDate = [];
+          state.searchBool = false;
+        }
+        state.AllFalseDate = [...state.AllFalseDate, ...q.result];
+        if (state.AllFalseDate.length === state.AllFalseDate.length) {
+          return;
+        }
+      }
     },
     [__getAllFalse.rejected]: (state, action) => {
       state.isLoading = true;

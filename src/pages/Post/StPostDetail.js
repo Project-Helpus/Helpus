@@ -175,3 +175,27 @@ export const StContentsWrapper = styled.div`
 export const StZZimCount = styled.p`
   margin: 0 10px 0 5px;
 `;
+export const StSearch = styled.form`
+  position: relative;
+  input {
+    width: 400px;
+    height: 44px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+    padding-left: 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+  }
+  input::placeholder {
+    color: ${(props) => props.theme.colors.lightGray};
+  }
+  input:focus {
+    outline: ${(props) => props.theme.colors.mainPink};
+  }
+  img {
+    position: absolute;
+    right: 0.8em;
+    top: 40%;
+    transform: translate(-50%, -50%);
+  }
+`;
