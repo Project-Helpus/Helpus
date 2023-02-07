@@ -114,6 +114,7 @@ const MyChat = () => {
   // 새로운 채팅 감지 소켓 이벤트 수신
   useEffect(() => {
     socket.current.on("updateState", (data) => {
+      console.log(data);
       setAppointmentState(data.state);
     });
     socket.current.on("broadcast", (data) => {
@@ -126,6 +127,13 @@ const MyChat = () => {
   useEffect(() => {
     moveScrollToReceiveMessage();
   }, [newMsg, chatRecord]);
+
+  useEffect(() => {
+    socket.current.emit("read", { roomId: roomId, userId: userId });
+    socket.current.on("test", (data) => {
+      console.log("test", data);
+    });
+  }, [newMsg]);
 
   useEffect(() => {
     setAppointmentState(cardState);

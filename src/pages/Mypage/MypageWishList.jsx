@@ -4,8 +4,9 @@ import { useNavigate } from "react-router";
 import { __getMyPage, __getMyposts } from "../../redux/modules/mypageSlice";
 import styled from "styled-components";
 import Card from "../../components/Card";
+import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 
-const Mypage = () => {
+const MypageWishList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,6 +46,15 @@ const Mypage = () => {
 
   return (
     <StWarp>
+      <Starrow>
+        <img
+          src={arrow_forward_pink}
+          alt=""
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        ></img>
+      </Starrow>
       <StProfile>
         <StProfileImg src={profile?.userImage} alt="" />
         <StName>{userInfo?.userName}</StName>
@@ -53,7 +63,7 @@ const Mypage = () => {
           {userInfo?.state1} {userInfo?.state2}
         </StState>
       </StProfile>
-      <div>
+      <StMypage>
         <StMypageTitle>
           <h2>찜한 목록</h2>
         </StMypageTitle>
@@ -71,25 +81,33 @@ const Mypage = () => {
             ></div>
           )} */}
         </StZZimWrap>
-      </div>
+      </StMypage>
     </StWarp>
   );
 };
 
-export default Mypage;
+export default MypageWishList;
 
 const StWarp = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   margin: 0 auto;
+  gap: 5%;
 `;
 
+const StMypage = styled.div`
+  width: 55%;
+`;
+
+const Starrow = styled.div`
+  margin: 48px;
+  cursor: pointer;
+`;
 const StProfile = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  width: 448px;
   text-align: center;
   margin-top: 100px;
   span {
@@ -111,11 +129,11 @@ const StProfileImg = styled.img`
   width: 120px;
   height: 120px;
   border-radius: 100px;
+  border: 2px solid #f5f5f5;
 `;
 const StZZimWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 1032px;
   gap: 36px;
 `;
 const StMypageTitle = styled.div`
@@ -126,6 +144,8 @@ const StMypageTitle = styled.div`
   h2 {
     color: ${(props) => props.theme.colors.subPink};
     padding-right: 10px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
   }
   span {
     color: ${(props) => props.theme.colors.middleGray};
@@ -139,10 +159,10 @@ const StName = styled.div`
 `;
 const StEmail = styled.div`
   font-size: 1em;
-  margin-top: 18px;
+  margin-top: 12px;
   color: ${(props) => props.theme.colors.middleGray};
 `;
 const StState = styled.div`
   color: ${(props) => props.theme.colors.middleGray};
-  margin-top: 10px;
+  margin-top: 12px;
 `;
