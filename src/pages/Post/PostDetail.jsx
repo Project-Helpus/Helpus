@@ -76,49 +76,23 @@ const PostDetail = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const changeDeadLine = () => {
-    if (userId === detail?.userId) {
-      if (deadLine === 1) {
-        dispatch(
-          __deadLinePost({
-            isDeadLine: { isDeadLine: parseInt(2) },
-            id: postId,
-          })
-        );
-      } else {
-        dispatch(
-          __deadLinePost({
-            isDeadLine: { isDeadLine: parseInt(1) },
-            id: postId,
-          })
-        );
-      }
+    if (deadLine === 1) {
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(2) }, id: postId })
+      );
     } else {
-      alert("게시글 작성자만 이용할 수 있습니다");
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(1) }, id: postId })
+      );
     }
   };
 
-  const updatePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        navigate(`/post/update/${postId}`);
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
+  const linkUpdatePost = () => {
+    navigate(`/post/update/${postId}`);
   };
 
   const deletePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        dispatch(__deletePost(postId));
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
+    dispatch(__deletePost(postId));
   };
 
   const ZZim = async (e) => {
@@ -167,25 +141,35 @@ const PostDetail = () => {
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {deadLine === 2 ? (
+            {(logedIn || kakaoLogedIn) && (
               <>
-                <StDeadLineButton
-                  onClick={() => {
-                    if (logedIn || kakaoLogedIn) {
-                      changeDeadLine();
-                    } else {
-                      alert("로그인 후에 이용할 수 있습니다");
-                    }
-                  }}
-                >
-                  마감취소
-                </StDeadLineButton>
+                {userId === detail?.userId && (
+                  <>
+                    {deadLine === 2 ? (
+                      <>
+                        <StDeadLineButton onClick={changeDeadLine}>
+                          마감취소
+                        </StDeadLineButton>
+                      </>
+                    ) : (
+                      <StDeadLineButton onClick={changeDeadLine}>
+                        마감
+                      </StDeadLineButton>
+                    )}
+                  </>
+                )}
               </>
-            ) : (
-              <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>
             )}
-            {<StUpdateButton onClick={updatePost}>수정</StUpdateButton>}
-            {<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>}
+            {userId === detail?.userId && (
+              <StUpdateButton onClick={linkUpdatePost}>수정</StUpdateButton>
+            )}
+            {(logedIn || kakaoLogedIn) && (
+              <>
+                {userId === detail.userId && (
+                  <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
+                )}
+              </>
+            )}
           </StFlex>
         </StSpaceBetween>
         <StFlex>
