@@ -37,6 +37,9 @@ const PostList = () => {
   const helperRef = useRef(null);
   const helpeeRef = useRef(null);
   const allRef = useRef(null);
+  const testRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
 
   const {
     isLogin,
@@ -65,6 +68,21 @@ const PostList = () => {
   const [boolHelpUs, setBoollHelpUs] = useState(storeBoolHelpUs);
   const [boolHelper, setBoollHelper] = useState(storeBoolHelper);
   const [boolHelpee, setBoollHelpee] = useState(storeBoolHelpee);
+
+  const searching = (e) => {
+    e.preventDefault();
+    dispatch(__giveInput(search));
+  };
+
+  const navigatePostCreate = () => {
+    if (isLogin || isLoginKakao) {
+      navigate("/post");
+    } else {
+      window.alert("로그인이 필요 합니다.");
+      navigate("/login");
+    }
+  };
+
   const setBoolAllTrue = () => {
     allRef.current.style.color = "black";
     allRef.current.style.borderBottom = "4px solid #EA9DB4";
@@ -122,9 +140,6 @@ const PostList = () => {
     allRef.current.style.borderBottom = "4px solid #B4B4B4";
   };
 
-  const testRef = useRef(null);
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
   const toggleRight = () => {
     if (isLogin === false && isLoginKakao === false) {
       alert("로그인시 이용할 수 있습니다");
@@ -146,10 +161,6 @@ const PostList = () => {
       leftRef.current.style.color = "#fff";
       dispatch(__setBoolLocationFalse());
     }
-  };
-  const searching = (e) => {
-    e.preventDefault();
-    dispatch(__giveInput(search));
   };
 
   useEffect(() => {
@@ -179,15 +190,6 @@ const PostList = () => {
       rightRef.current.style.color = "#fff";
     }
   }, [storeBoolLocation]);
-
-  const navigatePostCreate = () => {
-    if (isLogin || isLoginKakao) {
-      navigate("/post");
-    } else {
-      window.alert("로그인이 필요 합니다.");
-      navigate("/login");
-    }
-  };
 
   return (
     <>

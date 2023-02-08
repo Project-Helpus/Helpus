@@ -48,11 +48,10 @@ const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   const { userId, logedIn, kakaoLogedIn, zMsg, detail, dead } = useSelector(
     (state) => ({
-      userId: state.userSlice.userId,
+      userId: state.userSlice.userInfo.userId,
       logedIn: state.userSlice.isLogin,
       kakaoLogedIn: state.userSlice.isLoginKakao,
       zMsg: state.postSlice.ZZimMsg?.message,
@@ -74,28 +73,7 @@ const PostDetail = () => {
   const KrCurr = new Date(utc + kRTimeDiff);
   const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
 
-  const deletePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        dispatch(__deletePost(postId));
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
-  };
-  const updatePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        navigate(`/post/update/${postId}`);
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
-  };
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const changeDeadLine = () => {
     if (userId === detail?.userId) {
@@ -119,16 +97,34 @@ const PostDetail = () => {
     }
   };
 
+  const updatePost = () => {
+    if (logedIn || kakaoLogedIn) {
+      if (userId === detail?.userId) {
+        navigate(`/post/update/${postId}`);
+      } else {
+        alert("게시글 작성자만 이용할 수 있습니다");
+      }
+    } else {
+      alert("로그인 시 이용할 수 있습니다");
+    }
+  };
+
+  const deletePost = () => {
+    if (logedIn || kakaoLogedIn) {
+      if (userId === detail?.userId) {
+        dispatch(__deletePost(postId));
+      } else {
+        alert("게시글 작성자만 이용할 수 있습니다");
+      }
+    } else {
+      alert("로그인 시 이용할 수 있습니다");
+    }
+  };
+
   const ZZim = async (e) => {
     dispatch(__postZZim(postId));
   };
-  useEffect(() => {
-    if (zMsg !== undefined) {
-      zMsg === "찜"
-        ? (zzimRef.current.src = `${fullHeart}`)
-        : (zzimRef.current.src = `${emptyHeart}`);
-    }
-  }, [zMsg]);
+
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -151,13 +147,18 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
+    dispatch(__detailPost(postId));
+    if (zMsg !== undefined) {
+      zMsg === "찜"
+        ? (zzimRef.current.src = `${fullHeart}`)
+        : (zzimRef.current.src = `${emptyHeart}`);
+    }
+  }, [dead, zMsg]);
+
+  useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
-
-  useEffect(() => {
-    dispatch(__detailPost(postId));
-  }, [dead, zMsg]);
   return (
     <StWrapper>
       <StContainer>

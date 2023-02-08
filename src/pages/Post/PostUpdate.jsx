@@ -24,42 +24,42 @@ import {
   StRow,
 } from "./element/styles/StPostUpdate";
 const PostCreate = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const postInfo = useSelector((state) => state.postSlice.postInfo);
+
+  const category = postInfo?.category;
   const { state, city } = address;
-  const [tags, setTags] = useState(
-    !postInfo.tag ? [] : postInfo.tag.split(",")
-  );
-  const [tag, setTag] = useState("");
+  const helpeeRef = useRef(null);
+  const helperRef = useRef(null);
+  const helpUsRef = useRef(null);
+
+  const [titleInput, setTitleInput] = useState(postInfo.title);
+  const [contentsInput, setContentsInput] = useState(postInfo.content);
   const [date, setDate] = useState(
     !postInfo.appointed ? null : new Date(postInfo.appointed)
   );
+  const [categories, setCategories] = useState(category);
   const [input, setInput] = useState({
     location1: `${postInfo?.location1}`,
     location2: `${postInfo?.location2}`,
   });
-
   const [location1, setLocation1] = useState(
     !postInfo?.location1 ? null : postInfo.location1
   );
   const [location2, setLocation2] = useState(
     !postInfo?.location2 ? null : postInfo.location2
   );
-
-  const [titleInput, setTitleInput] = useState(postInfo.title);
-  const [contentsInput, setContentsInput] = useState(postInfo.content);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const helpeeRef = useRef(null);
-  const helperRef = useRef(null);
-  const helpUsRef = useRef(null);
-
-  const category = postInfo?.category;
-  const [categories, setCategories] = useState(category);
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState(
+    !postInfo.tag ? [] : postInfo.tag.split(",")
+  );
 
   const changeInputHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
+
   const changeHelpeeColor = (e) => {
     helpeeRef.current.style.backgroundColor = "#EA9DB4";
     helperRef.current.style.backgroundColor = "#F0F0F0";
@@ -77,6 +77,21 @@ const PostCreate = () => {
     helpeeRef.current.style.backgroundColor = "#F0F0F0";
     helperRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
+  };
+
+  const addTag = (e) => {
+    setTag(e.target.value);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && tag !== "" && tag.length < 8) {
+      setTags([...tags, tag]);
+      setTag("");
+    }
+  };
+  const removeTag = (i) => {
+    const clonetags = tags.slice();
+    clonetags.splice(i, 1);
+    setTags(clonetags);
   };
 
   const clickHandler = async (e) => {
@@ -115,22 +130,6 @@ const PostCreate = () => {
     }
   };
 
-  const removeTag = (i) => {
-    const clonetags = tags.slice();
-    clonetags.splice(i, 1);
-    setTags(clonetags);
-  };
-
-  const addTag = (e) => {
-    setTag(e.target.value);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && tag !== "" && tag.length < 8) {
-      setTags([...tags, tag]);
-      setTag("");
-    }
-  };
   useEffect(() => {
     if (category === 1) {
       helpeeRef.current.style.backgroundColor = "#EA9DB4";
