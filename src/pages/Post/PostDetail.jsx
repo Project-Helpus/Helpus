@@ -91,8 +91,10 @@ const PostDetail = () => {
     navigate(`/post/update/${postId}`);
   };
 
-  const deletePost = () => {
-    dispatch(__deletePost(postId));
+  const deletePost = async () => {
+    if (window.confirm("게시글을 삭제합니다")) {
+      dispatch(__deletePost(postId));
+    } else return;
   };
 
   const ZZim = async (e) => {
