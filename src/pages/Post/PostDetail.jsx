@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -48,30 +48,31 @@ const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { userId } = useSelector((state) => state.userSlice.userInfo);
-  const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
-  const logedIn = useSelector((state) => state.userSlice.isLogin);
-  const kakaoLogedIn = useSelector((state) => state.userSlice?.isLoginKakao);
-  const detail = useSelector((state) => state.postSlice?.postInfo);
-  const deadLine = detail.isDeadLine;
-  const dead = useSelector((state) => state.postSlice.deadLineMsg);
-
-  const curr = new Date(detail.appointed);
-
-  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
-
-  const kRTimeDiff = 9 * 60 * 60 * 1000;
-
-  const KrCurr = new Date(utc + kRTimeDiff);
-
-  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
-
-  const tag = detail.tag?.split(",");
-  const crsRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const TotalSlides = detail?.imageUrls?.length - 4;
 
+  const { userId, logedIn, kakaoLogedIn, zMsg, detail, dead } = useSelector(
+    (state) => ({
+      userId: state.userSlice.userId,
+      logedIn: state.userSlice.isLogin,
+      kakaoLogedIn: state.userSlice.isLoginKakao,
+      zMsg: state.postSlice.ZZimMsg?.message,
+      detail: state.postSlice?.postInfo,
+      dead: state.postSlice.deadLineMsg,
+    })
+  );
+
+  const zzimRef = useRef(null);
   const preRef = useRef(null);
+  const crsRef = useRef(null);
+
+  const deadLine = detail.isDeadLine;
+  const tag = detail.tag?.split(",");
+  const curr = new Date(detail.appointed);
+  const TotalSlides = detail?.imageUrls?.length - 4;
+  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+  const kRTimeDiff = 9 * 60 * 60 * 1000;
+  const KrCurr = new Date(utc + kRTimeDiff);
+  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
 
   const deletePost = () => {
     if (logedIn || kakaoLogedIn) {
@@ -118,7 +119,6 @@ const PostDetail = () => {
     }
   };
 
-  const zzimRef = useRef(null);
   const ZZim = async (e) => {
     dispatch(__postZZim(postId));
   };
