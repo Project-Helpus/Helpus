@@ -1,15 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { StButton } from "../../components/UI/StIndex";
-import { __getChat } from "../../redux/modules/mypageSlice";
 import * as chatSocket from "../../utils/socket";
-import * as StChat from "./StChat";
-import add_a_photo from "../../asset/add_a_photo.svg";
+import * as StChat from "./styles/StChat";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import AppointmentCard from "./element/AppointmentCard";
+import { __getChat } from "../../redux/modules/mypageSlice";
 import { __sendImage } from "../../redux/modules/chatSlice";
 import { __getState } from "../../redux/modules/chatSlice";
+
+import * as chatting from "../../utils/chatting";
+import ChatList from "./element/ChatList";
+import ChatInputBox from "./element/ChatInput";
 
 const OpenChat = () => {
   const dispatch = useDispatch();
@@ -22,7 +25,6 @@ const OpenChat = () => {
   const socket = useRef(chatSocket.socket);
   const chatWindow = useRef(null);
   const fileInput = useRef(null);
-
   const [msg, setMsg] = useState("");
   const [newMsg, setNewMsg] = useState([]);
   const [chatRecord, setChatRecord] = useState(null);
@@ -33,24 +35,6 @@ const OpenChat = () => {
   const changeInputHandler = (e) => {
     setMsg(e.target.value);
   };
-
-  const chatTime = (time) => {
-    const chat = new Date(time).toLocaleTimeString();
-    return chat.split(":", 2)[0] + ":" + chat.split(":", 2)[1];
-  };
-
-  const appointedTime = (time) => {
-    const chat = time.split("T", 1);
-    return chat;
-  };
-
-  const moveScrollToReceiveMessage = useCallback(() => {
-    if (chatWindow.current) {
-      chatWindow.current.scrollTo({
-        top: chatWindow.current.scrollHeight,
-      });
-    }
-  }, []);
 
   const sendMsg = (e) => {
     if (e.key === "Enter" && msg !== "") {
@@ -68,7 +52,8 @@ const OpenChat = () => {
       chatSocket.sendMessage(userId, roomId, result.payload.content);
     }
   };
-  const acceptRequest = () => {
+
+  const acceptRequest = (chatSocket) => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
     }
@@ -112,9 +97,10 @@ const OpenChat = () => {
 
   // 새로운 채팅 감지 시 스크롤 다운
   useEffect(() => {
-    moveScrollToReceiveMessage();
+    chatting.moveScrollToReceiveMessage(chatWindow);
   }, [newMsg, chatRecord]);
 
+  // 약속 상태 불러오기
   useEffect(() => {
     setAppointmentState(cardState);
   }, [cardState]);
@@ -122,55 +108,12 @@ const OpenChat = () => {
   return (
     <StChat.StWrapper>
       <StChat.StContainer>
-        <StChat.StChatList>
+        <StChat.StChatContainer>
           <StChat.StTopContainer>
             <StChat.StTitle>채팅</StChat.StTitle>
           </StChat.StTopContainer>
-          {chatList.list?.map((el, idx) => {
-            if (el.ownerId === userId) {
-              return (
-                <StChat.StCard
-                  key={idx}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { chatInfo: el },
-                    });
-                  }}
-                >
-                  <StChat.StProfileImage
-                    src={el.senderImage}
-                    alt="sender_profile_image"
-                  />
-                  <StChat.StCol>
-                    <StChat.StPostTitle>{el.title}</StChat.StPostTitle>
-                    <span>{el.senderName}</span>
-                  </StChat.StCol>
-                  <StChat.StCol></StChat.StCol>
-                </StChat.StCard>
-              );
-            } else {
-              return (
-                <StChat.StCard
-                  key={idx}
-                  onClick={() => {
-                    navigate(`/mypage/chat/${el.roomId}`, {
-                      state: { chatInfo: el },
-                    });
-                  }}
-                >
-                  <StChat.StProfileImage
-                    src={el.ownerImage}
-                    alt="sender_profile_image"
-                  />
-                  <StChat.StCol>
-                    <StChat.StPostTitle>{el.title}</StChat.StPostTitle>
-                    <span>{el.ownerName}</span>
-                  </StChat.StCol>
-                </StChat.StCard>
-              );
-            }
-          })}
-        </StChat.StChatList>
+          <ChatList chatList={chatList} userId={userId} />
+        </StChat.StChatContainer>
         <StChat.StInnerBox>
           <StChat.StTopContainer>
             <StChat.StBackBtn onClick={() => navigate(`/post/${postId}`)}>
@@ -178,7 +121,7 @@ const OpenChat = () => {
             </StChat.StBackBtn>
             <StChat.StAppointment>
               <StChat.StAppointedDay>
-                {appointedTime(state.chatInfo.appointed)}
+                {chatting.appointedTime(state.chatInfo.appointed)}
               </StChat.StAppointedDay>
               <StButton mode="orangeSmBtn" onClick={deleteChatRoom}>
                 나가기
@@ -195,7 +138,7 @@ const OpenChat = () => {
               ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <span>{chatTime(el.createdAt)}</span>
+                    <span>{chatting.chatTime(el.createdAt)}</span>
                     <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
                   </StChat.StSendDiv>
                 );
@@ -211,7 +154,7 @@ const OpenChat = () => {
                       alt="sender_profile_image"
                     />
                     <StChat.StChatSend>{el.content}</StChat.StChatSend>
-                    <span>{chatTime(el.createdAt)}</span>
+                    <span>{chatting.chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
               } else if (
@@ -240,10 +183,7 @@ const OpenChat = () => {
                     />
                   </StChat.StReceiveDiv>
                 );
-              } else if (
-                el.userId === userId &&
-                el.content?.split("`")[1] === "image"
-              ) {
+              } else if (el.userId === userId) {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <StChat.StImage
@@ -252,10 +192,7 @@ const OpenChat = () => {
                     />
                   </StChat.StSendDiv>
                 );
-              } else if (
-                el.userId !== userId &&
-                el.content?.split("`")[1] === "image"
-              ) {
+              } else if (el.userId !== userId) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <StChat.StImage
@@ -275,7 +212,7 @@ const OpenChat = () => {
               ) {
                 return (
                   <StChat.StSendDiv key={idx}>
-                    <span>{chatTime(el.createdAt)}</span>
+                    <span>{chatting.chatTime(el.createdAt)}</span>
                     <StChat.StChatReceive>{el.content}</StChat.StChatReceive>
                   </StChat.StSendDiv>
                 );
@@ -291,7 +228,7 @@ const OpenChat = () => {
                       alt="sender_profile_image"
                     />
                     <StChat.StChatSend>{el.content}</StChat.StChatSend>
-                    <span>{chatTime(el.createdAt)}</span>
+                    <span>{chatting.chatTime(el.createdAt)}</span>
                   </StChat.StReceiveDiv>
                 );
               } else if (
@@ -343,30 +280,13 @@ const OpenChat = () => {
               }
             })}
           </StChat.StChatBox>
-          <StChat.StInputBox>
-            <StChat.StInput
-              value={msg}
-              onKeyPress={(e) => sendMsg(e)}
-              onChange={changeInputHandler}
-              placeholder="메세지 입력"
-            ></StChat.StInput>
-            <input
-              style={{ display: "none" }}
-              accept=".jpg, .jpeg, .png"
-              id="image"
-              name="image"
-              type="file"
-              ref={fileInput}
-              onChange={sendImage}
-            />
-            <img
-              onClick={() => {
-                fileInput.current.click();
-              }}
-              src={add_a_photo}
-              alt="image_upload"
-            />
-          </StChat.StInputBox>
+          <ChatInputBox
+            msg={msg}
+            changeInputHandler={changeInputHandler}
+            sendMsg={sendMsg}
+            sendImage={sendImage}
+            fileInput={fileInput}
+          />
         </StChat.StInnerBox>
       </StChat.StContainer>
     </StChat.StWrapper>
