@@ -12,11 +12,14 @@ export const StContainer = styled.div`
   height: 100%;
   margin: 0 auto;
 `;
-export const StChatList = styled.section`
+export const StChatContainer = styled.section`
   display: flex;
   flex-direction: column;
   width: 35%;
   height: 100%;
+`;
+export const StChatList = styled.section`
+  overflow-y: scroll;
 `;
 export const StInnerBox = styled.section`
   display: flex;
