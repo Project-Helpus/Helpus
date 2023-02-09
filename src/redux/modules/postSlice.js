@@ -24,6 +24,7 @@ const initialState = {
   ZZimMsg: [],
   deadLineMsg: "",
   searchBool: false,
+  postEnd: false,
 };
 
 export const __createPost = createAsyncThunk(
@@ -118,12 +119,11 @@ export const __deadLinePost = createAsyncThunk(
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
-    if (payload.count == undefined) {
+    if (payload.count === undefined) {
       return;
     }
     try {
       if (payload.input.length > 0) {
-        //검색 결과를 가지고와서 길이가 0보다 크면 작동
         const res = await PostAPI.getAllFalse(payload.count, payload.input);
         return thunkAPI.fulfillWithValue({
           result: res.data.result,
@@ -144,31 +144,45 @@ export const __getAllFalse = createAsyncThunk(
     }
   }
 );
-// export const __getAllFalse = createAsyncThunk(
-//   "mypageSlice/getAllFalse",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-//       const res = await PostAPI.getAllFalse(searchValue);
-//       return thunkAPI.fulfillWithValue(res.data.result);
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue();
-//     }
-//   }
-// );
 
 //    <  헬피 false  >
 export const __getHelpeeFalse = createAsyncThunk(
   "mypageSlice/__getHelpeeFalse",
   async (payload, thunkAPI) => {
+    if (payload.count === undefined) {
+      return;
+    }
     try {
-      const searchValue = thunkAPI.getState().postSlice.inputReciver;
-      const res = await PostAPI.getHelpeeFalse(searchValue);
+      if (payload.input.length > 0) {
+        const res = await PostAPI.getHelpeeFalse(payload.count, payload.input);
 
-      return thunkAPI.fulfillWithValue(res.data);
+        return thunkAPI.fulfillWithValue({
+          result: res.data.result,
+          input: payload.input,
+        });
+      } else {
+        const res = await PostAPI.getHelpeeFalse(
+          payload.count,
+          (payload.input = [])
+        );
+
+        return thunkAPI.fulfillWithValue({
+          result: res.data.result,
+          input: 0,
+        });
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
+
+    // try {
+    //   const searchValue = thunkAPI.getState().postSlice.inputReciver;
+    //   const res = await PostAPI.getHelpeeFalse(searchValue);
+
+    //   return thunkAPI.fulfillWithValue(res.data);
+    // } catch (err) {
+    //   return thunkAPI.rejectWithValue();
+    // }
   }
 );
 
@@ -347,19 +361,8 @@ const postSlice = createSlice({
     },
 
     //    <<<<  전체 false 가져오기  >>>>
-    [__getAllFalse.pending]: (state) => {
-      state.isLoading = true;
-    },
     [__getAllFalse.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      // state.AllFalseDate = action.payload;
-      // state.dataLength = action.payload.length;
-      // if (state.dataLength !== 0) {
-      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      // }
       const q = action.payload;
-      // const resLength = state.AllFalseDate.length;
-
       if (q.input.length > 0) {
         state.AllFalseDate = q.result;
         state.searchBool = true;
@@ -369,19 +372,39 @@ const postSlice = createSlice({
           state.searchBool = false;
         }
         state.AllFalseDate = [...state.AllFalseDate, ...q.result];
-        if (state.AllFalseDate.length === state.AllFalseDate.length) {
-          return;
+        if (q.result.length === 0) {
+          state.postEnd = true;
         }
       }
     },
-    [__getAllFalse.rejected]: (state, action) => {
+    [__getAllFalse.rejected]: (state) => {
       state.isLoading = true;
     },
 
     //    <  헬피 false 가져오기  >
     [__getHelpeeFalse.pending]: (state) => {},
     [__getHelpeeFalse.fulfilled]: (state, action) => {
-      state.helpeeFalseDate = action.payload;
+      // state.helpeeFalseDate = action.payload;
+      const q = action.payload;
+      //검색시 실행
+      if (q.input.length > 0) {
+        state.helpeeFalseDate = q.result;
+        state.searchBool = true;
+      }
+      //일반 조회
+      else {
+        if (state.searchBool === true) {
+          state.helpeeFalseDate = [];
+          state.searchBool = false;
+        }
+        state.helpeeFalseDate = [...state.helpeeFalseDate, ...q.result];
+        console.log("helper:", state.helpeeFalseDate);
+
+        if (q.result.length === 0) {
+          state.postEnd = true;
+        }
+      }
+      // console.log("data:", q);
     },
     [__getHelpeeFalse.rejected]: (state, action) => {},
     //    <  헬퍼 false 가져오기  >

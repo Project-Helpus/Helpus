@@ -3,34 +3,39 @@ import { useDispatch, useSelector } from "react-redux";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
 import styled from "styled-components";
-
+import useInfinite from "../../../../components/useInfiniteScroll";
 const AllFalse = ({ search }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.postSlice?.AllFalseDate);
   const input = useSelector((state) => state.postSlice.inputReciver);
-  const { isLoading } = useSelector((state) => state.postSlice);
+  const postEnd = useSelector((state) => state.postSlice.postEnd);
+  const osbRef = useRef(null);
+  const endRef = useRef(null);
 
-  const observerTarget = useRef(null);
   const [count, setCount] = useState(0);
-  const searched = useSelector((state) => state.postSlice.searchBool);
-
-  let osbRef = useRef(null);
+  // const [callback] = useInfinite(count, __getAllFalse, input);
   const [searchCount, setSearchCount] = useState(0);
-  const [target, setTarget] = useState(false);
-  const boolRef = useRef(false);
-  const [bool, setBool] = useState(false);
-  const callback = (entries, observer) => {
-    entries.forEach(async (entry) => {
-      if (entry.isIntersecting) {
-        await dispatch(__getAllFalse({ count: count, input: input }));
-        setCount((prev) => prev + 12);
-        observer.unobserve(entry.target);
-      } else return;
-    });
-  };
+
+  if (postEnd === true) {
+    endRef.current.innerHTML = "마지막 게시글 입니다";
+  }
+  // console.log(postEnd);
+  // if (postEnd === true) {
+
+  // }
   useEffect(() => {
+    const callback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          dispatch(__getAllFalse({ count: count, input: input }));
+          setCount((prev) => prev + 12);
+          observer.unobserve(entry.target);
+        } else return;
+      });
+    };
     if (search.length > 0) {
       dispatch(__getAllFalse({ count: searchCount, input: input }));
+      setSearchCount((prev) => prev + 12);
       setCount(0);
     } else {
       let observer;
@@ -42,6 +47,7 @@ const AllFalse = ({ search }) => {
     }
   }, [count, input]);
 
+  useEffect(() => {});
   return (
     <>
       {data?.length === 0 ? (
@@ -54,12 +60,14 @@ const AllFalse = ({ search }) => {
         </>
       )}
       <Stdiv ref={osbRef}></Stdiv>
+      <Stdiv ref={endRef}>로딩중...</Stdiv>
     </>
   );
 };
 
 export default AllFalse;
 
-const Stdiv = styled.div`
-  width: 100%;
+const Stdiv = styled.p`
+  margin-top: 400px;
+  font-size: 50px;
 `;

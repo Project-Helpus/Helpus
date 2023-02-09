@@ -23,12 +23,12 @@ export const PostAPI = {
     client.put(`api/post/deadLine/${id}`, isDeadLine),
   getAllFalse: (payload, searchValue) =>
     client.get(
-      `api/post/all-location?q=${payload}&category=&search=${searchValue}`
+      `api/post/all-location?page=${payload}&category=&search=${searchValue}`
     ),
-  // getAllFalse: (searchValue) =>
-  //   client.get(`api/post/all-location?category=&search=${searchValue}`),
-  getHelpeeFalse: (searchValue) =>
-    client.get(`api/post/all-location?category=1&search=${searchValue}`),
+  getHelpeeFalse: (payload, searchValue) =>
+    client.get(
+      `api/post/all-location?page=${payload}&category=1&search=${searchValue}`
+    ),
   getHelperFalse: (searchValue) =>
     client.get(`api/post/all-location?category=2&search=${searchValue}`),
   getHelpUsFalse: (searchValue) =>

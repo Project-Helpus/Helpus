@@ -21,6 +21,7 @@ import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { StSearch } from "./StPostDetail";
 import icon_search from "../../asset/icon_search.svg";
+import BoolPost from "./BoolPost";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -130,7 +131,6 @@ const PostList = () => {
   const searching = (e) => {
     e.preventDefault();
     dispatch(__giveInput(search));
-    // dispatch(__setBollAll());
   };
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const PostList = () => {
       // dispatch(__getAllFalse());
     }
   }, []);
-
+  //토글 버튼 UI 변화
   useEffect(() => {
     if (storeBooLocation === false) {
       testRef.current.style.left = "0";
@@ -171,6 +171,20 @@ const PostList = () => {
     }
   };
 
+  let value;
+  if (boolHelpee) {
+    value = 1;
+  } else if (boolHelper) {
+    value = 2;
+  } else if (boolHelpUs) {
+    value = 3;
+  }
+  const postEnd = useSelector((state) => state.postSlice.postEnd);
+  const osbRef = useRef(null);
+  const endRef = useRef(null);
+  if (postEnd === true) {
+    endRef.current.innerHTML = "마지막 게시글 입니다";
+  }
   return (
     <>
       <StWrapper>
@@ -225,12 +239,15 @@ const PostList = () => {
             </>
           ) : (
             <>
-              {boolHelpee && <HelpeeFalse search={search} />}
+              <BoolPost num={value} search={search} ref={osbRef} />
+              {/* {boolHelpee && <HelpeeFalse search={search} />}
               {boolHelper && <HelperFalse />}
               {boolHelpUs && <HelpUsFalse />}
-              {boolAll && <AllFalse search={search} />}
+              {boolAll && <AllFalse search={search} />} */}
             </>
           )}
+          <Stdiv ref={osbRef}></Stdiv>
+          <Stdiv ref={endRef}>로딩중...</Stdiv>
         </StCardContainer>
       </StWrapper>
     </>
@@ -238,6 +255,10 @@ const PostList = () => {
 };
 
 export default PostList;
+const Stdiv = styled.p`
+  margin-top: 400px;
+  font-size: 50px;
+`;
 
 const StTabWrapper = styled.div`
   display: flex;
