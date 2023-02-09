@@ -51,13 +51,13 @@ const Home = () => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const crsHelperRef = useRef(null);
-  const crsHelpUsRef = useRef(null);
-  const crsHelpeeRef = useRef(null);
+  const input = useSelector((state) => state.postSlice.inputReciver);
   const isLogIn = useSelector((state) => state.userSlice.isLogin);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
 
-  const input = useSelector((state) => state.postSlice.inputReciver);
+  const crsHelperRef = useRef(null);
+  const crsHelpUsRef = useRef(null);
+  const crsHelpeeRef = useRef(null);
 
   const linkHelpUs = () => {
     dispatch(__setBoolHelpUs());
