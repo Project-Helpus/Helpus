@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import theme from "../../../styles/theme";
 
 export const StFlex = styled.div`
   display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const StCirclePhoto = styled.img`

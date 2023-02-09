@@ -22,6 +22,7 @@ export const StGroupImgs = styled.div`
 export const StBtnBox = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 40px;
 `;
 export const StChatBtn = styled.button`
@@ -31,19 +32,19 @@ export const StChatBtn = styled.button`
   border-radius: 10px;
   color: white;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 20px;
   border: none;
   &:hover {
     background-color: #ea9db4;
   }
 `;
 export const StWishBtn = styled.button`
-  vertical-align: middle;
-  border: none;
-  background: white;
-  font-weight: 700;
-  font-size: 24px;
   display: flex;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 20px;
 `;
 export const StDeadLineButton = styled.button`
   width: 8.25em;

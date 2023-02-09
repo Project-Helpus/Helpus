@@ -67,7 +67,11 @@ export const __deletePost = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await PostAPI.deletePost(id);
-      return thunkAPI.fulfillWithValue(res.data);
+      if (res.status === 201) {
+        window.alert("게시글이 삭제되었습니다");
+        thunkAPI.fulfillWithValue(res.data);
+        window.location.replace("/mypage");
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -114,7 +118,7 @@ export const __deadLinePost = createAsyncThunk(
   }
 );
 //    <<<<<<  전국  >>>>>>
-//    <  전국 false  >
+//    <  전체 false  >
 export const __getAllFalse = createAsyncThunk(
   "mypageSlice/getAllFalse",
   async (payload, thunkAPI) => {
@@ -201,7 +205,7 @@ export const __getHelpUsFalse = createAsyncThunk(
 );
 
 //    <<<<<<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  로컬  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
-//    <  전체 게시물 true  >
+//    <  전체 true  >
 export const __getAllTrue = createAsyncThunk(
   "mypageSlice/getAllTrue",
   async (payload, thunkAPI) => {
@@ -296,55 +300,33 @@ const postSlice = createSlice({
     },
   },
   extraReducers: {
-    [__createPost.pending]: (state) => {
-      state.isLoading = true;
-    },
+    [__createPost.pending]: (state) => {},
     [__createPost.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [__createPost.rejected]: (state) => {
-      state.isLoading = false;
-      state.error = true;
-    },
-    [__detailPost.pending]: (state) => {
-      state.isLoading = true;
-    },
+    [__createPost.rejected]: (state) => {},
+    [__detailPost.pending]: (state) => {},
     [__detailPost.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.postInfo = action.payload.result;
     },
-    [__detailPost.rejected]: (state) => {
-      state.isLoading = false;
-      state.error = true;
-    },
-    [__updatePost.pending]: (state) => {
-      state.isLoading = true;
-    },
+    [__detailPost.rejected]: (state) => {},
+    [__updatePost.pending]: (state) => {},
     [__updatePost.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [__updatePost.rejected]: (state) => {
-      state.isLoading = false;
-      state.error = true;
-    },
-    [__postZZim.pending]: (state) => {
-      state.isLoading = true;
-    },
+    [__updatePost.rejected]: (state) => {},
+    [__postZZim.pending]: (state) => {},
     [__postZZim.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.ZZimMsg = action.payload;
     },
-    [__postZZim.rejected]: (state) => {
-      state.isLoading = false;
-      state.error = true;
-    },
+    [__postZZim.rejected]: (state) => {},
     [__deadLinePost.pending]: (state) => {},
     [__deadLinePost.fulfilled]: (state, action) => {
       state.deadLineMsg = action.payload;
     },
-    [__deadLinePost.rejected]: (state) => {
-      state.error = true;
-    },
+    [__deadLinePost.rejected]: (state) => {},
 
     //    <<<<  전체 false 가져오기  >>>>
     [__getAllFalse.pending]: (state) => {
@@ -383,37 +365,37 @@ const postSlice = createSlice({
     [__getHelpeeFalse.fulfilled]: (state, action) => {
       state.helpeeFalseDate = action.payload;
     },
-    [__getHelpeeFalse.rejected]: (state, action) => {},
+    [__getHelpeeFalse.rejected]: (state) => {},
     //    <  헬퍼 false 가져오기  >
     [__getHelperFalse.pending]: (state) => {},
     [__getHelperFalse.fulfilled]: (state, action) => {
       state.helperFalseDate = action.payload;
     },
-    [__getHelperFalse.rejected]: (state, action) => {},
+    [__getHelperFalse.rejected]: (state) => {},
     //    <  헬퍼스 false 가져오기  >
     [__getHelpUsFalse.pending]: (state) => {},
     [__getHelpUsFalse.fulfilled]: (state, action) => {
       state.helpUsFalseDate = action.payload;
     },
-    [__getHelpUsFalse.rejected]: (state, action) => {},
+    [__getHelpUsFalse.rejected]: (state) => {},
     //    <<<<  전체 true 가져오기  >>>>
     [__getAllTrue.pending]: (state) => {},
     [__getAllTrue.fulfilled]: (state, action) => {
       state.AllTrueDate = action.payload;
     },
-    [__getAllTrue.rejected]: (state, action) => {},
+    [__getAllTrue.rejected]: (state) => {},
     //    <  헬피 true 가져오기  >
     [__getHelpeeTrue.pending]: (state) => {},
     [__getHelpeeTrue.fulfilled]: (state, action) => {
       state.helpeeTrueDate = action.payload;
     },
-    [__getHelpeeTrue.rejected]: (state, action) => {},
+    [__getHelpeeTrue.rejected]: (state) => {},
     //    <  헬퍼 true 가져오기  >
     [__getHelperTrue.pending]: (state) => {},
     [__getHelperTrue.fulfilled]: (state, action) => {
       state.helperTrueDate = action.payload;
     },
-    [__getHelperTrue.rejected]: (state, action) => {},
+    [__getHelperTrue.rejected]: (state) => {},
     //    <  헬퍼스 true 가져오기  >
     [__getHelpUsTrue.pending]: (state) => {},
     [__getHelpUsTrue.fulfilled]: (state, action) => {

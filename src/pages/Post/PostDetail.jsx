@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { StWrapper } from "../../components/UI/StIndex";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,6 +10,9 @@ import {
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import emptyHeart from "../../asset/emptyHeart.svg";
 import fullHeart from "../../asset/fullHeart.svg";
+import CrsLeft from "../../asset/CrsLeft.svg";
+import CrsRight from "../../asset/CrsRight.svg";
+import { StWrapper } from "../../components/UI/StIndex";
 import { StFlex, StSpaceBetween } from "../../components/UI/CardStyle/StCommon";
 import {
   StBackBtn,
@@ -40,98 +42,65 @@ import {
   StWishBtn,
   StZZimCount,
   StZZimImg,
-} from "./StPostDetail";
-import CrsLeft from "../../asset/CrsLeft.svg";
-import CrsRight from "../../asset/CrsRight.svg";
-import { useRef } from "react";
-import { useState } from "react";
+} from "./element/styles/StPostDetail";
+
 const PostDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { userId } = useSelector((state) => state.userSlice.userInfo);
-  const zMsg = useSelector((state) => state.postSlice.ZZimMsg?.message);
-  const logedIn = useSelector((state) => state.userSlice.isLogin);
-  const kakaoLogedIn = useSelector((state) => state.userSlice?.isLoginKakao);
-  const detail = useSelector((state) => state.postSlice?.postInfo);
-  const deadLine = detail.isDeadLine;
-  const dead = useSelector((state) => state.postSlice.deadLineMsg);
 
-  const curr = new Date(detail.appointed);
-
-  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
-
-  const kRTimeDiff = 9 * 60 * 60 * 1000;
-
-  const KrCurr = new Date(utc + kRTimeDiff);
-
-  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
-
-  const tag = detail.tag?.split(",");
-  const crsRef = useRef(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const TotalSlides = detail?.imageUrls?.length - 4;
-
-  const preRef = useRef(null);
-
-  const deletePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        dispatch(__deletePost(postId));
-        alert("게시물이 삭제되었습니다.");
-        navigate("/postlist");
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
-  };
-  const updatePost = () => {
-    if (logedIn || kakaoLogedIn) {
-      if (userId === detail?.userId) {
-        navigate(`/post/update/${postId}`);
-      } else {
-        alert("게시글 작성자만 이용할 수 있습니다");
-      }
-    } else {
-      alert("로그인 시 이용할 수 있습니다");
-    }
-  };
-
-  const changeDeadLine = () => {
-    if (userId === detail?.userId) {
-      if (deadLine === 1) {
-        dispatch(
-          __deadLinePost({
-            isDeadLine: { isDeadLine: parseInt(2) },
-            id: postId,
-          })
-        );
-      } else {
-        dispatch(
-          __deadLinePost({
-            isDeadLine: { isDeadLine: parseInt(1) },
-            id: postId,
-          })
-        );
-      }
-    } else {
-      alert("게시글 작성자만 이용할 수 있습니다");
-    }
-  };
+  const { userId, logedIn, kakaoLogedIn, zMsg, detail, dead } = useSelector(
+    (state) => ({
+      userId: state.userSlice.userInfo.userId,
+      logedIn: state.userSlice.isLogin,
+      kakaoLogedIn: state.userSlice.isLoginKakao,
+      zMsg: state.postSlice.ZZimMsg?.message,
+      detail: state.postSlice?.postInfo,
+      dead: state.postSlice.deadLineMsg,
+    })
+  );
 
   const zzimRef = useRef(null);
+  const preRef = useRef(null);
+  const crsRef = useRef(null);
+
+  const deadLine = detail.isDeadLine;
+  const tag = detail.tag?.split(",");
+  const curr = new Date(detail.appointed);
+  const TotalSlides = detail?.imageUrls?.length - 4;
+  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+  const kRTimeDiff = 9 * 60 * 60 * 1000;
+  const KrCurr = new Date(utc + kRTimeDiff);
+  const KoreaDate = !detail.appointed ? null : KrCurr.toLocaleDateString();
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const changeDeadLine = () => {
+    if (deadLine === 1) {
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(2) }, id: postId })
+      );
+    } else {
+      dispatch(
+        __deadLinePost({ isDeadLine: { isDeadLine: parseInt(1) }, id: postId })
+      );
+    }
+  };
+
+  const linkUpdatePost = () => {
+    navigate(`/post/update/${postId}`);
+  };
+
+  const deletePost = async () => {
+    if (window.confirm("게시글을 삭제합니다")) {
+      dispatch(__deletePost(postId));
+    } else return;
+  };
+
   const ZZim = async (e) => {
     dispatch(__postZZim(postId));
   };
-  useEffect(() => {
-    if (zMsg !== undefined) {
-      zMsg === "찜"
-        ? (zzimRef.current.src = `${fullHeart}`)
-        : (zzimRef.current.src = `${emptyHeart}`);
-    }
-  }, [zMsg]);
+
   const moveCrsLeft = () => {
     if (currentSlide === 0) {
       setCurrentSlide(TotalSlides);
@@ -154,13 +123,18 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
+    dispatch(__detailPost(postId));
+    if (zMsg !== undefined) {
+      zMsg === "찜"
+        ? (zzimRef.current.src = `${fullHeart}`)
+        : (zzimRef.current.src = `${emptyHeart}`);
+    }
+  }, [dead, zMsg]);
+
+  useEffect(() => {
     crsRef.current.style.transition = "all 0.5s ease-in-out";
     crsRef.current.style.transform = `translateX(-${currentSlide * 12.88}em)`;
   }, [currentSlide]);
-
-  useEffect(() => {
-    dispatch(__detailPost(postId));
-  }, [dead, zMsg]);
   return (
     <StWrapper>
       <StContainer>
@@ -169,25 +143,35 @@ const PostDetail = () => {
             <img src={arrow_forward_ios} alt="back_button" />
           </StBackBtn>
           <StFlex>
-            {deadLine === 2 ? (
+            {(logedIn || kakaoLogedIn) && (
               <>
-                <StDeadLineButton
-                  onClick={() => {
-                    if (logedIn || kakaoLogedIn) {
-                      changeDeadLine();
-                    } else {
-                      alert("로그인 후에 이용할 수 있습니다");
-                    }
-                  }}
-                >
-                  마감취소
-                </StDeadLineButton>
+                {userId === detail?.userId && (
+                  <>
+                    {deadLine === 2 ? (
+                      <>
+                        <StDeadLineButton onClick={changeDeadLine}>
+                          마감취소
+                        </StDeadLineButton>
+                      </>
+                    ) : (
+                      <StDeadLineButton onClick={changeDeadLine}>
+                        마감
+                      </StDeadLineButton>
+                    )}
+                  </>
+                )}
               </>
-            ) : (
-              <StDeadLineButton onClick={changeDeadLine}>마감</StDeadLineButton>
             )}
-            {<StUpdateButton onClick={updatePost}>수정</StUpdateButton>}
-            {<StDeleteButton onClick={deletePost}>삭제</StDeleteButton>}
+            {userId === detail?.userId && (
+              <StUpdateButton onClick={linkUpdatePost}>수정</StUpdateButton>
+            )}
+            {(logedIn || kakaoLogedIn) && (
+              <>
+                {userId === detail.userId && (
+                  <StDeleteButton onClick={deletePost}>삭제</StDeleteButton>
+                )}
+              </>
+            )}
           </StFlex>
         </StSpaceBetween>
         <StFlex>

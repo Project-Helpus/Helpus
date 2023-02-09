@@ -1,50 +1,65 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __updatePost } from "../../redux/modules/postSlice";
 import { address } from "../../asset/address";
 import Calender from "./element/Calender";
-import { StRedFont } from "./StPostDetail";
-
+import {
+  StContainer,
+  StBox,
+  StBackBtn,
+  StTitle,
+  StCol,
+  StLabel,
+  StTextarea,
+  StInnerBox,
+  StCategory,
+  StSelector,
+  StRedFont,
+  StTagContainer,
+  StTag,
+  StTagName,
+  StTagButton,
+  StRow,
+} from "./element/styles/StPostUpdate";
 const PostCreate = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const postInfo = useSelector((state) => state.postSlice.postInfo);
+
+  const category = postInfo?.category;
   const { state, city } = address;
-  const [tags, setTags] = useState(
-    !postInfo.tag ? [] : postInfo.tag.split(",")
-  );
-  const [tag, setTag] = useState("");
+  const helpeeRef = useRef(null);
+  const helperRef = useRef(null);
+  const helpUsRef = useRef(null);
+
+  const [titleInput, setTitleInput] = useState(postInfo.title);
+  const [contentsInput, setContentsInput] = useState(postInfo.content);
   const [date, setDate] = useState(
     !postInfo.appointed ? null : new Date(postInfo.appointed)
   );
+  const [categories, setCategories] = useState(category);
   const [input, setInput] = useState({
     location1: `${postInfo?.location1}`,
     location2: `${postInfo?.location2}`,
   });
-
   const [location1, setLocation1] = useState(
     !postInfo?.location1 ? null : postInfo.location1
   );
   const [location2, setLocation2] = useState(
     !postInfo?.location2 ? null : postInfo.location2
   );
-
-  const [titleInput, setTitleInput] = useState(postInfo.title);
-  const [contentsInput, setContentsInput] = useState(postInfo.content);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const helpeeRef = useRef(null);
-  const helperRef = useRef(null);
-  const helpUsRef = useRef(null);
-
-  const category = postInfo?.category;
-  const [categories, setCategories] = useState(category);
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState(
+    !postInfo.tag ? [] : postInfo.tag.split(",")
+  );
 
   const changeInputHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
+
   const changeHelpeeColor = (e) => {
     helpeeRef.current.style.backgroundColor = "#EA9DB4";
     helperRef.current.style.backgroundColor = "#F0F0F0";
@@ -62,6 +77,21 @@ const PostCreate = () => {
     helpeeRef.current.style.backgroundColor = "#F0F0F0";
     helperRef.current.style.backgroundColor = "#F0F0F0";
     setCategories(e.target.value);
+  };
+
+  const addTag = (e) => {
+    setTag(e.target.value);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && tag !== "" && tag.length < 8) {
+      setTags([...tags, tag]);
+      setTag("");
+    }
+  };
+  const removeTag = (i) => {
+    const clonetags = tags.slice();
+    clonetags.splice(i, 1);
+    setTags(clonetags);
   };
 
   const clickHandler = async (e) => {
@@ -100,22 +130,6 @@ const PostCreate = () => {
     }
   };
 
-  const removeTag = (i) => {
-    const clonetags = tags.slice();
-    clonetags.splice(i, 1);
-    setTags(clonetags);
-  };
-
-  const addTag = (e) => {
-    setTag(e.target.value);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && tag !== "" && tag.length < 8) {
-      setTags([...tags, tag]);
-      setTag("");
-    }
-  };
   useEffect(() => {
     if (category === 1) {
       helpeeRef.current.style.backgroundColor = "#EA9DB4";
@@ -227,119 +241,5 @@ const PostCreate = () => {
     </StWrapper>
   );
 };
-
-const StTitle = styled.h2`
-  text-align: center;
-  width: 100%;
-`;
-
-const StBackBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border: none;
-  background-color: transparent;
-`;
-
-const StContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 55px;
-  width: 800px;
-`;
-
-const StInnerBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-
-const StBox = styled.article`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const StCol = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const StLabel = styled.label`
-  font-size: 20px;
-  font-weight: 800;
-`;
-
-const StTextarea = styled.textarea`
-  resize: none;
-  height: 300px;
-`;
-
-const StTagContainer = styled.div`
-  display: flex;
-  width: 590px;
-  flex-flow: row;
-`;
-
-const StRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 40px;
-`;
-
-const StTag = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 28px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  margin-right: 10px;
-  background-color: pink;
-  color: white;
-  font-size: 16px;
-  font-weight: 800;
-`;
-
-const StTagName = styled.span`
-  margin-right: 10px;
-`;
-
-const StTagButton = styled.button`
-  width: 20px;
-  border: 0.5px solid white;
-  border-radius: 50%;
-  color: white;
-
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const StCategory = styled.button`
-  width: 160px;
-  height: 44px;
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  font-weight: 800;
-`;
-
-const StSelectedCategory = styled.button`
-  width: 200px;
-  height: 44px;
-  background-color: ${(props) => props.theme.colors.subPink};
-  color: white;
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  font-weight: 800;
-`;
-
-const StSelector = styled.select`
-  width: 300px;
-  height: 44px;
-  border-radius: 10px;
-`;
 
 export default PostCreate;
