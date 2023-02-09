@@ -53,7 +53,7 @@ const OpenChat = () => {
     }
   };
 
-  const acceptRequest = (chatSocket) => {
+  const acceptRequest = () => {
     if (window.confirm("수락 하시겠습니까?")) {
       chatSocket.acception(roomId);
     }
