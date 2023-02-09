@@ -1,10 +1,8 @@
 <h2>👼최종 프로젝트 Helpus</h2>
 재능기부 사이트, Helpus
 
-
-
 <h2>🍎공동작업 노션</h2>
-<a href="https://ludicrous-iguanodon-d38.notion.site/4-SA-c3f621f45fed4e12bf050b75124a9fa2">최종 프로젝트 S.A</a>
+<a href="https://potent-print-150.notion.site/Front-End-62d756cc7acd4898bb1846275f1cd964">Front-end Document</a>
 
 <h2> 👯‍♀️5조 팀원</h2>
 👱‍♀️나지원(BE)
@@ -13,28 +11,22 @@
 👱김수현(FE)
 👱‍♀️권애경(FE)
 
-
 <h2>⚙주요 기능</h2>
 
 <h2>🛠STACK</h2>
 <div>
-<img src="https://user-images.githubusercontent.com/116799513/209918842-d2725bc5-fd62-4bd1-9d25-9a0bfe973bb5.png"/>
-<img src="https://user-images.githubusercontent.com/116799513/209918909-24f468a0-e69c-49f1-b6aa-349df76a4c95.png"/>
-<img src= "https://user-images.githubusercontent.com/116799513/209918924-8caebfa4-dbdf-4752-9464-13610685ec56.png"/>
-<img src= "https://user-images.githubusercontent.com/116799513/209918936-6341450b-ea78-429b-9704-639fe6a7056c.png"/>
-<img src= "https://user-images.githubusercontent.com/116799513/209918949-ce1c6512-361e-4cbe-a242-e4716188d523.png"/>
-<img src="https://user-images.githubusercontent.com/116799513/209918960-75b47446-d844-45c4-becb-41539eed9553.png"/>
-<div>
-        
- <h2>🛠Trouble Shooting(FE)</h2>       
-<div markdown="1">	
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white"/>
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"/>
+<img src= "https://img.shields.io/badge/axios-764ABC?style=for-the-badge&logo=axios&logoColor=white"/>
+<img src= "https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+<img src= "https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>
+<img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
+<img src="https://img.shields.io/badge/Socket.io-000000?style=for-the-badge&logo=Socket.io&logoColor=white""/>
+
+<div>    
+<h2>🛠Trouble Shooting(FE)</h2>
 <br>
 </div>
 </details>
 <details>
 <summary> 1. 로그인/ 회원가입 </summary>
-
-
-
-
-
