@@ -69,7 +69,6 @@ const RatingCard = () => {
             <span>어떠셨나요?</span>
             <div>
               <StRatingRadioWrap>
-                {/* // */}
                 <label>
                   <input
                     type="radio"
@@ -88,7 +87,6 @@ const RatingCard = () => {
                   />
                   <span></span>
                 </label>
-                {/* // */}
                 <label>
                   <input
                     type="radio"
