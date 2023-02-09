@@ -183,7 +183,10 @@ const OpenChat = () => {
                     />
                   </StChat.StReceiveDiv>
                 );
-              } else if (el.userId === userId) {
+              } else if (
+                el.userId === userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StSendDiv key={idx}>
                     <StChat.StImage
@@ -192,7 +195,10 @@ const OpenChat = () => {
                     />
                   </StChat.StSendDiv>
                 );
-              } else if (el.userId !== userId) {
+              } else if (
+                el.userId !== userId &&
+                el.content?.split("`")[1] === "image"
+              ) {
                 return (
                   <StChat.StReceiveDiv key={idx}>
                     <StChat.StImage
