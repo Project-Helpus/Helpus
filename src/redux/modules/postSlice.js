@@ -148,18 +148,6 @@ export const __getAllFalse = createAsyncThunk(
     }
   }
 );
-// export const __getAllFalse = createAsyncThunk(
-//   "mypageSlice/getAllFalse",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-//       const res = await PostAPI.getAllFalse(searchValue);
-//       return thunkAPI.fulfillWithValue(res.data.result);
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue();
-//     }
-//   }
-// );
 
 //    <  헬피 false  >
 export const __getHelpeeFalse = createAsyncThunk(
@@ -350,7 +338,7 @@ const postSlice = createSlice({
       }
     },
     [__getAllFalse.rejected]: (state, action) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
 
     //    <  헬피 false 가져오기  >
