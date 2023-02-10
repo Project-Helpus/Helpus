@@ -9,7 +9,7 @@ const initialState = {
   boolHelper: false,
   boolHelpee: false,
   boolHelpUs: false,
-  boolAll: false,
+  boolAll: true,
   boolLocation: false,
   AllFalseDate: [],
   helpeeFalseDate: [],
