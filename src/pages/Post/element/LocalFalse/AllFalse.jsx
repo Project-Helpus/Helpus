@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { __getAllFalse } from "../../../../redux/modules/postSlice";
 import Card from "../../../../components/Card";
 import styled from "styled-components";
+import { Spinner } from "../styles/Spinner";
 
 const AllFalse = ({ search }) => {
   const dispatch = useDispatch();
@@ -42,20 +43,16 @@ const AllFalse = ({ search }) => {
     }
   }, [count, input]);
 
-  return (
-    <>
-      {data?.length === 0 ? (
-        <p>게시글이 없습니다</p>
-      ) : (
-        <>
-          {data?.map((item, idx) => {
-            return <Card type={"세로"} data={item} key={idx} />;
-          })}
-        </>
-      )}
-      <Stdiv ref={osbRef}></Stdiv>
-    </>
-  );
+  if (isLoading === true) return <Spinner />;
+  else
+    return (
+      <>
+        {data?.map((item, idx) => {
+          return <Card type={"세로"} data={item} key={idx} />;
+        })}
+        <Stdiv ref={osbRef}></Stdiv>
+      </>
+    );
 };
 
 export default AllFalse;

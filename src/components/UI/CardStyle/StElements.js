@@ -91,7 +91,6 @@ export const StEmptyDiv = styled.div`
 `;
 
 //마이페이지 찜하기 card_Style
-
 export const StZZimWrap = styled.div`
   width: 320px;
   position: relative;
@@ -100,8 +99,12 @@ export const StZZimWrap = styled.div`
 export const StZZimImg = styled.img`
   width: 320px;
   height: 180px;
+  border-radius: 1.25em;
   border: 1px solid ${(props) => props.theme.colors.gray};
   border-radius: 20px;
+  background-color: rgb(245, 245, 245);
+  object-fit: contain;
+  box-sizing: content-box;
 `;
 
 export const StZZimHeart = styled.img`

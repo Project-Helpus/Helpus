@@ -9,7 +9,7 @@ const initialState = {
   boolHelper: false,
   boolHelpee: false,
   boolHelpUs: false,
-  boolAll: false,
+  boolAll: true,
   boolLocation: false,
   AllFalseDate: [],
   helpeeFalseDate: [],
@@ -31,13 +31,13 @@ export const __createPost = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
-
+      console.log(response);
       if (response.status === 201) {
-        return thunkAPI.fulfillWithValue(response.status);
+        return thunkAPI.fulfillWithValue(response.data);
       } else if (response.response.status === 400) {
-        return thunkAPI.rejectWithValue(response.response.status);
+        return thunkAPI.rejectWithValue(response.data);
       } else {
-        return thunkAPI.rejectWithValue(response.response.status);
+        return thunkAPI.rejectWithValue(response.data);
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -148,18 +148,6 @@ export const __getAllFalse = createAsyncThunk(
     }
   }
 );
-// export const __getAllFalse = createAsyncThunk(
-//   "mypageSlice/getAllFalse",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const searchValue = thunkAPI.getState().postSlice.inputReciver;
-//       const res = await PostAPI.getAllFalse(searchValue);
-//       return thunkAPI.fulfillWithValue(res.data.result);
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue();
-//     }
-//   }
-// );
 
 //    <  헬피 false  >
 export const __getHelpeeFalse = createAsyncThunk(
@@ -334,14 +322,7 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // state.AllFalseDate = action.payload;
-      // state.dataLength = action.payload.length;
-      // if (state.dataLength !== 0) {
-      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      // }
       const q = action.payload;
-      // const resLength = state.AllFalseDate.length;
-
       if (q.input.length > 0) {
         state.AllFalseDate = q.result;
         state.searchBool = true;
@@ -357,7 +338,7 @@ const postSlice = createSlice({
       }
     },
     [__getAllFalse.rejected]: (state, action) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
 
     //    <  헬피 false 가져오기  >

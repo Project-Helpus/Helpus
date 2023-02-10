@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import useDetectClose from "../hooks/DropDetectClose";
+import useDropDetectClose from "../hooks/useDropDetectClose";
 import icon_bell from "../asset/icon_bell.svg";
 
 const DropdownNotification = ({
@@ -10,7 +10,7 @@ const DropdownNotification = ({
   notificationMessages,
 }) => {
   const [notificationIsOpen, notificationRef, notificationHandler] =
-    useDetectClose(false);
+    useDropDetectClose(false);
   return (
     <Wrapper>
       <DropdownContainer onClick={notificationHandler} ref={notificationRef}>
