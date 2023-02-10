@@ -329,9 +329,8 @@ const PostCreate = () => {
           </StLabel>
           <StTagContainer>
             {tags.map((e, i) => (
-              <StTag key={i}>
-                <StTagName>{e}</StTagName>
-                <StTagButton onClick={() => removeTag(i)}>x</StTagButton>
+              <StTag key={i} onClick={() => removeTag(i)}>
+                <span>{e}</span>
               </StTag>
             ))}
           </StTagContainer>
@@ -464,31 +463,19 @@ const StImgButton = styled.label`
   cursor: pointer;
 `;
 
-const StTag = styled.div`
+const StTag = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 32px;
-  padding: 0 4px;
+  padding: 0 8px;
   border-radius: 12px;
   margin-right: 10px;
   background-color: pink;
   color: white;
   font-size: 18px;
   font-weight: 800;
-`;
-
-const StTagName = styled.span`
-  margin-right: 10px;
-`;
-
-const StTagButton = styled.button`
-  width: 20px;
-  border: 0.5px solid white;
-  border-radius: 50%;
-  color: white;
-  background-color: transparent;
-  cursor: pointer;
+  border: none;
 `;
 
 const StCategory = styled.button`
