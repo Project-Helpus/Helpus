@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-const useDetectClose = (initialState) => {
+const useDropDetectClose = (initialState) => {
   const [isOpen, setIsOpen] = useState(initialState);
   const ref = useRef(null);
 
@@ -27,4 +27,4 @@ const useDetectClose = (initialState) => {
   return [isOpen, ref, removeHandler];
 };
 
-export default useDetectClose;
+export default useDropDetectClose;
