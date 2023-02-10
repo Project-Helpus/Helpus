@@ -47,13 +47,13 @@ const State = () => {
   //submit 이벤트 핸들러
   const submitHandler = (event) => {
     event.preventDefault();
-    const paylode = {
+    const payload = {
       userId: userInfo?.userId,
       state1: state1,
       state2: state2,
     };
-    dispatch(__kakaoState(paylode));
-    alert("가입완료");
+    dispatch(__kakaoState(payload));
+    alert("회원 가입이 완료 되었습니다");
     navigate("/postlist");
   };
 
