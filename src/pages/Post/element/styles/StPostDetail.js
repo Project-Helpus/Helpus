@@ -47,7 +47,7 @@ export const StWishBtn = styled.button`
   font-size: 20px;
 `;
 export const StDeadLineButton = styled.button`
-  width: 8.25em;
+  width: 5.25em;
   height: 2.75em;
   background-color: #ffcd4d;
   border: none;
@@ -56,7 +56,7 @@ export const StDeadLineButton = styled.button`
   cursor: pointer;
 `;
 export const StUpdateButton = styled.button`
-  width: 8.25em;
+  width: 5.25em;
   height: 2.75em;
   background-color: ${(props) => props.theme.colors.subPink};
   border: none;
@@ -66,7 +66,7 @@ export const StUpdateButton = styled.button`
   margin: 0 1.25em 0 1.25em;
 `;
 export const StDeleteButton = styled.button`
-  width: 5.5em;
+  width: 5.25em;
   height: 2.75em;
   background-color: #ff5c00;
   border: none;
