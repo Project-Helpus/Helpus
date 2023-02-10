@@ -31,13 +31,13 @@ export const __createPost = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
-
+      console.log(response);
       if (response.status === 201) {
-        return thunkAPI.fulfillWithValue(response.status);
+        return thunkAPI.fulfillWithValue(response.data);
       } else if (response.response.status === 400) {
-        return thunkAPI.rejectWithValue(response.response.status);
+        return thunkAPI.rejectWithValue(response.data);
       } else {
-        return thunkAPI.rejectWithValue(response.response.status);
+        return thunkAPI.rejectWithValue(response.data);
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -334,14 +334,7 @@ const postSlice = createSlice({
     },
     [__getAllFalse.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // state.AllFalseDate = action.payload;
-      // state.dataLength = action.payload.length;
-      // if (state.dataLength !== 0) {
-      //   state.AllFalseDate = [...state.AllFalseDate, ...action.payload];
-      // }
       const q = action.payload;
-      // const resLength = state.AllFalseDate.length;
-
       if (q.input.length > 0) {
         state.AllFalseDate = q.result;
         state.searchBool = true;

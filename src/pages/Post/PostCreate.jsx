@@ -111,10 +111,11 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       const res = await dispatch(__createPost(formData));
-      if (res.payload === 201) {
+      console.log(res);
+      if (res.meta.requestStatus === "fulfilled") {
         window.alert("게시물이 생성 되었습니다.");
-        navigate("/postlist");
-      } else if (res.payload === 400) {
+        navigate(`/post/${res.payload.postId}`);
+      } else if (res.meta.requestStatus === "rejected") {
         window.alert("제목, 내용, 카테고리 선택은 필수 입니다.");
       }
     }
