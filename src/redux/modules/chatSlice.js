@@ -15,7 +15,6 @@ export const __delNotification = createAsyncThunk(
       const res = await ChatAPI.delNotification();
       if (res.status === 200) return thunkAPI.fulfillWithValue(res.data);
       else {
-        alert("정보 불러오기에 실패 했습니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (err) {
