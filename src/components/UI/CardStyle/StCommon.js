@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import theme from "../../../styles/theme";
 
 export const StFlex = styled.div`
   display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const StCirclePhoto = styled.img`
@@ -26,6 +27,9 @@ export const StAllPostSquarePhoto = styled.img`
   cursor: pointer;
   margin-bottom: 12px;
   border: 0.06em solid rgb(240, 240, 240);
+  object-fit: contain;
+  background-color: rgb(245, 245, 245);
+  box-sizing: content-box;
 `;
 
 export const StZZimSquarePhote = styled.img`

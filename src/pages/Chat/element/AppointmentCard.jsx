@@ -9,7 +9,7 @@ const AppointmentCard = ({ appointment, acceptRequest, userId }) => {
 
   return (
     <StCard>
-      <img src={logo} />
+      <img src={logo} alt="appointment_card" />
       <StContent>함께 해요</StContent>
       <div>
         {userId !== myId && appointment !== 2 && (

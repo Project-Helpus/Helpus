@@ -69,7 +69,6 @@ const RatingCard = () => {
             <span>어떠셨나요?</span>
             <div>
               <StRatingRadioWrap>
-                {/* // */}
                 <label>
                   <input
                     type="radio"
@@ -88,7 +87,6 @@ const RatingCard = () => {
                   />
                   <span></span>
                 </label>
-                {/* // */}
                 <label>
                   <input
                     type="radio"
@@ -165,6 +163,7 @@ const RatingCard = () => {
                   <span></span>
                 </label>
               </StRatingRadioWrap>
+              <StNotification>하트를 더블클릭 해주세요!</StNotification>
               <StRatingBtWrap onClick={submitHandler}>
                 <div>하트를 날려주세요</div>
               </StRatingBtWrap>
@@ -284,4 +283,11 @@ const StCloseBt = styled.button`
   width: 25px;
   height: 25px;
   background-image: url(${rating_close_icon});
+`;
+
+const StNotification = styled.div`
+  color: red;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
 `;

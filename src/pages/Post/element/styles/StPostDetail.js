@@ -22,6 +22,7 @@ export const StGroupImgs = styled.div`
 export const StBtnBox = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 40px;
 `;
 export const StChatBtn = styled.button`
@@ -31,22 +32,22 @@ export const StChatBtn = styled.button`
   border-radius: 10px;
   color: white;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 20px;
   border: none;
   &:hover {
     background-color: #ea9db4;
   }
 `;
 export const StWishBtn = styled.button`
-  vertical-align: middle;
-  border: none;
-  background: white;
-  font-weight: 700;
-  font-size: 24px;
   display: flex;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 20px;
 `;
 export const StDeadLineButton = styled.button`
-  width: 8.25em;
+  width: 5.25em;
   height: 2.75em;
   background-color: #ffcd4d;
   border: none;
@@ -55,7 +56,7 @@ export const StDeadLineButton = styled.button`
   cursor: pointer;
 `;
 export const StUpdateButton = styled.button`
-  width: 8.25em;
+  width: 5.25em;
   height: 2.75em;
   background-color: ${(props) => props.theme.colors.subPink};
   border: none;
@@ -65,7 +66,7 @@ export const StUpdateButton = styled.button`
   margin: 0 1.25em 0 1.25em;
 `;
 export const StDeleteButton = styled.button`
-  width: 5.5em;
+  width: 5.25em;
   height: 2.75em;
   background-color: #ff5c00;
   border: none;

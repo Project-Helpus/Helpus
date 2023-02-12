@@ -7,6 +7,7 @@ export const client = axios.create({
 });
 
 export const ChatAPI = {
+  delNotification: () => client.delete("api/chat/alarm"),
   getNotification: () => client.get("api/chat/alarm"),
   getState: (roomId) => client.post("api/chat/state", roomId),
   getSenderInfo: (roomId) => client.post("/api/chat/info", roomId),
@@ -29,6 +30,7 @@ export const PostAPI = {
     client.get(
       `api/post/all-location?page=${payload}&category=1&search=${searchValue}`
     ),
+
   getHelperFalse: (searchValue) =>
     client.get(`api/post/all-location?category=2&search=${searchValue}`),
   getHelpUsFalse: (searchValue) =>

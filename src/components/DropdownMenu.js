@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import useDetectClose from "../hooks/DropDetectClose";
+import useDropDetectClose from "../hooks/useDropDetectClose";
 import { __logout } from "../redux/modules/userSlice";
 import icon_back from "../asset/icon_back.svg";
 
@@ -10,7 +10,7 @@ const DropdownMenu = ({ setSearch }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
+  const [myPageIsOpen, myPageRef, myPageHandler] = useDropDetectClose(false);
   const { userInfo } = useSelector((state) => state.userSlice);
 
   const mypageClickHandler = () => {

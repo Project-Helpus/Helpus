@@ -1,6 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import * as chatSocket from "../utils/socket";
+import top_logo from "../asset/top_logo.svg";
+import icon_search from "../asset/icon_search.svg";
+import DropdownMenu from "./DropdownMenu";
+import DropdownNotification from "./DropdownNotification";
+import {
+  __getNotification,
+  __delNotification,
+} from "../redux/modules/chatSlice";
 import {
   __giveInput,
   __setBollAll,
@@ -8,34 +18,28 @@ import {
   __setBoolHelpee,
   __setBoolHelper,
 } from "../redux/modules/postSlice";
-import styled from "styled-components";
-import * as chatSocket from "../utils/socket";
-import top_logo from "../asset/top_logo.svg";
-import icon_search from "../asset/icon_search.svg";
-import DropdownMenu from "./DropdownMenu";
-import DropdownNotification from "./DropdownNotification";
-import { __getNotification } from "../redux/modules/chatSlice";
 
 const Header = () => {
   const locationNow = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [notifications, setNotifications] = useState([]);
+  const [notification, setNotification] = useState([]);
   const [open, setOpen] = useState(false);
   const isLogin = useSelector((state) => state.userSlice.isLogin);
   const { userInfo } = useSelector((state) => state.userSlice);
   const isLoginKakao = useSelector((state) => state.userSlice.isLoginKakao);
-
   const [search, setSearch] = useState("");
-  const data = useSelector((state) => state.chatSlice.data);
+  const notificationMessages = useSelector(
+    (state) => state.chatSlice.notificationMessages
+  );
   const socket = useRef(chatSocket.socket);
 
-  const displayNotification = ({ title, senderName, count }) => {
+  const displayNotification = ({ title, senderName, count }, idx) => {
     return (
-      <StNotificationContainer>
-        <StTitle>{`${data[0]?.title}`}</StTitle>
-        <span>{`${data[0]?.senderName}님에게 ${data[0]?.count}개의 메세지가 왔습니다.`}</span>
+      <StNotificationContainer key={idx}>
+        <StTitle>{`${title}`}</StTitle>
+        <span>{`${senderName}님에게 ${count}개의 메세지가 왔습니다.`}</span>
       </StNotificationContainer>
     );
   };
@@ -52,17 +56,18 @@ const Header = () => {
     navigate("/postlist");
   };
   const handleRead = () => {
-    setNotifications([]);
+    dispatch(__delNotification());
+    setNotification([]);
     setOpen(!open);
   };
 
   useEffect(() => {
     chatSocket.login(userInfo.userId);
-  }, []);
-
-  useEffect(() => {
+    if (isLogin || isLoginKakao) {
+      dispatch(__getNotification());
+    }
     socket.current.on("new-chat", (data) => {
-      setNotifications((prev) => [...prev, data]);
+      setNotification((prev) => [...prev, data]);
       dispatch(__getNotification());
     });
   }, []);
@@ -102,8 +107,8 @@ const Header = () => {
             <DropdownNotification
               handleRead={handleRead}
               setSearch={setSearch}
-              notifications={notifications}
-              data={data}
+              notification={notification}
+              notificationMessages={notificationMessages}
               displayNotification={displayNotification}
             />
             <DropdownMenu setSearch={setSearch} />
