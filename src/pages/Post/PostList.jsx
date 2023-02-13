@@ -29,8 +29,10 @@ import {
   StLabelMy,
   StCardContainer,
   StSearch,
+  StObserverDiv,
 } from "./element/styles/StPostList";
 import FalsePost from "./element/FalsePost";
+import TruePost from "./element/styles/TruePost";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -262,10 +264,10 @@ const PostList = () => {
         <StCardContainer>
           {storeBoolLocation ? (
             <>
-              {/* <TruePost num={value} search={search} /> */}
-              {boolHelpee && <HelpeeTrue />}
+              <TruePost num={value} search={search} />
+              {/* {boolHelpee && <HelpeeTrue />}
               {boolHelper && <HelperTrue />}
-              {boolHelpUs && <HelpUsTrue />}
+              {boolHelpUs && <HelpUsTrue />} */}
               {/* {boolAll && <AllTrue />} */}
             </>
           ) : (
@@ -273,7 +275,7 @@ const PostList = () => {
               <FalsePost num={value} search={search} ref={osbRef} />
               <p ref={osbRef}></p>
               {/* {postEnd === true ? <p>마지막</p> : <p>로딩중...</p>} */}
-              <p ref={endRef}></p>
+              <StObserverDiv ref={endRef}></StObserverDiv>
             </>
           )}
         </StCardContainer>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   __getAllFalse,
@@ -9,7 +9,6 @@ import {
 } from "../../../redux/modules/postSlice";
 
 import Card from "../../../components/Card";
-import { forwardRef } from "react";
 
 const FalsePost = ({ num, search }, osbRef) => {
   const dispatch = useDispatch();
@@ -85,7 +84,7 @@ const FalsePost = ({ num, search }, osbRef) => {
     setCount(0);
     dispatch(__setPostEnd(false));
   }, [num]);
-
+  console.log("data:");
   return (
     <>
       {data?.length === 0 ? (
