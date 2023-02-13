@@ -13,10 +13,10 @@ import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
   __giveInput,
+  __setPostEnd,
 } from "../../redux/modules/postSlice";
 import icon_search from "../../asset/icon_search.svg";
 import { StWrapper } from "../../components/UI/StIndex";
-import { StSearch } from "./element/styles/StPostDetail";
 import {
   StTitleButtonWrapper,
   StLocation,
@@ -28,7 +28,9 @@ import {
   StToggle,
   StLabelMy,
   StCardContainer,
+  StSearch,
 } from "./element/styles/StPostList";
+import FalsePost from "./element/FalsePost";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -40,7 +42,8 @@ const PostList = () => {
   const testRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
-
+  const osbRef = useRef(null);
+  const endRef = useRef(null);
   const {
     isLogin,
     isLoginKakao,
@@ -62,6 +65,7 @@ const PostList = () => {
     storeBoolAll: state.postSlice.boolAll,
     storeBoolLocation: state.postSlice.boolLocation,
   }));
+  const postEnd = useSelector((state) => state.postSlice.postEnd);
 
   const [search, setSearch] = useState("");
   const [boolAll, setBoolAll] = useState(storeBoolAll);
@@ -178,7 +182,7 @@ const PostList = () => {
       helperRef.current.style.borderBottom = "4px solid #EA9DB4";
     }
   }, []);
-
+  //토글 버튼 UI 변화
   useEffect(() => {
     if (storeBoolLocation === false) {
       testRef.current.style.left = "0";
@@ -190,6 +194,26 @@ const PostList = () => {
       rightRef.current.style.color = "#fff";
     }
   }, [storeBoolLocation]);
+
+  let value;
+  if (boolHelpee) {
+    value = 1;
+  } else if (boolHelper) {
+    value = 2;
+  } else if (boolHelpUs) {
+    value = 3;
+  }
+  // useEffect(() => {
+  //   dispatch(__setPostEnd(false));
+  // }, [value]);
+
+  useEffect(() => {
+    if (postEnd === true) {
+      endRef.current.innerHTML = "마지막 게시글 입니다";
+    } else {
+      endRef.current.innerHTML = "로딩중...";
+    }
+  }, [postEnd]);
 
   return (
     <>
@@ -238,17 +262,18 @@ const PostList = () => {
         <StCardContainer>
           {storeBoolLocation ? (
             <>
+              {/* <TruePost num={value} search={search} /> */}
               {boolHelpee && <HelpeeTrue />}
               {boolHelper && <HelperTrue />}
               {boolHelpUs && <HelpUsTrue />}
-              {boolAll && <AllTrue />}
+              {/* {boolAll && <AllTrue />} */}
             </>
           ) : (
             <>
-              {boolHelpee && <HelpeeFalse search={search} />}
-              {boolHelper && <HelperFalse />}
-              {boolHelpUs && <HelpUsFalse />}
-              {boolAll && <AllFalse search={search} />}
+              <FalsePost num={value} search={search} ref={osbRef} />
+              <p ref={osbRef}></p>
+              {/* {postEnd === true ? <p>마지막</p> : <p>로딩중...</p>} */}
+              <p ref={endRef}></p>
             </>
           )}
         </StCardContainer>

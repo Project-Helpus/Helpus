@@ -40,15 +40,9 @@ import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";
 import { __giveInput } from "../../redux/modules/postSlice";
 const Home = () => {
-  const HelpUsData = useSelector(
-    (state) => state.postSlice.helpUsFalseDate?.result
-  );
-  const HelperData = useSelector(
-    (state) => state.postSlice.helperFalseDate?.result
-  );
-  const HelpeeData = useSelector(
-    (state) => state.postSlice.helpeeFalseDate?.result
-  );
+  const HelpUsData = useSelector((state) => state.postSlice?.helpUsFalseDate);
+  const HelperData = useSelector((state) => state.postSlice?.helperFalseDate);
+  const HelpeeData = useSelector((state) => state.postSlice?.helpeeFalseDate);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const input = useSelector((state) => state.postSlice.inputReciver);
@@ -73,15 +67,15 @@ const Home = () => {
   };
 
   useEffect(() => {
-    dispatch(__getHelpUsFalse());
+    dispatch(__getHelpUsFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
-    dispatch(__getHelperFalse(""));
+    dispatch(__getHelperFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
-    dispatch(__getHelpeeFalse(""));
+    dispatch(__getHelpeeFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
