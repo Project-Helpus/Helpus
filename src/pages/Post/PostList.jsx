@@ -1,19 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
-import HelperFalse from "./element/LocalFalse/HelperFalse";
-import HelpeeFalse from "./element/LocalFalse/HelpeeFalse";
-import HelpUsTrue from "./element/LocalTrue/HelpUsTrue";
-import HelperTrue from "./element/LocalTrue/HelperTrue";
-import HelpeeTrue from "./element/LocalTrue/HelpeeTrue";
-import AllTrue from "./element/LocalTrue/AllTrue";
-import AllFalse from "./element/LocalFalse/AllFalse";
 import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
   __giveInput,
-  __setPostEnd,
 } from "../../redux/modules/postSlice";
 import icon_search from "../../asset/icon_search.svg";
 import { StWrapper } from "../../components/UI/StIndex";
@@ -205,9 +196,6 @@ const PostList = () => {
   } else if (boolHelpUs) {
     value = 3;
   }
-  // useEffect(() => {
-  //   dispatch(__setPostEnd(false));
-  // }, [value]);
 
   useEffect(() => {
     if (postEnd === true) {
@@ -265,16 +253,11 @@ const PostList = () => {
           {storeBoolLocation ? (
             <>
               <TruePost num={value} search={search} />
-              {/* {boolHelpee && <HelpeeTrue />}
-              {boolHelper && <HelperTrue />}
-              {boolHelpUs && <HelpUsTrue />} */}
-              {/* {boolAll && <AllTrue />} */}
             </>
           ) : (
             <>
               <FalsePost num={value} search={search} ref={osbRef} />
               <p ref={osbRef}></p>
-              {/* {postEnd === true ? <p>마지막</p> : <p>로딩중...</p>} */}
               <StObserverDiv ref={endRef}></StObserverDiv>
             </>
           )}
