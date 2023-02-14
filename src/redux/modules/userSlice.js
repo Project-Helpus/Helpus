@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserAPI } from "../api/axios";
 import storage from "redux-persist/lib/storage";
+import swal from "sweetalert";
 
 const initialState = {
   dupCheck: false,
@@ -27,10 +28,10 @@ export const __signUp = createAsyncThunk(
     try {
       const res = await UserAPI.signUp(payload);
       if (res.status === 201) {
-        window.alert("회원가입이 완료되었습니다.");
+        swal("회원가입이 완료되었습니다.");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
-        window.alert("회원가입에 실패했습니다.");
+        swal("회원가입에 실패했습니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -45,10 +46,10 @@ export const __postDupEmail = createAsyncThunk(
     try {
       const res = await UserAPI.emailCheck(payload);
       if (res.status === 200) {
-        window.alert("사용 가능한 이메일입니다.");
+        swal("사용 가능한 이메일입니다.");
         return thunkAPI.fulfillWithValue(res.data);
       } else {
-        window.alert("중복된 ID가 있습니다.");
+        swal("중복된 ID가 있습니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -66,7 +67,7 @@ export const __postLogin = createAsyncThunk(
       if (res.status === 200) {
         return thunkAPI.fulfillWithValue(res.data);
       } else {
-        window.alert("가입하신 이메일, 비밀번호와 다릅니다.");
+        swal("가입하신 이메일, 비밀번호와 다릅니다.");
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
@@ -88,7 +89,6 @@ export const __logout = createAsyncThunk(
         return thunkAPI.rejectWithValue();
       }
     } catch (error) {
-      window.alert(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -135,7 +135,6 @@ export const __kakaoSignOut = createAsyncThunk(
     try {
       const response = await UserAPI.kakaoSignOut();
       if (response.status === 200) {
-        window.alert("탈퇴가 완료되었습니다.");
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();
@@ -153,7 +152,6 @@ export const __signOut = createAsyncThunk(
     try {
       const response = await UserAPI.signOut();
       if (response.status === 200) {
-        window.alert("탈퇴가 완료되었습니다.");
         return thunkAPI.fulfillWithValue(response.data);
       } else {
         return thunkAPI.rejectWithValue();

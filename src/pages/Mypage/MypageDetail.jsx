@@ -14,6 +14,7 @@ import { StSelector } from "../../components/UI/StIndex";
 import { address } from "../../asset/address";
 import icon_camera from "../../asset/icon_camera.svg";
 import styled from "styled-components";
+import swal from "sweetalert";
 
 const MypageDetail = () => {
   const dispatch = useDispatch();
@@ -70,9 +71,7 @@ const MypageDetail = () => {
     //프로필 이미지 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
-      if (reader.readyState === 2) {
-        setPrivewImg(reader.result);
-      }
+      setPrivewImg(reader.result);
     };
     reader.readAsDataURL(e.target.files[0]);
   };
@@ -84,16 +83,16 @@ const MypageDetail = () => {
     formData.append("userImage", imgFile);
     dispatch(__userImage(formData));
     if (imgFile === undefined) {
-      alert("이미지 등록을 해주세요:)");
+      swal("이미지 등록을 해주세요.");
     } else {
-      alert("수정 완료");
+      swal("수정완료");
     }
   };
 
   //패쓰워드 수정 완료 버튼
   const PassWordUpdateHandler = () => {
     if (password === "") {
-      alert("비밀번호를 입력해주세요.");
+      swal("비밀번호를 입력해주세요.");
     } else {
       dispatch(__patchPassword(password));
       dispatch(__logout());
@@ -110,22 +109,40 @@ const MypageDetail = () => {
 
   //카카오 탈퇴 버튼
   const kakaosignOutHandler = () => {
-    if (window.confirm("정말 탈퇴하시겠습니까?")) {
-      dispatch(__kakaoSignOut());
-      navigate("/");
-    } else {
-      alert("취소합니다.");
-    }
+    swal("정말 탈퇴하시겠습니까?", {
+      buttons: {
+        cancel: "아니요.",
+        "예.": true,
+      },
+    }).then((value) => {
+      switch (value) {
+        case "예.":
+          dispatch(__kakaoSignOut());
+          navigate("/");
+          break;
+        default:
+          break;
+      }
+    });
   };
 
   //로컬 탈퇴 버튼
   const signOutHandler = () => {
-    if (window.confirm("정말 탈퇴하시겠습니까?")) {
-      dispatch(__signOut());
-      navigate("/");
-    } else {
-      alert("취소합니다.");
-    }
+    swal("정말 탈퇴하시겠습니까?", {
+      buttons: {
+        cancel: "아니요.",
+        "예.": true,
+      },
+    }).then((value) => {
+      switch (value) {
+        case "예.":
+          dispatch(__signOut());
+          navigate("/");
+          break;
+        default:
+          break;
+      }
+    });
   };
 
   //프로필 정보 불러오기
@@ -133,6 +150,7 @@ const MypageDetail = () => {
     dispatch(__getMyPage());
   }, [dispatch]);
 
+  //카카오 정보 불러오기
   useEffect(() => {
     dispatch(__kakaoState(isLoginKakao));
   }, [dispatch]);
