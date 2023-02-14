@@ -57,7 +57,7 @@ const Mypage = () => {
           <hr></hr>
           <StChatWrap>
             {chatList.list?.length === 0 && <span>해당 채팅이 없습니다.</span>}
-            {chatList.list?.map((el) => {
+            {chatList.list?.slice(0, 6).map((el) => {
               if (userInfo.userId === el.ownerId) {
                 return (
                   <StChatTitle
