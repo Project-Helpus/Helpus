@@ -13,40 +13,60 @@ import Card from "../../../components/Card";
 const FalsePost = ({ num, search }, osbRef) => {
   const dispatch = useDispatch();
 
-  const { helpee, helper, helpUs, falseAll, input, postEnd } = useSelector(
-    (state) => ({
-      helpee: state.postSlice?.helpeeFalseDate,
-      helper: state.postSlice?.helperFalseDate,
-      helpUs: state.postSlice?.helpUsFalseDate,
-      falseAll: state.postSlice?.AllFalseDate,
-      input: state.postSlice.inputReciver,
-      postEnd: state.postSlice.postEnd,
-    })
-  );
+  const {
+    helpee,
+    helper,
+    helpUs,
+    falseAll,
+    input,
+    postEnd,
+    allInfiniteState,
+    helpeeInfiniteState,
+    helperInfiniteState,
+    helpUsInfiniteState,
+  } = useSelector((state) => ({
+    helpee: state.postSlice?.helpeeFalseDate,
+    helper: state.postSlice?.helperFalseDate,
+    helpUs: state.postSlice?.helpUsFalseDate,
+    falseAll: state.postSlice?.AllFalseDate,
+    input: state.postSlice.inputReciver,
+    postEnd: state.postSlice.postEnd,
+    allInfiniteState: state.postSlice.allInfiniteState,
+    helpeeInfiniteState: state.postSlice.helpeeInfiniteState,
+    helperInfiniteState: state.postSlice.helperInfiniteState,
+    helpUsInfiniteState: state.postSlice.helpUsInfiniteState,
+  }));
   let data;
   let func;
+  let infiniteState;
   const [count, setCount] = useState(0);
   const [searchCount, setSearchCount] = useState(0);
   switch (num) {
     case 0:
       data = falseAll;
       func = __getAllFalse;
+      infiniteState = allInfiniteState;
       break;
     case 1:
       data = helpee;
       func = __getHelpeeFalse;
+      infiniteState = helpeeInfiniteState;
       break;
     case 2:
       data = helper;
       func = __getHelperFalse;
+      infiniteState = helperInfiniteState;
       break;
     case 3:
       data = helpUs;
       func = __getHelpUsFalse;
+      infiniteState = helpUsInfiniteState;
+
       break;
     default:
       data = falseAll;
       func = __getAllFalse;
+      infiniteState = allInfiniteState;
   }
 
   const callback = (entries, observer) => {
@@ -69,7 +89,7 @@ const FalsePost = ({ num, search }, osbRef) => {
       setSearchCount((prev) => prev + 12);
       setCount(0);
     } else {
-      if (postEnd === false) {
+      if (postEnd === false && infiniteState === true) {
         let observer;
         observer = new IntersectionObserver(callback, { threshold: 1 });
         observer.observe(osbRef.current);
@@ -84,7 +104,7 @@ const FalsePost = ({ num, search }, osbRef) => {
     setCount(0);
     dispatch(__setPostEnd(false));
   }, [num]);
-  console.log("data:");
+
   return (
     <>
       {data?.length === 0 ? (

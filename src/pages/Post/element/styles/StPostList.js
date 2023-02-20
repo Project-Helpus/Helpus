@@ -114,9 +114,3 @@ export const StSearch = styled.form`
     transform: translate(-50%, -50%);
   }
 `;
-export const StObserverDiv = styled.div`
-  width: 100%;
-  height: 20%;
-  margin-top: 10%;
-  font-size: 40px;
-`;

@@ -25,6 +25,10 @@ const initialState = {
   deadLineMsg: "",
   searchBool: false,
   postEnd: false,
+  helpeeInfiniteState: true,
+  helperInfiniteState: true,
+  helpUsInfiniteState: true,
+  allInfiniteState: true,
 };
 
 export const __createPost = createAsyncThunk(
@@ -387,6 +391,7 @@ const postSlice = createSlice({
         state.AllFalseDate = [...state.AllFalseDate, ...q.result];
         if (q.result.length === 0) {
           state.postEnd = true;
+          state.allInfiniteState = false;
         }
       }
     },
@@ -410,10 +415,10 @@ const postSlice = createSlice({
           state.searchBool = false;
         }
         state.helpeeFalseDate = [...state.helpeeFalseDate, ...q.result];
-        console.log("helper:", state.helpeeFalseDate);
 
         if (q.result.length === 0) {
           state.postEnd = true;
+          state.helpeeInfiniteState = false;
         }
       }
     },
@@ -434,10 +439,10 @@ const postSlice = createSlice({
           state.searchBool = false;
         }
         state.helperFalseDate = [...state.helperFalseDate, ...q.result];
-        console.log("helper:", state.helperFalseDate);
 
         if (q.result.length === 0) {
           state.postEnd = true;
+          state.helperInfiniteState = false;
         }
       }
     },
@@ -460,6 +465,7 @@ const postSlice = createSlice({
         state.helpUsFalseDate = [...state.helpUsFalseDate, ...q.result];
         if (q.result.length === 0) {
           state.postEnd = true;
+          state.helpUsInfiniteState = false;
         }
       }
     },

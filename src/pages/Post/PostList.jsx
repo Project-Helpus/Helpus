@@ -20,7 +20,6 @@ import {
   StLabelMy,
   StCardContainer,
   StSearch,
-  StObserverDiv,
 } from "./element/styles/StPostList";
 import FalsePost from "./element/FalsePost";
 import TruePost from "./element/styles/TruePost";
@@ -36,7 +35,6 @@ const PostList = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const osbRef = useRef(null);
-  const endRef = useRef(null);
   const {
     isLogin,
     isLoginKakao,
@@ -58,7 +56,6 @@ const PostList = () => {
     storeBoolAll: state.postSlice.boolAll,
     storeBoolLocation: state.postSlice.boolLocation,
   }));
-  const postEnd = useSelector((state) => state.postSlice.postEnd);
 
   const [search, setSearch] = useState("");
   const [boolAll, setBoolAll] = useState(storeBoolAll);
@@ -197,14 +194,6 @@ const PostList = () => {
     value = 3;
   }
 
-  useEffect(() => {
-    if (postEnd === true) {
-      endRef.current.innerHTML = "마지막 게시글 입니다";
-    } else {
-      endRef.current.innerHTML = "로딩중...";
-    }
-  }, [postEnd]);
-
   return (
     <>
       <StWrapper>
@@ -251,14 +240,11 @@ const PostList = () => {
         </StTabWrapper>
         <StCardContainer>
           {storeBoolLocation ? (
-            <>
-              <TruePost num={value} search={search} />
-            </>
+            <TruePost num={value} search={search} />
           ) : (
             <>
               <FalsePost num={value} search={search} ref={osbRef} />
               <p ref={osbRef}></p>
-              <StObserverDiv ref={endRef}></StObserverDiv>
             </>
           )}
         </StCardContainer>
