@@ -26,12 +26,18 @@ export const PostAPI = {
     client.get(
       `api/post/all-location?page=${payload}&category=&search=${searchValue}`
     ),
-  getHelpeeFalse: (searchValue) =>
-    client.get(`api/post/all-location?category=1&search=${searchValue}`),
-  getHelperFalse: (searchValue) =>
-    client.get(`api/post/all-location?category=2&search=${searchValue}`),
-  getHelpUsFalse: (searchValue) =>
-    client.get(`api/post/all-location?category=3&search=${searchValue}`),
+  getHelpeeFalse: (payload, searchValue) =>
+    client.get(
+      `api/post/all-location?page=${payload}&category=1&search=${searchValue}`
+    ),
+  getHelperFalse: (payload, searchValue) =>
+    client.get(
+      `api/post/all-location?page=${payload}&category=2&search=${searchValue}`
+    ),
+  getHelpUsFalse: (payload, searchValue) =>
+    client.get(
+      `api/post/all-location?page=${payload}&category=3&search=${searchValue}`
+    ),
   getAllTrue: (searchValue) =>
     client.get(`api/post/my-location?category=&search=${searchValue}`),
   getHelpeeTrue: (searchValue) =>

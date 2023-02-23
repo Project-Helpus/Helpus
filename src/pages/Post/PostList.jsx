@@ -1,14 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import HelpUsFalse from "./element/LocalFalse/HelpUsFalse";
-import HelperFalse from "./element/LocalFalse/HelperFalse";
-import HelpeeFalse from "./element/LocalFalse/HelpeeFalse";
-import HelpUsTrue from "./element/LocalTrue/HelpUsTrue";
-import HelperTrue from "./element/LocalTrue/HelperTrue";
-import HelpeeTrue from "./element/LocalTrue/HelpeeTrue";
-import AllTrue from "./element/LocalTrue/AllTrue";
-import AllFalse from "./element/LocalFalse/AllFalse";
 import {
   __setBoolLocationTrue,
   __setBoolLocationFalse,
@@ -16,7 +8,6 @@ import {
 } from "../../redux/modules/postSlice";
 import icon_search from "../../asset/icon_search.svg";
 import { StWrapper } from "../../components/UI/StIndex";
-import { StSearch } from "./element/styles/StPostDetail";
 import {
   StTitleButtonWrapper,
   StLocation,
@@ -28,7 +19,10 @@ import {
   StToggle,
   StLabelMy,
   StCardContainer,
+  StSearch,
 } from "./element/styles/StPostList";
+import FalsePost from "./element/FalsePost";
+import TruePost from "./element/styles/TruePost";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -40,7 +34,7 @@ const PostList = () => {
   const testRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
-
+  const osbRef = useRef(null);
   const {
     isLogin,
     isLoginKakao,
@@ -178,7 +172,7 @@ const PostList = () => {
       helperRef.current.style.borderBottom = "4px solid #EA9DB4";
     }
   }, []);
-
+  //토글 버튼 UI 변화
   useEffect(() => {
     if (storeBoolLocation === false) {
       testRef.current.style.left = "0";
@@ -190,6 +184,15 @@ const PostList = () => {
       rightRef.current.style.color = "#fff";
     }
   }, [storeBoolLocation]);
+
+  let value;
+  if (boolHelpee) {
+    value = 1;
+  } else if (boolHelper) {
+    value = 2;
+  } else if (boolHelpUs) {
+    value = 3;
+  }
 
   return (
     <>
@@ -237,18 +240,11 @@ const PostList = () => {
         </StTabWrapper>
         <StCardContainer>
           {storeBoolLocation ? (
-            <>
-              {boolHelpee && <HelpeeTrue />}
-              {boolHelper && <HelperTrue />}
-              {boolHelpUs && <HelpUsTrue />}
-              {boolAll && <AllTrue />}
-            </>
+            <TruePost num={value} search={search} />
           ) : (
             <>
-              {boolHelpee && <HelpeeFalse search={search} />}
-              {boolHelper && <HelperFalse />}
-              {boolHelpUs && <HelpUsFalse />}
-              {boolAll && <AllFalse search={search} />}
+              <FalsePost num={value} search={search} ref={osbRef} />
+              <p ref={osbRef}></p>
             </>
           )}
         </StCardContainer>
