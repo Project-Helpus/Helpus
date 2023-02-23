@@ -46,7 +46,6 @@ const TruePost = ({ num }) => {
   useEffect(() => {
     dispatch(func());
   }, [input, num]);
-  console.log("data:", data);
   return (
     <>
       {data?.length === 0 ? (
