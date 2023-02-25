@@ -36,7 +36,6 @@ export const __createPost = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await PostAPI.postCreate(formData);
-      console.log(response);
       if (response.status === 201) {
         return thunkAPI.fulfillWithValue(response.data);
       } else if (response.response.status === 400) {
@@ -345,7 +344,17 @@ const postSlice = createSlice({
     },
     __setPostEnd: (state, action) => {
       state.postEnd = action.payload;
-      console.log("pay:", action.payload);
+    },
+    __clearPost: (state) => {
+      state.helpeeFalseDate = [];
+      state.helperFalseDate = [];
+      state.helpUsFalseDate = [];
+    },
+    __resetInfiniteState: (state) => {
+      state.helpeeInfiniteState = true;
+      state.helperInfiniteState = true;
+      state.helpUsInfiniteState = true;
+      state.postEnd = false;
     },
   },
   extraReducers: {
@@ -505,5 +514,7 @@ export const {
   __setBoolLocationFalse,
   __giveInput,
   __setPostEnd,
+  __clearPost,
+  __resetInfiniteState,
 } = postSlice.actions;
 export default postSlice.reducer;
