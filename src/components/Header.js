@@ -18,7 +18,7 @@ import {
   __setBoolHelpee,
   __setBoolHelper,
   __clearPost,
-  __reestInfiniteState,
+  __resetInfiniteState,
 } from "../redux/modules/postSlice";
 
 const Header = () => {
@@ -93,7 +93,7 @@ const Header = () => {
         onClick={() => {
           navigate("/");
           setSearch("");
-          dispatch(__reestInfiniteState());
+          dispatch(__resetInfiniteState());
         }}
       >
         <img src={top_logo} alt=""></img>
