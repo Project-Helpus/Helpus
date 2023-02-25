@@ -350,7 +350,7 @@ const postSlice = createSlice({
       state.helperFalseDate = [];
       state.helpUsFalseDate = [];
     },
-    __reestInfiniteState: (state) => {
+    __resetInfiniteState: (state) => {
       state.helpeeInfiniteState = true;
       state.helperInfiniteState = true;
       state.helpUsInfiniteState = true;
@@ -515,6 +515,6 @@ export const {
   __giveInput,
   __setPostEnd,
   __clearPost,
-  __reestInfiniteState,
+  __resetInfiniteState,
 } = postSlice.actions;
 export default postSlice.reducer;
