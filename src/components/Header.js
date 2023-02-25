@@ -17,6 +17,8 @@ import {
   __setBoolHelpUs,
   __setBoolHelpee,
   __setBoolHelper,
+  __clearPost,
+  __reestInfiniteState,
 } from "../redux/modules/postSlice";
 
 const Header = () => {
@@ -44,14 +46,23 @@ const Header = () => {
     );
   };
   const linkHelpUs = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
   };
   const linkHelper = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelper());
     navigate("/postlist");
   };
   const linkHelpee = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelpee());
     navigate("/postlist");
   };
@@ -82,6 +93,7 @@ const Header = () => {
         onClick={() => {
           navigate("/");
           setSearch("");
+          dispatch(__reestInfiniteState());
         }}
       >
         <img src={top_logo} alt=""></img>
@@ -120,7 +132,6 @@ const Header = () => {
 };
 
 export default Header;
-
 const StHeaderWrapper = styled.header`
   display: flex;
   justify-content: space-between;
