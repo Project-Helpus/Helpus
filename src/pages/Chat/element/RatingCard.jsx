@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import rating_heart from "../../../asset/rating_heart.png";
+import rating_heart from "../../../asset/rating_heart.webp";
 import rating_close_icon from "../../../asset/rating_close_icon.svg";
 import { __score } from "../../../redux/modules/chatSlice";
 import { StButton } from "../../../components/UI/StIndex";

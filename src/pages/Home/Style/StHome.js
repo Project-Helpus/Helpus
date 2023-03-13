@@ -56,7 +56,7 @@ export const StMainImg = styled.img`
 `;
 export const StMainImg2 = styled.img`
   width: 28.1em;
-  height: 13.94em;
+  height: 11.94em;
   border-radius: 1em;
   position: relative;
   transform: translateY(-5.3em);
