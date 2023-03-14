@@ -36,8 +36,8 @@ import {
   StWriteButton,
   StWrBtnWrapper,
 } from "./Style/StHome";
-import HomeMain from "../../asset/main_image.png";
-import HomeMain2 from "../../asset/HomeMain2.png";
+import HomeMain from "../../asset/main_image.webp";
+import HomeMain2 from "../../asset/HomeMain2.webp";
 import "../../static/fonts/font.css";
 const Home = () => {
   const locationNow = useLocation();
