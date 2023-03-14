@@ -90,3 +90,27 @@ export const StCardContainer = styled.div`
   width: 100%;
   gap: 2.25% 3.125%;
 `;
+export const StSearch = styled.form`
+  position: relative;
+  input {
+    width: 400px;
+    height: 44px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+    padding-left: 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid ${(props) => props.theme.colors.lightGray};
+  }
+  input::placeholder {
+    color: ${(props) => props.theme.colors.lightGray};
+  }
+  input:focus {
+    outline: ${(props) => props.theme.colors.mainPink};
+  }
+  img {
+    position: absolute;
+    right: 0.8em;
+    top: 40%;
+    transform: translate(-50%, -50%);
+  }
+`;

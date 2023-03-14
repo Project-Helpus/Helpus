@@ -12,6 +12,7 @@ function App() {
   return (
     <div className="App">
       <Router />
+      <StTopBtn onClick={() => window.scrollTo(0, 0)}>Top</StTopBtn>
       <StGuideBtn
         onClick={() =>
           window.open(
@@ -29,6 +30,22 @@ function App() {
 
 export default App;
 
+const StTopBtn = styled.button`
+  color: #ea9db4;
+  background-color: #fff;
+  position: fixed;
+  bottom: 15%;
+  right: 3%;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ea9db4;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover {
+    background-color: #dc6b94;
+    color: #fff;
+  }
+`;
 const StGuideBtn = styled.button`
   position: fixed;
   display: flex;
