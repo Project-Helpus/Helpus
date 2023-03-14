@@ -29,11 +29,14 @@ export const StRowContent = styled.p`
   font-weight: 500;
 `;
 export const StCrsPost = styled.img`
-  width: 26.25em;
+  width: 26.13em;
   height: 18.13em;
   margin-right: 2.5em;
   border: 1px solid rgb(240, 240, 240);
   border-radius: 1.25em;
+  object-fit: contain;
+  background-color: rgb(245, 245, 245);
+  box-sizing: content-box;
   cursor: pointer;
 `;
 export const StProfileWrapper = styled.div`

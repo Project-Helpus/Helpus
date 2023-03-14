@@ -71,6 +71,7 @@ export const StCrsLeftButton = styled.img`
   top: 40%;
   transform: translateX(-3em);
 `;
+
 export const StCrsRightButton = styled.img`
   cursor: pointer;
   position: absolute;
@@ -78,10 +79,15 @@ export const StCrsRightButton = styled.img`
   right: 0;
   transform: translateX(3em);
 `;
+
 export const StCrsImg = styled.img`
   min-width: 11.38em;
   border: 0.06em solid rgb(240, 240, 240);
-  border-radius: 10px;
   height: 6.48em;
   margin-right: 1.5em;
+  border-radius: 20px;
+  cursor: pointer;
+  object-fit: contain;
+  background-color: rgb(245, 245, 245);
+  box-sizing: content-box;
 `;
