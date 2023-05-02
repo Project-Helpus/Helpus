@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router";
 import {
   __setBoolHelpUs,
   __setBoolHelpee,
@@ -9,6 +8,8 @@ import {
   __getHelpUsFalse,
   __getHelperFalse,
   __getHelpeeFalse,
+  __giveInput,
+  __clearPost,
 } from "../../redux/modules/postSlice";
 import Card from "../../components/Card";
 import {
@@ -38,17 +39,11 @@ import {
 import HomeMain from "../../asset/main_image.png";
 import HomeMain2 from "../../asset/HomeMain2.png";
 import "../../static/fonts/font.css";
-import { __giveInput } from "../../redux/modules/postSlice";
 const Home = () => {
-  const HelpUsData = useSelector(
-    (state) => state.postSlice.helpUsFalseDate?.result
-  );
-  const HelperData = useSelector(
-    (state) => state.postSlice.helperFalseDate?.result
-  );
-  const HelpeeData = useSelector(
-    (state) => state.postSlice.helpeeFalseDate?.result
-  );
+  const locationNow = useLocation();
+  const HelpUsData = useSelector((state) => state.postSlice?.helpUsFalseDate);
+  const HelperData = useSelector((state) => state.postSlice?.helperFalseDate);
+  const HelpeeData = useSelector((state) => state.postSlice?.helpeeFalseDate);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const input = useSelector((state) => state.postSlice.inputReciver);
@@ -60,28 +55,37 @@ const Home = () => {
   const crsHelpeeRef = useRef(null);
 
   const linkHelpUs = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelpUs());
     navigate("/postlist");
   };
   const linkHelper = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelper());
     navigate("/postlist");
   };
   const linkHelpee = () => {
+    if (locationNow.pathname === "/") {
+      dispatch(__clearPost());
+    }
     dispatch(__setBoolHelpee());
     navigate("/postlist");
   };
 
   useEffect(() => {
-    dispatch(__getHelpUsFalse());
+    dispatch(__getHelpUsFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
-    dispatch(__getHelperFalse(""));
+    dispatch(__getHelperFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
-    dispatch(__getHelpeeFalse(""));
+    dispatch(__getHelpeeFalse({ count: 0, input: input }));
   }, [input]);
 
   useEffect(() => {
