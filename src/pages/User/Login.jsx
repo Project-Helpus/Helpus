@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { __postLogin } from "../../redux/modules/userSlice";
 import { KAKAO_AUTH_URL } from "./KakaoLogin";
-import kakaoLogin from "../../asset/kakaoLogin.png";
+import kakaoLogin from "../../asset/kakaoLogin.webp";
 import StUserWrap from "../../components/UI/StUserWrap";
 import arrow_forward_ios from "../../asset/arrow_forward_ios.svg";
 import icon_eye from "../../asset/icon_eye.svg";
