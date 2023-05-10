@@ -52,27 +52,4 @@
 
 ### 💥Trouble Shooting(FE)
 
-<details>
-<summary> 1️⃣ Redux-persist 적용 </summary>
-<div markdown="1">
-<br>
-❗️ 문제 상황<br>
-redux에 저장되있는 전역상태는 새로고침시 모두 초기화가 이루어지기 때문에 정보를 유지할 수 있는 캐시 기능의 구현이 필요했습니다.
-<br><br>
-💡 해결방안<br>
-기존에는 새로고침시에 로그인이 풀리지 않도록 하기 위해서 LocalStorage에 사용자 인증 상태를 확인하기 위한 토큰을 저장하고 불러와서 사용하고는 했습니다. 하지만 그 토큰에 페이지의 많은 상태 값이 의존하고 있고, LocalStorage에 매번 접근하여 인증 정보를 가져오는 것보다 store로 통합해서 관리하는 것이 더 낫다고 판단하여 redux-persist 를 사용하여 해결하였습니다.
-<br>
-<br>
-</details>
-<details>
-<summary>2️⃣ Refrash Token</summary>
-<div markdown="2">  
-<br>  
-❗️ 문제 상황<br>
-리프레시 토큰을 적용하면서 인증인가 처리에 대한 인터셉터 로직이 추가되어야 했습니다.
-페이지 내에서 API요청을 여러개를 해야하는 경우가 있었는데 모든 요청이 비동기로 실행되어 인증, 인가가 제대로 이루어 지지 않는 현상이 발생했습니다.
-<br><br>
-💡 해결방안<br>
-useEffect안의 dispatch() 에 async await를 걸어주어 동기적 처리를 하고, 요청이 차례대로 가게 하였고 axios의 인터셉터에서 모든 인가에 대한 에러메세지를 받았습니다. 엑세스 토큰이 만료되었을때 리프레쉬 토큰을 보내어 인증을 다시 받아 토큰을 발급 받고 이전의 API요청을 다시 처리하게 구현되었습니다. 내부적으로 인가에 대한 문제가 발생 되었지만 사용자는 어떤 문제가 발생했는지 모르게 처리되었습니다.  두 토큰이 모두 만료 되었을때는 모든 토큰 값을 지우고 로그인창으로 유도 시킵니다.
-</div>
-</details>
+- [Document 바로가기](https://potent-print-150.notion.site/Trouble-shooting-6c4fdead6ea7427bb33141a54a917999)
