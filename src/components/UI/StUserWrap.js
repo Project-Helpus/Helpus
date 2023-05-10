@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import login_bg from "../../asset/login_bg.png";
+import login_bg from "../../asset/login_bg.webp";
 import login_object from "../../asset/login_object.svg";
 import login_white_logo from "../../asset/login_white_logo.svg";
 const StUserWrap = () => {
