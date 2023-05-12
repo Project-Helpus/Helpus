@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import { address } from "../../asset/address";
 import { categoryType } from "./element/categoryType";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { StWrapper, StButton } from "../../components/UI/StIndex";
 import { __createPost } from "../../redux/modules/postSlice";
+import { compressImage } from "../../utils/imageCompression";
 import Calender from "./element/Calender";
 import arrow_forward_pink from "../../asset/arrow_forward_pink.svg";
 import add_circle_outline from "../../asset/add_circle_outline.svg";
@@ -78,7 +79,11 @@ const PostCreate = () => {
       reader.readAsDataURL(file[i]);
     }
 
-    setImg(file);
+    // image compression
+    for (let i = 0; i < file.length; i++) {
+      setImg((prev) => [...prev, compressImage(file[i])]);
+    }
+
     setGetImg(true);
   };
 
@@ -111,7 +116,6 @@ const PostCreate = () => {
         formData.append("post-images", img[i]);
       }
       const res = await dispatch(__createPost(formData));
-      console.log(res);
       if (res.meta.requestStatus === "fulfilled") {
         window.alert("게시물이 생성 되었습니다.");
         navigate(`/post/${res.payload.postId}`);
@@ -147,16 +151,13 @@ const PostCreate = () => {
   };
   const changeOver = (el) => {
     if (el === 1) {
-      blindText.current.innerHTML =
-        "헬피는 재능기부를 요청하거나 도움을 받아볼 수 있어요.";
+      blindText.current.innerHTML = "헬피는 재능기부를 요청하거나 도움을 받아볼 수 있어요.";
       blindText.current.style.color = "red";
     } else if (el === 2) {
-      blindText.current.innerHTML =
-        "헬퍼는 재능을 기부하거나 도움을 줄수 있어요.";
+      blindText.current.innerHTML = "헬퍼는 재능을 기부하거나 도움을 줄수 있어요.";
       blindText.current.style.color = "red";
     } else {
-      blindText.current.innerHTML =
-        "헬퍼스로 단체 재능기부나 봉사활동을 모집해 보세요.";
+      blindText.current.innerHTML = "헬퍼스로 단체 재능기부나 봉사활동을 모집해 보세요.";
       blindText.current.style.color = "red";
     }
   };
@@ -196,8 +197,7 @@ const PostCreate = () => {
         </StCol>
         <StCol>
           <StLabel htmlFor="content">
-            내용입력 *{" "}
-            <StLengthCount>({input.content.length}/500)</StLengthCount>
+            내용입력 * <StLengthCount>({input.content.length}/500)</StLengthCount>
           </StLabel>
           <StTextarea
             name="content"
@@ -255,11 +255,9 @@ const PostCreate = () => {
         </StCol>
         <StCol>
           <StLabel htmlFor="image">사진</StLabel>
+          {getImg}
           {getImg && (
-            <span htmlFor="image">
-              첫번째 이미지는 썸네일로 보여집니다. 이미지가 없다면 임의 사진으로
-              대체 됩니다.
-            </span>
+            <span htmlFor="image">첫번째 이미지는 썸네일로 보여집니다. 이미지가 없다면 임의 사진으로 대체 됩니다.</span>
           )}
           <input
             ref={crsRef}
@@ -274,14 +272,8 @@ const PostCreate = () => {
           <StRow>
             {previewImg ? (
               <StCrsContainser value={currentSlide + 1}>
-                <StCrsLeftButton
-                  src={crsLeftButton}
-                  onClick={moveCrsLeft}
-                ></StCrsLeftButton>
-                <StCrsRightButton
-                  src={crsRightButton}
-                  onClick={moveCrsRight}
-                ></StCrsRightButton>
+                <StCrsLeftButton src={crsLeftButton} onClick={moveCrsLeft}></StCrsLeftButton>
+                <StCrsRightButton src={crsRightButton} onClick={moveCrsRight}></StCrsRightButton>
                 <StHidden>
                   <StFlexBox ref={crsRef}>
                     {previewImg?.map((el, i) => (
