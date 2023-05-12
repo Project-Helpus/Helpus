@@ -18,21 +18,15 @@ import State from "../pages/User/State";
 import PostUpdate from "../pages/Post/PostUpdate";
 import MypagePostsDetail from "../pages/Mypage/MypagePostsDetail";
 import MypageWishList from "../pages/Mypage/MypageWishList";
-import ScrollToTop from "../utils/ScrollTop";
 import StopService from "../pages/NotFound/StopService";
 
 const Router = () => {
   const isStopService = true;
   return (
     <BrowserRouter>
-      <ScrollToTop />
       {!isStopService && <Header />}
       <Routes>
-        {!isStopService ? (
-          <Route path="/" element={<Home />} />
-        ) : (
-          <Route path="/" element={<StopService />} />
-        )}
+        {!isStopService ? <Route path="/" element={<Home />} /> : <Route path="/" element={<StopService />} />}
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage" element={<Mypage />} />
@@ -49,7 +43,6 @@ const Router = () => {
         <Route path="/chat/:postId/:ownerId" element={<OpenChat />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
-      {!isStopService && <Header />}
     </BrowserRouter>
   );
 };
